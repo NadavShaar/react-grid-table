@@ -22,14 +22,24 @@ const styles = {
 
 const App = () => {
     
-    const [editRowId, setEditRowId] = useState(null);
+	const [editRowId, setEditRowId] = useState(null);
+	const [rowsData, setRowsData] = useState([]);
+    const [isLoading, setLoading] = useState(false);
+	
+    useEffect(() => {
+		setLoading(true);
+		setTimeout(() => {
+			setRowsData(MOCK_DATA.default)
+			setLoading(false);
+		}, 1500);
+	}, [])
 
-    const COLUMN_DEFS = [
+    const columns = [
         {
             id: 1,
             field: 'checkbox',
             pinned: true,
-            width: '53px',
+            width: '53px'
         },
         {
             id: 2, 
@@ -43,26 +53,26 @@ const App = () => {
             id: 3,
             field: 'first_name',
             label: 'First Name',
-            width: 'max-content',
+            width: 'max-content'
         }, 
         {
             id: 4, 
             field: 'last_name', 
             label: 'Last Name',
-            width: 'max-content',
+            width: 'max-content'
         }, 
         {
             id: 5, 
             field: 'email',
             label: 'Email',
-            width: 'max-content',
+            width: 'max-content'
         },
         {
             id: 6, 
             field: 'gender', 
             label: 'Gender',
             width: 'max-content',
-            editorCellRenderer: ({value, field, onChange, row, column, rowIndex, searchText}) => (
+            editorCellRenderer: ({value, field, onChange, row, rows, column, rowIndex}) => (
 				<select 
 					style={styles.select} 
 					value={value} 
@@ -77,7 +87,7 @@ const App = () => {
             id: 7, 
             field: 'ip_address', 
             label: 'IP Address',
-            width: 'max-content',
+            width: 'max-content'
         },
         {
             id: 8, 
@@ -88,7 +98,7 @@ const App = () => {
                 let aa = a.split('/').reverse().join(),
                 bb = b.split('/').reverse().join();
                 return aa < bb ? isAscending ? -1 : 1 : (aa > bb ? isAscending ? 1 : -1 : 0);
-            },
+            }
         },
         {
             id: 9, 
@@ -100,7 +110,7 @@ const App = () => {
                 let rowClone = { ...row };
                 rowClone[column.field].x = value;
                 setRow(rowClone);
-            },
+            }
         },
         {
             id: 10, 
@@ -121,7 +131,7 @@ const App = () => {
 					</button>
                 </div>
             ),
-            editorCellRenderer: ({value, field, onChange, row, column, rowIndex, searchText}) => (
+            editorCellRenderer: ({value, field, onChange, row, rows, column, rowIndex}) => (
                 <div style={styles.buttonsCellEditorContainer}>
 					<button 
 						title="Cnacel" 
@@ -133,37 +143,25 @@ const App = () => {
 					<button 
 						title="Save" 
 						style={styles.saveButton} 
-						onClick={e => {updateItem(row); setEditRowId(null);}}
+						onClick={e => {
+							let rowsClone = [...rows];
+							let updatedRowIndex = rowsClone.findIndex(r => r.id === row.id);
+							rowsClone[updatedRowIndex] = row;
+
+							setRowsData(rowsClone);
+							setEditRowId(null);
+						}}
 					>
 						{ SAVE_SVG }
 					</button>
                 </div>
             )
-        },
-    ];
-
-    const [rowsData, setRowsData] = useState([]);
-    const [isLoading, setLoading] = useState(false);
-
-    const updateItem = (item) => {
-        let rowClone = [...rowsData];
-        let itemIndex = rowClone.findIndex(it => it.id === item.id);
-        
-        rowClone[itemIndex] = item;
-        setRowsData(rowClone);
-    }
-
-    useEffect(() => {
-		setLoading(true);
-		setTimeout(() => {
-			setRowsData(MOCK_DATA.default)
-			setLoading(false);
-		}, 1500);
-    }, [])
-
+        }
+	];
+	
     return (
         <GridTable 
-            columns={COLUMN_DEFS}
+			columns={columns}
             rows={rowsData} 
             isLoading={isLoading}
             editRowId={editRowId}
@@ -172,4 +170,4 @@ const App = () => {
     )
 };
 
-export default App
+export default App;

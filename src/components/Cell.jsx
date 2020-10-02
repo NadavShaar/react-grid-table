@@ -6,6 +6,7 @@ const Cell = (props) => {
     let {
         row,
         rowId,
+        rows,
         column,
         className,
         cellRenderer,
@@ -78,7 +79,7 @@ const Cell = (props) => {
             {
                 column.editable !== false && isEdit ?
                     editorCellRenderer ? 
-                        editorCellRenderer({value, field: column.field, onChange: setUpdatedRow, row, column, rowIndex})
+                        editorCellRenderer({value, field: column.field, onChange: setUpdatedRow, row, rows, column, rowIndex})
                         :
                         <div className='rgt-cell-inner rgt-cell-editor'>
                             {

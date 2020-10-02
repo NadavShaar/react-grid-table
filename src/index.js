@@ -300,6 +300,7 @@ const GridTable = (props) => {
                                     <Cell 
                                         rowId={d[props.rowIdField]}
                                         row={updatedRow?.[props.rowIdField] === d[props.rowIdField] ? updatedRow : d} 
+                                        rows={props.rows}
                                         rowIndex={rowIndex} 
                                         onRowClick={props.onRowClick}
                                         colIndex={idx2} 
