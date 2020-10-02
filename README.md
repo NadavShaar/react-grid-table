@@ -20,9 +20,8 @@
 
 Live [demo](https://nadavshaar.github.io/react-grid-table/)
 
-![screen-recording](https://user-images.githubusercontent.com/8030614/94882300-470fd400-0470-11eb-92ba-59de92697a8f.gif)
+![screen-recording (1)](https://user-images.githubusercontent.com/8030614/94882668-44fa4500-0471-11eb-99d6-1bfaa9714526.gif)
 
-![rgt](https://user-images.githubusercontent.com/8030614/94877247-9d761600-0462-11eb-996b-d45c13ec357b.png)
 
 ## Install
 
