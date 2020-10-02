@@ -35,3 +35,9 @@ body {
 .rgt-row-hover {
   background: #f5f5f5 !important;
 } */
+
+@media only screen and (max-width: 768px) {
+  body {
+    padding: 20px;
+  }
+}

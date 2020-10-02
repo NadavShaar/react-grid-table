@@ -33,7 +33,7 @@ const GridTable = (props) => {
         
         if(cd.field === 'checkbox') return {
             className: '',
-            width: 'max-width',
+            width: 'max-content',
             minWidth: null,
             maxWidth: null,
             resizable: false,
@@ -409,7 +409,7 @@ const GridTable = (props) => {
         rowIdField,
         ...rest
      } = props;
-
+console.log(visibleColumnsWithVirtual.filter(t => t.visible))
     return (
         <div ref={rgtRef} className='rgt-wrapper' {...rest} >
             { renderHeader() }

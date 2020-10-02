@@ -13,9 +13,9 @@ const SAVE_SVG = <svg height="20" viewBox="0 0 20 20" width="20" xmlns="http://w
 
 const styles = {
 	select: {margin: '0 20px'},
-	buttonsCellContainer: {padding: '0 10px', width: '100%', height: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center'},
+	buttonsCellContainer: {padding: '0 20px', width: '100%', height: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center'},
 	editButton: {background: '#f3f3f3', outline: 'none', cursor: 'pointer', padding: 4, display: 'inline-flex', border: 'none', borderRadius: '50%', boxShadow: '1px 1px 2px 0px rgb(0 0 0 / .3)'},
-	buttonsCellEditorContainer: {height: '100%', width: '100%', display: 'inline-flex', padding: '0 10px', justifyContent: 'flex-end', alignItems: 'center'},
+	buttonsCellEditorContainer: {height: '100%', width: '100%', display: 'inline-flex', padding: '0 20px', justifyContent: 'flex-end', alignItems: 'center'},
 	cancelButton: {background: '#f3f3f3', outline: 'none', cursor: 'pointer', marginRight: 10, padding: 2, display: 'inline-flex', border: 'none', borderRadius: '50%', boxShadow: '1px 1px 2px 0px rgb(0 0 0 / .3)'},
 	saveButton: {background: '#f3f3f3', outline: 'none', cursor: 'pointer', padding: 2, display: 'inline-flex', border: 'none', borderRadius: '50%', boxShadow: '1px 1px 2px 0px rgb(0 0 0 / .3)'}
 }
@@ -39,39 +39,34 @@ const App = () => {
             id: 1,
             field: 'checkbox',
             pinned: true,
-            width: '53px'
+            // width: '54px'
         },
         {
             id: 2, 
             field: 'username', 
             label: 'Username',
-            width: 'max-content',
             cellRenderer: Username,
             editorCellRenderer: props => <Username {...props} isEdit />
         }, 
         {
             id: 3,
             field: 'first_name',
-            label: 'First Name',
-            width: 'max-content'
+            label: 'First Name'
         }, 
         {
             id: 4, 
             field: 'last_name', 
-            label: 'Last Name',
-            width: 'max-content'
+            label: 'Last Name'
         }, 
         {
             id: 5, 
             field: 'email',
-            label: 'Email',
-            width: 'max-content'
+            label: 'Email'
         },
         {
             id: 6, 
             field: 'gender', 
             label: 'Gender',
-            width: 'max-content',
             editorCellRenderer: ({value, field, onChange, row, rows, column, rowIndex}) => (
 				<select 
 					style={styles.select} 
@@ -86,14 +81,12 @@ const App = () => {
         {
             id: 7, 
             field: 'ip_address', 
-            label: 'IP Address',
-            width: 'max-content'
+            label: 'IP Address'
         },
         {
             id: 8, 
             field: 'last_visited', 
             label: 'Last Visited',
-            width: 'max-content',
             sort: ({a, b, isAscending}) => {
                 let aa = a.split('/').reverse().join(),
                 bb = b.split('/').reverse().join();
@@ -104,7 +97,6 @@ const App = () => {
             id: 9, 
             field: 'test', 
             label: 'Object Value',
-            width: 'max-content',
             getValue: ({value, column}) => value.x.toString(),
             setValue: ({value, row, setRow, column}) => {
                 let rowClone = { ...row };
@@ -116,7 +108,6 @@ const App = () => {
             id: 10, 
             field: 'buttons', 
             label: '',
-            width: 'max-content',
             pinned: true,
             sortable: false,
             resizable: false,
