@@ -38,7 +38,7 @@ import '@nadavshaar/react-grid-table/dist/index.css'
 import Username from "./components/Username"
 import * as MOCK_DATA from "./MOCK_DATA.json";
 
-let rowsData = MOCK_DATA.default;
+let rows = MOCK_DATA.default;
 // row data example: 
 // { 
 //     "id": 1, 
@@ -94,7 +94,7 @@ const MyAwesomeTable = () => {
     return (
         <GridTable 
             columns={columns}
-            rows={rowsData} 
+            rows={rows} 
         />
     )
 };
