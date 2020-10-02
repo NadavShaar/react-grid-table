@@ -166,7 +166,6 @@ const App = () => {
             columns={COLUMN_DEFS}
             rows={rowsData} 
             isLoading={isLoading}
-            onRowClick={({rowIndex, row, column, event}) => console.log(rowIndex, row, column, event)}
             editRowId={editRowId}
             style={{boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px'}} 
         />
