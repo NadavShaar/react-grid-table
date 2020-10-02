@@ -28,6 +28,82 @@
 npm install --save @nadavshaar/react-grid-table
 ```
 
+## Usage
+```JSX
+  import React from "react";
+
+import GridTable from '@nadavshaar/react-grid-table'
+import '@nadavshaar/react-grid-table/dist/index.css'
+
+import Username from "./components/Username"
+import * as MOCK_DATA from "./MOCK_DATA.json";
+
+let rowsData = MOCK_DATA.default;
+// row data example: 
+// [ 
+//     ..., 
+//     { 
+//         "id": 1, 
+//         "username": "wotham0", 
+//         "gender": "Male", 
+//         "last_visited": "12/08/2019", 
+//         "object_value_field": {"x": 1, "y": 2}, 
+//         ... 
+//     } 
+// ]
+
+const MyAwesomeTable = () => {
+    
+    const columns = [
+        {
+            id: 1,
+            field: 'checkbox',
+            pinned: true,
+        },
+        {
+            id: 2, 
+            field: 'username', 
+            label: 'Username',
+            cellRenderer: Username,
+        }, 
+        {
+            id: 3, 
+            field: 'gender', 
+            label: 'Gender',
+        },
+        {
+            id: 4, 
+            field: 'last_visited', 
+            label: 'Last Visited',
+            sort: ({a, b, isAscending}) => {
+                let aa = a.split('/').reverse().join(),
+                bb = b.split('/').reverse().join();
+                return aa < bb ? isAscending ? -1 : 1 : (aa > bb ? isAscending ? 1 : -1 : 0);
+            }
+        },
+        {
+            id: 5, 
+            field: 'object_value_field', 
+            label: 'Object Value',
+            getValue: ({value, column}) => value.x.toString(),
+            setValue: ({value, row, setRow, column}) => {
+                let rowClone = { ...row };
+                rowClone[column.field].x = value;
+                setRow(rowClone);
+            }
+        }
+	];
+	
+    return (
+        <GridTable 
+            columns={columns}
+            rows={rowsData} 
+        />
+    )
+};
+
+export default MyAwesomeTable;
+```
 
 ## Table of contents
 - [Components structure](#components-structure)
