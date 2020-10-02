@@ -1,4 +1,4 @@
-# @nadavshaar/react-grid-table
+# react-grid-table
 
 > A modular table, based on a CSS grid layout, optimized for customization.
 
