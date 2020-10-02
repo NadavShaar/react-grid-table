@@ -89,8 +89,8 @@ const MyAwesomeTable = () => {
                 setRow(rowClone);
             }
         }
-	];
-	
+    ];
+
     return (
         <GridTable 
             columns={columns}
