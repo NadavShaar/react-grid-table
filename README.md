@@ -40,17 +40,14 @@ import * as MOCK_DATA from "./MOCK_DATA.json";
 
 let rowsData = MOCK_DATA.default;
 // row data example: 
-// [ 
-//     ..., 
-//     { 
-//         "id": 1, 
-//         "username": "wotham0", 
-//         "gender": "Male", 
-//         "last_visited": "12/08/2019", 
-//         "object_value_field": {"x": 1, "y": 2}, 
-//         ... 
-//     } 
-// ]
+// { 
+//     "id": 1, 
+//     "username": "wotham0", 
+//     "gender": "Male", 
+//     "last_visited": "12/08/2019", 
+//     "object_value_field": {"x": 1, "y": 2}, 
+//     ... 
+// } 
 
 const MyAwesomeTable = () => {
     
