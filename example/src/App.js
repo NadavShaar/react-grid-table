@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-import GridTable from '@nadavshaar/react-grid-table'
-import '@nadavshaar/react-grid-table/dist/index.css'
+import GridTable from '@nadavshaar/react-grid-table';
+import '@nadavshaar/react-grid-table/dist/index.css';
 
-import Username from "./components/Username"
+import Username from "./components/Username";
 import * as MOCK_DATA from "./MOCK_DATA.json";
 import './index.css';
 

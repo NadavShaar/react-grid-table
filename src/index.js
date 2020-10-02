@@ -6,6 +6,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import PropTypes from 'prop-types';
 import tableManager from './tableManager';
+import './index.css';
 
 const DEFAULT_LOADER = <svg width="46" height="46" viewBox="-2 -2 42 42" xmlns="http://www.w3.org/2000/svg">
     <g fill="none" fillRule="evenodd">
