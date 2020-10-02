@@ -30,7 +30,7 @@ npm install --save @nadavshaar/react-grid-table
 
 ## Usage
 ```JSX
-  import React from "react";
+import React from "react";
 
 import GridTable from '@nadavshaar/react-grid-table'
 import '@nadavshaar/react-grid-table/dist/index.css'
