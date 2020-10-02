@@ -4,6 +4,9 @@
 
 [![NPM](https://img.shields.io/npm/v/@nadavshaar/react-grid-table.svg)](https://www.npmjs.com/package/@nadavshaar/react-grid-table) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
+
+![rgt](https://user-images.githubusercontent.com/8030614/94877247-9d761600-0462-11eb-996b-d45c13ec357b.png)
+
 **Supported features:**
 
 - Sort by column
