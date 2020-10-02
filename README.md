@@ -4,9 +4,6 @@
 
 [![NPM](https://img.shields.io/npm/v/@nadavshaar/react-grid-table.svg)](https://www.npmjs.com/package/@nadavshaar/react-grid-table) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-
-![rgt](https://user-images.githubusercontent.com/8030614/94877247-9d761600-0462-11eb-996b-d45c13ec357b.png)
-
 **Supported features:**
 
 - Sort by column
@@ -20,6 +17,10 @@
 - Column visibility management
 - Sticky header
 - Dynamic row height
+
+**Live [Demo](https://nadavshaar.github.io/react-grid-table/)**
+
+![rgt](https://user-images.githubusercontent.com/8030614/94882804-9efb0a80-0471-11eb-80c3-b95e36c26d77.png)
 
 ## Install
 
@@ -134,7 +135,7 @@ Each column supports the following properties:
 | sort | function | the sort function for this column | `({a, b, isAscending}) => { if(a.toLowerCase() > b.toLowerCase()) return isAscending ? 1 : -1; else if(a.toLowerCase() < b.toLowerCase()) return isAscending ? -1 : 1; return 0; }` |
 | cellRenderer | function | used for custom rendering the cell `({value, row, column, rowIndex, searchText}) => ( children )` | --- |
 | headerCellRenderer | function | used for custom rendering the header cell `({label, column}) => ( children ) ` | --- |
-| editorCellRenderer | function | used for custom rendering the cell in edit mode `({value, field, onChange, row, column, rowIndex, searchText}) => ( children ) ` | --- |
+| editorCellRenderer | function | used for custom rendering the cell in edit mode `({value, field, onChange, row, rows, column, rowIndex}) => ( children ) ` | --- |
 
 **Example:**
 ```javascript
@@ -161,7 +162,7 @@ Each column supports the following properties:
   // sort: ({a, b, isAscending}) => { },
   // cellRenderer: ({value, row, column, rowIndex, searchText}) => { },
   // headerCellRenderer: ({label, column}) => ( ),
-  // editorCellRenderer: ({value, field, onChange, row, column, rowIndex, searchText}) => { }
+  // editorCellRenderer: ({value, field, onChange, row, rows, column, rowIndex}) => { }
 }
 ```
 
@@ -398,10 +399,17 @@ let columns = [
     cellRenderer: ({value, row, column, rowIndex, searchText}) => (
       <button onClick={e => setEditRowId(row.id)}>Edit</button>
     )
-    editorCellRenderer: ({value, field, onChange, row, column, rowIndex, searchText}) => (
+    editorCellRenderer: ({value, field, onChange, row, rows, column, rowIndex}) => (
       <div style={{display: 'inline-flex'}}>
         <button onClick={e => setEditRowId(null)}>Cancel</button>
-        <button onClick={e => {updateRowData(row); setEditRowId(null);}}>Save</button>
+        <button onClick={e => {
+          let rowsClone = [...rows];
+          let updatedRowIndex = rowsClone.findIndex(r => r.id === row.id);
+          rowsClone[updatedRowIndex] = row;
+
+          setRows(rowsClone);
+          setEditRowId(null);
+        }}>Save</button>
       </div>
     )
   }
