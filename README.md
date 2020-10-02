@@ -18,7 +18,7 @@
 - Sticky header
 - Dynamic row height
 
-**[Demo](https://nadavshaar.github.io/react-grid-table/)**
+**Live [Demo](https://nadavshaar.github.io/react-grid-table/)**
 
 ![rgt](https://user-images.githubusercontent.com/8030614/94882804-9efb0a80-0471-11eb-80c3-b95e36c26d77.png)
 
