@@ -399,10 +399,17 @@ let columns = [
     cellRenderer: ({value, row, column, rowIndex, searchText}) => (
       <button onClick={e => setEditRowId(row.id)}>Edit</button>
     )
-    editorCellRenderer: ({value, field, onChange, row, column, rowIndex, searchText}) => (
+    editorCellRenderer: ({value, field, onChange, row, rows, column, rowIndex}) => (
       <div style={{display: 'inline-flex'}}>
         <button onClick={e => setEditRowId(null)}>Cancel</button>
-        <button onClick={e => {updateRowData(row); setEditRowId(null);}}>Save</button>
+        <button onClick={e => {
+          let rowsClone = [...rows];
+          let updatedRowIndex = rowsClone.findIndex(r => r.id === row.id);
+          rowsClone[updatedRowIndex] = row;
+
+          setRows(rowsClone);
+          setEditRowId(null);
+        }}>Save</button>
       </div>
     )
   }
