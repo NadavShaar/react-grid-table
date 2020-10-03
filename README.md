@@ -112,9 +112,14 @@ export default MyAwesomeTable;
 - [Styling](#styling)
 
 ## Components structure
-<div style="display: flex; flex-direction: column; width: 100%; max-width: 650px; margin: 0;"></kbd>
-<div style="display: flex; flex: 1; min-height: 50px; border: 1px dashed #ddd; justify-content: center; align-items: center;"><b>HEADER (optional | customizable):</b>&nbsp;search & column visibility management</div><div style="display: flex; flex: 1; min-height: 50px; border: 1px dashed #ddd; justify-content: center; align-items: center;"><b>TABLE HEADER:</b>&nbsp; sort, resize & column reorder</div><div style="display: flex; flex: 1; min-height: 220px; border: 1px dashed #ddd; justify-content: center; align-items: center;"><b>TABLE BODY:</b>&nbsp; displaying data / loader / no-results, row editing & row selection</div><div style="display: flex; flex: 1; min-height: 50px; border: 1px dashed #ddd; justify-content: center; align-items: center;"><b>FOOTER (optional | customizable):</b>&nbsp;items information & pagination</div>
-</div>
+HEADER (optional | customizable): search & column visibility management. 
+
+TABLE HEADER: sort, resize & column reorder. 
+
+TABLE BODY: displaying data / loader / no-results, row editing & row selection. 
+
+FOOTER (optional | customizable): items information & pagination. 
+
 
 ## props
 
