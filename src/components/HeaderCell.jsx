@@ -36,7 +36,7 @@ const HeaderCell = (props) => {
     }, [column])
 
     let sortingProps = (column.sortable !== false && column.field  !== 'checkbox' && !column.isVirtual) ? {onClick: e => handleSort(column.id)} : {};
-    let disabledColumnSort = column.sortableColumn === false || column.pinned;
+    let disabledColumnSort = column.sortableColumn === false || isPinnedRight || isPinnedLeft;
 
     return (
         <div 
