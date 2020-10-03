@@ -225,7 +225,7 @@ Each column supports the following properties:
 | minWidth | number, null | the minimum width of the column when resizing | null |
 | maxWidth | number, null | the maximum width of the column when resizing | null |
 | getValue | function | used for getting the cell value (usefull when the cell value is not a string - [details](#rows)) | `({value, column}) => value` |
-| setValue | function | used for updating the cell value (usefull when the cell value is not a string) - [details](#Row-Editing) | `({value, row, setRow, column}) => { setRow({...row, [column.field]: value}) }` |
+| setValue | function | used for updating the cell value (usefull when the cell value is not a string) - [details](#Row-Editing) | `({value, row, setRow, column}) => setRow({...row, [column.field]: value})` |
 | searchable | boolean | whether to apply search filtering on the column | true |
 | editable | boolean | whether to allow editing for the column | true |
 | sortable | boolean | whether to allow sort for the column | true |
