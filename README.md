@@ -330,7 +330,7 @@ Each row should have a unique identifier field, which by default is `id`, but it
 }
 ```
 
-**Note:** If a property value is not of type string, you'll have to use the `getValue` function on the column in order to format the value. 
+**Note:** If a property value is not of type string, you'll have to use the `getValue` function on the column in order to extract the desired value. 
 
 **Example:**
 
