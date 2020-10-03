@@ -83,11 +83,6 @@ const MyAwesomeTable = () => {
             field: 'object_value_field', 
             label: 'Object Value',
             getValue: ({value, column}) => value.x.toString(),
-            setValue: ({value, row, setRow, column}) => {
-                let rowClone = { ...row };
-                rowClone[column.field].x = value;
-                setRow(rowClone);
-            }
         }
     ];
 
