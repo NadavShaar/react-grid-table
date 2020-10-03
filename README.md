@@ -449,7 +449,7 @@ footerRenderer={({
 )}
 ```
 
-## How to...
+# How to...
 
 ### Row-Editing
 Row editing can be done by rendering your row edit button using the `cellRenderer` property in the column configuration, then when clicked, it will set a state proprty with the clicked row id, and that row id would be used in the `editRowId` prop, then the table will render the editing components for columns that are defined as `editable` (true by default), and as was defined in the `editorCellRenderer` which by default will render a text input.
