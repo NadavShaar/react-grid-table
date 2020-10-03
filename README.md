@@ -109,7 +109,7 @@ const MyAwesomeTable = () => {
             id: 4, 
             field: 'object_value_field', 
             label: 'Object Value',
-            getValue: ({value, column}) => value.x.toString(),
+            getValue: ({value, column}) => value.x * value.y,
         }
     ];
 
