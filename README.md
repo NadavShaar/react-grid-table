@@ -20,7 +20,7 @@
 
 **Live [Demo](https://nadavshaar.github.io/react-grid-table/)**
 
-![rgt](https://user-images.githubusercontent.com/8030614/94882804-9efb0a80-0471-11eb-80c3-b95e36c26d77.png)
+![table](https://user-images.githubusercontent.com/8030614/94979139-cad9c700-0529-11eb-8774-324eb4dfe4f6.gif)
 
 ## Install
 
@@ -29,15 +29,20 @@ npm install --save @nadavshaar/react-grid-table
 ```
 
 ## Usage
+Import both the component from `@nadavshaar/react-grid-table` and its styles from `@nadavshaar/react-grid-table/dist/index.css`.
 ```JSX
 import React from "react";
 
-import GridTable from '@nadavshaar/react-grid-table'
-import '@nadavshaar/react-grid-table/dist/index.css'
+// importing the table component
+import GridTable from '@nadavshaar/react-grid-table';
+// importing the component's styles - required
+import '@nadavshaar/react-grid-table/dist/index.css';
 
-import Username from "./components/Username"
+// custom cell component
+import Username from "./components/Username";
+
+// some rows data
 import * as MOCK_DATA from "./MOCK_DATA.json";
-
 let rows = MOCK_DATA.default;
 // row data example: 
 // { 
@@ -53,23 +58,18 @@ const MyAwesomeTable = () => {
     
     const columns = [
         {
-            id: 1,
-            field: 'checkbox',
-            pinned: true,
-        },
-        {
-            id: 2, 
+            id: 1, 
             field: 'username', 
             label: 'Username',
             cellRenderer: Username,
         }, 
         {
-            id: 3, 
+            id: 2, 
             field: 'gender', 
             label: 'Gender',
         },
         {
-            id: 4, 
+            id: 3, 
             field: 'last_visited', 
             label: 'Last Visited',
             sort: ({a, b, isAscending}) => {
@@ -79,15 +79,10 @@ const MyAwesomeTable = () => {
             }
         },
         {
-            id: 5, 
+            id: 4, 
             field: 'object_value_field', 
             label: 'Object Value',
             getValue: ({value, column}) => value.x.toString(),
-            setValue: ({value, row, setRow, column}) => {
-                let rowClone = { ...row };
-                rowClone[column.field].x = value;
-                setRow(rowClone);
-            }
         }
     ];
 
@@ -101,8 +96,8 @@ const MyAwesomeTable = () => {
 
 export default MyAwesomeTable;
 ```
-
-## Table of contents
+# Docs
+### Table of contents
 - [Components structure](#components-structure)
 - [Props](#props)
 - [Table configuration props](#table-configuration-props)
@@ -117,9 +112,14 @@ export default MyAwesomeTable;
 - [Styling](#styling)
 
 ## Components structure
-<div style="display: flex; flex-direction: column; width: 100%; max-width: 650px; margin: 0;"></kbd>
-<div style="display: flex; flex: 1; min-height: 50px; border: 1px dashed #ddd; justify-content: center; align-items: center;"><b>HEADER (optional | customizable):</b>&nbsp;search & column visibility management</div><div style="display: flex; flex: 1; min-height: 50px; border: 1px dashed #ddd; justify-content: center; align-items: center;"><b>TABLE HEADER:</b>&nbsp; sort, resize & column reorder</div><div style="display: flex; flex: 1; min-height: 220px; border: 1px dashed #ddd; justify-content: center; align-items: center;"><b>TABLE BODY:</b>&nbsp; displaying data / loader / no-results, row editing & row selection</div><div style="display: flex; flex: 1; min-height: 50px; border: 1px dashed #ddd; justify-content: center; align-items: center;"><b>FOOTER (optional | customizable):</b>&nbsp;items information & pagination</div>
-</div>
+**HEADER (optional | customizable):** search & column visibility management. 
+
+**TABLE-HEADER:** sort, resize & column reorder. 
+
+**TABLE-BODY:** displaying data / loader / no-results, row editing & row selection. 
+
+**FOOTER (optional | customizable):** items information & pagination. 
+
 
 ## props
 
@@ -456,7 +456,7 @@ Row editing can be done by rendering your row edit button using the `cellRendere
 
 ```JSX
 // state
-const [rows, setRows] = useState(MOCK_DATA);
+const [rowsData, setRows] = useState(MOCK_DATA);
 const [editRowId, setEditRowId] = useState(null)
 
 // columns
@@ -488,18 +488,10 @@ let columns = [
   }
 ];
 
-// update handler
-const updateRowData = (row) => {
-  let rowsClone = [...rows];
-  let rowIndex = rowsClone.findIndex(it => it.id === item.id);
-  rowsClone[rowIndex] = row;
-  setRows(rowsClone);
-}
-
 // render
 <GridTable 
     columns={columns}
-    rows={rows} 
+    rows={rowsData} 
     editRowId={editRowId}
     ...
 />
