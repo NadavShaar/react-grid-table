@@ -150,7 +150,7 @@ export default MyAwesomeTable;
 
 ## props
 
-| name | type | description | default value  |
+| name | type | description | default value |
 |---|---|---|---|
 | columns* | array of objects | columns configuration (<u>[details](#columns)</u>) | [ ] |
 | rows* | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
@@ -215,7 +215,7 @@ Each column supports the following properties:
 
 | name | type | description | default value  |
 |---|---|---|---|
-| id* | string, number | a unique id for the column | --- |
+| id* | string, number | a unique id for the column, can be named using the `rowIdField` prop | --- |
 | field* | string | the name of the field as in the row data / 'checkbox' (more [details](#checkbox-column) about checkbox column) | --- |
 | label | string | the label to display in the header cell | the `field` property |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns| false |
@@ -273,7 +273,7 @@ Checkbox column has supports the following properties:
 
 | name | type | description | default value  |
 |---|---|---|---|
-| id* | string, number | a unique id for the column | --- |
+| id* | string, number | a unique id for the column, can be named using the `rowIdField` prop | --- |
 | field* | string | defines the column as a 'checkbox' column | 'checkbox' |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns | false |
 | visible | boolean | whether to show the column (pinned columns are always visible) | true |
