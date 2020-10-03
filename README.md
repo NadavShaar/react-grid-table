@@ -33,6 +33,7 @@ npm install --save @nadavshaar/react-grid-table
 import React from "react";
 
 import GridTable from '@nadavshaar/react-grid-table'
+// applying styles - required
 import '@nadavshaar/react-grid-table/dist/index.css'
 
 import Username from "./components/Username"
