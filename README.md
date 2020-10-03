@@ -33,13 +33,16 @@ Import both the component from `@nadavshaar/react-grid-table` and its styles fro
 ```JSX
 import React from "react";
 
+// importing the table component
 import GridTable from '@nadavshaar/react-grid-table';
-// applying styles - required
+// importing the component's styles - required
 import '@nadavshaar/react-grid-table/dist/index.css';
 
+// custom cell component
 import Username from "./components/Username";
-import * as MOCK_DATA from "./MOCK_DATA.json";
 
+// some rows data
+import * as MOCK_DATA from "./MOCK_DATA.json";
 let rows = MOCK_DATA.default;
 // row data example: 
 // { 
