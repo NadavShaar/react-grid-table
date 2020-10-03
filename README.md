@@ -340,7 +340,7 @@ Let's say the field's value for a cell is an object:
 
 Its `getValue` function for displaying the first and last name as a full name, would be: 
 
-`getValue: (({value, column}) => value.firstName + ' ' +  value.lastName`
+`getValue: ({value, column}) => value.firstName + ' ' +  value.lastName`
 
 The value that returns from the `getValue` function will be used for searching, sorting etc...
 
