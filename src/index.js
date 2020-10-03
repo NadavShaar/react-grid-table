@@ -426,6 +426,8 @@ const GridTable = (props) => {
                 onSortStart={tableManager.handleColumnSortStart}
                 onSortEnd={sortObj => tableManager.handleColumnSortEnd({sortObj, visibleColumns, columns: colDefs, setColumns: setColDefs})}
                 style={{
+                    display: 'grid',
+                    overflow: 'auto',
                     gridTemplateColumns: (visibleColumnsWithVirtual.filter(t => t.visible).map(g => g.width)).join(" "),
                     gridTemplateRows: `repeat(${rows.length}, max-content)`,
                 }}
