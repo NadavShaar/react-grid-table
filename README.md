@@ -125,7 +125,7 @@ export default MyAwesomeTable;
 ```
 # Docs
 ### Table of contents
-- [Components structure](#components-structure)
+- [Main components](#main-components)
 - [Props](#props)
 - [Table configuration props](#table-configuration-props)
 - [Event props](#event-props)
@@ -138,7 +138,7 @@ export default MyAwesomeTable;
 - [Row-Editing](#row-editing)
 - [Styling](#styling)
 
-## Components structure
+## Main components
 **HEADER (optional | customizable):** search & column visibility management. 
 
 **TABLE-HEADER:** sort, resize & column reorder. 
