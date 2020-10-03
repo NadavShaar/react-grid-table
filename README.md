@@ -447,7 +447,7 @@ Row editing can be done by rendering your row edit button using the `cellRendere
 
 ```JSX
 // state
-const [rows, setRows] = useState(MOCK_DATA);
+const [rowsData, setRows] = useState(MOCK_DATA);
 const [editRowId, setEditRowId] = useState(null)
 
 // columns
@@ -479,18 +479,10 @@ let columns = [
   }
 ];
 
-// update handler
-const updateRowData = (row) => {
-  let rowsClone = [...rows];
-  let rowIndex = rowsClone.findIndex(it => it.id === item.id);
-  rowsClone[rowIndex] = row;
-  setRows(rowsClone);
-}
-
 // render
 <GridTable 
     columns={columns}
-    rows={rows} 
+    rows={rowsData} 
     editRowId={editRowId}
     ...
 />
