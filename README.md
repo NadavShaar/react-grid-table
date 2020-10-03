@@ -112,13 +112,13 @@ export default MyAwesomeTable;
 - [Styling](#styling)
 
 ## Components structure
-HEADER (optional | customizable): search & column visibility management. 
+**HEADER (optional | customizable):** search & column visibility management. 
 
-TABLE HEADER: sort, resize & column reorder. 
+**TABLE-HEADER:** sort, resize & column reorder. 
 
-TABLE BODY: displaying data / loader / no-results, row editing & row selection. 
+**TABLE-BODY:** displaying data / loader / no-results, row editing & row selection. 
 
-FOOTER (optional | customizable): items information & pagination. 
+**FOOTER (optional | customizable):** items information & pagination. 
 
 
 ## props
