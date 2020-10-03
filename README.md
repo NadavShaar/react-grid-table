@@ -215,7 +215,7 @@ Each column supports the following properties:
 
 | name | type | description | default value  |
 |---|---|---|---|
-| id* | string, number | a unique id for the column, can be named using the `rowIdField` prop | --- |
+| id* | string, number | a unique identifier for the column, can be changed using the `rowIdField` prop | --- |
 | field* | string | the name of the field as in the row data / 'checkbox' (more [details](#checkbox-column) about checkbox column) | --- |
 | label | string | the label to display in the header cell | the `field` property |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns| false |
@@ -273,7 +273,7 @@ Checkbox column has supports the following properties:
 
 | name | type | description | default value  |
 |---|---|---|---|
-| id* | string, number | a unique id for the column, can be named using the `rowIdField` prop | --- |
+| id* | string, number | a unique identifier for the column, can be changed using the `rowIdField` prop | --- |
 | field* | string | defines the column as a 'checkbox' column | 'checkbox' |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns | false |
 | visible | boolean | whether to show the column (pinned columns are always visible) | true |
