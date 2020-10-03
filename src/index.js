@@ -38,8 +38,9 @@ const GridTable = (props) => {
             minWidth: null,
             maxWidth: null,
             resizable: false,
-            visible: cd.pinned || cd.visible !== false,
-            ...cd
+            sortableColumn: true,
+            ...cd,
+            visible: cd.pinned || cd.visible !== false
         };
         
         return {
