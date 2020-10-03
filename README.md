@@ -492,7 +492,7 @@ const [editRowId, setEditRowId] = useState(null)
 let columns = [
   ...,
   {
-    id: 'my-buttons-column'
+    id: 'my-buttons-column',
     field: 'buttons', 
     label: '',
     pinned: true,
@@ -500,7 +500,7 @@ let columns = [
     resizable: false,
     cellRenderer: ({value, row, column, rowIndex, searchText}) => (
       <button onClick={e => setEditRowId(row.id)}>Edit</button>
-    )
+    ),
     editorCellRenderer: ({value, field, onChange, row, rows, column, rowIndex}) => (
       <div style={{display: 'inline-flex'}}>
         <button onClick={e => setEditRowId(null)}>Cancel</button>
