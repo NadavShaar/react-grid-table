@@ -29,6 +29,7 @@ npm install --save @nadavshaar/react-grid-table
 ```
 
 ## Usage
+In order to use the table, you must import both the component from `@nadavshaar/react-grid-table` and its styles from `@nadavshaar/react-grid-table/dist/index.css`.
 ```JSX
 import React from "react";
 
