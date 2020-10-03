@@ -28,7 +28,9 @@
 npm install --save @nadavshaar/react-grid-table
 ```
 
-## Usage
+## Basic Usage
+By default, the table is fully featured even with just a basic configuration of rows and columns.
+
 Import both the component from `@nadavshaar/react-grid-table` and its styles from `@nadavshaar/react-grid-table/dist/index.css`.
 ```JSX
 import React from "react";
@@ -41,18 +43,43 @@ import '@nadavshaar/react-grid-table/dist/index.css';
 // custom cell component
 import Username from "./components/Username";
 
-// some rows data
-import * as MOCK_DATA from "./MOCK_DATA.json";
-let rows = MOCK_DATA.default;
-// row data example: 
-// { 
-//     "id": 1, 
-//     "username": "wotham0", 
-//     "gender": "Male", 
-//     "last_visited": "12/08/2019", 
-//     "object_value_field": {"x": 1, "y": 2}, 
-//     ... 
-// } 
+let rows = [
+    { 
+        "id": 1, 
+        "username": "wotham0", 
+        "gender": "Male", 
+        "last_visited": "12/08/2019", 
+        "object_value_field": {"x": 1, "y": 2}, 
+    },
+    { 
+        "id": 2, 
+        "username": "dbraddon2", 
+        "gender": "Female", 
+        "last_visited": "16/07/2018", 
+        "object_value_field": {"x": 3, "y": 4}, 
+    },
+    { 
+        "id": 3, 
+        "username": "dridett3", 
+        "gender": "Male", 
+        "last_visited": "20/11/2016", 
+        "object_value_field": {"x": 5, "y": 8}, 
+    },
+    { 
+        "id": 4, 
+        "username": "gdefty6", 
+        "gender": "Female", 
+        "last_visited": "03/08/2019", 
+        "object_value_field": {"x": 7, "y": 4}, 
+    },
+    { 
+        "id": 5, 
+        "username": "hbeyer9", 
+        "gender": "Male", 
+        "last_visited": "10/10/2016", 
+        "object_value_field": {"x": 2, "y": 2}, 
+    }
+];
 
 const MyAwesomeTable = () => {
     
@@ -98,7 +125,7 @@ export default MyAwesomeTable;
 ```
 # Docs
 ### Table of contents
-- [Components structure](#components-structure)
+- [Main components](#main-components)
 - [Props](#props)
 - [Table configuration props](#table-configuration-props)
 - [Event props](#event-props)
@@ -111,7 +138,7 @@ export default MyAwesomeTable;
 - [Row-Editing](#row-editing)
 - [Styling](#styling)
 
-## Components structure
+## Main components
 **HEADER (optional | customizable):** search & column visibility management. 
 
 **TABLE-HEADER:** sort, resize & column reorder. 
@@ -123,7 +150,7 @@ export default MyAwesomeTable;
 
 ## props
 
-| name | type | description | default value  |
+| name | type | description | default value |
 |---|---|---|---|
 | columns* | array of objects | columns configuration (<u>[details](#columns)</u>) | [ ] |
 | rows* | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
@@ -170,7 +197,7 @@ A set of functions that are used for rendering custom components.
 | name | type | description | usage |
 |---|---|---|---|
 | headerRenderer | function | used for rendering a custom header ([details](#headerRenderer)) | `({searchText, setSearchText, setColumnVisibility, columns}) => ( children )` |
-| footerRenderer | function | used for rendering a custom footer ([details](#footerRenderer)) | `({page, totalPages, handlePagination, pageSize, pageSizes, setPageSize, setPage, totalRows, selectedRowsLength,  numberOfRows }) => ( children )` |
+| footerRenderer | function | used for rendering a custom footer ([details](#footerRenderer)) | `({page, totalPages, handlePagination, pageSize, pageSizes, setPageSize, totalRows, selectedRowsLength,  numberOfRows }) => ( children )` |
 | loaderRenderer | function | used for rendering a custom loader | `() => ( children )` |
 | noResultsRenderer | function | used for rendering a custom component when there is no data to display | `() => ( children )` |
 | searchRenderer | function | used for rendering a custom search component ([details](#headerRenderer)) | `({searchText, setSearchText}) => ( children )` |
@@ -188,7 +215,7 @@ Each column supports the following properties:
 
 | name | type | description | default value  |
 |---|---|---|---|
-| id* | string, number | a unique id for the column | --- |
+| id* | string, number | a unique id for the column, can be named using the `rowIdField` prop | --- |
 | field* | string | the name of the field as in the row data / 'checkbox' (more [details](#checkbox-column) about checkbox column) | --- |
 | label | string | the label to display in the header cell | the `field` property |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns| false |
@@ -246,7 +273,7 @@ Checkbox column has supports the following properties:
 
 | name | type | description | default value  |
 |---|---|---|---|
-| id* | string, number | a unique id for the column | --- |
+| id* | string, number | a unique id for the column, can be named using the `rowIdField` prop | --- |
 | field* | string | defines the column as a 'checkbox' column | 'checkbox' |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns | false |
 | visible | boolean | whether to show the column (pinned columns are always visible) | true |
@@ -449,7 +476,7 @@ footerRenderer={({
 )}
 ```
 
-## How to...
+# How to...
 
 ### Row-Editing
 Row editing can be done by rendering your row edit button using the `cellRenderer` property in the column configuration, then when clicked, it will set a state proprty with the clicked row id, and that row id would be used in the `editRowId` prop, then the table will render the editing components for columns that are defined as `editable` (true by default), and as was defined in the `editorCellRenderer` which by default will render a text input.
