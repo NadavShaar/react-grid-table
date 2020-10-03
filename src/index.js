@@ -429,7 +429,7 @@ const GridTable = (props) => {
                     display: 'grid',
                     overflow: 'auto',
                     gridTemplateColumns: (visibleColumnsWithVirtual.filter(t => t.visible).map(g => g.width)).join(" "),
-                    gridTemplateRows: `repeat(${items.length}, max-content)`,
+                    gridTemplateRows: `repeat(${items.length+1}, max-content)`,
                 }}
             >
                 { renderHeaderCells() }
