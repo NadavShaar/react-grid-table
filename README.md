@@ -349,7 +349,7 @@ The value that returns from the `getValue` function will be used for searching, 
 
 This function is used for rendering a custom header.
 
-By default the header renders a search and column visibility manager components, you can render your own custom components and still use the table's callbacks.
+By default the header renders a search and column visibility manager components, but you can render your own custom components and still use the table's callbacks.
 
 If you just want to replace the search or the column visibility management components, you can use the `searchRenderer` or the `columnVisibilityRenderer` props.
 
@@ -405,7 +405,7 @@ headerRenderer={({searchText, setSearchText, setColumnVisibility, columns}) => (
 
 This function is used for rendering a custom footer.
 
-By default the footer renders items information and pagination controls, you can render your own custom components and still use the table's callbacks.
+By default the footer renders items information and pagination controls, but you can render your own custom components and still use the table's callbacks.
 
 **Arguments:** 
 | name | type | description | default value |
