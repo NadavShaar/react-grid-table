@@ -32,11 +32,11 @@ npm install --save @nadavshaar/react-grid-table
 ```JSX
 import React from "react";
 
-import GridTable from '@nadavshaar/react-grid-table'
+import GridTable from '@nadavshaar/react-grid-table';
 // applying styles - required
-import '@nadavshaar/react-grid-table/dist/index.css'
+import '@nadavshaar/react-grid-table/dist/index.css';
 
-import Username from "./components/Username"
+import Username from "./components/Username";
 import * as MOCK_DATA from "./MOCK_DATA.json";
 
 let rows = MOCK_DATA.default;
