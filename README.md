@@ -281,7 +281,7 @@ Checkbox column has supports the following properties:
 | width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "max-content" |
 | minWidth | number, null | the minimum width of the column when resizing | null |
 | maxWidth | number, null | the maximum width of the column when resizing | null |
-| resizable | boolean | whether to allow resizing for the column | true |
+| resizable | boolean | whether to allow resizing for the column | false |
 | cellRenderer | function | used for custom rendering the checkbox cell `({isChecked, callback, disabled, rowIndex}) => ( <input type="checkbox" onChange={ callback } checked={ isChecked } disabled={ disabled } /> )` | --- |
 | headerCellRenderer | function | used for custom rendering the checkbox header cell `({isChecked, callback, disabled}) => ( <input type="checkbox" onChange={ callback } checked={ isChecked } disabled={ disabled } /> )` | --- |
 
