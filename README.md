@@ -54,23 +54,18 @@ const MyAwesomeTable = () => {
     
     const columns = [
         {
-            id: 1,
-            field: 'checkbox',
-            pinned: true,
-        },
-        {
-            id: 2, 
+            id: 1, 
             field: 'username', 
             label: 'Username',
             cellRenderer: Username,
         }, 
         {
-            id: 3, 
+            id: 2, 
             field: 'gender', 
             label: 'Gender',
         },
         {
-            id: 4, 
+            id: 3, 
             field: 'last_visited', 
             label: 'Last Visited',
             sort: ({a, b, isAscending}) => {
@@ -80,7 +75,7 @@ const MyAwesomeTable = () => {
             }
         },
         {
-            id: 5, 
+            id: 4, 
             field: 'object_value_field', 
             label: 'Object Value',
             getValue: ({value, column}) => value.x.toString(),
