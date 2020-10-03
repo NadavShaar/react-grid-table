@@ -110,7 +110,7 @@ const App = () => {
             label: '',
             pinned: true,
             sortable: false,
-            // resizable: false,
+            resizable: false,
             cellRenderer: ({value, row, column, rowIndex, searchText}) => (
                 <div style={styles.buttonsCellContainer}>
 					<button 
