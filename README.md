@@ -41,18 +41,43 @@ import '@nadavshaar/react-grid-table/dist/index.css';
 // custom cell component
 import Username from "./components/Username";
 
-// some rows data
-import * as MOCK_DATA from "./MOCK_DATA.json";
-let rows = MOCK_DATA.default;
-// row data example: 
-// { 
-//     "id": 1, 
-//     "username": "wotham0", 
-//     "gender": "Male", 
-//     "last_visited": "12/08/2019", 
-//     "object_value_field": {"x": 1, "y": 2}, 
-//     ... 
-// } 
+let rows = [
+    { 
+        "id": 1, 
+        "username": "wotham0", 
+        "gender": "Male", 
+        "last_visited": "12/08/2019", 
+        "object_value_field": {"x": 1, "y": 2}, 
+    },
+    { 
+        "id": 2, 
+        "username": "dbraddon2", 
+        "gender": "Female", 
+        "last_visited": "16/07/2018", 
+        "object_value_field": {"x": 3, "y": 4}, 
+    },
+    { 
+        "id": 3, 
+        "username": "dridett3", 
+        "gender": "Male", 
+        "last_visited": "20/11/2016", 
+        "object_value_field": {"x": 5, "y": 8}, 
+    },
+    { 
+        "id": 4, 
+        "username": "gdefty6", 
+        "gender": "Female", 
+        "last_visited": "03/08/2019", 
+        "object_value_field": {"x": 7, "y": 4}, 
+    },
+    { 
+        "id": 5, 
+        "username": "hbeyer9", 
+        "gender": "Male", 
+        "last_visited": "10/10/2016", 
+        "object_value_field": {"x": 2, "y": 2}, 
+    }
+];
 
 const MyAwesomeTable = () => {
     
