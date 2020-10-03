@@ -97,7 +97,7 @@ const MyAwesomeTable = () => {
 export default MyAwesomeTable;
 ```
 # Docs
-## Table of contents
+### Table of contents
 - [Components structure](#components-structure)
 - [Props](#props)
 - [Table configuration props](#table-configuration-props)
