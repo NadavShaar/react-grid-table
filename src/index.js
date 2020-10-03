@@ -409,8 +409,8 @@ const GridTable = (props) => {
         onRowClick,
         rowIdField,
         ...rest
-     } = props;
-console.log(visibleColumnsWithVirtual.filter(t => t.visible))
+    } = props;
+
     return (
         <div ref={rgtRef} className='rgt-wrapper' {...rest} >
             { renderHeader() }
