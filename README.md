@@ -282,6 +282,7 @@ Checkbox column has supports the following properties:
 | minWidth | number, null | the minimum width of the column when resizing | null |
 | maxWidth | number, null | the maximum width of the column when resizing | null |
 | resizable | boolean | whether to allow resizing for the column | false |
+| sortableColumn | boolean | whether to allow column reorder | true |
 | cellRenderer | function | used for custom rendering the checkbox cell `({isChecked, callback, disabled, rowIndex}) => ( <input type="checkbox" onChange={ callback } checked={ isChecked } disabled={ disabled } /> )` | --- |
 | headerCellRenderer | function | used for custom rendering the checkbox header cell `({isChecked, callback, disabled}) => ( <input type="checkbox" onChange={ callback } checked={ isChecked } disabled={ disabled } /> )` | --- |
 
@@ -298,6 +299,7 @@ Checkbox column has supports the following properties:
   minWidth: null,
   maxWidth: null,
   resizable: false,
+  sortableColumn: false,
   visible: true,
   // cellRenderer: ({isChecked, callback, disabled, rowIndex}) => ( children )
   // headerCellRenderer: ({isChecked, callback, disabled}) => ( children )
