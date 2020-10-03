@@ -39,7 +39,7 @@ const App = () => {
             id: 1,
             field: 'checkbox',
             pinned: true,
-            // width: '54px'
+            width: '54px'
         },
         {
             id: 2, 
@@ -110,7 +110,7 @@ const App = () => {
             label: '',
             pinned: true,
             sortable: false,
-            resizable: false,
+            // resizable: false,
             cellRenderer: ({value, row, column, rowIndex, searchText}) => (
                 <div style={styles.buttonsCellContainer}>
 					<button 

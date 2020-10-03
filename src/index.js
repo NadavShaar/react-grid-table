@@ -225,7 +225,7 @@ const GridTable = (props) => {
             index={visibleColumns.length}
             className={`rgt-cell-header rgt-cell-header-virtual-col${props.isHeaderSticky !== false ? ' rgt-cell-header-sticky' : ''}`}
             column={{id: "virtual-col", name: "", isVirtual: true }} 
-            handleResize={({e, target, column}) => tableManager.handleResize({e, target, column, tableRef, visibleColumns, minColumnWidth: props.minColumnWidth})}
+            handleResize={({e, target, column}) => tableManager.handleResize({e, target, column, tableRef, visibleColumns: visibleColumnsWithVirtual, minColumnWidth: props.minColumnWidth})}
             stickyHeader={props.isHeaderSticky !== false}
         />;
         
@@ -240,7 +240,7 @@ const GridTable = (props) => {
                     index={idx} 
                     column={cd} 
                     handleResizeEnd={() => tableManager.handleResizeEnd({tableRef, columns: colDefs, setColumns: setColDefs})}
-                    handleResize={({e, target, column}) => tableManager.handleResize({e, target, column, tableRef, visibleColumns, minColumnWidth: props.minColumnWidth})}
+                    handleResize={({e, target, column}) => tableManager.handleResize({e, target, column, tableRef, visibleColumns: visibleColumnsWithVirtual, minColumnWidth: props.minColumnWidth})}
                     stickyHeader={props.isHeaderSticky !== false}
                     handleSort={colId => tableManager.handleSort({colId, onSortChange: props.onSortChange, setSortBy, setSortAsc, sortByState, sortAsc})}
                     sortBy={sortByState}
