@@ -295,7 +295,7 @@ Checkbox column has supports the following properties:
   field: 'checkbox',
   pinned: true,
   className: '',
-  width: '53px',
+  width: '54px',
   minWidth: null,
   maxWidth: null,
   resizable: false,
