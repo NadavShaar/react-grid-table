@@ -215,7 +215,7 @@ Each column supports the following properties:
 
 | name | type | description | default value  |
 |---|---|---|---|
-| id* | string, number | a unique id for the column, can be named using the `rowIdField` prop | --- |
+| id* | string, number | a unique identifier for the column, can be changed using the `rowIdField` prop | --- |
 | field* | string | the name of the field as in the row data / 'checkbox' (more [details](#checkbox-column) about checkbox column) | --- |
 | label | string | the label to display in the header cell | the `field` property |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns| false |
@@ -230,7 +230,7 @@ Each column supports the following properties:
 | editable | boolean | whether to allow editing for the column | true |
 | sortable | boolean | whether to allow sort for the column | true |
 | resizable | boolean | whether to allow resizing for the column | true |
-| sortableColumn | boolean | whether to allow column reorder | true |
+| sortableColumn | boolean | whether to allow column reorder (disabled for pinned columns) | true |
 | search | function | the search function for this column | `({value, searchText}) => value.toLowerCase().includes(searchText.toLowerCase())` |
 | sort | function | the sort function for this column | `({a, b, isAscending}) => { if(a.toLowerCase() > b.toLowerCase()) return isAscending ? 1 : -1; else if(a.toLowerCase() < b.toLowerCase()) return isAscending ? -1 : 1; return 0; }` |
 | cellRenderer | function | used for custom rendering the cell `({value, row, column, rowIndex, searchText}) => ( children )` | --- |
@@ -273,7 +273,7 @@ Checkbox column has supports the following properties:
 
 | name | type | description | default value  |
 |---|---|---|---|
-| id* | string, number | a unique id for the column, can be named using the `rowIdField` prop | --- |
+| id* | string, number | a unique identifier for the column, can be changed using the `rowIdField` prop | --- |
 | field* | string | defines the column as a 'checkbox' column | 'checkbox' |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns | false |
 | visible | boolean | whether to show the column (pinned columns are always visible) | true |
@@ -281,7 +281,8 @@ Checkbox column has supports the following properties:
 | width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "max-content" |
 | minWidth | number, null | the minimum width of the column when resizing | null |
 | maxWidth | number, null | the maximum width of the column when resizing | null |
-| resizable | boolean | whether to allow resizing for the column | true |
+| resizable | boolean | whether to allow resizing for the column | false |
+| sortableColumn | boolean | whether to allow column reorder (disabled for pinned columns) | true |
 | cellRenderer | function | used for custom rendering the checkbox cell `({isChecked, callback, disabled, rowIndex}) => ( <input type="checkbox" onChange={ callback } checked={ isChecked } disabled={ disabled } /> )` | --- |
 | headerCellRenderer | function | used for custom rendering the checkbox header cell `({isChecked, callback, disabled}) => ( <input type="checkbox" onChange={ callback } checked={ isChecked } disabled={ disabled } /> )` | --- |
 
@@ -294,10 +295,11 @@ Checkbox column has supports the following properties:
   field: 'checkbox',
   pinned: true,
   className: '',
-  width: '53px',
+  width: '54px',
   minWidth: null,
   maxWidth: null,
   resizable: false,
+  sortableColumn: false,
   visible: true,
   // cellRenderer: ({isChecked, callback, disabled, rowIndex}) => ( children )
   // headerCellRenderer: ({isChecked, callback, disabled}) => ( children )
