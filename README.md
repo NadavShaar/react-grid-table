@@ -230,7 +230,7 @@ Each column supports the following properties:
 | editable | boolean | whether to allow editing for the column | true |
 | sortable | boolean | whether to allow sort for the column | true |
 | resizable | boolean | whether to allow resizing for the column | true |
-| sortableColumn | boolean | whether to allow column reorder | true |
+| sortableColumn | boolean | whether to allow column reorder (disabled for pinned columns) | true |
 | search | function | the search function for this column | `({value, searchText}) => value.toLowerCase().includes(searchText.toLowerCase())` |
 | sort | function | the sort function for this column | `({a, b, isAscending}) => { if(a.toLowerCase() > b.toLowerCase()) return isAscending ? 1 : -1; else if(a.toLowerCase() < b.toLowerCase()) return isAscending ? -1 : 1; return 0; }` |
 | cellRenderer | function | used for custom rendering the cell `({value, row, column, rowIndex, searchText}) => ( children )` | --- |
@@ -282,7 +282,7 @@ Checkbox column has supports the following properties:
 | minWidth | number, null | the minimum width of the column when resizing | null |
 | maxWidth | number, null | the maximum width of the column when resizing | null |
 | resizable | boolean | whether to allow resizing for the column | false |
-| sortableColumn | boolean | whether to allow column reorder | true |
+| sortableColumn | boolean | whether to allow column reorder (disabled for pinned columns) | true |
 | cellRenderer | function | used for custom rendering the checkbox cell `({isChecked, callback, disabled, rowIndex}) => ( <input type="checkbox" onChange={ callback } checked={ isChecked } disabled={ disabled } /> )` | --- |
 | headerCellRenderer | function | used for custom rendering the checkbox header cell `({isChecked, callback, disabled}) => ( <input type="checkbox" onChange={ callback } checked={ isChecked } disabled={ disabled } /> )` | --- |
 
