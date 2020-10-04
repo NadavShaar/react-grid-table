@@ -20,6 +20,8 @@
 
 **Live [Demo](https://nadavshaar.github.io/react-grid-table/)**
 
+<!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
+
 ![table](https://user-images.githubusercontent.com/8030614/94979139-cad9c700-0529-11eb-8774-324eb4dfe4f6.gif)
 
 ## Install
@@ -28,10 +30,15 @@
 npm install --save @nadavshaar/react-grid-table
 ```
 
-## Basic Usage
+## Usage
 By default, the table is fully featured even with just a basic configuration of rows and columns.
 
 Import both the component from `@nadavshaar/react-grid-table` and its styles from `@nadavshaar/react-grid-table/dist/index.css`.
+
+**Example:**
+
+<!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
+
 ```JSX
 import React from "react";
 
@@ -179,7 +186,7 @@ export default MyAwesomeTable;
 | isLoading | boolean | whether to render a loader | false |
 | isHeaderSticky | boolean | whether the table header will be stick to the top when scrolling or not | true |
 | manageColumnVisibility | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
-| icons | object with nodes | custom icons config (current supprt for sort icons only) | { sort: { ascending: &#9650;, descending: &#9660; } } |
+| icons | object of nodes | custom icons config (current supprt for sort icons only) | { sort: { ascending: &#9650;, descending: &#9660; } } |
 
 ### Event props
 
@@ -221,7 +228,7 @@ Each column supports the following properties:
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns| false |
 | visible | boolean | whether to show the column (pinned columns are always visible) | true |
 | className | string | a custom class selector for all column cells | "" |
-| width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "max-content" |
+| width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "auto" |
 | minWidth | number, null | the minimum width of the column when resizing | null |
 | maxWidth | number, null | the maximum width of the column when resizing | null |
 | getValue | function | used for getting the cell value (usefull when the cell value is not a string - [details](#rows)) | `({value, column}) => value` |
@@ -278,7 +285,7 @@ Checkbox column has supports the following properties:
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns | false |
 | visible | boolean | whether to show the column (pinned columns are always visible) | true |
 | className | string | a custom class for all column cells | "" |
-| width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "max-content" |
+| width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "auto" |
 | minWidth | number, null | the minimum width of the column when resizing | null |
 | maxWidth | number, null | the maximum width of the column when resizing | null |
 | resizable | boolean | whether to allow resizing for the column | false |
@@ -363,6 +370,8 @@ If you just want to replace the search or the column visibility management compo
 
 **Example:**
 
+<!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
+
 ```JSX
 headerRenderer={({searchText, setSearchText, setColumnVisibility, columns}) => (
     <div style={{display: 'flex', flexDirection: 'column', padding: '10px 20px', background: '#fff', width: '100%'}}>
@@ -421,6 +430,8 @@ By default the footer renders items information and pagination controls, but you
 | numberOfRows | number | total number of rows in the page | 0 | 
 
 **Example:**
+
+<!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
 
 ```JSX
 footerRenderer={({
@@ -483,6 +494,8 @@ footerRenderer={({
 ### Row-Editing
 Row editing can be done by rendering your row edit button using the `cellRenderer` property in the column configuration, then when clicked, it will set a state proprty with the clicked row id, and that row id would be used in the `editRowId` prop, then the table will render the editing components for columns that are defined as `editable` (true by default), and as was defined in the `editorCellRenderer` which by default will render a text input.
 
+<!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
+
 ```JSX
 // state
 const [rowsData, setRows] = useState(MOCK_DATA);
@@ -530,6 +543,7 @@ let columns = [
 For columns which holds values other than string, you'll have to also define the `setValue` function on the column so the updated value won't override the original value.
 
 **Example:**
+
 ```JSX
   setValue: ({value, row, setRow, column}) => {
     // value: '35', 
