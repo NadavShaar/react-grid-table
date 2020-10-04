@@ -90,6 +90,7 @@
   min-height: 48px;
   max-height: 48px;
   border-bottom: var(--border);
+  margin-right: 1px;
 }
 
 .rgt-cell-header-virtual-col {
@@ -108,7 +109,7 @@
 
 .rgt-cell-header-inner-not-pinned-right {
   border-right: var(--border);
-  margin-right: 1px; 
+  /* margin-right: 1px;  */
 }
 
 .rgt-cell-header-inner-checkbox-column {
