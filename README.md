@@ -109,7 +109,7 @@ const MyAwesomeTable = () => {
             id: 4, 
             field: 'object_value_field', 
             label: 'Object Value',
-            getValue: ({value, column}) => value.x.toString(),
+            getValue: ({value, column}) => value.x * value.y,
         }
     ];
 
@@ -330,7 +330,7 @@ Each row should have a unique identifier field, which by default is `id`, but it
 }
 ```
 
-**Note:** If a property value is not of type string, you'll have to use the `getValue` function on the column in order to format the value. 
+**Note:** If a property value is not of type string, you'll have to use the `getValue` function on the column in order to extract the desired value. 
 
 **Example:**
 
@@ -340,7 +340,7 @@ Let's say the field's value for a cell is an object:
 
 Its `getValue` function for displaying the first and last name as a full name, would be: 
 
-`getValue: (({value, column}) => value.firstName + ' ' +  value.lastName`
+`getValue: ({value, column}) => value.firstName + ' ' +  value.lastName`
 
 The value that returns from the `getValue` function will be used for searching, sorting etc...
 
@@ -349,7 +349,7 @@ The value that returns from the `getValue` function will be used for searching, 
 
 This function is used for rendering a custom header.
 
-By default the header renders a search and column visibility components, you can render your own custom components and still use the table's callbacks.
+By default the header renders a search and column visibility manager components, but you can render your own custom components.
 
 If you just want to replace the search or the column visibility management components, you can use the `searchRenderer` or the `columnVisibilityRenderer` props.
 
@@ -405,7 +405,7 @@ headerRenderer={({searchText, setSearchText, setColumnVisibility, columns}) => (
 
 This function is used for rendering a custom footer.
 
-By default the footer renders items information and pagination controls, you can render your own custom components and still use the table's callbacks.
+By default the footer renders items information and pagination controls, but you can render your own custom components.
 
 **Arguments:** 
 | name | type | description | default value |
@@ -492,7 +492,7 @@ const [editRowId, setEditRowId] = useState(null)
 let columns = [
   ...,
   {
-    id: 'my-buttons-column'
+    id: 'my-buttons-column',
     field: 'buttons', 
     label: '',
     pinned: true,
@@ -500,7 +500,7 @@ let columns = [
     resizable: false,
     cellRenderer: ({value, row, column, rowIndex, searchText}) => (
       <button onClick={e => setEditRowId(row.id)}>Edit</button>
-    )
+    ),
     editorCellRenderer: ({value, field, onChange, row, rows, column, rowIndex}) => (
       <div style={{display: 'inline-flex'}}>
         <button onClick={e => setEditRowId(null)}>Cancel</button>
