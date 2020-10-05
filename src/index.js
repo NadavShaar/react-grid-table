@@ -110,8 +110,8 @@ const GridTable = (props) => {
     // recheck if last visible column is pinned
     let lastColIsPinned = visibleColumns[visibleColumns.length-1]?.pinned;
     // virtual column insertion
-    let visibleColumnsWithVirtual = [ ...visibleColumns ];
     let virtualColConfig = {id: 'virtual', visible: true, width: "auto"};
+    let visibleColumnsWithVirtual = [ ...visibleColumns ];
     if(!lastColIsPinned) visibleColumnsWithVirtual.push(virtualColConfig) 
     else visibleColumnsWithVirtual.splice(visibleColumns.length-1, 0, virtualColConfig);
 
@@ -240,7 +240,7 @@ const GridTable = (props) => {
                     className={`rgt-cell-header rgt-cell-header-${cd.field}${(cd.sortable !== false && cd.field  !== 'checkbox' && !cd.isVirtual) ? ' rgt-clickable' : ''}${cd.sortable !== false && cd.field !== 'checkbox' ? ' rgt-cell-header-sortable' : ' rgt-cell-header-not-sortable'}${props.isHeaderSticky !== false ? ' rgt-cell-header-sticky' : ''}${cd.resizable !== false ? ' rgt-cell-header-resizable' : ' rgt-cell-header-not-resizable'}${cd.searchable !== false && cd.field !== 'checkbox' ? ' rgt-cell-header-searchable' : ' rgt-cell-header-not-searchable'}${cd.sortableColumn !== false && !cd.pinned ? ' rgt-cell-header-sortable-column' : ' rgt-cell-header-not-sortable-column'}${cd.pinned && idx === 0 ? ' rgt-cell-header-pinned rgt-cell-header-pinned-left' : ''}${cd.pinned && idx === visibleColumns.length-1 ? ' rgt-cell-header-pinned rgt-cell-header-pinned-right' : ''} ${cd.className}`.trim()}
                     index={idx} 
                     column={cd} 
-                    handleResizeEnd={() => tableManager.handleResizeEnd({tableRef, columns: colDefs, setColumns: setColDefs})}
+                    handleResizeEnd={() => tableManager.handleResizeEnd({tableRef, columns: visibleColumnsWithVirtual, setColumns: setColDefs})}
                     handleResize={({e, target, column}) => tableManager.handleResize({e, target, column, tableRef, visibleColumns: visibleColumnsWithVirtual, minColumnWidth: props.minColumnWidth})}
                     stickyHeader={props.isHeaderSticky !== false}
                     handleSort={colId => tableManager.handleSort({colId, onSortChange: props.onSortChange, setSortBy, setSortAsc, sortByState, sortAsc})}

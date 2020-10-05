@@ -70,7 +70,7 @@ const tableManager = {
         let gridTemplateColumns = containerEl.style.gridTemplateColumns;
         gridTemplateColumns = gridTemplateColumns.split(" ");
         
-        columns = columns.map((cd, idx) => { return {...cd, width: gridTemplateColumns[idx]} });
+        columns = columns.map((cd, idx) => { return {...cd, width: gridTemplateColumns[idx]} }).filter(col => col.id !== 'virtual');
         setColumns(columns);
     },
     handleColumnSortStart: (obj, e) => {
