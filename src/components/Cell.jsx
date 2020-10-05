@@ -23,6 +23,7 @@ const Cell = (props) => {
         onSelectedItemsChange,
         page,
         onRowClick,
+        isChecked,
         ...rest
     } = props;
 
@@ -33,7 +34,6 @@ const Cell = (props) => {
     if(onRowClick) rowEvents.onClick = event => onRowClick({rowIndex, row, column, event});
 
     const renderCheckboxCell = () => {
-        let isChecked = !!(selectedItems.find(si => si === rowId));
         let callback = e => tableManager.toggleItemSelection({id: rowId, selectedItems, onSelectedItemsChange});
     
         return (

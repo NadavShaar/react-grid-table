@@ -267,8 +267,17 @@ const GridTable = (props) => {
     const renderDataCells = () => {
         return items.map((d, idx1) => {
 
+            // row's id
+            let rowId = d[props.rowIdField];
+
             // check whether the row selection should be disabled
-            let disableSelection = !(selectableItems.find(si => si[props.rowIdField] === d[props.rowIdField]));
+            let disableSelection = !(selectableItems.find(si => si[props.rowIdField] === rowId));
+
+            // row index by page
+            let rowIndex = (idx1+1) + (items.length * page - items.length);
+
+            // check if row is selected
+            let isChecked = !!(selectedItems.find(si => si === rowId));
             
             return(
                 <React.Fragment key={idx1}>
@@ -276,21 +285,18 @@ const GridTable = (props) => {
                         visibleColumns.map((cd, idx2) => {
 
                             // getting the cell value from the getValue function on the column
-                            let cellValue = cd.getValue?.({value: (updatedRow?.[props.rowIdField] === d[props.rowIdField]) ? updatedRow[cd.field] : d[cd.field], column: cd});
+                            let cellValue = cd.getValue?.({value: (updatedRow?.[props.rowIdField] === rowId) ? updatedRow[cd.field] : d[cd.field], column: cd});
                             
                             // highlight searched text if...
-                            if(cd.searchable !== false && updatedRow?.[props.rowIdField] !== d[props.rowIdField] && props.highlightSearch !== false && searchTextState && searchTextState.length >= props.searchMinChars && cellValue?.toLowerCase?.().includes(searchTextState.toLowerCase())) {
+                            if(cd.searchable !== false && updatedRow?.[props.rowIdField] !== rowId && props.highlightSearch !== false && searchTextState && searchTextState.length >= props.searchMinChars && cellValue?.toLowerCase?.().includes(searchTextState.toLowerCase())) {
                                 cellValue = handleSearchHighlight(cellValue);
                             }
 
-                            // row index by page
-                            let rowIndex = (idx1+1) + (items.length * page - items.length);
-
                             // class selectors
                             let classNames = cd.field === 'checkbox' ? 
-                                `rgt-cell rgt-cell-checkbox rgt-row-${rowIndex} rgt-row-${(idx1+1) % 2 === 0 ? 'even' : 'odd'} ${cd.pinned && idx2 === 0 ? 'rgt-cell-pinned rgt-cell-pinned-left' : ''} ${cd.pinned && idx2 === visibleColumns.length-1 ? 'rgt-cell-pinned rgt-cell-pinned-right' : ''} ${cd.className}`
+                                `rgt-cell rgt-cell-checkbox rgt-row-${rowIndex} rgt-row-${(idx1+1) % 2 === 0 ? 'even' : 'odd'}${cd.pinned && idx2 === 0 ? ' rgt-cell-pinned rgt-cell-pinned-left' : ''}${cd.pinned && idx2 === visibleColumns.length-1 ? ' rgt-cell-pinned rgt-cell-pinned-right' : ''}${isChecked ? ' rgt-row-selected' : ''} ${cd.className}`.trim()
                                 :
-                                `rgt-cell rgt-cell-${cd.field} rgt-row-${rowIndex} rgt-row-${(idx1+1) % 2 === 0 ? 'even' : 'odd'}${!tableHasSelection ? '' : disableSelection ? ' rgt-row-not-selectable' : ' rgt-row-selectable'}${cd.pinned && idx2 === 0 ? ' rgt-cell-pinned rgt-cell-pinned-left' : ''}${cd.pinned && idx2 === visibleColumns.length-1 ? ' rgt-cell-pinned rgt-cell-pinned-right' : ''} ${cd.className}`
+                                `rgt-cell rgt-cell-${cd.field} rgt-row-${rowIndex} rgt-row-${(idx1+1) % 2 === 0 ? 'even' : 'odd'}${!tableHasSelection ? '' : disableSelection ? ' rgt-row-not-selectable' : ' rgt-row-selectable'}${cd.pinned && idx2 === 0 ? ' rgt-cell-pinned rgt-cell-pinned-left' : ''}${cd.pinned && idx2 === visibleColumns.length-1 ? ' rgt-cell-pinned rgt-cell-pinned-right' : ''}${isChecked ? ' rgt-row-selected' : ''}  ${cd.className}`.trim()
 
                             return (
                                 <React.Fragment key={idx1+idx2} >
@@ -300,11 +306,12 @@ const GridTable = (props) => {
                                             : null
                                     }
                                     <Cell 
-                                        rowId={d[props.rowIdField]}
-                                        row={updatedRow?.[props.rowIdField] === d[props.rowIdField] ? updatedRow : d} 
+                                        rowId={rowId}
+                                        row={updatedRow?.[props.rowIdField] === rowId ? updatedRow : d} 
                                         rows={props.rows}
                                         rowIndex={rowIndex} 
                                         onRowClick={props.onRowClick}
+                                        isChecked={isChecked}
                                         colIndex={idx2} 
                                         colDefs={colDefs} 
                                         column={cd}
@@ -313,7 +320,7 @@ const GridTable = (props) => {
                                         cellRenderer={cd.cellRenderer}
                                         editorCellRenderer={cd.editorCellRenderer}
                                         searchText={searchTextState}
-                                        isEdit={updatedRow?.[props.rowIdField] === d[props.rowIdField] && !!props.isRowEditable(d)}
+                                        isEdit={updatedRow?.[props.rowIdField] === rowId && !!props.isRowEditable(d)}
                                         setUpdatedRow={setUpdatedRow}
                                         selectedItems={selectedItems}
                                         onSelectedItemsChange={updateSelectedItems}
