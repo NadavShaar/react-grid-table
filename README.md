@@ -250,8 +250,8 @@ Each column supports the following properties:
 | sortable | boolean | whether to allow sort for the column | true |
 | resizable | boolean | whether to allow resizing for the column | true |
 | sortableColumn | boolean | whether to allow column reorder (disabled for pinned columns) | true |
-| search | function | the search function for this column | `({value, searchText}) => value.toLowerCase().includes(searchText.toLowerCase())` |
-| sort | function | the sort function for this column | `({a, b, isAscending}) => { if(a.toLowerCase() > b.toLowerCase()) return isAscending ? 1 : -1; else if(a.toLowerCase() < b.toLowerCase()) return isAscending ? -1 : 1; return 0; }` |
+| search | function | the search function for this column | `({value, searchText}) => value.toString().toLowerCase().includes(searchText.toLowerCase())` |
+| sort | function | the sort function for this column | `({a, b, isAscending}) => { let aa = typeof a === 'string' ? a.toLowerCase() : a; let bb = typeof b === 'string' ? b.toLowerCase() : b; if(aa > bb) return isAscending ? 1 : -1; else if(aa < bb) return isAscending ? -1 : 1; return 0; }` |
 | cellRenderer | function | used for custom rendering the cell `({value, row, column, rowIndex, searchText}) => ( children )` | --- |
 | headerCellRenderer | function | used for custom rendering the header cell `({label, column}) => ( children ) ` | --- |
 | editorCellRenderer | function | used for custom rendering the cell in edit mode `({value, field, onChange, row, rows, column, rowIndex}) => ( children ) ` | --- |
