@@ -294,47 +294,41 @@ const GridTable = (props) => {
 
                             // class selectors
                             let classNames = cd.field === 'checkbox' ? 
-                                `rgt-cell rgt-cell-checkbox rgt-row-${rowIndex} rgt-row-${(idx1+1) % 2 === 0 ? 'even' : 'odd'}${cd.pinned && idx2 === 0 ? ' rgt-cell-pinned rgt-cell-pinned-left' : ''}${cd.pinned && idx2 === visibleColumns.length-1 ? ' rgt-cell-pinned rgt-cell-pinned-right' : ''}${isChecked ? ' rgt-row-selected' : ''} ${cd.className}`.trim()
+                                `rgt-cell rgt-cell-checkbox rgt-row-${rowIndex} rgt-row-${(idx1+1) % 2 === 0 ? 'even' : 'odd'}${cd.pinned && idx2 === 0 ? ' rgt-cell-pinned rgt-cell-pinned-left' : ''}${cd.pinned && idx2 === visibleColumns.length-1 ? ' rgt-cell-pinned rgt-cell-pinned-right' : ''}${isChecked ? ' rgt-row-selected' : ''} ${cd.className}`
                                 :
-                                `rgt-cell rgt-cell-${cd.field} rgt-row-${rowIndex} rgt-row-${(idx1+1) % 2 === 0 ? 'even' : 'odd'}${!tableHasSelection ? '' : disableSelection ? ' rgt-row-not-selectable' : ' rgt-row-selectable'}${cd.pinned && idx2 === 0 ? ' rgt-cell-pinned rgt-cell-pinned-left' : ''}${cd.pinned && idx2 === visibleColumns.length-1 ? ' rgt-cell-pinned rgt-cell-pinned-right' : ''}${isChecked ? ' rgt-row-selected' : ''}  ${cd.className}`.trim()
+                                cd.id === 'virtual' ?
+                                    `rgt-cell rgt-cell-virtual rgt-row-${rowIndex} rgt-row-${(idx1+1) % 2 === 0 ? 'even' : 'odd'}${!tableHasSelection ? '' : disableSelection ? ' rgt-row-not-selectable' : ' rgt-row-selectable'}${isChecked ? ' rgt-row-selected' : ''}`
+                                    :
+                                    `rgt-cell rgt-cell-${cd.field} rgt-row-${rowIndex} rgt-row-${(idx1+1) % 2 === 0 ? 'even' : 'odd'}${!tableHasSelection ? '' : disableSelection ? ' rgt-row-not-selectable' : ' rgt-row-selectable'}${cd.pinned && idx2 === 0 ? ' rgt-cell-pinned rgt-cell-pinned-left' : ''}${cd.pinned && idx2 === visibleColumns.length-1 ? ' rgt-cell-pinned rgt-cell-pinned-right' : ''}${isChecked ? ' rgt-row-selected' : ''}  ${cd.className}`
 
                             return (
-                                <React.Fragment key={idx1+idx2} >
-                                    {
-                                        lastColIsPinned && idx2 === visibleColumns.length-1 ?
-                                            <div className={`rgt-cell rgt-cell-virtual rgt-row-${rowIndex} rgt-row-${(idx1+1) % 2 === 0 ? 'even' : 'odd'} ${!tableHasSelection ? '' : disableSelection ? 'rgt-row-not-selectable' : 'rgt-row-selectable'}`} {...props.cellProps}></div>
-                                            : null
-                                    }
-                                    <Cell 
-                                        rowId={rowId}
-                                        row={updatedRow?.[props.rowIdField] === rowId ? updatedRow : d} 
-                                        rows={props.rows}
-                                        rowIndex={rowIndex} 
-                                        onRowClick={props.onRowClick}
-                                        isChecked={isChecked}
-                                        colIndex={idx2} 
-                                        colDefs={colDefs} 
-                                        column={cd}
-                                        value={cellValue}
-                                        className={classNames.trim()}
-                                        cellRenderer={cd.cellRenderer}
-                                        editorCellRenderer={cd.editorCellRenderer}
-                                        searchText={searchTextState}
-                                        isEdit={updatedRow?.[props.rowIdField] === rowId && !!props.isRowEditable(d)}
-                                        setUpdatedRow={setUpdatedRow}
-                                        selectedItems={selectedItems}
-                                        onSelectedItemsChange={updateSelectedItems}
-                                        disableSelection={disableSelection}
-                                        {...props.cellProps}
-                                    />
-                                </React.Fragment>
+                                <Cell 
+                                    key={idx1+idx2}
+                                    rowId={rowId}
+                                    row={updatedRow?.[props.rowIdField] === rowId ? updatedRow : d} 
+                                    rows={props.rows}
+                                    rowIndex={rowIndex} 
+                                    onRowClick={props.onRowClick}
+                                    isChecked={isChecked}
+                                    colIndex={idx2} 
+                                    colDefs={colDefs} 
+                                    column={cd}
+                                    value={cellValue}
+                                    lastColIsPinned={lastColIsPinned}
+                                    className={classNames.trim()}
+                                    visibleColumns={visibleColumns}
+                                    cellRenderer={cd.cellRenderer}
+                                    editorCellRenderer={cd.editorCellRenderer}
+                                    searchText={searchTextState}
+                                    isEdit={updatedRow?.[props.rowIdField] === rowId && !!props.isRowEditable(d)}
+                                    setUpdatedRow={setUpdatedRow}
+                                    selectedItems={selectedItems}
+                                    onSelectedItemsChange={updateSelectedItems}
+                                    disableSelection={disableSelection}
+                                    {...props.cellProps}
+                                />
                             )
                         })
-                    }
-                    {
-                        !lastColIsPinned ?
-                            <div className={`rgt-cell rgt-cell-virtual rgt-row-${idx1+1} rgt-row-${(idx1+1) % 2 === 0 ? 'even' : 'odd'} ${!tableHasSelection ? '' : disableSelection ? 'rgt-row-not-selectable' : 'rgt-row-selectable'}`}></div>
-                            : null
                     }
                 </React.Fragment>
             )

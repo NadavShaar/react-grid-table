@@ -96,6 +96,7 @@
 .rgt-cell-header-virtual-col {
   border-bottom: var(--border);
   background: var(--background-color);
+  z-index: 2;
 }
 
 .rgt-cell-header-inner {

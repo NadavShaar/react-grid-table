@@ -24,6 +24,8 @@ const Cell = (props) => {
         page,
         onRowClick,
         isChecked,
+        lastColIsPinned,
+        visibleColumns,
         ...rest
     } = props;
 
@@ -33,32 +35,46 @@ const Cell = (props) => {
     }
     if(onRowClick) rowEvents.onClick = event => onRowClick({rowIndex, row, column, event});
 
+    let dataAttributes = {"data-row-id": (rowId).toString(), "data-row-index": rowIndex.toString(), "data-column-id": (column.id).toString()};
+
+    let virtualCell = <div { ...dataAttributes } className={className} { ...rowEvents } {...rest}></div>;
+
     const renderCheckboxCell = () => {
         let callback = e => tableManager.toggleItemSelection({id: rowId, selectedItems, onSelectedItemsChange});
     
         return (
-            <div 
-                data-row-id={(rowId).toString()}
-                data-row-index={rowIndex.toString()}
-                data-column-id={(column.id).toString()}
-                className={className} 
-                { ...rowEvents }
-                { ...rest }
-            >
+            <React.Fragment>
                 {
-                    (column.cellRenderer) ? 
-                        column.cellRenderer({isChecked, callback, disabled: disableSelection, rowIndex})
-                        :
-                        <input 
-                            className={disableSelection ? 'rgt-disabled' : 'rgt-clickable'}
-                            type="checkbox" 
-                            onChange={ callback } 
-                            onClick={ e => e.stopPropagation() } 
-                            checked={ isChecked } 
-                            disabled={ disableSelection }
-                        />
+                    lastColIsPinned && colIndex === visibleColumns.length-1 ?
+                        virtualCell
+                        : null
                 }
-            </div>
+                <div 
+                    className={className} 
+                    { ...dataAttributes }
+                    { ...rowEvents }
+                    { ...rest }
+                >
+                    {
+                        (column.cellRenderer) ? 
+                            column.cellRenderer({isChecked, callback, disabled: disableSelection, rowIndex})
+                            :
+                            <input 
+                                className={disableSelection ? 'rgt-disabled' : 'rgt-clickable'}
+                                type="checkbox" 
+                                onChange={ callback } 
+                                onClick={ e => e.stopPropagation() } 
+                                checked={ isChecked } 
+                                disabled={ disableSelection }
+                            />
+                    }
+                </div>
+                {
+                    !lastColIsPinned && colIndex === visibleColumns.length-1 ?
+                        virtualCell
+                        : null
+                }
+            </React.Fragment>
         )
     }
 
@@ -67,41 +83,51 @@ const Cell = (props) => {
     let isInputFocused = colIndex === colDefs.findIndex(column => column.field !== 'checkbox' && column.editable !== false);
 
     return (
-        <div 
-            data-row-id={(rowId).toString()}
-            data-row-index={rowIndex.toString()}
-            data-column-id={(column.id).toString()}
-            style={{minWidth: column.minWidth, maxWidth: column.maxWidth}}
-            className={className} 
-            { ...rowEvents }
-            { ...rest }
-        >
+        <React.Fragment>
             {
-                column.editable !== false && isEdit ?
-                    editorCellRenderer ? 
-                        editorCellRenderer({value, field: column.field, onChange: setUpdatedRow, row, rows, column, rowIndex})
-                        :
-                        <div className='rgt-cell-inner rgt-cell-editor'>
-                            {
-                                <div className='rgt-cell-editor-inner'>
-                                    <input
-                                        tabIndex={0}
-                                        autoFocus={isInputFocused}
-                                        className='rgt-cell-editor-input' 
-                                        type="text" 
-                                        value={value} 
-                                        onChange={e => column.setValue({value: e.target.value, row, setRow: setUpdatedRow, column})} 
-                                    />
-                                </div>
-                            }
-                        </div>
-                :
-                cellRenderer ? 
-                    cellRenderer({value, row, column, rowIndex, searchText})
-                    :
-                    <div className='rgt-cell-inner'>{value}</div>
+                lastColIsPinned && colIndex === visibleColumns.length-1 ?
+                    virtualCell
+                    : null
             }
-        </div>
+            <div 
+                className={className} 
+                style={{minWidth: column.minWidth, maxWidth: column.maxWidth}}
+                { ...dataAttributes }
+                { ...rowEvents }
+                { ...rest }
+            >
+                {
+                    column.editable !== false && isEdit ?
+                        editorCellRenderer ? 
+                            editorCellRenderer({value, field: column.field, onChange: setUpdatedRow, row, rows, column, rowIndex})
+                            :
+                            <div className='rgt-cell-inner rgt-cell-editor'>
+                                {
+                                    <div className='rgt-cell-editor-inner'>
+                                        <input
+                                            tabIndex={0}
+                                            autoFocus={isInputFocused}
+                                            className='rgt-cell-editor-input' 
+                                            type="text" 
+                                            value={value} 
+                                            onChange={e => column.setValue({value: e.target.value, row, setRow: setUpdatedRow, column})} 
+                                        />
+                                    </div>
+                                }
+                            </div>
+                    :
+                    cellRenderer ? 
+                        cellRenderer({value, row, column, rowIndex, searchText})
+                        :
+                        <div className='rgt-cell-inner'>{value}</div>
+                }
+            </div>
+            {
+                !lastColIsPinned && colIndex === visibleColumns.length-1 ?
+                    virtualCell
+                    : null
+            }
+        </React.Fragment>
     )
 }
 
