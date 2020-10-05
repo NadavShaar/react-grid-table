@@ -17,7 +17,7 @@ const tableManager = {
             items = items.filter(item => Object.keys(item).some(key => {
                 if (conf[key] && conf[key].searchable !== false) {
                     let displayValue = conf[key].getValue({value: item[key], column: conf[key]});
-                    return conf[key].search({value: displayValue, searchText});
+                    return conf[key].search({value: displayValue.toString(), searchText});
                 }
                 return false;
             }));

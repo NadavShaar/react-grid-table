@@ -56,20 +56,12 @@ const GridTable = (props) => {
             sortable: true,
             resizable: true,
             sortableColumn: true,
-            search: ({value, searchText}) => {
-                if(typeof value !== 'string' && typeof value !== 'number') {
-                    console.warn(`Failed to search on "${cd.field}" column, type is not a string or a number, you should add a custom search function in the column definition in order to handle search for this column`);
-                    return false;
-                }
-                return value.toLowerCase().includes(searchText.toLowerCase());
-            }, 
+            search: ({value, searchText}) => value.toString().toLowerCase().includes(searchText.toLowerCase()), 
             sort: ({a, b, isAscending}) => {
-                if(typeof a !== 'string' || typeof b !== 'string') {
-                    console.warn(`Failed to sort on "${cd.field}" column, type is not a string or a number, you should add a custom sort function in the column definition in order to handle sort for this column`);
-                    return 0;
-                } 
-                if(a.toLowerCase() > b.toLowerCase()) return isAscending ? 1 : -1;
-                else if(a.toLowerCase() < b.toLowerCase()) return isAscending ? -1 : 1;
+                let aa = typeof a === 'string' ? a.toLowerCase() : a;
+                let bb = typeof b === 'string' ? b.toLowerCase() : b;
+                if(aa > bb) return isAscending ? 1 : -1;
+                else if(aa < bb) return isAscending ? -1 : 1;
                 return 0;
             }, 
             ...cd, 
@@ -285,7 +277,7 @@ const GridTable = (props) => {
                         visibleColumns.map((cd, idx2) => {
 
                             // getting the cell value from the getValue function on the column
-                            let cellValue = cd.getValue?.({value: (updatedRow?.[props.rowIdField] === rowId) ? updatedRow[cd.field] : d[cd.field], column: cd});
+                            let cellValue = cd.getValue?.({value: (updatedRow?.[props.rowIdField] === rowId) ? updatedRow[cd.field] : d[cd.field], column: cd}).toString();
                             
                             // highlight searched text if...
                             if(cd.searchable !== false && updatedRow?.[props.rowIdField] !== rowId && props.highlightSearch !== false && searchTextState && searchTextState.length >= props.searchMinChars && cellValue?.toLowerCase?.().includes(searchTextState.toLowerCase())) {
