@@ -48,7 +48,14 @@ import GridTable from '@nadavshaar/react-grid-table';
 import '@nadavshaar/react-grid-table/dist/index.css';
 
 // custom cell component
-import Username from "./components/Username";
+const Username = ({value, row, column, rowIndex, searchText}) => {
+    return (
+        <div className='rgt-cell-inner' style={{display: 'flex', alignItems: 'center'}}>
+            <img src={row.avatar} alt="user avatar" />
+            <span className='rgt-text-truncate' style={{marginLeft: 10}}>{value}</span>
+        </div>
+    )
+}
 
 let rows = [
     { 
@@ -56,35 +63,40 @@ let rows = [
         "username": "wotham0", 
         "gender": "Male", 
         "last_visited": "12/08/2019", 
-        "object_value_field": {"x": 1, "y": 2}, 
+        "tests": {"x": 1, "y": 2}, 
+        "avatar":"https://robohash.org/atquenihillaboriosam.bmp?size=32x32&set=set1"
     },
     { 
         "id": 2, 
         "username": "dbraddon2", 
         "gender": "Female", 
         "last_visited": "16/07/2018", 
-        "object_value_field": {"x": 3, "y": 4}, 
+        "tests": {"x": 3, "y": 4}, 
+        "avatar":"https://robohash.org/etsedex.bmp?size=32x32&set=set1"
     },
     { 
         "id": 3, 
         "username": "dridett3", 
         "gender": "Male", 
         "last_visited": "20/11/2016", 
-        "object_value_field": {"x": 5, "y": 8}, 
+        "tests": {"x": 5, "y": 8}, 
+        "avatar":"https://robohash.org/inimpeditquam.bmp?size=32x32&set=set1"
     },
     { 
         "id": 4, 
         "username": "gdefty6", 
         "gender": "Female", 
         "last_visited": "03/08/2019", 
-        "object_value_field": {"x": 7, "y": 4}, 
+        "tests": {"x": 7, "y": 4}, 
+        "avatar":"https://robohash.org/nobisducimussaepe.bmp?size=32x32&set=set1"
     },
     { 
         "id": 5, 
         "username": "hbeyer9", 
         "gender": "Male", 
         "last_visited": "10/10/2016", 
-        "object_value_field": {"x": 2, "y": 2}, 
+        "tests": {"x": 2, "y": 2}, 
+        "avatar":"https://robohash.org/etconsequatureaque.jpg?size=32x32&set=set1"
     }
 ];
 
@@ -114,9 +126,9 @@ const MyAwesomeTable = () => {
         },
         {
             id: 4, 
-            field: 'object_value_field', 
-            label: 'Object Value',
-            getValue: ({value, column}) => value.x * value.y,
+            field: 'tests', 
+            label: 'Score',
+            getValue: ({value, column}) => value.x + value.y
         }
     ];
 
