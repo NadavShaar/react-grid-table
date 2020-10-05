@@ -25,11 +25,11 @@
 ![table](https://user-images.githubusercontent.com/8030614/94979139-cad9c700-0529-11eb-8774-324eb4dfe4f6.gif)
 
 ## Install
-
+<!--
 ```bash
 npm install --save @nadavshaar/react-grid-table
 ```
-
+-->
 ## Usage
 By default, the table is fully featured even with just a basic configuration of rows and columns.
 
@@ -48,7 +48,14 @@ import GridTable from '@nadavshaar/react-grid-table';
 import '@nadavshaar/react-grid-table/dist/index.css';
 
 // custom cell component
-import Username from "./components/Username";
+const Username = ({value, row, column, rowIndex, searchText}) => {
+    return (
+        <div className='rgt-cell-inner' style={{display: 'flex', alignItems: 'center'}}>
+            <img src={row.avatar} alt="user avatar" />
+            <span className='rgt-text-truncate' style={{marginLeft: 10}}>{value}</span>
+        </div>
+    )
+}
 
 let rows = [
     { 
@@ -56,35 +63,40 @@ let rows = [
         "username": "wotham0", 
         "gender": "Male", 
         "last_visited": "12/08/2019", 
-        "object_value_field": {"x": 1, "y": 2}, 
+        "tests": {"x": 1, "y": 2}, 
+        "avatar":"https://robohash.org/atquenihillaboriosam.bmp?size=32x32&set=set1"
     },
     { 
         "id": 2, 
         "username": "dbraddon2", 
         "gender": "Female", 
         "last_visited": "16/07/2018", 
-        "object_value_field": {"x": 3, "y": 4}, 
+        "tests": {"x": 3, "y": 4}, 
+        "avatar":"https://robohash.org/etsedex.bmp?size=32x32&set=set1"
     },
     { 
         "id": 3, 
         "username": "dridett3", 
         "gender": "Male", 
         "last_visited": "20/11/2016", 
-        "object_value_field": {"x": 5, "y": 8}, 
+        "tests": {"x": 5, "y": 8}, 
+        "avatar":"https://robohash.org/inimpeditquam.bmp?size=32x32&set=set1"
     },
     { 
         "id": 4, 
         "username": "gdefty6", 
         "gender": "Female", 
         "last_visited": "03/08/2019", 
-        "object_value_field": {"x": 7, "y": 4}, 
+        "tests": {"x": 7, "y": 4}, 
+        "avatar":"https://robohash.org/nobisducimussaepe.bmp?size=32x32&set=set1"
     },
     { 
         "id": 5, 
         "username": "hbeyer9", 
         "gender": "Male", 
         "last_visited": "10/10/2016", 
-        "object_value_field": {"x": 2, "y": 2}, 
+        "tests": {"x": 2, "y": 2}, 
+        "avatar":"https://robohash.org/etconsequatureaque.jpg?size=32x32&set=set1"
     }
 ];
 
@@ -114,9 +126,9 @@ const MyAwesomeTable = () => {
         },
         {
             id: 4, 
-            field: 'object_value_field', 
-            label: 'Object Value',
-            getValue: ({value, column}) => value.x * value.y,
+            field: 'tests', 
+            label: 'Score',
+            getValue: ({value, column}) => value.x + value.y
         }
     ];
 
@@ -238,8 +250,8 @@ Each column supports the following properties:
 | sortable | boolean | whether to allow sort for the column | true |
 | resizable | boolean | whether to allow resizing for the column | true |
 | sortableColumn | boolean | whether to allow column reorder (disabled for pinned columns) | true |
-| search | function | the search function for this column | `({value, searchText}) => value.toLowerCase().includes(searchText.toLowerCase())` |
-| sort | function | the sort function for this column | `({a, b, isAscending}) => { if(a.toLowerCase() > b.toLowerCase()) return isAscending ? 1 : -1; else if(a.toLowerCase() < b.toLowerCase()) return isAscending ? -1 : 1; return 0; }` |
+| search | function | the search function for this column | `({value, searchText}) => value.toString().toLowerCase().includes(searchText.toLowerCase())` |
+| sort | function | the sort function for this column | `({a, b, isAscending}) => { let aa = typeof a === 'string' ? a.toLowerCase() : a; let bb = typeof b === 'string' ? b.toLowerCase() : b; if(aa > bb) return isAscending ? 1 : -1; else if(aa < bb) return isAscending ? -1 : 1; return 0; }` |
 | cellRenderer | function | used for custom rendering the cell `({value, row, column, rowIndex, searchText}) => ( children )` | --- |
 | headerCellRenderer | function | used for custom rendering the header cell `({label, column}) => ( children ) ` | --- |
 | editorCellRenderer | function | used for custom rendering the cell in edit mode `({value, field, onChange, row, rows, column, rowIndex}) => ( children ) ` | --- |
