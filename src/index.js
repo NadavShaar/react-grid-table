@@ -277,7 +277,8 @@ const GridTable = (props) => {
                         visibleColumns.map((cd, idx2) => {
 
                             // getting the cell value from the getValue function on the column
-                            let cellValue = cd.getValue?.({value: (updatedRow?.[props.rowIdField] === rowId) ? updatedRow[cd.field] : d[cd.field], column: cd}).toString();
+                            let cellValue = cd.getValue?.({value: (updatedRow?.[props.rowIdField] === rowId) ? updatedRow[cd.field] : d[cd.field], column: cd});
+                            cellValue = cellValue && cellValue.toString();
                             
                             // highlight searched text if...
                             if(cd.searchable !== false && updatedRow?.[props.rowIdField] !== rowId && props.highlightSearch !== false && searchTextState && searchTextState.length >= props.searchMinChars && cellValue?.toLowerCase?.().includes(searchTextState.toLowerCase())) {
