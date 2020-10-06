@@ -29,48 +29,9 @@ const SortableList = SortableContainer(({style, className, children}) => <div cl
  
 const GridTable = (props) => {
 
-    // initial colDefs with defaults
-    let initColDefs = props.columns?.map?.(cd => { 
-        
-        if(cd.field === 'checkbox') return {
-            className: '',
-            width: 'max-content',
-            minWidth: null,
-            maxWidth: null,
-            resizable: false,
-            ...cd,
-            visible: cd.pinned || cd.visible !== false
-        };
-        
-        return {
-            label: cd.field,
-            className: '',
-            width: 'max-content',
-            minWidth: null,
-            maxWidth: null,
-            getValue: ({value, column}) => value, 
-            setValue: ({value, row, setRow, column}) => { setRow({...row, [column.field]: value}) },
-            searchable: true,
-            editable: true,
-            sortable: true,
-            resizable: true,
-            search: ({value, searchText}) => value.toString().toLowerCase().includes(searchText.toLowerCase()), 
-            sort: ({a, b, isAscending}) => {
-                let aa = typeof a === 'string' ? a.toLowerCase() : a;
-                let bb = typeof b === 'string' ? b.toLowerCase() : b;
-                if(aa > bb) return isAscending ? 1 : -1;
-                else if(aa < bb) return isAscending ? -1 : 1;
-                return 0;
-            }, 
-            ...cd, 
-            visible: cd.pinned || cd.visible !== false, 
-        }
-    });
-    
-
     // ** state **
 
-    const [colDefs, setColDefs] = useState(initColDefs);
+    const [colDefs, setColDefs] = useState(tableManager.generateColumns({columns: props.columns}));
     const [items, setItems] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
     const [listEl, setListEl] = useState(null);
@@ -130,10 +91,15 @@ const GridTable = (props) => {
         setSelectedItems(props.selectedRowsIds || []);
     }, [props.selectedRowsIds])
 
-    // update colDefs
+    // update columns by state
     useEffect(() => {
         props.onColumnsChange?.(colDefs);
     }, [colDefs])
+
+    // update columns by props
+    useEffect(() => {
+        setColDefs(tableManager.generateColumns({columns: props.columns}));
+    }, [props.columns])
 
     // set grid's wrapper ref (used for auto scrolling the page to top when moving between pages)
     useEffect(() => {

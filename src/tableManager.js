@@ -1,6 +1,49 @@
 var lastPos;
 
 const tableManager = {
+    generateColumns: ({columns}) => {
+        return columns.map((cd, idx) => { 
+
+            let isPinnedColumn =  idx === 0 && cd.pinned || idx === columns.length-1 && cd.pinned;
+            let isVisibleColumn =  isPinnedColumn || cd.visible !== false;
+            
+            if(cd.field === 'checkbox') return {
+                className: '',
+                width: 'max-content',
+                minWidth: null,
+                maxWidth: null,
+                resizable: false,
+                ...cd,
+                pinned: isPinnedColumn,
+                visible: isVisibleColumn
+            };
+            
+            return {
+                label: cd.field,
+                className: '',
+                width: 'max-content',
+                minWidth: null,
+                maxWidth: null,
+                getValue: ({value, column}) => value, 
+                setValue: ({value, row, setRow, column}) => { setRow({...row, [column.field]: value}) },
+                searchable: true,
+                editable: true,
+                sortable: true,
+                resizable: true,
+                search: ({value, searchText}) => value.toString().toLowerCase().includes(searchText.toLowerCase()), 
+                sort: ({a, b, isAscending}) => {
+                    let aa = typeof a === 'string' ? a.toLowerCase() : a;
+                    let bb = typeof b === 'string' ? b.toLowerCase() : b;
+                    if(aa > bb) return isAscending ? 1 : -1;
+                    else if(aa < bb) return isAscending ? -1 : 1;
+                    return 0;
+                }, 
+                ...cd, 
+                pinned: isPinnedColumn,
+                visible: isVisibleColumn
+            }
+        });
+    },
     getNormalizedItems: ({columns, items, searchText, isPaginated, page, pageSize, sortBy, sortAsc, setItems, setTotalPages, searchMinChars}) => {
         items = [...items];
 
