@@ -313,7 +313,7 @@ Checkbox column has supports the following properties:
   pinned: true,
   className: '',
   width: '54px',
-  minWidth: null,
+  minWidth: 0,
   maxWidth: null,
   resizable: false,
   visible: true,
