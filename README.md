@@ -235,8 +235,8 @@ Each column supports the following properties:
 
 | name | type | description | default value  |
 |---|---|---|---|
-| id* | string, number | a unique identifier for the column, can be changed using the `rowIdField` prop | --- |
-| field* | string | the name of the field as in the row data / 'checkbox' (more [details](#checkbox-column) about checkbox column) | --- |
+| id* | string, number | a unique identifier for the column (can be changedto a different field using the `rowIdField` prop), or you can set it to 'checkbox' which will generate a rows selction column (more [details](#checkbox-column) about checkbox column)  | --- |
+| field* | string | the name of the field as in the row data | --- |
 | label | string | the label to display in the header cell | the `field` property |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns| false |
 | visible | boolean | whether to show the column (pinned columns are always visible) | true |
@@ -285,14 +285,13 @@ Each column supports the following properties:
 ```
 
 #### checkbox-column
-Rows selection is done by a predefined column, simply add a column with a field name of 'checkbox'.
+Rows selection is done by a predefined column, simply add a column with an `id` of 'checkbox'.
 
 Checkbox column has supports the following properties:
 
 | name | type | description | default value  |
 |---|---|---|---|
-| id* | string, number | a unique identifier for the column, can be changed using the `rowIdField` prop | --- |
-| field* | string | defines the column as a 'checkbox' column | 'checkbox' |
+| id* | string, number, 'checkbox' | a unique identifier for the column (can be changed using the `rowIdField` prop), or you can set it to 'checkbox' which will generate a rows selction column (more [details](#checkbox-column) about checkbox column) | --- |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns | false |
 | visible | boolean | whether to show the column (pinned columns are always visible) | true |
 | className | string | a custom class for all column cells | "" |
@@ -308,8 +307,7 @@ Checkbox column has supports the following properties:
 // checkbox column config
 
 {
-  id: 'some-unique-id',
-  field: 'checkbox',
+  id: 'checkbox',
   pinned: true,
   className: '',
   width: '54px',
@@ -574,7 +572,7 @@ Styling is done by css class selectors. the table's components are mapped with p
 | Search | `rgt-search-container` `rgt-search-label` `rgt-search-icon` `rgt-search-input` `rgt-search-highlight` |
 | Columns Visibility Manager | `rgt-columns-manager-wrapper` `rgt-columns-manager-button` `rgt-columns-manager-popover` `rgt-columns-manager-popover-open` `rgt-columns-manager-popover-row` |
 | Table | `rgt-container` |
-| Header Cell | `rgt-cell-header` `rgt-cell-header-checkbox` `rgt-cell-header-[column.field]` `rgt-cell-header-sortable / rgt-cell-header-not-sortable` `rgt-cell-header-sticky` `rgt-cell-header-resizable / rgt-cell-header-not-resizable` `rgt-cell-header-searchable / rgt-cell-header-not-searchable` `rgt-cell-header-pinned` `rgt-cell-header-pinned-left / rgt-cell-header-pinned-right` `[column.className]` `rgt-cell-header-inner` `rgt-cell-header-inner-checkbox-column` `rgt-header-checkbox-cell` `rgt-resize-handle` `rgt-sort-icon` `rgt-sort-icon-ascending / rgt-sort-icon-descending` `rgt-column-sort-ghost` |
+| Header Cell | `rgt-cell-header` `rgt-cell-header-checkbox / rgt-cell-header-[column.field]` `rgt-cell-header-sortable / rgt-cell-header-not-sortable` `rgt-cell-header-sticky` `rgt-cell-header-resizable / rgt-cell-header-not-resizable` `rgt-cell-header-searchable / rgt-cell-header-not-searchable` `rgt-cell-header-pinned` `rgt-cell-header-pinned-left / rgt-cell-header-pinned-right` `[column.className]` `rgt-cell-header-inner` `rgt-cell-header-inner-checkbox-column` `rgt-resize-handle` `rgt-sort-icon` `rgt-sort-icon-ascending / rgt-sort-icon-descending` `rgt-column-sort-ghost` |
 | Cell | `rgt-cell` `rgt-cell-[column.field]` `rgt-row-[rowNumber]` `rgt-row-odd / rgt-row-even` `rgt-row-hover` `rgt-row-selectable / rgt-row-not-selectable` `rgt-cell-inner` `rgt-cell-checkbox` `rgt-cell-pinned` `rgt-cell-pinned-left / rgt-cell-pinned-right` `rgt-cell-editor` `rgt-cell-editor-inner` `rgt-cell-editor-input` `rgt-row-selected` |
 | Pagination | `rgt-footer-items-per-page` `rgt-footer-pagination-button` `rgt-footer-pagination-container` `rgt-footer-page-input` |
 | Footer | `rgt-footer` `rgt-footer-items-information` `rgt-footer-right-container` |
