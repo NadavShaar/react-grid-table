@@ -96,11 +96,6 @@ const GridTable = (props) => {
         props.onColumnsChange?.(colDefs);
     }, [colDefs])
 
-    // update columns by props
-    useEffect(() => {
-        setColDefs(tableManager.generateColumns({columns: props.columns}));
-    }, [props.columns])
-
     // set grid's wrapper ref (used for auto scrolling the page to top when moving between pages)
     useEffect(() => {
         if(!rgtRef?.current?.children) return;
