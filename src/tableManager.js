@@ -7,8 +7,9 @@ const tableManager = {
             let isPinnedColumn =  idx === 0 && cd.pinned || idx === columns.length-1 && cd.pinned;
             let isVisibleColumn =  isPinnedColumn || cd.visible !== false;
             
-            if(cd.field === 'checkbox') return {
+            if(cd.id === 'checkbox') return {
                 className: '',
+                label: '',
                 width: 'max-content',
                 minWidth: 0,
                 maxWidth: null,
@@ -22,7 +23,7 @@ const tableManager = {
                 label: cd.field,
                 className: '',
                 width: 'max-content',
-                minWidth: typeof cd.minWidth === 'number' ? cd.minWidth : minColumnWidth,
+                minWidth: cd.minWidth || minColumnWidth,
                 maxWidth: null,
                 getValue: ({value, column}) => value, 
                 setValue: ({value, row, setRow, column}) => { setRow({...row, [column.field]: value}) },
@@ -119,8 +120,10 @@ const tableManager = {
     },
     handleColumnSortStart: (obj, e) => {
         obj.helper.classList.add('rgt-column-sort-ghost');
+        tableManager.isColumnSorting = true;
     },
     handleColumnSortEnd: ({sortObj, visibleColumns, columns, setColumns}) => {
+        setTimeout(() => { tableManager.isColumnSorting = false }, 0);
         if(sortObj.oldIndex === sortObj.newIndex) return;
 
         let colDefNewIndex = columns.findIndex(oc => oc.id === visibleColumns[sortObj.newIndex].id);
@@ -132,6 +135,8 @@ const tableManager = {
         setColumns(columns);
     },
     handleSort: ({colId, onSortChange, setSortBy, setSortAsc, sortByState, sortAsc}) => {
+        if(tableManager.isColumnSorting) return;
+        
         if(sortByState !== colId) {
             setSortBy(colId);
             setSortAsc(true);

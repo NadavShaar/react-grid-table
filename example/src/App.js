@@ -36,8 +36,7 @@ const App = () => {
 
     const columns = [
         {
-            id: 1,
-            field: 'checkbox',
+            id: 'checkbox',
             pinned: true,
             width: '54px'
         },

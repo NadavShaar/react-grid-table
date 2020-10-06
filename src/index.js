@@ -53,7 +53,7 @@ const GridTable = (props) => {
     // ** data preparations **
 
     // check if table has a 'checkbox' column
-    let tableHasSelection = !!colDefs.find(cd => cd.field === 'checkbox');
+    let tableHasSelection = !!colDefs.find(cd => cd.id === 'checkbox');
     // set selectable items
     let selectableItems = items.filter(it => props.isRowSelectable(it));
     // set visible columns
@@ -188,7 +188,7 @@ const GridTable = (props) => {
             arr.push(
                 <HeaderCell 
                     key={idx} 
-                    className={`rgt-cell-header rgt-cell-header-${cd.field}${(cd.sortable !== false && cd.field  !== 'checkbox' && !cd.isVirtual) ? ' rgt-clickable' : ''}${cd.sortable !== false && cd.field !== 'checkbox' ? ' rgt-cell-header-sortable' : ' rgt-cell-header-not-sortable'}${props.isHeaderSticky !== false ? ' rgt-cell-header-sticky' : ''}${cd.resizable !== false ? ' rgt-cell-header-resizable' : ' rgt-cell-header-not-resizable'}${cd.searchable !== false && cd.field !== 'checkbox' ? ' rgt-cell-header-searchable' : ' rgt-cell-header-not-searchable'}${cd.pinned && idx === 0 ? ' rgt-cell-header-pinned rgt-cell-header-pinned-left' : ''}${cd.pinned && idx === visibleColumns.length-1 ? ' rgt-cell-header-pinned rgt-cell-header-pinned-right' : ''} ${cd.className}`.trim()}
+                    className={`rgt-cell-header rgt-cell-header-${cd.id === 'checkbox' ? 'checkbox' : cd.field}${(cd.sortable !== false && cd.id  !== 'checkbox' && !cd.isVirtual) ? ' rgt-clickable' : ''}${cd.sortable !== false && cd.id !== 'checkbox' ? ' rgt-cell-header-sortable' : ' rgt-cell-header-not-sortable'}${props.isHeaderSticky !== false ? ' rgt-cell-header-sticky' : ''}${cd.resizable !== false ? ' rgt-cell-header-resizable' : ' rgt-cell-header-not-resizable'}${cd.searchable !== false && cd.id !== 'checkbox' ? ' rgt-cell-header-searchable' : ' rgt-cell-header-not-searchable'}${cd.pinned && idx === 0 ? ' rgt-cell-header-pinned rgt-cell-header-pinned-left' : ''}${cd.pinned && idx === visibleColumns.length-1 ? ' rgt-cell-header-pinned rgt-cell-header-pinned-right' : ''} ${cd.className}`.trim()}
                     index={idx} 
                     column={cd} 
                     handleResizeEnd={() => tableManager.handleResizeEnd({tableRef, columns: visibleColumnsWithVirtual, setColumns: setColDefs})}
@@ -246,7 +246,7 @@ const GridTable = (props) => {
                             }
 
                             // class selectors
-                            let classNames = cd.field === 'checkbox' ? 
+                            let classNames = cd.id === 'checkbox' ? 
                                 `rgt-cell rgt-cell-checkbox rgt-row-${rowIndex} rgt-row-${(idx1+1) % 2 === 0 ? 'even' : 'odd'}${cd.pinned && idx2 === 0 ? ' rgt-cell-pinned rgt-cell-pinned-left' : ''}${cd.pinned && idx2 === visibleColumns.length-1 ? ' rgt-cell-pinned rgt-cell-pinned-right' : ''}${isChecked ? ' rgt-row-selected' : ''} ${cd.className}`
                                 :
                                 cd.id === 'virtual' ?

@@ -36,12 +36,12 @@ const HeaderCell = (props) => {
         setTarget(resizeHandleRef.current);
     }, [column])
 
-    let sortingProps = (column.sortable !== false && column.field  !== 'checkbox' && !column.isVirtual) ? {onClick: e => handleSort(column.id)} : {};
+    let sortingProps = (column.sortable !== false && column.id  !== 'checkbox' && !column.isVirtual) ? {onClick: e => handleSort(column.id)} : {};
 
     return (
         <div 
             data-column-id={(column.id).toString()}
-            id={`rgt-column-${column.isVirtual ? 'virtual' : column.field.toLowerCase()}`}
+            id={`rgt-column-${column.isVirtual ? 'virtual' : column.id === 'checkbox' ? 'checkbox' : column.field.toLowerCase()}`}
             style={{minWidth: column.minWidth, maxWidth: column.maxWidth}}
             className={className}
             {...sortingProps}
@@ -51,7 +51,7 @@ const HeaderCell = (props) => {
                 (!column.isVirtual) ?
                     <React.Fragment>
                         <SortableItem 
-                            className={`rgt-cell-header-inner${column.field === 'checkbox' ? ' rgt-cell-header-inner-checkbox-column' : ''}${!isPinnedRight ? ' rgt-cell-header-inner-not-pinned-right' : '' }`}
+                            className={`rgt-cell-header-inner${column.id === 'checkbox' ? ' rgt-cell-header-inner-checkbox-column' : ''}${!isPinnedRight ? ' rgt-cell-header-inner-not-pinned-right' : '' }`}
                             index={index} 
                             disabled={disableColumnsReorder}
                             columnId={(column.id).toString()}
@@ -64,7 +64,7 @@ const HeaderCell = (props) => {
                                     null
                             }
                             {
-                                (column.field === 'checkbox') ?
+                                (column.id === 'checkbox') ?
                                     <div className="rgt-header-checkbox-cell">
                                         {
                                             column.headerCellRenderer ?

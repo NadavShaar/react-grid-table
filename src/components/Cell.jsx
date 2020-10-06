@@ -78,9 +78,9 @@ const Cell = (props) => {
         )
     }
 
-    if(column.field === 'checkbox') return renderCheckboxCell();
+    if(column.id === 'checkbox') return renderCheckboxCell();
 
-    let isInputFocused = colIndex === colDefs.findIndex(column => column.field !== 'checkbox' && column.editable !== false);
+    let isInputFocused = colIndex === colDefs.findIndex(column => column.id !== 'checkbox' && column.editable !== false);
 
     return (
         <React.Fragment>
