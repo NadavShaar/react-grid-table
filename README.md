@@ -154,8 +154,8 @@ export default MyAwesomeTable;
 - [The `rows` prop](#rows)
 - [The `headerRenderer` prop](#headerRenderer)
 - [The `footerRenderer` prop](#footerRenderer)
-- [**How-To:** Row-Editing](#row-editing)
-- [Styling](#styling)
+- [How-To: Row-Editing](#row-editing)
+- [How-To: Styling](#styling)
 
 ## Main components
 **HEADER (optional | customizable):** search & column visibility management. 
