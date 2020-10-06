@@ -585,4 +585,4 @@ Styling is done by css class selectors. the table's components are mapped with p
 
 ## License
 
- © [MIT](https://github.com/NadavShaar/react-grid-table/blob/main/LICENSE) 
+ © [NadavShaar](https://github.com/NadavShaar) 
