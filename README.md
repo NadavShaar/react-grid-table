@@ -191,7 +191,7 @@ export default MyAwesomeTable;
 | pageSize | number | the selected page size | 20 |
 | sortBy | string, number, null | the id of the column that should be sorted | null |
 | sortAscending | boolean | determine the sort direction | true |
-| minColumnWidth | number | minimum width for all columns | 70 |
+| minColumnWidth | number | minimum width for all columns (doesn't apply to 'checkbox' column)| 70 |
 | highlightSearch | boolean | whether to highlight the search term | true |
 | showSearch | boolean | whether to show the search in the header | true |
 | searchMinChars | number | the minimum characters to apply search and highlighting | 2 |
@@ -242,7 +242,7 @@ Each column supports the following properties:
 | visible | boolean | whether to show the column (pinned columns are always visible) | true |
 | className | string | a custom class selector for all column cells | "" |
 | width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "auto" |
-| minWidth | number, null | the minimum width of the column when resizing | null |
+| minWidth | number | the minimum width of the column | `minColumnWidth` prop |
 | maxWidth | number, null | the maximum width of the column when resizing | null |
 | getValue | function | used for getting the cell value (usefull when the cell value is not a string - [details](#rows)) | `({value, column}) => value` |
 | setValue | function | used for updating the cell value (usefull when the cell value is not a string) - [details](#Row-Editing) | `({value, row, setRow, column}) => setRow({...row, [column.field]: value})` |
@@ -269,7 +269,7 @@ Each column supports the following properties:
   width: 'max-content',
   getValue: ({value, column}) => value, 
   setValue: ({value, row, setRow, column}) => { setRow({...row, [column.field]: value}) },
-  minWidth: null,
+  minWidth: 70,
   maxWidth: null,
   sortable: true,
   editable: true,
@@ -297,7 +297,7 @@ Checkbox column has supports the following properties:
 | visible | boolean | whether to show the column (pinned columns are always visible) | true |
 | className | string | a custom class for all column cells | "" |
 | width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "auto" |
-| minWidth | number, null | the minimum width of the column when resizing | null |
+| minWidth | number | the minimum width of the column | 0 |
 | maxWidth | number, null | the maximum width of the column when resizing | null |
 | resizable | boolean | whether to allow resizing for the column | false |
 | cellRenderer | function | used for custom rendering the checkbox cell `({isChecked, callback, disabled, rowIndex}) => ( <input type="checkbox" onChange={ callback } checked={ isChecked } disabled={ disabled } /> )` | --- |
@@ -313,7 +313,7 @@ Checkbox column has supports the following properties:
   pinned: true,
   className: '',
   width: '54px',
-  minWidth: null,
+  minWidth: 0,
   maxWidth: null,
   resizable: false,
   visible: true,
