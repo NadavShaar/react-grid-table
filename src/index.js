@@ -31,7 +31,7 @@ const GridTable = (props) => {
 
     // ** state **
 
-    const [colDefs, setColDefs] = useState(tableManager.generateColumns({columns: props.columns}));
+    const [colDefs, setColDefs] = useState(tableManager.generateColumns({columns: props.columns, minColumnWidth: props.minColumnWidth}));
     const [items, setItems] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
     const [listEl, setListEl] = useState(null);
@@ -177,7 +177,7 @@ const GridTable = (props) => {
             index={visibleColumns.length}
             className={`rgt-cell-header rgt-cell-header-virtual-col${props.isHeaderSticky !== false ? ' rgt-cell-header-sticky' : ''}`}
             column={{id: "virtual-col", name: "", isVirtual: true }} 
-            handleResize={({e, target, column}) => tableManager.handleResize({e, target, column, tableRef, visibleColumns: visibleColumnsWithVirtual, minColumnWidth: props.minColumnWidth})}
+            handleResize={({e, target, column}) => tableManager.handleResize({e, target, column, tableRef, visibleColumns: visibleColumnsWithVirtual})}
             stickyHeader={props.isHeaderSticky !== false}
         />;
         
@@ -192,7 +192,7 @@ const GridTable = (props) => {
                     index={idx} 
                     column={cd} 
                     handleResizeEnd={() => tableManager.handleResizeEnd({tableRef, columns: visibleColumnsWithVirtual, setColumns: setColDefs})}
-                    handleResize={({e, target, column}) => tableManager.handleResize({e, target, column, tableRef, visibleColumns: visibleColumnsWithVirtual, minColumnWidth: props.minColumnWidth})}
+                    handleResize={({e, target, column}) => tableManager.handleResize({e, target, column, tableRef, visibleColumns: visibleColumnsWithVirtual})}
                     stickyHeader={props.isHeaderSticky !== false}
                     handleSort={colId => tableManager.handleSort({colId, onSortChange: props.onSortChange, setSortBy, setSortAsc, sortByState, sortAsc})}
                     sortBy={sortByState}

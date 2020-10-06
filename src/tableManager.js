@@ -1,7 +1,7 @@
 var lastPos;
 
 const tableManager = {
-    generateColumns: ({columns}) => {
+    generateColumns: ({columns, minColumnWidth}) => {
         return columns.map((cd, idx) => { 
 
             let isPinnedColumn =  idx === 0 && cd.pinned || idx === columns.length-1 && cd.pinned;
@@ -10,7 +10,7 @@ const tableManager = {
             if(cd.field === 'checkbox') return {
                 className: '',
                 width: 'max-content',
-                minWidth: null,
+                minWidth: 0,
                 maxWidth: null,
                 resizable: false,
                 ...cd,
@@ -22,7 +22,7 @@ const tableManager = {
                 label: cd.field,
                 className: '',
                 width: 'max-content',
-                minWidth: null,
+                minWidth: typeof cd.minWidth === 'number' ? cd.minWidth : minColumnWidth,
                 maxWidth: null,
                 getValue: ({value, column}) => value, 
                 setValue: ({value, row, setRow, column}) => { setRow({...row, [column.field]: value}) },
@@ -85,7 +85,7 @@ const tableManager = {
         setItems(items);
         setTotalPages(totalPages);
     },
-    handleResize: ({e, target, column, tableRef, visibleColumns, minColumnWidth}) => {
+    handleResize: ({e, target, column, tableRef, visibleColumns}) => {
         let containerEl = tableRef.current.container;
         let gridTemplateColumns = containerEl.style.gridTemplateColumns;
         let currentColWidth = target.offsetParent.clientWidth;
@@ -94,7 +94,8 @@ const tableManager = {
         let diff = lastPos - e.clientX;
         
         let colIndex = visibleColumns.findIndex(cd => cd.id === column.id);
-        if(e.clientX > lastPos || e.clientX < lastPos && currentColWidth - diff > (visibleColumns[colIndex].minWidth || minColumnWidth)) {
+        let colMinWidth = visibleColumns[colIndex].minWidth;
+        if(e.clientX > lastPos || e.clientX < lastPos && currentColWidth - diff > colMinWidth) {
             let gtcArr = gridTemplateColumns.split(" ");
             
             if((column.minWidth && ((currentColWidth - diff) <= column.minWidth)) || (column.maxWidth && ((currentColWidth - diff) >= column.maxWidth))) return;
