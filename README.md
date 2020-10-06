@@ -235,7 +235,7 @@ Each column supports the following properties:
 
 | name | type | description | default value  |
 |---|---|---|---|
-| id* | string, number | a unique identifier for the column (can be changedto a different field using the `rowIdField` prop), or you can set it to 'checkbox' which will generate a rows selction column (more [details](#checkbox-column) about checkbox column)  | --- |
+| id* | string, number | a unique identifier for the column (can be changed to a different field using the `rowIdField` prop), or you can set it to 'checkbox' which will generate a rows selction column (more [details](#checkbox-column) about checkbox column)  | --- |
 | field* | string | the name of the field as in the row data | --- |
 | label | string | the label to display in the header cell | the `field` property |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns| false |
