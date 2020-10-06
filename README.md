@@ -199,7 +199,7 @@ export default MyAwesomeTable;
 | disableColumnsReorder | bool | whether to disable column drag & drop | false |
 | isHeaderSticky | boolean | whether the table header will be stick to the top when scrolling or not | true |
 | manageColumnVisibility | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
-| icons | object of nodes | custom icons config (current supprt for sort icons only) | { sort: { ascending: &#9650;, descending: &#9660; } } |
+| icons | object of nodes | custom icons config (current supprt for sort icons only) | { sort: { ascending: &#129105;, descending: &#129107; } } |
 
 ### Event props
 

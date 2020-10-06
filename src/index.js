@@ -416,7 +416,7 @@ GridTable.defaultProps = {
     disableColumnsReorder: false,
     isRowSelectable: row => true,
     isRowEditable: row => true,
-    icons: { sort: { ascending: <React.Fragment>&#9650;</React.Fragment>, descending: <React.Fragment>&#9660;</React.Fragment> } }
+    icons: { sort: { ascending: <React.Fragment>&#129105;</React.Fragment>, descending: <React.Fragment>&#129107;</React.Fragment> } }
 };
 
 GridTable.propTypes = {
