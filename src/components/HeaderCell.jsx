@@ -24,6 +24,7 @@ const HeaderCell = (props) => {
         stickyHeader,
         handleResizeEnd,
         handleResize,
+        disableColumnsReorder,
         ...rest
     } = props;
     
@@ -52,6 +53,7 @@ const HeaderCell = (props) => {
                         <SortableItem 
                             className={`rgt-cell-header-inner${column.field === 'checkbox' ? ' rgt-cell-header-inner-checkbox-column' : ''}${!isPinnedRight ? ' rgt-cell-header-inner-not-pinned-right' : '' }`}
                             index={index} 
+                            disabled={disableColumnsReorder}
                             columnId={(column.id).toString()}
                             collection={isPinnedLeft || isPinnedRight ? 0 : 1}
                         >

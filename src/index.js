@@ -202,6 +202,7 @@ const GridTable = (props) => {
                     handleSort={colId => tableManager.handleSort({colId, onSortChange: props.onSortChange, setSortBy, setSortAsc, sortByState, sortAsc})}
                     sortBy={sortByState}
                     sortAsc={sortAsc}
+                    disableColumnsReorder={props.disableColumnsReorder}
                     toggleSelectAll={() => tableManager.toggleSelectAll({selectAllIsChecked, selectableItems, onSelectedItemsChange: updateSelectedItems, rowIdField: props.rowIdField})}
                     selectAllIsChecked={selectAllIsChecked}
                     selectAllIsDisabled={selectAllIsDisabled}
@@ -367,6 +368,7 @@ const GridTable = (props) => {
         searchMinChars,
         onRowClick,
         rowIdField,
+        disableColumnsReorder,
         ...rest
     } = props;
 
@@ -416,6 +418,7 @@ GridTable.defaultProps = {
     showSearch: true,
     sortBy: null,
     sortAscending: true,
+    disableColumnsReorder: false,
     isRowSelectable: row => true,
     isRowEditable: row => true,
     icons: { sort: { ascending: <React.Fragment>&#9650;</React.Fragment>, descending: <React.Fragment>&#9660;</React.Fragment> } }
@@ -438,6 +441,7 @@ GridTable.propTypes = {
     headerCellProps: PropTypes.object,
     // table config
     isPaginated: PropTypes.bool,
+    disableColumnsReorder: PropTypes.bool,
     pageSizes: PropTypes.arrayOf(PropTypes.number),
     pageSize: PropTypes.number,
     sortBy: PropTypes.oneOfType([
