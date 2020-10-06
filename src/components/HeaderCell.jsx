@@ -36,7 +36,6 @@ const HeaderCell = (props) => {
     }, [column])
 
     let sortingProps = (column.sortable !== false && column.field  !== 'checkbox' && !column.isVirtual) ? {onClick: e => handleSort(column.id)} : {};
-    let disabledColumnSort = column.sortableColumn === false || isPinnedRight || isPinnedLeft;
 
     return (
         <div 
@@ -51,14 +50,13 @@ const HeaderCell = (props) => {
                 (!column.isVirtual) ?
                     <React.Fragment>
                         <SortableItem 
-                            disabled={disabledColumnSort} 
                             className={`rgt-cell-header-inner${column.field === 'checkbox' ? ' rgt-cell-header-inner-checkbox-column' : ''}${!isPinnedRight ? ' rgt-cell-header-inner-not-pinned-right' : '' }`}
                             index={index} 
                             columnId={(column.id).toString()}
                             collection={isPinnedLeft || isPinnedRight ? 0 : 1}
                         >
                             {
-                                dragHandleRenderer && !disabledColumnSort ?
+                                dragHandleRenderer ?
                                     <DragHandle index={index}>{dragHandleRenderer()}</DragHandle>
                                     :
                                     null

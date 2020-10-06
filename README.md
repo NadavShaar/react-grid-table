@@ -249,7 +249,6 @@ Each column supports the following properties:
 | editable | boolean | whether to allow editing for the column | true |
 | sortable | boolean | whether to allow sort for the column | true |
 | resizable | boolean | whether to allow resizing for the column | true |
-| sortableColumn | boolean | whether to allow column reorder (disabled for pinned columns) | true |
 | search | function | the search function for this column | `({value, searchText}) => value.toString().toLowerCase().includes(searchText.toLowerCase())` |
 | sort | function | the sort function for this column | `({a, b, isAscending}) => { let aa = typeof a === 'string' ? a.toLowerCase() : a; let bb = typeof b === 'string' ? b.toLowerCase() : b; if(aa > bb) return isAscending ? 1 : -1; else if(aa < bb) return isAscending ? -1 : 1; return 0; }` |
 | cellRenderer | function | used for custom rendering the cell `({value, row, column, rowIndex, searchText}) => ( children )` | --- |
@@ -276,7 +275,6 @@ Each column supports the following properties:
   searchable: true,
   visible: true,
   resizable: true,
-  sortableColumn: true,
   // search: ({value, searchText}) => { },
   // sort: ({a, b, isAscending}) => { },
   // cellRenderer: ({value, row, column, rowIndex, searchText}) => { },
@@ -301,7 +299,6 @@ Checkbox column has supports the following properties:
 | minWidth | number, null | the minimum width of the column when resizing | null |
 | maxWidth | number, null | the maximum width of the column when resizing | null |
 | resizable | boolean | whether to allow resizing for the column | false |
-| sortableColumn | boolean | whether to allow column reorder (disabled for pinned columns) | true |
 | cellRenderer | function | used for custom rendering the checkbox cell `({isChecked, callback, disabled, rowIndex}) => ( <input type="checkbox" onChange={ callback } checked={ isChecked } disabled={ disabled } /> )` | --- |
 | headerCellRenderer | function | used for custom rendering the checkbox header cell `({isChecked, callback, disabled}) => ( <input type="checkbox" onChange={ callback } checked={ isChecked } disabled={ disabled } /> )` | --- |
 
@@ -318,7 +315,6 @@ Checkbox column has supports the following properties:
   minWidth: null,
   maxWidth: null,
   resizable: false,
-  sortableColumn: false,
   visible: true,
   // cellRenderer: ({isChecked, callback, disabled, rowIndex}) => ( children )
   // headerCellRenderer: ({isChecked, callback, disabled}) => ( children )
@@ -577,7 +573,7 @@ Styling is done by css class selectors. the table's components are mapped with p
 | Search | `rgt-search-container` `rgt-search-label` `rgt-search-icon` `rgt-search-input` `rgt-search-highlight` |
 | Columns Visibility Manager | `rgt-columns-manager-wrapper` `rgt-columns-manager-button` `rgt-columns-manager-popover` `rgt-columns-manager-popover-open` `rgt-columns-manager-popover-row` |
 | Table | `rgt-container` |
-| Header Cell | `rgt-cell-header` `rgt-cell-header-checkbox` `rgt-cell-header-[column.field]` `rgt-cell-header-sortable / rgt-cell-header-not-sortable` `rgt-cell-header-sticky` `rgt-cell-header-resizable / rgt-cell-header-not-resizable` `rgt-cell-header-searchable / rgt-cell-header-not-searchable` `rgt-cell-header-sortable-column / rgt-cell-header-not-sortable-column` `rgt-cell-header-pinned` `rgt-cell-header-pinned-left / rgt-cell-header-pinned-right` `[column.className]` `rgt-cell-header-inner` `rgt-cell-header-inner-checkbox-column` `rgt-header-checkbox-cell` `rgt-resize-handle` `rgt-sort-icon` `rgt-sort-icon-ascending / rgt-sort-icon-descending` `rgt-column-sort-ghost` |
+| Header Cell | `rgt-cell-header` `rgt-cell-header-checkbox` `rgt-cell-header-[column.field]` `rgt-cell-header-sortable / rgt-cell-header-not-sortable` `rgt-cell-header-sticky` `rgt-cell-header-resizable / rgt-cell-header-not-resizable` `rgt-cell-header-searchable / rgt-cell-header-not-searchable` `rgt-cell-header-pinned` `rgt-cell-header-pinned-left / rgt-cell-header-pinned-right` `[column.className]` `rgt-cell-header-inner` `rgt-cell-header-inner-checkbox-column` `rgt-header-checkbox-cell` `rgt-resize-handle` `rgt-sort-icon` `rgt-sort-icon-ascending / rgt-sort-icon-descending` `rgt-column-sort-ghost` |
 | Cell | `rgt-cell` `rgt-cell-[column.field]` `rgt-row-[rowNumber]` `rgt-row-odd / rgt-row-even` `rgt-row-hover` `rgt-row-selectable / rgt-row-not-selectable` `rgt-cell-inner` `rgt-cell-checkbox` `rgt-cell-pinned` `rgt-cell-pinned-left / rgt-cell-pinned-right` `rgt-cell-editor` `rgt-cell-editor-inner` `rgt-cell-editor-input` `rgt-row-selected` |
 | Pagination | `rgt-footer-items-per-page` `rgt-footer-pagination-button` `rgt-footer-pagination-container` `rgt-footer-page-input` |
 | Footer | `rgt-footer` `rgt-footer-items-information` `rgt-footer-right-container` |

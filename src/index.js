@@ -38,7 +38,6 @@ const GridTable = (props) => {
             minWidth: null,
             maxWidth: null,
             resizable: false,
-            sortableColumn: true,
             ...cd,
             visible: cd.pinned || cd.visible !== false
         };
@@ -55,7 +54,6 @@ const GridTable = (props) => {
             editable: true,
             sortable: true,
             resizable: true,
-            sortableColumn: true,
             search: ({value, searchText}) => value.toString().toLowerCase().includes(searchText.toLowerCase()), 
             sort: ({a, b, isAscending}) => {
                 let aa = typeof a === 'string' ? a.toLowerCase() : a;
@@ -229,7 +227,7 @@ const GridTable = (props) => {
             arr.push(
                 <HeaderCell 
                     key={idx} 
-                    className={`rgt-cell-header rgt-cell-header-${cd.field}${(cd.sortable !== false && cd.field  !== 'checkbox' && !cd.isVirtual) ? ' rgt-clickable' : ''}${cd.sortable !== false && cd.field !== 'checkbox' ? ' rgt-cell-header-sortable' : ' rgt-cell-header-not-sortable'}${props.isHeaderSticky !== false ? ' rgt-cell-header-sticky' : ''}${cd.resizable !== false ? ' rgt-cell-header-resizable' : ' rgt-cell-header-not-resizable'}${cd.searchable !== false && cd.field !== 'checkbox' ? ' rgt-cell-header-searchable' : ' rgt-cell-header-not-searchable'}${cd.sortableColumn !== false && !cd.pinned ? ' rgt-cell-header-sortable-column' : ' rgt-cell-header-not-sortable-column'}${cd.pinned && idx === 0 ? ' rgt-cell-header-pinned rgt-cell-header-pinned-left' : ''}${cd.pinned && idx === visibleColumns.length-1 ? ' rgt-cell-header-pinned rgt-cell-header-pinned-right' : ''} ${cd.className}`.trim()}
+                    className={`rgt-cell-header rgt-cell-header-${cd.field}${(cd.sortable !== false && cd.field  !== 'checkbox' && !cd.isVirtual) ? ' rgt-clickable' : ''}${cd.sortable !== false && cd.field !== 'checkbox' ? ' rgt-cell-header-sortable' : ' rgt-cell-header-not-sortable'}${props.isHeaderSticky !== false ? ' rgt-cell-header-sticky' : ''}${cd.resizable !== false ? ' rgt-cell-header-resizable' : ' rgt-cell-header-not-resizable'}${cd.searchable !== false && cd.field !== 'checkbox' ? ' rgt-cell-header-searchable' : ' rgt-cell-header-not-searchable'}${cd.pinned && idx === 0 ? ' rgt-cell-header-pinned rgt-cell-header-pinned-left' : ''}${cd.pinned && idx === visibleColumns.length-1 ? ' rgt-cell-header-pinned rgt-cell-header-pinned-right' : ''} ${cd.className}`.trim()}
                     index={idx} 
                     column={cd} 
                     handleResizeEnd={() => tableManager.handleResizeEnd({tableRef, columns: visibleColumnsWithVirtual, setColumns: setColDefs})}
