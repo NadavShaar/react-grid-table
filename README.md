@@ -242,7 +242,7 @@ Each column supports the following properties:
 | visible | boolean | whether to show the column (pinned columns are always visible) | true |
 | className | string | a custom class selector for all column cells | "" |
 | width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "auto" |
-| minWidth | number | the minimum width of the column when resizing | `minColumnWidth` prop |
+| minWidth | number | the minimum width of the column | `minColumnWidth` prop |
 | maxWidth | number, null | the maximum width of the column when resizing | null |
 | getValue | function | used for getting the cell value (usefull when the cell value is not a string - [details](#rows)) | `({value, column}) => value` |
 | setValue | function | used for updating the cell value (usefull when the cell value is not a string) - [details](#Row-Editing) | `({value, row, setRow, column}) => setRow({...row, [column.field]: value})` |
@@ -297,7 +297,7 @@ Checkbox column has supports the following properties:
 | visible | boolean | whether to show the column (pinned columns are always visible) | true |
 | className | string | a custom class for all column cells | "" |
 | width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "auto" |
-| minWidth | number | the minimum width of the column when resizing | 0 |
+| minWidth | number | the minimum width of the column | 0 |
 | maxWidth | number, null | the maximum width of the column when resizing | null |
 | resizable | boolean | whether to allow resizing for the column | false |
 | cellRenderer | function | used for custom rendering the checkbox cell `({isChecked, callback, disabled, rowIndex}) => ( <input type="checkbox" onChange={ callback } checked={ isChecked } disabled={ disabled } /> )` | --- |
