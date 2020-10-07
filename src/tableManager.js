@@ -9,7 +9,6 @@ const tableManager = {
             
             if(cd.id === 'checkbox') return {
                 className: '',
-                label: '',
                 width: 'max-content',
                 minWidth: 0,
                 maxWidth: null,
