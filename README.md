@@ -233,7 +233,7 @@ This prop defines the columns configuration.
 
 Each column supports the following properties:
 
-| name | type | description | default value |
+| name | type | description | <span style="width:400px">default value</span> |
 |---|---|---|---|
 | id* | string, number | a unique identifier for the column (can be changed to a different field using the `rowIdField` prop), or you can set it to 'checkbox' which will generate a rows selction column (more [details](#checkbox-column) about checkbox column)  | --- |
 | field* | string | the name of the field as in the row data | --- |
