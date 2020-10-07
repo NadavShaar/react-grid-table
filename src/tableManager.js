@@ -156,9 +156,9 @@ const tableManager = {
             setTimeout(() => { listEl.scrollTop = 0 }, 0);
         };
     },
-    toggleSelectAll: ({selectAllIsChecked, selectableItems, onSelectedItemsChange, rowIdField}) => {
+    toggleSelectAll: ({selectAllIsChecked, selectableItems, onSelectedItemsChange, isSelectAllIndeterminate, rowIdField}) => {
         let selectedIds = [];
-        if (!selectAllIsChecked) selectedIds = selectableItems.map(s => s[rowIdField]);
+        if (!selectAllIsChecked && !isSelectAllIndeterminate) selectedIds = selectableItems.map(s => s[rowIdField]);
         
         onSelectedItemsChange(selectedIds);
     },

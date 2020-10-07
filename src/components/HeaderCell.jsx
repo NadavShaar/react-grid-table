@@ -25,16 +25,25 @@ const HeaderCell = (props) => {
         handleResizeEnd,
         handleResize,
         disableColumnsReorder,
+        isSelectAllIndeterminate,
         ...rest
     } = props;
     
     let resizeHandleRef = useRef(null);
+    let selectAllRef = useRef(null);
     const [target, setTarget] = useState(resizeHandleRef?.current || null);
     useResizeEvents(target, column, handleResize, handleResizeEnd);
 
     useEffect(() => {
         setTarget(resizeHandleRef.current);
     }, [column])
+    
+    useEffect(() => {
+        if(!selectAllRef.current) return;
+
+        if(isSelectAllIndeterminate) selectAllRef.current.indeterminate = true;
+        else selectAllRef.current.indeterminate = false;
+    }, [isSelectAllIndeterminate])
 
     let sortingProps = (column.sortable !== false && column.id  !== 'checkbox' && !column.isVirtual) ? {onClick: e => handleSort(column.id)} : {};
 
@@ -71,6 +80,7 @@ const HeaderCell = (props) => {
                                                 column.headerCellRenderer({isChecked: selectAllIsChecked, callback: toggleSelectAll, disabled: selectAllIsDisabled})
                                                 :
                                                 <input 
+                                                    ref={selectAllRef}
                                                     className={selectAllIsDisabled ? 'rgt-disabled' : 'rgt-clickable'}
                                                     disabled={selectAllIsDisabled}
                                                     type="checkbox" 

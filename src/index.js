@@ -67,6 +67,10 @@ const GridTable = (props) => {
     else visibleColumnsWithVirtual.splice(visibleColumns.length-1, 0, virtualColConfig);
 
 
+    let selectAllIsChecked = selectableItems.length && (selectedItems.length === selectableItems.length);
+    let selectAllIsDisabled = !selectableItems.length;
+    let isSelectAllIndeterminate = selectedItems.length && !selectAllIsChecked;
+
     // ** life cycles **
 
     // set item in edit mode
@@ -169,9 +173,6 @@ const GridTable = (props) => {
 
     const renderHeaderCells = () => {
 
-        let selectAllIsChecked = selectableItems.length && (selectedItems.length === selectableItems.length);
-        let selectAllIsDisabled = !selectableItems.length;
-
         let virtualCell = <HeaderCell 
             key='virtual-col-header'
             index={visibleColumns.length}
@@ -198,9 +199,10 @@ const GridTable = (props) => {
                     sortBy={sortByState}
                     sortAsc={sortAsc}
                     disableColumnsReorder={props.disableColumnsReorder}
-                    toggleSelectAll={() => tableManager.toggleSelectAll({selectAllIsChecked, selectableItems, onSelectedItemsChange: updateSelectedItems, rowIdField: props.rowIdField})}
+                    toggleSelectAll={() => tableManager.toggleSelectAll({selectAllIsChecked, selectableItems, onSelectedItemsChange: updateSelectedItems, isSelectAllIndeterminate, rowIdField: props.rowIdField})}
                     selectAllIsChecked={selectAllIsChecked}
                     selectAllIsDisabled={selectAllIsDisabled}
+                    isSelectAllIndeterminate={isSelectAllIndeterminate}
                     isPinnedLeft={cd.pinned && idx === 0}
                     isPinnedRight={cd.pinned && idx+1 === visibleColumns.length}
                     sortIcons={props.icons.sort}
