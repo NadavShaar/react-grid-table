@@ -174,11 +174,11 @@ export default MyAwesomeTable;
 | columns* | array of objects | columns configuration (<u>[details](#columns)</u>) | [ ] |
 | rows* | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
 | rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be unique | 'id' |
-| selectedRowsIds | array of ids | selected rows ids (<u>[details](#checkbox-column)</u>) | [ ] |
+| selectedRowsIds | array of ids | the ids of all selected rows (<u>[details](#checkbox-column)</u>) | [ ] |
 | searchText | string | text for search | "" |
 | isRowSelectable | function | whether row selection for the current row is disabled or not | `row => true` |
 | isRowEditable | function | whether row editing for the current row is disabled or not | `row => true` |
-| editRowId | string, number, null | the id of the row to edit, (more <u>[details](#Row-Editing)</u> about row editing) | null |
+| editRowId | any | the id of the row to edit, (more <u>[details](#Row-Editing)</u> about row editing) | null |
 | cellProps | object | global props for all data cells | { } |
 | headerCellProps | object | global props for all header cells | { } |
 
@@ -235,7 +235,7 @@ Each column supports the following properties:
 
 | name | type | description | default value |
 |---|---|---|---|
-| id* | string, number | a unique identifier for the column (can be changed to a different field using the `rowIdField` prop), or you can set it to 'checkbox' which will generate a rows selction column (more [details](#checkbox-column) about checkbox column)  | --- |
+| id* | any | a unique identifier for the column (can be changed to a different field using the `rowIdField` prop), or you can set it to 'checkbox' which will generate a rows selction column (more [details](#checkbox-column) about checkbox column)  | --- |
 | field* | string | the name of the field as in the row data | --- |
 | label | string | the label to display in the header cell | the `field` property |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns| false |
@@ -291,7 +291,7 @@ Checkbox column has supports the following properties:
 
 | name | type | description | default value  |
 |---|---|---|---|
-| id* | string, number, 'checkbox' | a unique identifier for the column (can be changed using the `rowIdField` prop), or you can set it to 'checkbox' which will generate a rows selction column (more [details](#checkbox-column) about checkbox column) | --- |
+| id* | any, 'checkbox' | a unique identifier for the column (can be changed using the `rowIdField` prop), or you can set it to 'checkbox' which will generate a rows selction column (more [details](#checkbox-column) about checkbox column) | --- |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns | false |
 | visible | boolean | whether to show the column (pinned columns are always visible) | true |
 | className | string | a custom class for all column cells | "" |

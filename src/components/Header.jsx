@@ -51,7 +51,7 @@ const Header = (props) => {
                         if(cd.pinned && idx === 0 || cd.pinned && idx === colDefs.length-1) return null;
                         return (
                             <div key={idx} className='rgt-columns-manager-popover-row'>
-                                <label htmlFor={`checkbox-${idx}`} className='rgt-clickable rgt-flex-child rgt-text-truncate'>{cd.label || cd.field}</label>
+                                <label htmlFor={`checkbox-${idx}`} className='rgt-clickable rgt-flex-child rgt-text-truncate'>{cd.label || cd.field || cd.id}</label>
                                 <input 
                                     id={`checkbox-${idx}`}
                                     className='rgt-clickable'

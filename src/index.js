@@ -5,7 +5,7 @@ import Cell from './components/Cell';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import PropTypes from 'prop-types';
-import tableManager from './tableManager';
+import TM from './tableManager';
 import './index.css';
 
 const DEFAULT_LOADER = <svg width="46" height="46" viewBox="-2 -2 42 42" xmlns="http://www.w3.org/2000/svg">
@@ -45,7 +45,8 @@ const GridTable = (props) => {
 
     // ** state **
 
-    const [colDefs, setColDefs] = useState(tableManager.generateColumns({columns: props.columns, minColumnWidth: props.minColumnWidth}));
+    const [tableManager] = useState(TM())
+    const [colDefs, setCols] = useState(tableManager.generateColumns({columns: props.columns, minColumnWidth: props.minColumnWidth}));
     const [items, setItems] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
     const [listEl, setListEl] = useState(null);
@@ -80,10 +81,14 @@ const GridTable = (props) => {
     if(!lastColIsPinned) visibleColumnsWithVirtual.push(virtualColConfig) 
     else visibleColumnsWithVirtual.splice(visibleColumns.length-1, 0, virtualColConfig);
 
-
+    // select all params
     let selectAllIsChecked = selectableItems.length && (selectedItems.length === selectableItems.length);
     let selectAllIsDisabled = !selectableItems.length;
     let isSelectAllIndeterminate = selectedItems.length && !selectAllIsChecked;
+
+    const setColDefs = (cols) => {
+        props.onColumnsChange ? props.onColumnsChange?.(cols) : setCols(cols);
+    }
 
     // ** life cycles **
 
@@ -108,11 +113,21 @@ const GridTable = (props) => {
     useEffect(() => {
         setSelectedItems(props.selectedRowsIds || []);
     }, [props.selectedRowsIds])
-
-    // update columns by state
+    
+    // update columns by props
     useEffect(() => {
-        props.onColumnsChange?.(colDefs);
-    }, [colDefs])
+        setCols(tableManager.generateColumns({columns: props.columns, minColumnWidth: props.minColumnWidth}));
+    }, [props.columns])
+
+    // sort by
+    useEffect(() => {
+        setSortBy(props.sotBy)
+    }, [props.sortBy])
+
+    // sort ascending
+    useEffect(() => {
+        setSortAsc(props.sortAscending)
+    }, [props.sortAscending])
 
     // set grid's wrapper ref (used for auto scrolling the page to top when moving between pages)
     useEffect(() => {
@@ -272,7 +287,7 @@ const GridTable = (props) => {
 
                             return (
                                 <Cell 
-                                    key={idx1+idx2}
+                                    key={rowIndex+idx2}
                                     rowId={rowId}
                                     row={updatedRow?.[props.rowIdField] === rowId ? updatedRow : d} 
                                     rows={props.rows}
@@ -294,6 +309,7 @@ const GridTable = (props) => {
                                     selectedItems={selectedItems}
                                     onSelectedItemsChange={updateSelectedItems}
                                     disableSelection={disableSelection}
+                                    tableManager={tableManager}
                                     {...props.cellProps}
                                 />
                             )
@@ -380,6 +396,7 @@ const GridTable = (props) => {
         onRowClick,
         rowIdField,
         disableColumnsReorder,
+        loaderRenderer,
         ...rest
     } = props;
 
@@ -432,7 +449,7 @@ GridTable.defaultProps = {
     disableColumnsReorder: false,
     isRowSelectable: row => true,
     isRowEditable: row => true,
-    icons: { sort: { ascending: <React.Fragment>{ DEFAULT_ASCENDING_ICON }</React.Fragment>, descending: <React.Fragment>{ DEFAULT_DESCENDING_ICON }</React.Fragment> } }
+    icons: { sort: { ascending: DEFAULT_ASCENDING_ICON, descending: DEFAULT_DESCENDING_ICON } }
 };
 
 GridTable.propTypes = {
@@ -440,7 +457,7 @@ GridTable.propTypes = {
     columns: PropTypes.arrayOf(PropTypes.object).isRequired,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
     rowIdField: PropTypes.string,
-    selectedRowsIds: PropTypes.arrayOf(PropTypes.object),
+    selectedRowsIds: PropTypes.array,
     searchText: PropTypes.string,
     isRowSelectable: PropTypes.func,
     isRowEditable: PropTypes.func,

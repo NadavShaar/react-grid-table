@@ -103,6 +103,7 @@
   display: flex;
   flex: 1;
   align-items: center;
+  position: relative;
   width: 100%;
   background: var(--rgt-background-color);
 }
@@ -136,6 +137,7 @@
   z-index: 1;
   border-top: var(--rgt-border);
   overflow-x: auto;
+  overflow-y: hidden;
   min-height: 49px;
 }
 
@@ -390,6 +392,8 @@
 }
 
 .rgt-cell-header-pinned {
+  position: -webkit-sticky;
+  position: sticky;
   z-index: 2;
 }
 

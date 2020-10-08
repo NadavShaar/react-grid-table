@@ -100,10 +100,10 @@ const HeaderCell = (props) => {
                             {
                                 (sortBy === column.id) ? 
                                     sortAsc ? 
-                                        <span className='rgt-sort-icon rgt-sort-icon-ascending'>{sortIcons.ascending}</span> 
+                                        <span className='rgt-sort-icon rgt-sort-icon-ascending'>{sortIcons && sortIcons.ascending}</span> 
                                         :
                                         sortAsc === false ?
-                                            <span className='rgt-sort-icon rgt-sort-icon-descending'>{sortIcons.descending}</span> 
+                                            <span className='rgt-sort-icon rgt-sort-icon-descending'>{sortIcons && sortIcons.descending}</span> 
                                             : 
                                             null
                                     : 

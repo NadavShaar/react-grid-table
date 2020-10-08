@@ -1,5 +1,4 @@
 import React from 'react';
-import tableManager from '../tableManager';
 
 const Cell = (props) => {
 
@@ -26,6 +25,7 @@ const Cell = (props) => {
         isChecked,
         lastColIsPinned,
         visibleColumns,
+        tableManager,
         ...rest
     } = props;
 
