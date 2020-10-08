@@ -16,7 +16,10 @@ const PopoverButton = props => {
                 { buttonChildren }
             </button>
             <div className={`rgt-columns-manager-popover${isComponentVisible ? ' rgt-columns-manager-popover-open' : ''}`}>
-                { popoverChildren }
+                <span className='rgt-columns-manager-popover-row rgt-columns-manager-popover-title'>Column Visibility</span>
+                <div className='rgt-columns-manager-popover-body'>
+                    { popoverChildren }
+                </div>
             </div>
         </div>
     )

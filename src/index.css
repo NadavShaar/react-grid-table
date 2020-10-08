@@ -286,9 +286,9 @@
   right: 50%;
   top: 80%;
   background: var(--background-color);
-  width: 200px;
   border-radius: 2px;
   box-shadow: 1px 1px 4px 0px var(--shadow-color);
+  min-width: 200px;
 }
 
 .rgt-columns-manager-popover-open {
@@ -301,10 +301,32 @@
   justify-content: space-between;
   padding: 5px 20px;
   font-size: 14px;
+  align-items: center;
+}
+
+.rgt-columns-manager-popover-title {
+  font-weight: 500;
+  margin-bottom: 10px;
+  white-space: nowrap;
+  font-size: 16px;
+}
+
+.rgt-columns-manager-popover-row > label {
+  padding-right: 10px;
 }
 
 .rgt-columns-manager-popover-row:hover {
   background: var(--color5);
+}
+
+.rgt-columns-manager-popover-body {
+  display: inline-flex;
+  flex-direction: column;
+  max-height: 290px;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  max-width: 300px;
 }
 
 .rgt-search-container {
