@@ -113,7 +113,7 @@ const App = () => {
             editorCellRenderer: ({value, field, onChange, row, rows, column, rowIndex}) => (
                 <div style={styles.buttonsCellEditorContainer}>
 					<button 
-						title="Cnacel" 
+						title="Cancel" 
 						style={styles.cancelButton} 
 						onClick={e => setEditRowId(null)}
 					>
@@ -141,10 +141,10 @@ const App = () => {
     return (
         <GridTable 
 			columns={columns}
-            rows={rowsData} 
-            isLoading={isLoading}
-            editRowId={editRowId}
-            style={{boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px'}} 
+			rows={rowsData} 
+			isLoading={isLoading}
+			editRowId={editRowId}
+			style={{boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px'}} 
         />
     )
 };
