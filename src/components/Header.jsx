@@ -2,6 +2,10 @@ import React from 'react';
 import tableManager from '../tableManager';
 import PopoverButton from './PopoverButton';
 
+const DEFAULT_MENU_ICON = <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+    <path d="M12 18c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm0-9c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm0-9c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3z"/>
+</svg>;
+
 const Header = (props) => {
 
     let { 
@@ -41,7 +45,7 @@ const Header = (props) => {
     const renderColumnVisibilityManager = () => {
         return (
             <PopoverButton 
-                buttonChildren={<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 21 21"><g fill="#607D8B" fillRule="evenodd" transform="translate(5 5)"><rect width="3" height="3" x="4" y="4" rx="1"/><rect width="3" height="3" x="4" rx="1"/><rect width="3" height="3" x="8" y="4" rx="1"/><rect width="3" height="3" x="8" rx="1"/><rect width="3" height="3" x="8" y="8" rx="1"/><rect width="3" height="3" x="4" y="8" rx="1"/><rect width="3" height="3" y="4" rx="1"/><rect width="3" height="3" rx="1"/><rect width="3" height="3" y="8" rx="1"/></g></svg>}
+                buttonChildren={ DEFAULT_MENU_ICON }
                 popoverChildren={
                     colDefs.map((cd, idx) => {
                         if(cd.pinned && idx === 0 || cd.pinned && idx === colDefs.length-1) return null;

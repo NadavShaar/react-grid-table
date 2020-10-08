@@ -25,6 +25,20 @@ const DEFAULT_LOADER = <svg width="46" height="46" viewBox="-2 -2 42 42" xmlns="
     </g>
 </svg>;
 
+const DEFAULT_ASCENDING_ICON = <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 21 21">
+    <g fill="none" fillRule="evenodd" stroke="#000" strokeLinecap="round" strokeLinejoin="round" transform="translate(6 3)">
+        <polyline points="7.324 1.661 7.324 7.318 1.647 7.339" transform="scale(1 -1) rotate(45 15.35 0)"/>
+        <line x1="4.5" x2="4.5" y1=".5" y2="13.5"/>
+    </g>
+</svg>;
+
+const DEFAULT_DESCENDING_ICON = <svg height="16" viewBox="0 0 21 21" width="16" xmlns="http://www.w3.org/2000/svg">
+    <g fill="none" fillRule="evenodd" stroke="#000" strokeLinecap="round" strokeLinejoin="round" transform="translate(6 4)">
+        <path d="m7.328 6.67.001 5.658-5.658-.001" transform="matrix(-.70710678 .70710678 .70710678 .70710678 .965201 -.399799)"/>
+        <path d="m4.5.5v13"/>
+    </g>
+</svg>;
+
 const SortableList = SortableContainer(({style, className, children}) => <div className={className} style={style}>{children}</div>);
  
 const GridTable = (props) => {
@@ -418,7 +432,7 @@ GridTable.defaultProps = {
     disableColumnsReorder: false,
     isRowSelectable: row => true,
     isRowEditable: row => true,
-    icons: { sort: { ascending: <React.Fragment>&#129105;</React.Fragment>, descending: <React.Fragment>&#129107;</React.Fragment> } }
+    icons: { sort: { ascending: <React.Fragment>{ DEFAULT_ASCENDING_ICON }</React.Fragment>, descending: <React.Fragment>{ DEFAULT_DESCENDING_ICON }</React.Fragment> } }
 };
 
 GridTable.propTypes = {
