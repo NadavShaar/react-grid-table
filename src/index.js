@@ -82,9 +82,9 @@ const GridTable = (props) => {
     else visibleColumnsWithVirtual.splice(visibleColumns.length-1, 0, virtualColConfig);
 
     // select all params
-    let selectAllIsChecked = selectableItems.length && (selectedItems.length === selectableItems.length);
+    let selectAllIsChecked = selectableItems.length && selectableItems.every(si => selectedItems.find(id => si.id === id));
     let selectAllIsDisabled = !selectableItems.length;
-    let isSelectAllIndeterminate = selectedItems.length && !selectAllIsChecked;
+    let isSelectAllIndeterminate = selectedItems.length && !selectAllIsChecked && selectableItems.some(si => selectedItems.find(id => si.id === id));
 
     const setColDefs = (cols) => {
         props.onColumnsChange ? props.onColumnsChange?.(cols) : setCols(cols);
@@ -121,7 +121,7 @@ const GridTable = (props) => {
 
     // sort by
     useEffect(() => {
-        setSortBy(props.sotBy)
+        setSortBy(props.sortBy)
     }, [props.sortBy])
 
     // sort ascending
@@ -228,7 +228,7 @@ const GridTable = (props) => {
                     sortBy={sortByState}
                     sortAsc={sortAsc}
                     disableColumnsReorder={props.disableColumnsReorder}
-                    toggleSelectAll={() => tableManager.toggleSelectAll({selectAllIsChecked, selectableItems, onSelectedItemsChange: updateSelectedItems, isSelectAllIndeterminate, rowIdField: props.rowIdField})}
+                    toggleSelectAll={() => tableManager.toggleSelectAll({selectAllIsChecked, selectedItems, selectableItems, onSelectedItemsChange: updateSelectedItems, isSelectAllIndeterminate, rowIdField: props.rowIdField})}
                     selectAllIsChecked={selectAllIsChecked}
                     selectAllIsDisabled={selectAllIsDisabled}
                     isSelectAllIndeterminate={isSelectAllIndeterminate}
@@ -332,6 +332,7 @@ const GridTable = (props) => {
                 isPaginated={props.isPaginated}
                 footerRenderer={props.footerRenderer}
                 selectedRowsLength={selectedItems.length}
+                setSelectedItems={setSelectedItems}
                 numberOfRows={items.length}
                 totalItems={props.rows.length}
                 tableHasSelection={tableHasSelection}

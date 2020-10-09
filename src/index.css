@@ -144,6 +144,13 @@
 .rgt-footer-items-information {
   padding: 12px 20px;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+}
+
+.rgt-footer-clear-selection-button {
+  display: inline-flex;
+  margin-left: 5px;
 }
 
 .rgt-footer-items-per-page {

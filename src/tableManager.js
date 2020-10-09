@@ -151,15 +151,17 @@ const tableManager = () => {
         handlePagination: ({goToPage, listEl, totalPages, setPage, selectedItems, onSelectedItemsChange}) => {
             if((goToPage >= 1) && (goToPage <= totalPages)) {
                 setPage(goToPage);
-                if(selectedItems.length) {
-                    onSelectedItemsChange([]);
-                }
+                // if(selectedItems.length) {
+                //     onSelectedItemsChange([]);
+                // }
                 setTimeout(() => { listEl.scrollTop = 0 }, 0);
             };
         },
-        toggleSelectAll: ({selectAllIsChecked, selectableItems, onSelectedItemsChange, isSelectAllIndeterminate, rowIdField}) => {
-            let selectedIds = [];
-            if (!selectAllIsChecked && !isSelectAllIndeterminate) selectedIds = selectableItems.map(s => s[rowIdField]);
+        toggleSelectAll: ({selectAllIsChecked, selectedItems, selectableItems, onSelectedItemsChange, isSelectAllIndeterminate, rowIdField}) => {
+            let selectedIds = [...selectedItems];
+
+            if(selectAllIsChecked || isSelectAllIndeterminate) selectedIds = selectedIds.filter(si => !selectableItems.find(item => si === item.id));
+            if (!selectAllIsChecked && !isSelectAllIndeterminate) selectableItems.forEach(s => selectedIds.push(s[rowIdField]));
             
             onSelectedItemsChange(selectedIds);
         },
