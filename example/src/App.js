@@ -113,7 +113,7 @@ const App = () => {
             editorCellRenderer: ({value, field, onChange, row, rows, column, rowIndex}) => (
                 <div style={styles.buttonsCellEditorContainer}>
 					<button 
-						title="Cnacel" 
+						title="Cancel" 
 						style={styles.cancelButton} 
 						onClick={e => setEditRowId(null)}
 					>
