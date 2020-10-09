@@ -189,7 +189,7 @@ export default MyAwesomeTable;
 | isPaginated | boolean | determine whether the pagination controls sholuld be shown in the footer and if the rows data should be splitted into pages  | true |
 | pageSizes | array of numbers | page size options | [20, 50, 100] |
 | pageSize | number | the selected page size | 20 |
-| sortBy | string, number, null | the id of the column that should be sorted | null |
+| sortBy | any | the id of the column that should be sorted | null |
 | sortAscending | boolean | determine the sort direction | true |
 | minColumnWidth | number | minimum width for all columns (doesn't apply to 'checkbox' column)| 70 |
 | highlightSearch | boolean | whether to highlight the search term | true |
