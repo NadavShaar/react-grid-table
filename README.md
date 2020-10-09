@@ -217,7 +217,7 @@ A set of functions that are used for rendering custom components.
 | name | type | description | usage |
 |---|---|---|---|
 | headerRenderer | function | used for rendering a custom header ([details](#headerRenderer)) | `({searchText, setSearchText, setColumnVisibility, columns}) => ( children )` |
-| footerRenderer | function | used for rendering a custom footer ([details](#footerRenderer)) | `({page, totalPages, handlePagination, pageSize, pageSizes, setPageSize, totalRows, selectedRowsLength,  numberOfRows }) => ( children )` |
+| footerRenderer | function | used for rendering a custom footer ([details](#footerRenderer)) | `({page, totalPages, handlePagination, pageSize, pageSizes, setPageSize, totalRows, selectedRowsLength, clearSelection, numberOfRows }) => ( children )` |
 | loaderRenderer | function | used for rendering a custom loader | `() => ( children )` |
 | noResultsRenderer | function | used for rendering a custom component when there is no data to display | `() => ( children )` |
 | searchRenderer | function | used for rendering a custom search component ([details](#headerRenderer)) | `({searchText, setSearchText}) => ( children )` |
@@ -450,6 +450,7 @@ footerRenderer={({
     setPageSize, 
     totalRows,
     selectedRowsLength,
+    clearSelection,
     numberOfRows
 }) => (
     <div style={{display: 'flex', justifyContent: 'space-between', flex: 1, padding: '12px 20px'}}>

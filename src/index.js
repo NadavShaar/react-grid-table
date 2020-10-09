@@ -318,7 +318,7 @@ const GridTable = (props) => {
                 isPaginated={props.isPaginated}
                 footerRenderer={props.footerRenderer}
                 selectedRowsLength={selectedItems.length}
-                setSelectedItems={setSelectedItems}
+                clearSelection={() => setSelectedItems([])}
                 numberOfRows={items.length}
                 totalItems={props.rows.length}
                 tableHasSelection={tableHasSelection}
