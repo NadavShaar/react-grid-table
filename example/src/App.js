@@ -144,7 +144,6 @@ const App = () => {
             rows={rowsData} 
             isLoading={isLoading}
             editRowId={editRowId}
-            onSelectedRowsChange={si => console.log(si)}
             style={{boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px'}} 
         />
     )
