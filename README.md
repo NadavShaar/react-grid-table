@@ -376,7 +376,7 @@ If you just want to replace the search or the column visibility management compo
 | setSearchText | function | a callback function to update search text | `setSearchText(searchText)` | 
 | searchRenderer | function | as was defined in the `searchRenderer` prop | --- |
 | searchIcon | node | the search icon as was defined in the `icons` prop or the default one | [magnifier icon] |
-| showColumnVisibilityManager | boolean weather to show the column visibility manager | true | 
+| showColumnVisibilityManager | boolean | weather to show the column visibility manager | true | 
 | handleColumnVisibility | function | a callback function to update columns visibility that accepts the id of the column that should be toggled | `handleColumnVisibility(columnId)` | 
 | columnVisibilityRenderer | function | as was defined in the `columnVisibilityRenderer` prop | --- |
 | columnVisibilityIcon | node | the column visibility icon as was defined in the `icons` prop or the default one | [trash icon] |
