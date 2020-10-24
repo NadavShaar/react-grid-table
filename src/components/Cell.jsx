@@ -16,7 +16,7 @@ const Cell = (props) => {
         isEdit,
         setUpdatedRow,
         colIndex,
-        colDefs,
+        columns,
         disableSelection,
         selectedItems,
         onSelectedItemsChange,
@@ -25,7 +25,7 @@ const Cell = (props) => {
         isChecked,
         lastColIsPinned,
         visibleColumns,
-        tableManager,
+        toggleItemSelection,
         ...rest
     } = props;
 
@@ -40,7 +40,7 @@ const Cell = (props) => {
     let virtualCell = <div { ...dataAttributes } className={className} { ...rowEvents } {...rest}></div>;
 
     const renderCheckboxCell = () => {
-        let callback = e => tableManager.toggleItemSelection({id: rowId, selectedItems, onSelectedItemsChange});
+        let callback = e => toggleItemSelection(rowId);
     
         return (
             <React.Fragment>
@@ -80,7 +80,7 @@ const Cell = (props) => {
 
     if(column.id === 'checkbox') return renderCheckboxCell();
 
-    let isInputFocused = colIndex === colDefs.findIndex(column => column.id !== 'checkbox' && column.editable !== false);
+    let isInputFocused = colIndex === columns.findIndex(column => column.id !== 'checkbox' && column.editable !== false);
 
     return (
         <React.Fragment>

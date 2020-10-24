@@ -177,7 +177,7 @@ export default MyAwesomeTable;
 | selectedRowsIds | array of ids | the ids of all selected rows (<u>[details](#checkbox-column)</u>) | [ ] |
 | searchText | string | text for search | "" |
 | isRowSelectable | function | whether row selection for the current row is disabled or not | `row => true` |
-| isRowEditable | function | whether row editing for the current row is disabled or not | `row => true` |
+| handleIsRowEditable | function | whether row editing for the current row is disabled or not | `row => true` |
 | editRowId | any | the id of the row to edit, (more <u>[details](#Row-Editing)</u> about row editing) | null |
 | cellProps | object | global props for all data cells | { } |
 | headerCellProps | object | global props for all header cells | { } |
@@ -198,8 +198,8 @@ export default MyAwesomeTable;
 | isLoading | boolean | whether to render a loader | false |
 | disableColumnsReorder | bool | whether to disable column drag & drop | false |
 | isHeaderSticky | boolean | whether the table header will be stick to the top when scrolling or not | true |
-| manageColumnVisibility | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
-| icons | object | custom icons config (current supprt for sort icons only) | { sort: {ascending: &uarr;, descending: &darr; } } |
+| showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
+| icons | object with nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
 
 ### Event props
 
@@ -216,12 +216,12 @@ A set of functions that are used for rendering custom components.
 
 | name | type | description | usage |
 |---|---|---|---|
-| headerRenderer | function | used for rendering a custom header ([details](#headerRenderer)) | `({searchText, setSearchText, setColumnVisibility, columns}) => ( children )` |
+| headerRenderer | function | used for rendering a custom header ([details](#headerRenderer)) | `({searchText, setSearchText, handleColumnVisibility, columns}) => ( children )` |
 | footerRenderer | function | used for rendering a custom footer ([details](#footerRenderer)) | `({page, totalPages, handlePagination, pageSize, pageSizes, setPageSize, totalRows, selectedRowsLength, clearSelection, numberOfRows }) => ( children )` |
 | loaderRenderer | function | used for rendering a custom loader | `() => ( children )` |
 | noResultsRenderer | function | used for rendering a custom component when there is no data to display | `() => ( children )` |
 | searchRenderer | function | used for rendering a custom search component ([details](#headerRenderer)) | `({searchText, setSearchText}) => ( children )` |
-| columnVisibilityRenderer | function | used for rendering a custom columns visibility management component ([details](#headerRenderer)) | `({columns, setColumnVisibility}) => ( children )` |
+| columnVisibilityRenderer | function | used for rendering a custom columns visibility management component ([details](#headerRenderer)) | `({columns, handleColumnVisibility}) => ( children )` |
 | dragHandleRenderer | function | used for rendering a drag handle for the column reorder | `() => ( children )` |
 
 ## props - detailed
@@ -370,17 +370,34 @@ If you just want to replace the search or the column visibility management compo
 **Arguments:** 
 | name | type | description | default value |
 |---|---|---|---|
+| columns | function | the `columns` configuration | [ ] | 
+| showSearch | boolean weather to show the search | true | 
 | searchText | string | text for search | "" | 
 | setSearchText | function | a callback function to update search text | `setSearchText(searchText)` | 
-| setColumnVisibility | function | a callback function to update columns visibility that accepts the id of the column that should be toggled | `setColumnVisibility(columnId)` | 
-| columns | function | the `columns` configuration | [ ] | 
+| searchRenderer | function | as was defined in the `searchRenderer` prop | --- |
+| searchIcon | node | the search icon as was defined in the `icons` prop or the default one | [magnifier icon] |
+| showColumnVisibilityManager | boolean weather to show the column visibility manager | true | 
+| handleColumnVisibility | function | a callback function to update columns visibility that accepts the id of the column that should be toggled | `handleColumnVisibility(columnId)` | 
+| columnVisibilityRenderer | function | as was defined in the `columnVisibilityRenderer` prop | --- |
+| columnVisibilityIcon | node | the column visibility icon as was defined in the `icons` prop or the default one | [trash icon] |
 
 **Example:**
 
 <!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
 
 ```JSX
-headerRenderer={({searchText, setSearchText, setColumnVisibility, columns}) => (
+headerRenderer={({
+    columns,
+    showSearch,
+    searchText, 
+    setSearchText, 
+    searchRenderer,
+    searchIcon
+    showColumnVisibilityManager,
+    handleColumnVisibility,
+    columnVisibilityRenderer,
+    columnVisibilityIcon
+}) => (
     <div style={{display: 'flex', flexDirection: 'column', padding: '10px 20px', background: '#fff', width: '100%'}}>
         <div>
             <label htmlFor="my-search" style={{fontWeight: 500, marginRight: 10}}>
@@ -402,11 +419,11 @@ headerRenderer={({searchText, setSearchText, setColumnVisibility, columns}) => (
                         <input 
                             id={`checkbox-${idx}`}
                             type="checkbox" 
-                            onChange={ e => setColumnVisibility(cd.id) } 
+                            onChange={ e => handleColumnVisibility(cd.id) } 
                             checked={ cd.visible !== false } 
                         />
                         <label htmlFor={`checkbox-${idx}`} style={{flex: 1, cursor: 'pointer'}}>
-                          {cd.label || cd.field}
+                            {cd.label || cd.field}
                         </label>
                     </div>
                 ))
@@ -435,6 +452,10 @@ By default the footer renders items information and pagination controls, but you
 | totalRows | number | total number of rows in the table | 0 | 
 | selectedRowsLength | number | total number of selected rows | 0 | 
 | numberOfRows | number | total number of rows in the page | 0 | 
+| tableHasSelection | boolean | weather table has a [checkbox](#checkbox-column) column | --- | 
+| isPaginated | boolean | weather table has pagination | true | 
+| clearSelection | function | function to unselect all selected rows | --- | 
+| clearSelectionIcon | node | the clear selection icon as was defined in the `icons` prop or the default one | [trash icon] | 
 
 **Example:**
 
@@ -445,19 +466,23 @@ footerRenderer={({
     page, 
     totalPages, 
     handlePagination, 
-    pageSize, 
     pageSizes, 
+    pageSize, 
     setPageSize, 
     totalRows,
     selectedRowsLength,
+    numberOfRows,
+    tableHasSelection,
+    isPaginated,
     clearSelection,
-    numberOfRows
+    clearSelectionIcon
 }) => (
     <div style={{display: 'flex', justifyContent: 'space-between', flex: 1, padding: '12px 20px'}}>
         <div style={{display: 'flex'}}>
-          {`Total Rows: ${totalRows} 
-          | Rows: ${numberOfRows * page - numberOfRows} - ${numberOfRows * page} 
-          | ${selectedRowsLength} Selected`}
+            {`Total Rows: ${totalRows} 
+            | Rows: ${numberOfRows * page - numberOfRows} - ${numberOfRows * page} 
+            | ${selectedRowsLength} Selected`}
+            { selectedRowsLength ? <button style={{marginLeft: 10}} onClick={clearSelection}>{clearSelectionIcon}</button> : null }
         </div>
         <div style={{display: 'flex'}}>
             <div style={{width: 200, marginRight: 50}}>
