@@ -40,7 +40,7 @@ const GridTable = (props) => {
                 column={cd} 
                 handleResizeEnd={handlers.handleResizeEnd}
                 handleResize={handlers.handleResize}
-                isHeaderSticky={params.isHeaderSticky !== false}
+                isHeaderSticky={params.isHeaderSticky}
                 handleSort={handlers.handleSort}
                 sortBy={params.sortBy}
                 sortAsc={params.sortAsc}

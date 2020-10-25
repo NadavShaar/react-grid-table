@@ -395,7 +395,7 @@ export default function useTableManager(props) {
             selectAllIsDisabled,
             showSearch: props.showSearch,
             showColumnVisibilityManager: props.showColumnVisibilityManager,
-            isHeaderSticky: props.isHeaderSticky,
+            isHeaderSticky: props.isHeaderSticky !== false,
             isPaginated: props.isPaginated,
             disableColumnsReorder: props.disableColumnsReorder,
             pageSizes: props.pageSizes
