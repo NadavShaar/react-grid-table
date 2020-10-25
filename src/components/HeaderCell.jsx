@@ -21,17 +21,20 @@ const HeaderCell = (props) => {
         isPinnedRight,
         sortIcons,
         dragHandleRenderer,
-        stickyHeader,
+        isHeaderSticky,
         handleResizeEnd,
         handleResize,
         disableColumnsReorder,
         isSelectAllIndeterminate,
+        visibleColumnsLength,
         ...rest
     } = props;
     
     let resizeHandleRef = useRef(null);
     let selectAllRef = useRef(null);
+
     const [target, setTarget] = useState(resizeHandleRef?.current || null);
+
     useResizeEvents(target, column, handleResize, handleResizeEnd);
 
     useEffect(() => {
@@ -45,19 +48,21 @@ const HeaderCell = (props) => {
         else selectAllRef.current.indeterminate = false;
     }, [isSelectAllIndeterminate])
 
-    let sortingProps = (column.sortable !== false && column.id  !== 'checkbox' && !column.isVirtual) ? {onClick: e => handleSort(column.id)} : {};
+    let classes = column.id === 'virtual' ? `rgt-cell-header rgt-cell-header-virtual-col${isHeaderSticky ? ' rgt-cell-header-sticky' : ''}`.trim() : `rgt-cell-header rgt-cell-header-${column.id === 'checkbox' ? 'checkbox' : column.field}${(column.sortable !== false && column.id  !== 'checkbox' && column.id !== 'virtual') ? ' rgt-clickable' : ''}${column.sortable !== false && column.id !== 'checkbox' ? ' rgt-cell-header-sortable' : ' rgt-cell-header-not-sortable'}${isHeaderSticky ? ' rgt-cell-header-sticky' : ''}${column.resizable !== false ? ' rgt-cell-header-resizable' : ' rgt-cell-header-not-resizable'}${column.searchable !== false && column.id !== 'checkbox' ? ' rgt-cell-header-searchable' : ' rgt-cell-header-not-searchable'}${column.pinned && index === 0 ? ' rgt-cell-header-pinned rgt-cell-header-pinned-left' : ''}${column.pinned && index === visibleColumnsLength ? ' rgt-cell-header-pinned rgt-cell-header-pinned-right' : ''} ${column.className}`.trim() 
+
+    let sortingProps = (column.sortable !== false && column.id  !== 'checkbox' && column.id !== 'virtual') ? {onClick: e => handleSort(column.id)} : {};
 
     return (
         <div 
             data-column-id={(column.id).toString()}
-            id={`rgt-column-${column.isVirtual ? 'virtual' : column.id === 'checkbox' ? 'checkbox' : column.field.toLowerCase()}`}
+            id={`rgt-column-${column.id === 'virtual' ? 'virtual' : column.id === 'checkbox' ? 'checkbox' : column.field.toLowerCase()}`}
             style={{minWidth: column.minWidth, maxWidth: column.maxWidth}}
-            className={className}
+            className={classes}
             {...sortingProps}
             { ...rest }
         >
             {
-                (!column.isVirtual) ?
+                (column.id !== 'virtual') ?
                     <React.Fragment>
                         <SortableItem 
                             className={`rgt-cell-header-inner${column.id === 'checkbox' ? ' rgt-cell-header-inner-checkbox-column' : ''}${!isPinnedRight ? ' rgt-cell-header-inner-not-pinned-right' : '' }`}
