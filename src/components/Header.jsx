@@ -4,6 +4,11 @@ import PopoverButton from './PopoverButton';
 const Header = (props) => {
 
     let { 
+        headerRenderer,
+        ...rest
+    } = props;
+
+    let { 
         showSearch,
         showColumnVisibilityManager,
         columnVisibilityRenderer,
@@ -14,7 +19,9 @@ const Header = (props) => {
         handleColumnVisibility,
         columnVisibilityIcon,
         searchIcon
-    } = props;
+    } = rest;
+
+    if(headerRenderer) return headerRenderer(rest);
 
     const renderSearch = ({searchText, setSearchText}) => (
         <div className='rgt-search-container'>

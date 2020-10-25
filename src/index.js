@@ -16,54 +16,21 @@ const GridTable = (props) => {
 
     const { nodes, handlers, renderers, columnsData, params, rowsData, additionalProps, icons } = tableManager;
 
-    const handleSearchHighlight = (cellValue) => {
-        if(cellValue === params.searchText) return <span className='rgt-search-highlight'>{cellValue}</span> ;
-
-        let re = new RegExp(params.searchText,"gi");
-        let restArr = cellValue.split(re, cellValue.length);
-        let restItemsLength = 0;
-
-        return restArr.map((a, idx) => {
-            restItemsLength += a.length;
-
-            const el = (
-                <span key={idx}>
-                    {a} 
-                    { 
-                        (restArr.length !== idx+1) ? 
-                            <span className='rgt-search-highlight'>
-                                {cellValue.slice(restItemsLength, params.searchText.length + restItemsLength)}
-                            </span> 
-                            : null
-                    }
-                </span>
-            )
-            restItemsLength += params.searchText.length;
-
-            return el;
-        })
-    }
-
-    const renderHeader = () => {
-
-        let headerProps = {
-            columns: columnsData.columns,
-            showColumnVisibilityManager: params.showColumnVisibilityManager,
-            handleColumnVisibility: handlers.handleColumnVisibility,
-            columnVisibilityRenderer: renderers.columnVisibilityRenderer,
-            columnVisibilityIcon: icons.columnVisibility,
-            showSearch: params.showSearch,
-            searchText: params.searchText, 
-            setSearchText: handlers.setSearchText, 
-            searchRenderer: renderers.searchRenderer,
-            searchIcon: icons.search
-        };
-
-        if(renderers.headerRenderer) return renderers.headerRenderer(headerProps);
-        if(!showColumnVisibilityManager && !showSearch) return null;
-
-        return <Header { ...headerProps } />;
-    }
+    const renderHeader = () => (
+        <Header 
+            columns={columnsData.columns}
+            showColumnVisibilityManager={params.showColumnVisibilityManager}
+            handleColumnVisibility={handlers.handleColumnVisibility}
+            columnVisibilityRenderer={renderers.columnVisibilityRenderer}
+            columnVisibilityIcon={icons.columnVisibility}
+            showSearch={params.showSearch}
+            searchText={params.searchText} 
+            setSearchText={handlers.setSearchText} 
+            searchRenderer={renderers.searchRenderer}
+            searchIcon={icons.search}
+            headerRenderer={renderers.headerRenderer}
+        />
+    )
 
     const renderHeaderCells = () => {
 
@@ -138,7 +105,7 @@ const GridTable = (props) => {
                             
                             // highlight searched text if...
                             if(cd.searchable !== false && rowsData.updatedRow?.[rowsData.rowIdField] !== rowId && params.highlightSearch !== false && params.searchText && params.searchText.length >= params.searchMinChars && cellValue?.toLowerCase?.().includes(params.searchText.toLowerCase())) {
-                                cellValue = handleSearchHighlight(cellValue);
+                                cellValue = handlers.handleSearchHighlight(cellValue);
                             }
 
                             // class selectors
@@ -184,37 +151,35 @@ const GridTable = (props) => {
         })
     }
 
-    const renderFooter = () => {
-        return (
-            <Footer 
-                totalPages={params.totalPages} 
-                page={params.page} 
-                pageSize={params.pageSize} 
-                handlePagination={handlers.handlePagination}
-                setPageSize={handlers.setPageSize} 
-                pageSizes={params.pageSizes}
-                isPaginated={params.isPaginated}
-                footerRenderer={renderers.footerRenderer}
-                selectedRowsLength={rowsData.selectedItems.length}
-                clearSelection={() => handlers.updateSelectedItems([])}
-                clearSelectionIcon={icons.clearSelection}
-                numberOfRows={rowsData.pageItems.length}
-                totalRows={rowsData.items.length}
-                tableHasSelection={params.tableHasSelection}
-            />
-        )
-    }
+    const renderFooter = () => (
+        <Footer 
+            totalPages={params.totalPages} 
+            page={params.page} 
+            pageSize={params.pageSize} 
+            handlePagination={handlers.handlePagination}
+            setPageSize={handlers.setPageSize} 
+            pageSizes={params.pageSizes}
+            isPaginated={params.isPaginated}
+            footerRenderer={renderers.footerRenderer}
+            selectedRowsLength={rowsData.selectedItems.length}
+            clearSelection={() => handlers.updateSelectedItems([])}
+            clearSelectionIcon={icons.clearSelection}
+            numberOfRows={rowsData.pageItems.length}
+            totalRows={rowsData.items.length}
+            tableHasSelection={params.tableHasSelection}
+        />
+    )
 
     const renderLoader = () => (
-            <div className='rgt-no-data-container'>
-                { renderers.loaderRenderer?.() || icons.loader }
-            </div>
+        <div className='rgt-no-data-container'>
+            { renderers.loaderRenderer?.() || icons.loader }
+        </div>
     )
 
     const renderNoResults = () => (
-            <div className='rgt-no-data-container'>
-                { renderers.noResultsRenderer?.() || 'No Results :(' }
-            </div>
+        <div className='rgt-no-data-container'>
+            { renderers.noResultsRenderer?.() || 'No Results :(' }
+        </div>
     )
 
     let { 

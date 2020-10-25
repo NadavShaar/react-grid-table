@@ -392,7 +392,7 @@ headerRenderer={({
     searchText, 
     setSearchText, 
     searchRenderer,
-    searchIcon
+    searchIcon,
     showColumnVisibilityManager,
     handleColumnVisibility,
     columnVisibilityRenderer,
@@ -477,7 +477,7 @@ footerRenderer={({
     clearSelection,
     clearSelectionIcon
 }) => (
-    <div style={{display: 'flex', justifyContent: 'space-between', flex: 1, padding: '12px 20px'}}>
+    <div style={{display: 'flex', justifyContent: 'space-between', flex: 1, padding: '12px 20px', background: '#fff'}}>
         <div style={{display: 'flex'}}>
             {`Total Rows: ${totalRows} 
             | Rows: ${numberOfRows * page - numberOfRows} - ${numberOfRows * page} 

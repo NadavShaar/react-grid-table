@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import defaultIcons from './../defaultIcons';
 
 var lastPos;
@@ -305,7 +305,33 @@ export default function useTableManager(props) {
         setColumns(columns);
     }
 
+    function handleSearchHighlight(cellValue) {
+        if(cellValue === searchText) return <span className='rgt-search-highlight'>{cellValue}</span> ;
 
+        let re = new RegExp(searchText,"gi");
+        let restArr = cellValue.split(re, cellValue.length);
+        let restItemsLength = 0;
+
+        return restArr.map((a, idx) => {
+            restItemsLength += a.length;
+
+            const el = (
+                <span key={idx}>
+                    {a} 
+                    { 
+                        (restArr.length !== idx+1) ? 
+                            <span className='rgt-search-highlight'>
+                                {cellValue.slice(restItemsLength, searchText.length + restItemsLength)}
+                            </span> 
+                            : null
+                    }
+                </span>
+            )
+            restItemsLength += searchText.length;
+
+            return el;
+        })
+    }
 
     // **************** API ****************
 
@@ -336,7 +362,8 @@ export default function useTableManager(props) {
             handlePagination,
             handleColumnVisibility,
             onRowClick: props.onRowClick,
-            handleIsRowEditable: props.handleIsRowEditable
+            handleIsRowEditable: props.handleIsRowEditable,
+            handleSearchHighlight
         },
         renderers: {
             searchRenderer: props.searchRenderer,
