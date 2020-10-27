@@ -176,8 +176,8 @@ export default MyAwesomeTable;
 | rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be unique | 'id' |
 | selectedRowsIds | array of ids | the ids of all selected rows (<u>[details](#checkbox-column)</u>) | [ ] |
 | searchText | string | text for search | "" |
-| isRowSelectable | function | whether row selection for the current row is disabled or not | `row => true` |
-| handleIsRowEditable | function | whether row editing for the current row is disabled or not | `row => true` |
+| getIsRowSelectable | function | whether row selection for the current row is disabled or not | `row => true` |
+| getIsRowEditable | function | whether row editing for the current row is disabled or not | `row => true` |
 | editRowId | any | the id of the row to edit, (more <u>[details](#Row-Editing)</u> about row editing) | null |
 | cellProps | object | global props for all data cells | { } |
 | headerCellProps | object | global props for all header cells | { } |

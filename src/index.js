@@ -8,90 +8,13 @@ import PropTypes from 'prop-types';
 import useTableManager from './hooks/useTableManager';
 import './index.css';
 
-const SortableList = SortableContainer(({style, className, children}) => <div className={className} style={style}>{children}</div>);
+const SortableList = SortableContainer(({ style, className, children }) => <div className={className} style={style}>{children}</div>);
  
 const GridTable = (props) => {
 
     const tableManager = useTableManager(props);
 
     const { nodes, handlers, renderers, columnsData, params, rowsData, additionalProps, icons } = tableManager;
-
-    const renderHeader = () => (
-        <Header 
-            columns={columnsData.columns}
-            showColumnVisibilityManager={params.showColumnVisibilityManager}
-            handleColumnVisibility={handlers.handleColumnVisibility}
-            columnVisibilityRenderer={renderers.columnVisibilityRenderer}
-            columnVisibilityIcon={icons.columnVisibility}
-            showSearch={params.showSearch}
-            searchText={params.searchText} 
-            setSearchText={handlers.setSearchText} 
-            searchRenderer={renderers.searchRenderer}
-            searchIcon={icons.search}
-            headerRenderer={renderers.headerRenderer}
-        />
-    )
-
-    const renderTableHeader = () => {
-        return columnsData.visibleColumnsWithVirtual.map((cd, idx) => (
-            <HeaderCell 
-                key={idx} 
-                index={idx} 
-                column={cd} 
-                handleResizeEnd={handlers.handleResizeEnd}
-                handleResize={handlers.handleResize}
-                isHeaderSticky={params.isHeaderSticky}
-                handleSort={handlers.handleSort}
-                sortBy={params.sortBy}
-                sortAsc={params.sortAsc}
-                disableColumnsReorder={params.disableColumnsReorder}
-                toggleSelectAll={handlers.toggleSelectAll}
-                selectAllIsChecked={params.selectAllIsChecked}
-                selectAllIsDisabled={params.selectAllIsDisabled}
-                isSelectAllIndeterminate={params.isSelectAllIndeterminate}
-                isPinnedLeft={cd.pinned && idx === 0}
-                isPinnedRight={cd.pinned && idx+1 === columnsData.visibleColumnsWithVirtual.length}
-                sortIcons={{ascending: icons.sortAscending, descending: icons.sortDescending}}
-                dragHandleRenderer={renderers.dragHandleRenderer}
-                visibleColumnsLength={columnsData.visibleColumns.length}
-                { ...additionalProps.headerCell }
-            />
-        ))
-    }
-
-    const renderTableRows = () => {
-        return rowsData.pageItems.map((d, idx) => (
-            <Row 
-                key={idx} 
-                index={idx}
-                data={d} 
-                rowsData={rowsData}
-                params={params}
-                handlers={handlers}
-                columnsData={columnsData} 
-                additionalProps={additionalProps} 
-            />
-        ))
-    }
-
-    const renderFooter = () => (
-        <Footer 
-            totalPages={params.totalPages} 
-            page={params.page} 
-            pageSize={params.pageSize} 
-            handlePagination={handlers.handlePagination}
-            setPageSize={handlers.setPageSize} 
-            pageSizes={params.pageSizes}
-            isPaginated={params.isPaginated}
-            footerRenderer={renderers.footerRenderer}
-            selectedRowsLength={rowsData.selectedItems.length}
-            clearSelection={() => handlers.updateSelectedItems([])}
-            clearSelectionIcon={icons.clearSelection}
-            numberOfRows={rowsData.pageItems.length}
-            totalRows={rowsData.items.length}
-            tableHasSelection={params.tableHasSelection}
-        />
-    )
 
     const renderLoader = () => (
         <div className='rgt-no-data-container'>
@@ -106,47 +29,18 @@ const GridTable = (props) => {
     )
 
     let { 
-        columns,
-        rows,
         isLoading,
-        onColumnsChange,
-        onSelectedRowsChange,
-        editRowId,
-        isRowSelectable,
-        handleIsRowEditable,
-        onSortChange,
-        minColumnWidth,
-        pageSizes,
-        pageSize,
         dragHandleRenderer,
-        headerRenderer,
-        columnVisibilityRenderer,
-        footerRenderer,
-        selectedRowsIds,
-        noResultsRenderer,
-        showColumnVisibilityManager,
-        isHeaderSticky,
-        searchText,
-        highlightSearch,
-        onSearchChange,
-        searchRenderer,
-        isPaginated,
-        showSearch,
-        sortBy,
-        sortAscending,
-        cellProps,
-        headerCellProps,
-        searchMinChars,
-        onRowClick,
-        rowIdField,
-        disableColumnsReorder,
-        loaderRenderer,
-        ...rest
     } = props;
+
+    let rest = Object.keys(props).reduce((rest, key) => {
+        if (GridTable.propTypes[key] === undefined) rest = { ...rest, [key]: props[key] };
+        return rest;
+    }, {})
 
     return (
         <div ref={nodes.rgtRef} className='rgt-wrapper' {...rest} >
-            { renderHeader() }
+            <Header tableManager={tableManager} headerRenderer={tableManager.renderers.headerRenderer} />
             <SortableList
                 ref={nodes.tableRef}
                 className='rgt-container'
@@ -161,14 +55,18 @@ const GridTable = (props) => {
                 style={{
                     display: 'grid',
                     overflow: 'auto',
-                    gridTemplateColumns: (columnsData.visibleColumnsWithVirtual.filter(t => t.visible).map(g => g.width)).join(" "),
+                    gridTemplateColumns: (columnsData.visibleColumns.map(g => g.width)).join(" "),
                     gridTemplateRows: `repeat(${rowsData.pageItems.length+1}, max-content)`,
                 }}
             >
-                { renderTableHeader() }
-                { isLoading ? renderLoader() : rowsData.pageItems.length ? renderTableRows() : renderNoResults() }
+                {
+                    columnsData.visibleColumns.map((cd, idx) => (
+                        <HeaderCell key={idx} index={idx} column={cd} isPinnedRight={cd.pinned && idx + 1 === columnsData.visibleColumns.length} tableManager={tableManager}/>
+                    ))
+                }
+                {isLoading ? renderLoader() : rowsData.pageItems.length ? rowsData.pageItems.map((d, idx) => <Row key={idx} index={idx} data={d} tableManager={tableManager}/>) : renderNoResults() }
             </SortableList>
-            { renderFooter() }
+            <Footer tableManager={tableManager} footerRenderer={tableManager.renderers.footerRenderer}/>
         </div>
     )
 }
@@ -191,8 +89,8 @@ GridTable.defaultProps = {
     sortBy: null,
     sortAscending: true,
     disableColumnsReorder: false,
-    isRowSelectable: row => true,
-    handleIsRowEditable: row => true
+    getIsRowSelectable: row => true,
+    getIsRowEditable: row => true
 };
 
 GridTable.propTypes = {
@@ -202,8 +100,8 @@ GridTable.propTypes = {
     rowIdField: PropTypes.string,
     selectedRowsIds: PropTypes.array,
     searchText: PropTypes.string,
-    isRowSelectable: PropTypes.func,
-    handleIsRowEditable: PropTypes.func,
+    getIsRowSelectable: PropTypes.func,
+    getIsRowEditable: PropTypes.func,
     editRowId: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number

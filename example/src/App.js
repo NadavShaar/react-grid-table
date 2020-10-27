@@ -66,11 +66,11 @@ const App = () => {
             id: 6, 
             field: 'gender', 
             label: 'Gender',
-            editorCellRenderer: ({value, field, onChange, row, rows, column, rowIndex}) => (
+            editorCellRenderer: ({value, field, onChange, data, column, rowIndex}) => (
 				<select 
 					style={styles.select} 
 					value={value} 
-					onChange={e => onChange({...row, [field]: e.target.value})}
+					onChange={e => onChange({...data, [field]: e.target.value})}
 				>
 					<option>Male</option>
 					<option>Female</option>
@@ -98,19 +98,19 @@ const App = () => {
             label: '',
             pinned: true,
             sortable: false,
-            resizable: false,
-            cellRenderer: ({value, row, column, rowIndex, searchText}) => (
+            resizable: true,
+            cellRenderer: ({value, data, column, rowIndex, searchText}) => (
                 <div style={styles.buttonsCellContainer}>
 					<button 
 						title="Edit" 
 						style={styles.editButton} 
-						onClick={e => setEditRowId(row.id)} 
+						onClick={e => setEditRowId(data.id)} 
 					>
 						{ EDIT_SVG }
 					</button>
                 </div>
             ),
-            editorCellRenderer: ({value, field, onChange, row, rows, column, rowIndex}) => (
+            editorCellRenderer: ({ value, field, onChange, data, column, rowIndex}) => (
                 <div style={styles.buttonsCellEditorContainer}>
 					<button 
 						title="Cancel" 
@@ -123,9 +123,9 @@ const App = () => {
 						title="Save" 
 						style={styles.saveButton} 
 						onClick={e => {
-							let rowsClone = [...rows];
-							let updatedRowIndex = rowsClone.findIndex(r => r.id === row.id);
-							rowsClone[updatedRowIndex] = row;
+                            let rowsClone = [...rowsData];
+							let updatedRowIndex = rowsClone.findIndex(r => r.id === data.id);
+							rowsClone[updatedRowIndex] = data;
 
 							setRowsData(rowsClone);
 							setEditRowId(null);
@@ -140,6 +140,7 @@ const App = () => {
 	
     return (
         <GridTable 
+            id={'adsasdadas'}
 			columns={columns}
             rows={rowsData} 
             isLoading={isLoading}

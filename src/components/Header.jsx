@@ -3,25 +3,35 @@ import PopoverButton from './PopoverButton';
 
 const Header = (props) => {
 
-    let { 
-        headerRenderer,
-        ...rest
+    let {
+        tableManager,
+        headerRenderer
     } = props;
 
     let { 
-        showSearch,
-        showColumnVisibilityManager,
-        columnVisibilityRenderer,
-        searchRenderer,
-        columns,
-        searchText,
-        setSearchText,
-        handleColumnVisibility,
-        columnVisibilityIcon,
-        searchIcon
-    } = rest;
+        params: {
+            showSearch,
+            searchText,
+            showColumnVisibilityManager,
+        },
+        renderers: {
+            columnVisibilityRenderer,
+            searchRenderer,
+        },
+        columnsData: {
+            columns,
+        },
+        handlers: {
+            setSearchText,
+            handleColumnVisibility,
+        },
+        icons: {
+            columnVisibility: columnVisibilityIcon,
+            search: searchIcon
+        }
+    } = tableManager;
 
-    if(headerRenderer) return headerRenderer(rest);
+    if (headerRenderer) return headerRenderer({ tableManager });
 
     const renderSearch = ({searchText, setSearchText}) => (
         <div className='rgt-search-container'>

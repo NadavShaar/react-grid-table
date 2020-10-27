@@ -3,33 +3,43 @@ import React from 'react';
 const Footer = (props) => {
 
     let { 
+        tableManager,
         footerRenderer,
-        ...rest
     } = props;
 
-    let { 
-        totalPages, 
-        page, 
-        pageSize, 
-        handlePagination, 
-        setPageSize, 
-        pageSizes, 
-        selectedRowsLength,
-        numberOfRows,
-        totalRows,
-        tableHasSelection,
-        isPaginated,
-        clearSelection,
-        clearSelectionIcon
-    } = rest;
+    let {
+        params: {
+            totalPages,
+            page,
+            pageSize,
+            pageSizes,
+            tableHasSelection,
+            isPaginated,
+        },
+        renderers: {
+        },
+        rowsData: {
+            selectedItems,
+            pageItems,
+            items,
+        },
+        handlers: {
+            handlePagination,
+            setPageSize,
+            clearSelection,
+        },
+        icons: {
+            clearSelection: clearSelectionIcon
+        }
+    } = tableManager;
 
-    if(footerRenderer) return footerRenderer(rest);
+    if(footerRenderer) return footerRenderer({tableManager});
 
     let backButtonDisabled = page-1 < 1;
     let nextButtonDisabled = page+1 > totalPages;
 
     const renderSelectedItems = () => (
-        <span className='rgt-footer-items-information'>Total Rows: {totalRows} | {isPaginated ? `Rows: ${numberOfRows * page - numberOfRows} - ${numberOfRows * page}` : ''} { tableHasSelection ? <React.Fragment>{`| ${selectedRowsLength} Selected`}{selectedRowsLength ? <span className="rgt-footer-clear-selection-button rgt-clickable" onClick={clearSelection}>{ clearSelectionIcon }</span> : null}</React.Fragment> : ''}</span>
+        <span className='rgt-footer-items-information'>Total Rows: {items.length} | {isPaginated ? `Rows: ${pageItems.length * page - pageItems.length} - ${pageItems.length * page}` : ''} { tableHasSelection ? <React.Fragment>{`| ${selectedItems.length} Selected`}{selectedItems.length ? <span className="rgt-footer-clear-selection-button rgt-clickable" onClick={clearSelection}>{ clearSelectionIcon }</span> : null}</React.Fragment> : ''}</span>
     )
 
     const renderPageSize = () => (

@@ -38,13 +38,12 @@ export default function useTableManager(props) {
     let lastColIsPinned = visibleColumns[visibleColumns.length-1]?.pinned;
     // virtual column insertion
     let virtualColConfig = {id: 'virtual', visible: true, width: "auto"};
-    let visibleColumnsWithVirtual = [ ...visibleColumns ];
-    if(!lastColIsPinned) visibleColumnsWithVirtual.push(virtualColConfig) 
-    else visibleColumnsWithVirtual.splice(visibleColumns.length-1, 0, virtualColConfig);
+    if(!lastColIsPinned) visibleColumns.push(virtualColConfig) 
+    else visibleColumns.splice(visibleColumns.length-1, 0, virtualColConfig);
     // check if table has a 'checkbox' column
     let tableHasSelection = !!columns.find(cd => cd.id === 'checkbox');
     // set selectable items
-    let selectableItemsIds = items.filter(it => props.isRowSelectable(it)).map(item => item[props.rowIdField]);
+    let selectableItemsIds = items.filter(it => props.getIsRowSelectable(it)).map(item => item[props.rowIdField]);
     // select all params
     let selectAllIsChecked = selectableItemsIds.length && selectableItemsIds.every(si => selectedItems.find(id => si === id));
     let selectAllIsDisabled = !selectableItemsIds.length;
@@ -69,7 +68,7 @@ export default function useTableManager(props) {
     // set grid's wrapper ref (used for auto scrolling the page to top when moving between pages)
     useEffect(() => {
         if(!rgtRef?.current?.children) return;
-        let children = [ ...rgtRef.current.children ];
+        let children = [].slice.call(rgtRef.current.children);
         setListEl(children.find(el => el.classList.contains('rgt-container')));
     }, [listEl])
 
@@ -152,10 +151,11 @@ export default function useTableManager(props) {
     }
 
     const setColumns = (cols) => {
-        props.onColumnsChange ? props.onColumnsChange?.(cols) : setCols(cols);
+        props.onColumnsChange ? props.onColumnsChange?.(cols) : setCols(generateColumns({ cols, minColumnWidth: props.minColumnWidth }));
     }
 
-    function generateColumns({cols, minColumnWidth}) {
+    function generateColumns({ cols, minColumnWidth }) {
+        let visibleIndex = 0;
         return cols.map((cd, idx) => { 
 
             let isPinnedColumn =  idx === 0 && cd.pinned || idx === cols.length-1 && cd.pinned;
@@ -168,6 +168,8 @@ export default function useTableManager(props) {
                 maxWidth: null,
                 resizable: false,
                 ...cd,
+                index: idx,
+                visibleIndex: isVisibleColumn ? visibleIndex++ : null,
                 pinned: isPinnedColumn,
                 visible: isVisibleColumn
             };
@@ -179,7 +181,7 @@ export default function useTableManager(props) {
                 minWidth: cd.minWidth || minColumnWidth,
                 maxWidth: null,
                 getValue: ({value, column}) => value, 
-                setValue: ({value, row, setRow, column}) => { setRow({...row, [column.field]: value}) },
+                setValue: ({ value, data, setRow, column }) => { setRow({ ...data, [column.field]: value}) },
                 searchable: true,
                 editable: true,
                 sortable: true,
@@ -192,7 +194,9 @@ export default function useTableManager(props) {
                     else if(aa < bb) return isAscending ? -1 : 1;
                     return 0;
                 }, 
-                ...cd, 
+                ...cd,
+                index: idx,
+                visibleIndex: isVisibleColumn ? visibleIndex++ : null,
                 pinned: isPinnedColumn,
                 visible: isVisibleColumn
             }
@@ -206,10 +210,10 @@ export default function useTableManager(props) {
         if(!lastPos) lastPos = e.clientX;
         
         let diff = lastPos - e.clientX;
-        
-        let colIndex = visibleColumnsWithVirtual.findIndex(cd => cd.id === column.id);
-        let colMinWidth = visibleColumnsWithVirtual[colIndex].minWidth;
-        if(e.clientX > lastPos || e.clientX < lastPos && currentColWidth - diff > colMinWidth) {
+
+        let colIndex = visibleColumns.findIndex(cd => cd.id === column.id);
+
+        if (e.clientX > lastPos || e.clientX < lastPos && currentColWidth - diff > column.minWidth) {
             let gtcArr = gridTemplateColumns.split(" ");
             
             if((column.minWidth && ((currentColWidth - diff) <= column.minWidth)) || (column.maxWidth && ((currentColWidth - diff) >= column.maxWidth))) return;
@@ -227,10 +231,15 @@ export default function useTableManager(props) {
         lastPos = null;
         let containerEl = tableRef.current.container;
         let gridTemplateColumns = containerEl.style.gridTemplateColumns;
-        gridTemplateColumns = gridTemplateColumns.split(" ");
+        let gtcArr = gridTemplateColumns.split(" ");
         
-        visibleColumnsWithVirtual = visibleColumnsWithVirtual.map((cd, idx) => { return {...cd, width: gridTemplateColumns[idx]} }).filter(col => col.id !== 'virtual');
-        setColumns(visibleColumnsWithVirtual);
+        columns.forEach(col => {
+            let colIndex = visibleColumns.findIndex(cd => cd.id === col.id);
+            if (col.visible) {
+                col.width = gtcArr[colIndex];
+            }
+        })
+        setColumns(columns)
     }
 
     function handleColumnSortStart(obj) {
@@ -361,9 +370,10 @@ export default function useTableManager(props) {
             handleSort,
             handlePagination,
             handleColumnVisibility,
+            handleSearchHighlight,
             onRowClick: props.onRowClick,
-            handleIsRowEditable: props.handleIsRowEditable,
-            handleSearchHighlight
+            getIsRowEditable: props.getIsRowEditable,
+            getIsRowSelectable: props.getIsRowSelectable
         },
         renderers: {
             searchRenderer: props.searchRenderer,
@@ -376,7 +386,6 @@ export default function useTableManager(props) {
         },
         columnsData: {
             columns, 
-            visibleColumnsWithVirtual, 
             visibleColumns, 
         },
         params: {
