@@ -26,7 +26,7 @@ const Footer = (props) => {
         handlers: {
             handlePagination,
             setPageSize,
-            clearSelection,
+            updateSelectedItems
         },
         icons: {
             clearSelection: clearSelectionIcon
@@ -39,7 +39,7 @@ const Footer = (props) => {
     let nextButtonDisabled = page+1 > totalPages;
 
     const renderSelectedItems = () => (
-        <span className='rgt-footer-items-information'>Total Rows: {items.length} | {isPaginated ? `Rows: ${pageItems.length * page - pageItems.length} - ${pageItems.length * page}` : ''} { tableHasSelection ? <React.Fragment>{`| ${selectedItems.length} Selected`}{selectedItems.length ? <span className="rgt-footer-clear-selection-button rgt-clickable" onClick={clearSelection}>{ clearSelectionIcon }</span> : null}</React.Fragment> : ''}</span>
+        <span className='rgt-footer-items-information'>Total Rows: {items.length} | {isPaginated ? `Rows: ${pageItems.length * page - pageItems.length} - ${pageItems.length * page}` : ''} { tableHasSelection ? <React.Fragment>{`| ${selectedItems.length} Selected`}{selectedItems.length ? <span className="rgt-footer-clear-selection-button rgt-clickable" onClick={e => updateSelectedItems([])}>{ clearSelectionIcon }</span> : null}</React.Fragment> : ''}</span>
     )
 
     const renderPageSize = () => (

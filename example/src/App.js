@@ -25,6 +25,7 @@ const App = () => {
 	const [editRowId, setEditRowId] = useState(null);
 	const [rowsData, setRowsData] = useState([]);
     const [isLoading, setLoading] = useState(false);
+    const [tableManager, setTableManager] = useState(null);
 	
     useEffect(() => {
 		setLoading(true);
@@ -137,15 +138,15 @@ const App = () => {
             )
         }
 	];
-	
+
     return (
         <GridTable 
-            id={'adsasdadas'}
 			columns={columns}
             rows={rowsData} 
             isLoading={isLoading}
             editRowId={editRowId}
-            style={{boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px'}} 
+            style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }} 
+            onLoad={setTableManager}
         />
     )
 };

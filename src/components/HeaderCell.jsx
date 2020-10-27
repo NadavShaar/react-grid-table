@@ -18,11 +18,8 @@ const HeaderCell = (props) => {
         params: {
             sortBy,
             sortAsc,
-            selectAllIsChecked,
-            selectAllIsDisabled,
             isHeaderSticky,
-            disableColumnsReorder,
-            isSelectAllIndeterminate,
+            disableColumnsReorder
         },
         renderers: {
             dragHandleRenderer
@@ -32,6 +29,7 @@ const HeaderCell = (props) => {
             toggleSelectAll,
             handleResizeEnd,
             handleResize,
+            getIsRowSelectable
         },
         icons: {
             sortAscending: sortAscendingIcon,
@@ -39,6 +37,11 @@ const HeaderCell = (props) => {
         },
         columnsData: {
             visibleColumns
+        },
+        rowsData: {
+            selectedItems,
+            pageItems,
+            rowIdField
         },
         additionalProps: {
             headerCell: additionalProps
@@ -55,17 +58,49 @@ const HeaderCell = (props) => {
     useEffect(() => {
         setTarget(resizeHandleRef.current);
     }, [column])
-    
-    useEffect(() => {
-        if(!selectAllRef.current) return;
-
-        if(isSelectAllIndeterminate) selectAllRef.current.indeterminate = true;
-        else selectAllRef.current.indeterminate = false;
-    }, [isSelectAllIndeterminate])
 
     let classes = column.id === 'virtual' ? `rgt-cell-header rgt-cell-header-virtual-col${isHeaderSticky ? ' rgt-cell-header-sticky' : ''}`.trim() : `rgt-cell-header rgt-cell-header-${column.id === 'checkbox' ? 'checkbox' : column.field}${(column.sortable !== false && column.id !== 'checkbox' && column.id !== 'virtual') ? ' rgt-clickable' : ''}${column.sortable !== false && column.id !== 'checkbox' ? ' rgt-cell-header-sortable' : ' rgt-cell-header-not-sortable'}${isHeaderSticky ? ' rgt-cell-header-sticky' : ''}${column.resizable !== false ? ' rgt-cell-header-resizable' : ' rgt-cell-header-not-resizable'}${column.searchable !== false && column.id !== 'checkbox' ? ' rgt-cell-header-searchable' : ' rgt-cell-header-not-searchable'}${column.pinned && index === 0 ? ' rgt-cell-header-pinned rgt-cell-header-pinned-left' : ''}${column.pinned && index === visibleColumns.length-1 ? ' rgt-cell-header-pinned rgt-cell-header-pinned-right' : ''} ${column.className}`.trim() 
 
-    let sortingProps = (column.sortable !== false && column.id  !== 'checkbox' && column.id !== 'virtual') ? {onClick: e => handleSort(column.id)} : {};
+    let sortingProps = (column.sortable !== false && column.id !== 'checkbox' && column.id !== 'virtual') ? { onClick: e => handleSort(column.id) } : {};
+    
+    const renderCheckboxHeaderCell = () => {
+
+        // set selectable items
+        let selectableItemsIds = pageItems.filter(it => getIsRowSelectable(it)).map(item => item[rowIdField]);
+        // select all params
+        let selectAllIsChecked = selectableItemsIds.length && selectableItemsIds.every(si => selectedItems.find(id => si === id));
+        let selectAllIsDisabled = !selectableItemsIds.length;
+        let isSelectAllIndeterminate = !!(selectedItems.length && !selectAllIsChecked && selectableItemsIds.some(si => selectedItems.find(id => si === id)));
+
+        const onChange = () => {
+            toggleSelectAll(selectableItemsIds, selectAllIsChecked, isSelectAllIndeterminate)
+        }
+
+        useEffect(() => {
+            if (!selectAllRef.current) return;
+
+            if (isSelectAllIndeterminate) selectAllRef.current.indeterminate = true;
+            else selectAllRef.current.indeterminate = false;
+        }, [isSelectAllIndeterminate])
+
+        return (
+            <div className="rgt-header-checkbox-cell">
+                {
+                    column.headerCellRenderer ?
+                        column.headerCellRenderer({ isChecked: selectAllIsChecked, isIndeterminate: isSelectAllIndeterminate, callback: onChange, disabled: selectAllIsDisabled })
+                        :
+                        <input
+                            ref={selectAllRef}
+                            className={selectAllIsDisabled ? 'rgt-disabled' : 'rgt-clickable'}
+                            disabled={selectAllIsDisabled}
+                            type="checkbox"
+                            onChange={onChange}
+                            checked={selectAllIsChecked}
+                        />
+                }
+            </div>
+        )
+    }
 
     return (
         <div 
@@ -93,22 +128,8 @@ const HeaderCell = (props) => {
                                     null
                             }
                             {
-                                (column.id === 'checkbox') ?
-                                    <div className="rgt-header-checkbox-cell">
-                                        {
-                                            column.headerCellRenderer ?
-                                                column.headerCellRenderer({isChecked: selectAllIsChecked, callback: toggleSelectAll, disabled: selectAllIsDisabled})
-                                                :
-                                                <input 
-                                                    ref={selectAllRef}
-                                                    className={selectAllIsDisabled ? 'rgt-disabled' : 'rgt-clickable'}
-                                                    disabled={selectAllIsDisabled}
-                                                    type="checkbox" 
-                                                    onChange={toggleSelectAll} 
-                                                    checked={selectAllIsChecked} 
-                                                />
-                                        }
-                                    </div>
+                                (column.id === 'checkbox') ? 
+                                    renderCheckboxHeaderCell()
                                     :
                                     column.headerCellRenderer ? 
                                         column.headerCellRenderer({label: (typeof column.label === 'string' ? column.label : column.field), column: column})

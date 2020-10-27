@@ -16,13 +16,13 @@ const GridTable = (props) => {
 
     const { nodes, handlers, renderers, columnsData, params, rowsData, additionalProps, icons } = tableManager;
 
-    const renderLoader = () => (
+    const Loader = () => (
         <div className='rgt-no-data-container'>
             { renderers.loaderRenderer?.() || icons.loader }
         </div>
     )
 
-    const renderNoResults = () => (
+    const NoResults = () => (
         <div className='rgt-no-data-container'>
             { renderers.noResultsRenderer?.() || 'No Results :(' }
         </div>
@@ -64,7 +64,7 @@ const GridTable = (props) => {
                         <HeaderCell key={idx} index={idx} column={cd} isPinnedRight={cd.pinned && idx + 1 === columnsData.visibleColumns.length} tableManager={tableManager}/>
                     ))
                 }
-                {isLoading ? renderLoader() : rowsData.pageItems.length ? rowsData.pageItems.map((d, idx) => <Row key={idx} index={idx} data={d} tableManager={tableManager}/>) : renderNoResults() }
+                {isLoading ? <Loader/> : rowsData.pageItems.length ? rowsData.pageItems.map((d, idx) => <Row key={idx} index={idx} data={d} tableManager={tableManager} />) : <NoResults/> }
             </SortableList>
             <Footer tableManager={tableManager} footerRenderer={tableManager.renderers.footerRenderer}/>
         </div>
@@ -132,6 +132,7 @@ GridTable.propTypes = {
     onSelectedRowsChange: PropTypes.func,
     onSortChange: PropTypes.func,
     onRowClick: PropTypes.func,
+    onLoad: PropTypes.func,
     // custom renderers
     headerRenderer: PropTypes.func,
     footerRenderer: PropTypes.func,
@@ -140,7 +141,6 @@ GridTable.propTypes = {
     searchRenderer: PropTypes.func,
     columnVisibilityRenderer: PropTypes.func,
     dragHandleRenderer: PropTypes.func,
-
 };
 
 export default GridTable;
