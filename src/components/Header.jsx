@@ -22,7 +22,7 @@ const Header = (props) => {
             columns,
         },
         handlers: {
-            setSearchText,
+            handleSearchChange,
             handleColumnVisibility,
         },
         icons: {
@@ -33,7 +33,7 @@ const Header = (props) => {
 
     if (headerRenderer) return headerRenderer({ tableManager });
 
-    const renderSearch = ({searchText, setSearchText}) => (
+    const renderSearch = ({ searchText, handleSearchChange}) => (
         <div className='rgt-search-container'>
             <label htmlFor="rgt-search" className='rgt-search-label'>
             <span className='rgt-search-icon'>{ searchIcon }</span>
@@ -43,7 +43,7 @@ const Header = (props) => {
                 name="rgt-search"
                 type="search" 
                 value={searchText} 
-                onChange={e => setSearchText(e.target.value)} 
+                onChange={e => handleSearchChange(e.target.value)} 
                 className='rgt-search-input'
             />
         </div>
@@ -80,9 +80,9 @@ const Header = (props) => {
             {
                 showSearch !== false ?
                     searchRenderer ? 
-                        searchRenderer({searchText, setSearchText})
+                        searchRenderer({ searchText, handleSearchChange})
                         :
-                        renderSearch({searchText, setSearchText})
+                        renderSearch({ searchText, handleSearchChange})
                     :
                     <span></span>
             }

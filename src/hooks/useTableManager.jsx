@@ -9,13 +9,13 @@ export default function useTableManager(props) {
 
     // **************** State ****************
 
-    let [columns, setCols] = useState(generateColumns({cols: props.columns, minColumnWidth: props.minColumnWidth}));
-    let [sortBy, setSortBy] = useState(props.sortBy);
-    let [sortAsc, setSortAsc] = useState(props.sortAscending);
+    let [columns, setCols] = useState(props.columns);
+    let [sortBy, setSortBy] = useState(props.sortBy || null);
+    let [sortAsc, setSortAsc] = useState(props.sortAscending || null);
     let [listEl, setListEl] = useState(null);
     let [page, setPage] = useState(1);
     let [updatedRow, setUpdatedRow] = useState(null);
-    let [searchText, setSearchText] = useState(props.searchText);
+    let [searchText, setSearchText] = useState(props.searchText || "");
     let [pageSize, setPageSize] = useState(props.pageSize);
     let [selectedItems, setSelectedItems] = useState([]);
     let [tableManager] = useState({
@@ -29,7 +29,6 @@ export default function useTableManager(props) {
         icons: {}
     });
 
-
     // **************** Refs ****************
 
     const tableRef = useRef(null);
@@ -38,6 +37,12 @@ export default function useTableManager(props) {
 
     // **************** Table params ****************
 
+    searchText = props.searchText ?? searchText;
+    columns = useMemo(generateColumns, [props.columns, columns, props.minColumnWidth]); 
+    selectedItems = useMemo(getSelectedItems, [props.selectedItems, selectedItems]);
+    let sort = useMemo(getSort, [props.sortBy, sortBy, props.sortAscending, sortAsc]);
+    sortBy = sort.sortBy;
+    sortAsc = sort.sortAsc;
     let { pageItems, totalPages } = useMemo(getPageItems, [props.rows, props.sortBy, sortBy, sortAsc, page, pageSize, props.pageSize, totalPages, searchText])
 
     // set visible columns
@@ -76,6 +81,8 @@ export default function useTableManager(props) {
         handleSort,
         handlePagination,
         handleColumnVisibility,
+        handleSearchChange,
+        handleRowEditIdChange,
         getHighlightedSearch,
         onRowClick: props.onRowClick,
         getIsRowEditable: props.getIsRowEditable,
@@ -134,11 +141,6 @@ export default function useTableManager(props) {
 
     // **************** Life cycles ****************
 
-    // update columns by props
-    useEffect(() => {
-        setCols(generateColumns({cols: props.columns, minColumnWidth: props.minColumnWidth}));
-    }, [props.columns])
-
     // set grid's wrapper ref (used for auto scrolling the page to top when moving between pages)
     useEffect(() => {
         if(!rgtRef?.current?.children) return;
@@ -148,35 +150,18 @@ export default function useTableManager(props) {
 
     // update search while reseting page & edit mode
     useEffect(() => {
-        setPage(1);
-        setUpdatedRow(null);
-        props.onSearchChange?.(searchText);
+        if(page !== 1) setPage(1);
     }, [searchText])
+
+    // reset updated row if...
+    useEffect(() => {
+        if (updatedRow) handleRowEditIdChange(null);
+    }, [searchText, sortBy, sortAsc, page])
 
     // set item in edit mode
     useEffect(() => {
         setUpdatedRow(pageItems.find(item => item[props.rowIdField] === props.editRowId) || null);
     }, [props.editRowId])
-
-    // update search term
-    useEffect(() => {
-        setSearchText(props.searchText || "");
-    }, [props.searchText])
-
-    // update selected items
-    useEffect(() => {
-        setSelectedItems(props.selectedRowsIds || []);
-    }, [props.selectedRowsIds])
-
-    // sort by
-    useEffect(() => {
-        setSortBy(props.sortBy)
-    }, [props.sortBy])
-
-    // sort ascending
-    useEffect(() => {
-        setSortAsc(props.sortAscending)
-    }, [props.sortAscending])
 
     useEffect(() => {
         props.onLoad?.(tableManager)
@@ -184,6 +169,16 @@ export default function useTableManager(props) {
 
 
     // **************** Handlers ****************
+    function getSort() {
+        return {
+            sortBy: props.sortBy !== undefined ? props.sortBy : sortBy,
+            sortAsc: props.sortAscending !== undefined ? props.sortAscending : sortAsc
+        }
+    }
+
+    function getSelectedItems() {
+        return props.selectedItems ?? selectedItems
+    }
 
     function getPageItems() {
         let pageItems = [...props.rows];
@@ -226,12 +221,19 @@ export default function useTableManager(props) {
         return { pageItems, totalPages }
     }
 
-    const setColumns = (cols) => {
-        props.onColumnsChange ? props.onColumnsChange?.(cols) : setCols(generateColumns({ cols, minColumnWidth: props.minColumnWidth }));
+    function setColumns(cols){
+        if (!props.onColumnsChange) setCols(cols);
+        else props.onColumnsChange(cols);
     }
 
-    function generateColumns({ cols, minColumnWidth }) {
+    function handleRowEditIdChange(rowEditId){
+        setUpdatedRow(rowEditId && pageItems.find(item => item[props.rowIdField] === rowEditId) || null);
+        props.onRowEditIdChange?.(rowEditId);
+    }
+
+    function generateColumns() {
         let visibleIndex = 0;
+        let cols = props.onColumnsChange ? props.columns : columns;
         return cols.map((cd, idx) => { 
 
             let isPinnedColumn =  idx === 0 && cd.pinned || idx === cols.length-1 && cd.pinned;
@@ -254,7 +256,7 @@ export default function useTableManager(props) {
                 label: cd.field,
                 className: '',
                 width: 'max-content',
-                minWidth: cd.minWidth || minColumnWidth,
+                minWidth: cd.minWidth || props.minColumnWidth,
                 maxWidth: null,
                 getValue: ({value, column}) => value, 
                 setValue: ({ value, data, setRow, column }) => { setRow({ ...data, [column.field]: value}) },
@@ -337,18 +339,20 @@ export default function useTableManager(props) {
     }
 
     function handleSort(colId) {
-        if(isColumnSorting) return;
+        if (isColumnSorting) return;
         
-        if(sortBy !== colId) {
-            setSortBy(colId);
-            setSortAsc(true);
-            if(props.onSortChange) props.onSortChange(colId, true);
-            return;
-        }
-        let sort = sortAsc ? false : sortAsc === false ? null : true;
-        if(sort === null) setSortBy(null);
-        if(props.onSortChange) props.onSortChange(colId, sort);
-        setSortAsc(sort);
+        let sort = true;
+        if (sortBy === colId) sort = sortAsc ? false : null;
+        if (sort === null) colId = null;
+
+        if (props.sortBy === undefined) setSortBy(colId);
+        if (props.sortAsc === undefined) setSortAsc(sort);
+        props.onSortChange?.(colId, sort);
+    }
+
+    function handleSearchChange(searchText) {
+        if (props.searchText === undefined) setSearchText(searchText);
+        props.onSearchChange?.(searchText);
     }
 
     function handlePagination(goToPage) {
@@ -368,7 +372,8 @@ export default function useTableManager(props) {
     }
 
     function updateSelectedItems(newSelectedItems) {
-        props.onSelectedRowsChange ? props.onSelectedRowsChange(newSelectedItems) : setSelectedItems(newSelectedItems);
+        if (props.selectedItems === undefined) setSelectedItems(newSelectedItems);
+        props.onSelectedRowsChange?.(newSelectedItems);
     }
 
     function toggleItemSelection(rowId) {

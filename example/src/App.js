@@ -26,6 +26,112 @@ const App = () => {
 	const [rowsData, setRowsData] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const [tableManager, setTableManager] = useState(null);
+    let [searchText, setSearchText] = useState();
+    let [selectedItems, setSelectedItems] = useState([]);
+    let [sort, setSort] = useState({sortBy: 4, sortAsc: true});
+    let [columns, setColumns] = useState([
+        {
+            id: 'checkbox',
+            pinned: true,
+            width: '54px'
+        },
+        {
+            id: 2,
+            field: 'username',
+            label: 'Username',
+            cellRenderer: Username,
+            editorCellRenderer: props => <Username {...props} isEdit />
+        },
+        {
+            id: 3,
+            field: 'first_name',
+            label: 'First Name'
+        },
+        {
+            id: 4,
+            field: 'last_name',
+            label: 'Last Name'
+        },
+        {
+            id: 5,
+            field: 'email',
+            label: 'Email'
+        },
+        {
+            id: 6,
+            field: 'gender',
+            label: 'Gender',
+            editorCellRenderer: ({ value, field, onChange, data, column, rowIndex }) => (
+                <select
+                    style={styles.select}
+                    value={value}
+                    onChange={e => onChange({ ...data, [field]: e.target.value })}
+                >
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
+            )
+        },
+        {
+            id: 7,
+            field: 'ip_address',
+            label: 'IP Address'
+        },
+        {
+            id: 8,
+            field: 'last_visited',
+            label: 'Last Visited',
+            sort: ({ a, b, isAscending }) => {
+                let aa = a.split('/').reverse().join(),
+                    bb = b.split('/').reverse().join();
+                return aa < bb ? isAscending ? -1 : 1 : (aa > bb ? isAscending ? 1 : -1 : 0);
+            }
+        },
+        {
+            id: 9,
+            field: 'buttons',
+            label: '',
+            pinned: true,
+            sortable: false,
+            resizable: true,
+            cellRenderer: ({ tableManager, value, data, column, rowIndex, searchText }) => (
+                <div style={styles.buttonsCellContainer}>
+                    <button
+                        title="Edit"
+                        style={styles.editButton}
+                        onClick={e => tableManager.handlers.handleRowEditIdChange(data.id)}
+                    >
+                        {EDIT_SVG}
+                    </button>
+                </div>
+            ),
+            editorCellRenderer: ({ tableManager, value, field, onChange, data, column, rowIndex }) => (
+                <div style={styles.buttonsCellEditorContainer}>
+                    <button
+                        title="Cancel"
+                        style={styles.cancelButton}
+                        onClick={e => tableManager.handlers.handleRowEditIdChange(null)}
+                    >
+                        {CANCEL_SVG}
+                    </button>
+                    <button
+                        title="Save"
+                        style={styles.saveButton}
+                        onClick={e => {
+                            let rowsClone = [...tableManager.rowsData.items];
+                            let updatedRowIndex = rowsClone.findIndex(r => r.id === data.id);
+                            rowsClone[updatedRowIndex] = data;
+
+                            setRowsData(rowsClone);
+                            tableManager.handlers.handleRowEditIdChange(null);
+                        }}
+                    >
+                        {SAVE_SVG}
+                    </button>
+                </div>
+            )
+        }
+    ]);
 	
     useEffect(() => {
 		setLoading(true);
@@ -35,118 +141,22 @@ const App = () => {
 		}, 1500);
 	}, [])
 
-    const columns = [
-        {
-            id: 'checkbox',
-            pinned: true,
-            width: '54px'
-        },
-        {
-            id: 2, 
-            field: 'username', 
-            label: 'Username',
-            cellRenderer: Username,
-            editorCellRenderer: props => <Username {...props} isEdit />
-        }, 
-        {
-            id: 3,
-            field: 'first_name',
-            label: 'First Name'
-        }, 
-        {
-            id: 4, 
-            field: 'last_name', 
-            label: 'Last Name'
-        }, 
-        {
-            id: 5, 
-            field: 'email',
-            label: 'Email'
-        },
-        {
-            id: 6, 
-            field: 'gender', 
-            label: 'Gender',
-            editorCellRenderer: ({value, field, onChange, data, column, rowIndex}) => (
-				<select 
-					style={styles.select} 
-					value={value} 
-					onChange={e => onChange({...data, [field]: e.target.value})}
-				>
-					<option>Male</option>
-					<option>Female</option>
-				</select>
-			)
-        },
-        {
-            id: 7, 
-            field: 'ip_address', 
-            label: 'IP Address'
-        },
-        {
-            id: 8, 
-            field: 'last_visited', 
-            label: 'Last Visited',
-            sort: ({a, b, isAscending}) => {
-                let aa = a.split('/').reverse().join(),
-                bb = b.split('/').reverse().join();
-                return aa < bb ? isAscending ? -1 : 1 : (aa > bb ? isAscending ? 1 : -1 : 0);
-            }
-        },
-        {
-            id: 9, 
-            field: 'buttons', 
-            label: '',
-            pinned: true,
-            sortable: false,
-            resizable: true,
-            cellRenderer: ({value, data, column, rowIndex, searchText}) => (
-                <div style={styles.buttonsCellContainer}>
-					<button 
-						title="Edit" 
-						style={styles.editButton} 
-						onClick={e => setEditRowId(data.id)} 
-					>
-						{ EDIT_SVG }
-					</button>
-                </div>
-            ),
-            editorCellRenderer: ({ value, field, onChange, data, column, rowIndex}) => (
-                <div style={styles.buttonsCellEditorContainer}>
-					<button 
-						title="Cancel" 
-						style={styles.cancelButton} 
-						onClick={e => setEditRowId(null)}
-					>
-						{ CANCEL_SVG }
-					</button>
-					<button 
-						title="Save" 
-						style={styles.saveButton} 
-						onClick={e => {
-                            let rowsClone = [...rowsData];
-							let updatedRowIndex = rowsClone.findIndex(r => r.id === data.id);
-							rowsClone[updatedRowIndex] = data;
-
-							setRowsData(rowsClone);
-							setEditRowId(null);
-						}}
-					>
-						{ SAVE_SVG }
-					</button>
-                </div>
-            )
-        }
-	];
-
     return (
-        <GridTable 
-			columns={columns}
-            rows={rowsData} 
+        <GridTable
+            columns={columns}
+            rows={rowsData}
             isLoading={isLoading}
             editRowId={editRowId}
-            style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }} 
+            onRowEditIdChange={setEditRowId}
+            selectedItems={selectedItems}
+            onSelectedRowsChange={setSelectedItems}
+            style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
             onLoad={setTableManager}
+            searchText={searchText}
+            onSearchChange={setSearchText}
+            sortBy={sort.sortBy}
+            sortAscending={sort.sortAsc}
+            onSortChange={(sortBy, sortAsc) => setSort({ sortBy, sortAsc })}
         />
     )
 };

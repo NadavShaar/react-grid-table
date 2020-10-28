@@ -81,13 +81,10 @@ GridTable.defaultProps = {
     isLoading: false,
     showColumnVisibilityManager: true,
     isHeaderSticky: true,
-    searchText: '',
     highlightSearch: true,
     searchMinChars: 2,
     isPaginated: true,
     showSearch: true,
-    sortBy: null,
-    sortAscending: true,
     disableColumnsReorder: false,
     getIsRowSelectable: row => true,
     getIsRowEditable: row => true
