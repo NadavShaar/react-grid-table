@@ -229,7 +229,6 @@ export default function useTableManager(props) {
     }
 
     function generateColumns() {
-        let visibleIndex = 0;
         let cols = props.onColumnsChange ? props.columns : columns;
         return cols.map((cd, idx) => { 
 
@@ -243,8 +242,6 @@ export default function useTableManager(props) {
                 maxWidth: null,
                 resizable: false,
                 ...cd,
-                index: idx,
-                visibleIndex: isVisibleColumn ? visibleIndex++ : null,
                 pinned: isPinnedColumn,
                 visible: isVisibleColumn
             };
@@ -270,8 +267,6 @@ export default function useTableManager(props) {
                     return 0;
                 }, 
                 ...cd,
-                index: idx,
-                visibleIndex: isVisibleColumn ? visibleIndex++ : null,
                 pinned: isPinnedColumn,
                 visible: isVisibleColumn
             }
