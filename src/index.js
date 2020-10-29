@@ -129,11 +129,7 @@ GridTable.propTypes = {
     disableColumnsReorder: PropTypes.bool,
     pageSizes: PropTypes.arrayOf(PropTypes.number),
     pageSize: PropTypes.number,
-    sortBy: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number
-    ]),
-    sortAscending: PropTypes.bool,
+    sort: PropTypes.object,
     minColumnWidth: PropTypes.number,
     highlightSearch: PropTypes.bool,
     showSearch: PropTypes.bool,

@@ -34,7 +34,7 @@ const App = () => {
     const [tableManager, setTableManager] = useState(null);
     let [searchText, setSearchText] = useState();
     let [selectedRows, setSelectedRows] = useState([]);
-    let [sort, setSort] = useState({sortBy: 4, sortAsc: true});
+    let [sort, setSort] = useState({colId: 4, isAsc: true});
     let [columns, setColumns] = useState([
         {
             id: 'checkbox',
@@ -145,7 +145,8 @@ const App = () => {
 			setRowsData(MOCK_DATA.default)
 			setLoading(false);
 		}, 1500);
-	}, [])
+    }, [])
+
 
     return (
         <GridTable
@@ -160,9 +161,8 @@ const App = () => {
             onLoad={setTableManager}
             searchText={searchText}
             onSearchChange={setSearchText}
-            sortBy={sort.sortBy}
-            sortAscending={sort.sortAsc}
-            onSortChange={(sortBy, sortAsc) => setSort({ sortBy, sortAsc })}
+            sort={sort}
+            onSortChange={setSort}
             // searchComponent={Search}
         />
     )

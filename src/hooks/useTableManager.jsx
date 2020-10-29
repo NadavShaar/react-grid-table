@@ -16,8 +16,7 @@ export default function useTableManager(props) {
     // **************** State ****************
 
     let [columns, setCols] = useState(props.columns);
-    let [sortBy, setSortBy] = useState(props.sortBy || null);
-    let [sortAsc, setSortAsc] = useState(props.sortAscending || null);
+    let [sort, setSort] = useState(props.sort || {});
     let [page, setPage] = useState(1);
     let [updatedRow, setUpdatedRow] = useState(null);
     let [searchText, setSearchText] = useState(props.searchText || "");
@@ -43,12 +42,10 @@ export default function useTableManager(props) {
     // **************** Table params ****************
 
     searchText = props.searchText ?? searchText;
-    columns = useMemo(generateColumns, [props.columns, columns, props.minColumnWidth]); 
+    columns = useMemo(getColumns, [props.columns, columns, props.minColumnWidth]); 
     selectedRows = useMemo(getSelectedItems, [props.selectedRows, selectedRows]);
-    let sort = useMemo(getSort, [props.sortBy, sortBy, props.sortAscending, sortAsc]);
-    sortBy = sort.sortBy;
-    sortAsc = sort.sortAsc;
-    let { pageItems, totalPages } = useMemo(getPageItems, [props.rows, props.sortBy, sortBy, sortAsc, page, pageSize, props.pageSize, totalPages, searchText])
+    sort = useMemo(getSort, [props.sort, sort]);
+    let { pageItems, totalPages } = useMemo(getPageItems, [props.rows, sort, page, pageSize, props.pageSize, totalPages, searchText])
 
     // set visible columns
     let visibleColumns = columns.filter(cd => cd.visible !== false);
@@ -107,8 +104,7 @@ export default function useTableManager(props) {
     })
     tableManager.params = Object.assign(tableManager.params, {
         lastColIsPinned,
-        sortBy,
-        sortAsc,
+        sort,
         page,
         searchText,
         highlightSearch: props.highlightSearch,
@@ -153,7 +149,7 @@ export default function useTableManager(props) {
     // reset updated row if...
     useEffect(() => {
         if (updatedRow) handleRowEditIdChange(null);
-    }, [searchText, sortBy, sortAsc, page])
+    }, [searchText, sort, page])
 
     // set item in edit mode
     useEffect(() => {
@@ -167,10 +163,7 @@ export default function useTableManager(props) {
 
     // **************** Handlers ****************
     function getSort() {
-        return {
-            sortBy: props.sortBy !== undefined ? props.sortBy : sortBy,
-            sortAsc: props.sortAscending !== undefined ? props.sortAscending : sortAsc
-        }
+        return props.sort ?? sort
     }
 
     function getSelectedItems() {
@@ -200,13 +193,13 @@ export default function useTableManager(props) {
         }
 
         // sort
-        if (sortBy) {
+        if (sort?.colId) {
             pageItems.sort((a, b) => {
-                let aVal = conf2[sortBy].getValue({ value: a[conf2[sortBy].field], column: conf2[sortBy] });
-                let bVal = conf2[sortBy].getValue({ value: b[conf2[sortBy].field], column: conf2[sortBy] });
+                let aVal = conf2[sort.colId].getValue({ value: a[conf2[sort.colId].field], column: conf2[sort.colId] });
+                let bVal = conf2[sort.colId].getValue({ value: b[conf2[sort.colId].field], column: conf2[sort.colId] });
 
-                if (conf2[sortBy].sortable === false) return 0;
-                return conf2[sortBy].sort({ a: aVal, b: bVal, isAscending: sortAsc });
+                if (conf2[sort.colId].sortable === false) return 0;
+                return conf2[sort.colId].sort({ a: aVal, b: bVal, isAscending: sort.isAsc });
             });
         }
 
@@ -228,7 +221,7 @@ export default function useTableManager(props) {
         props.onRowEditIdChange?.(rowEditId);
     }
 
-    function generateColumns() {
+    function getColumns() {
         let cols = props.onColumnsChange ? props.columns : columns;
         return cols.map((cd, idx) => { 
 
@@ -333,13 +326,12 @@ export default function useTableManager(props) {
     function handleSort(colId) {
         if (isColumnSorting) return;
         
-        let sort = true;
-        if (sortBy === colId) sort = sortAsc ? false : null;
-        if (sort === null) colId = null;
+        let isAsc = true;
+        if (sort.colId === colId) isAsc = sort.isAsc ? false : null;
+        if (isAsc === null) colId = null;
 
-        if (props.sortBy === undefined) setSortBy(colId);
-        if (props.sortAsc === undefined) setSortAsc(sort);
-        props.onSortChange?.(colId, sort);
+        if (props.sort === undefined) setSort({colId, isAsc});
+        props.onSortChange?.({colId, isAsc});
     }
 
     function handleSearchChange(searchText) {

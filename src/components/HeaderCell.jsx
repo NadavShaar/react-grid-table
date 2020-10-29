@@ -16,8 +16,7 @@ const HeaderCell = (props) => {
 
     let {
         params: {
-            sortBy,
-            sortAsc,
+            sort,
             isHeaderSticky,
             disableColumnsReorder
         },
@@ -139,11 +138,11 @@ const HeaderCell = (props) => {
                                         </span>
                             }
                             {
-                                (sortBy === column.id) ? 
-                                    sortAsc ? 
+                                (sort.colId === column.id) ? 
+                                    sort.isAsc ? 
                                         <span className='rgt-sort-icon rgt-sort-icon-ascending'>{sortAscendingIcon}</span> 
                                         :
-                                        sortAsc === false ?
+                                        sort.isAsc === false ?
                                             <span className='rgt-sort-icon rgt-sort-icon-descending'>{sortDescendingIcon}</span> 
                                             : 
                                             null
