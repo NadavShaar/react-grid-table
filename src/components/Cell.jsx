@@ -23,7 +23,7 @@ const Cell = (props) => {
         },
         handlers: {
             onRowClick,
-            setUpdatedRow,
+            handleRowEdit,
             getHighlightedSearch,
             toggleItemSelection
         },
@@ -32,7 +32,6 @@ const Cell = (props) => {
             updatedRow,
         },
         columnsData: {
-            columns,
             visibleColumns
         },
         additionalProps: {
@@ -98,18 +97,18 @@ const Cell = (props) => {
                     :
                 column.editable !== false && isEdit ?
                     column.editorCellRenderer ?
-                        column.editorCellRenderer({ tableManager, value, field: column.field, onChange: setUpdatedRow, data, column, rowIndex })
+                                column.editorCellRenderer({ tableManager, value, field: column.field, onChange: handleRowEdit, data, column, rowIndex })
                         :
                         <div className='rgt-cell-inner rgt-cell-editor'>
                             {
                                 <div className='rgt-cell-editor-inner'>
                                     <input
                                         tabIndex={0}
-                                        autoFocus={columns.some(c => c.id === column.id && c.id !== 'checkbox' && c.editable !== false)}
+                                        autoFocus={visibleColumns.findIndex(c => c.id !== 'checkbox' && c.editable !== false) === colIndex}
                                         className='rgt-cell-editor-input'
                                         type="text"
                                         value={value}
-                                        onChange={e => column.setValue({ value: e.target.value, data, setRow: setUpdatedRow, column })}
+                                                onChange={e => column.setValue({ value: e.target.value, data, setRow: handleRowEdit, column })}
                                     />
                                 </div>
                             }

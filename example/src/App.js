@@ -161,7 +161,7 @@ const App = () => {
             onLoad={setTableManager}
             searchText={searchText}
             onSearchChange={setSearchText}
-            sort={sort}
+            // sort={sort}
             onSortChange={setSort}
             // searchComponent={Search}
         />

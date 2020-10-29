@@ -24,7 +24,7 @@ const Footer = (props) => {
         },
         handlers: {
             handlePagination,
-            setPageSize,
+            handlePageSizeChange,
             updateSelectedItems
         },
         icons: {
@@ -45,7 +45,7 @@ const Footer = (props) => {
             <select 
                 className='rgt-footer-items-per-page'
                 value={pageSize} 
-                onChange={e => {setPageSize(e.target.value); handlePagination(1)}}
+                onChange={e => { handlePageSizeChange(e.target.value);}}
             >
                 { pageSizes.map((op, idx) => <option key={idx} value={op}>{op}</option>) }
             </select>

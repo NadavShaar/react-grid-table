@@ -20,7 +20,7 @@ export default function useTableManager(props) {
     let [page, setPage] = useState(1);
     let [updatedRow, setUpdatedRow] = useState(null);
     let [searchText, setSearchText] = useState(props.searchText || "");
-    let [pageSize, setPageSize] = useState(props.pageSize);
+    let [pageSize, setPageSize] = useState(props.pageSize || 20);
     let [selectedRows, setSelectedRows] = useState([]);
     let [tableManager] = useState({
         refs: {},
@@ -42,10 +42,12 @@ export default function useTableManager(props) {
     // **************** Table params ****************
 
     searchText = props.searchText ?? searchText;
+    selectedRows = props.selectedRows ?? selectedRows;
+    sort = props.sort ?? sort;
+    page = props.page ?? page;
+    pageSize = props.pageSize ?? pageSize;
     columns = useMemo(getColumns, [props.columns, columns, props.minColumnWidth]); 
-    selectedRows = useMemo(getSelectedItems, [props.selectedRows, selectedRows]);
-    sort = useMemo(getSort, [props.sort, sort]);
-    let { pageItems, totalPages } = useMemo(getPageItems, [props.rows, sort, page, pageSize, props.pageSize, totalPages, searchText])
+    let { pageItems, totalPages } = useMemo(getPageItems, [props.rows, sort, page, pageSize, totalPages, searchText])
 
     // set visible columns
     let visibleColumns = columns.filter(cd => cd.visible !== false);
@@ -69,8 +71,10 @@ export default function useTableManager(props) {
         // setSortAsc,
         // setPage,
         // setSearchText,
-        setPageSize,
-        setUpdatedRow,
+        // setPageSize,
+        handlePageSizeChange,
+        // setUpdatedRow,
+        handleRowEdit,
         setSelectedRows,
         updateSelectedItems,
         toggleItemSelection,
@@ -143,8 +147,8 @@ export default function useTableManager(props) {
 
     // update search while reseting page & edit mode
     useEffect(() => {
-        if(page !== 1) setPage(1);
-    }, [searchText])
+        if (page !== 1) handlePageChange(1);
+    }, [searchText, pageSize])
 
     // reset updated row if...
     useEffect(() => {
@@ -162,14 +166,6 @@ export default function useTableManager(props) {
 
 
     // **************** Handlers ****************
-    function getSort() {
-        return props.sort ?? sort
-    }
-
-    function getSelectedItems() {
-        return props.selectedRows ?? selectedRows
-    }
-
     function getPageItems() {
         let pageItems = [...props.rows];
 
@@ -219,6 +215,10 @@ export default function useTableManager(props) {
     function handleRowEditIdChange(rowEditId){
         setUpdatedRow(rowEditId && pageItems.find(item => item[props.rowIdField] === rowEditId) || null);
         props.onRowEditIdChange?.(rowEditId);
+    }
+
+    function handleRowEdit(updatedRow) {
+        setUpdatedRow(updatedRow);
     }
 
     function getColumns() {
@@ -330,18 +330,28 @@ export default function useTableManager(props) {
         if (sort.colId === colId) isAsc = sort.isAsc ? false : null;
         if (isAsc === null) colId = null;
 
-        if (props.sort === undefined) setSort({colId, isAsc});
+        if (props.sort === undefined || props.onSortChange === undefined) setSort({colId, isAsc});
         props.onSortChange?.({colId, isAsc});
     }
 
     function handleSearchChange(searchText) {
-        if (props.searchText === undefined) setSearchText(searchText);
+        if (props.searchText === undefined || props.onSearchChange === undefined) setSearchText(searchText);
         props.onSearchChange?.(searchText);
+    }
+
+    function handlePageChange(page) {
+        if (props.page === undefined || props.onPageChange === undefined) setPage(page);
+        props.onPageChange?.(page);
+    }
+
+    function handlePageSizeChange(pageSize) {
+        if (props.pageSize === undefined || props.onPageSizeChange === undefined) setPageSize(pageSize);
+        props.onPageSizeChange?.(pageSize);
     }
 
     function handlePagination(goToPage) {
         if((goToPage >= 1) && (goToPage <= totalPages)) {
-            setPage(goToPage);
+            handlePageChange(goToPage);
             setTimeout(() => { tableRef.current.container.scrollTop = 0 }, 0);
         };
     }
@@ -356,7 +366,7 @@ export default function useTableManager(props) {
     }
 
     function updateSelectedItems(newSelectedItems) {
-        if (props.selectedRows === undefined) setSelectedRows(newSelectedItems);
+        if (props.selectedRows === undefined || props.onSelectedRowsChange === undefined) setSelectedRows(newSelectedItems);
         props.onSelectedRowsChange?.(newSelectedItems);
     }
 

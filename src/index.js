@@ -63,7 +63,7 @@ const GridTable = (props) => {
             >
                 {
                     columnsData.visibleColumns.map((cd, idx) => (
-                        <HeaderCell key={idx} index={idx} column={cd} isPinnedRight={cd.pinned && idx + 1 === columnsData.visibleColumns.length} tableManager={tableManager}/>
+                        <HeaderCell key={idx} index={idx} column={cd} tableManager={tableManager}/>
                     ))
                 }
                 {
@@ -95,7 +95,6 @@ GridTable.defaultProps = {
     rowIdField: 'id',
     minColumnWidth: 70,
     pageSizes: [20, 50, 100],
-    pageSize: 20,
     isLoading: false,
     showColumnVisibilityManager: true,
     isHeaderSticky: true,
