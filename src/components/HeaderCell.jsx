@@ -21,8 +21,8 @@ const HeaderCell = (props) => {
             isHeaderSticky,
             disableColumnsReorder
         },
-        renderers: {
-            dragHandleRenderer
+        components: {
+            dragHandleComponent
         },
         handlers: {
             handleSort,
@@ -39,7 +39,7 @@ const HeaderCell = (props) => {
             visibleColumns
         },
         rowsData: {
-            selectedItems,
+            selectedRows,
             pageItems,
             rowIdField
         },
@@ -68,9 +68,9 @@ const HeaderCell = (props) => {
         // set selectable items
         let selectableItemsIds = pageItems.filter(it => getIsRowSelectable(it)).map(item => item[rowIdField]);
         // select all params
-        let selectAllIsChecked = selectableItemsIds.length && selectableItemsIds.every(si => selectedItems.find(id => si === id));
+        let selectAllIsChecked = selectableItemsIds.length && selectableItemsIds.every(si => selectedRows.find(id => si === id));
         let selectAllIsDisabled = !selectableItemsIds.length;
-        let isSelectAllIndeterminate = !!(selectedItems.length && !selectAllIsChecked && selectableItemsIds.some(si => selectedItems.find(id => si === id)));
+        let isSelectAllIndeterminate = !!(selectedRows.length && !selectAllIsChecked && selectableItemsIds.some(si => selectedRows.find(id => si === id)));
 
         const onChange = () => {
             toggleSelectAll(selectableItemsIds, selectAllIsChecked, isSelectAllIndeterminate)
@@ -122,8 +122,8 @@ const HeaderCell = (props) => {
                             collection={column.pinned ? 0 : 1}
                         >
                             {
-                                dragHandleRenderer ?
-                                    <DragHandle index={index}>{dragHandleRenderer()}</DragHandle>
+                                dragHandleComponent ?
+                                    <DragHandle index={index}>{dragHandleComponent()}</DragHandle>
                                     :
                                     null
                             }

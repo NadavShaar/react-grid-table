@@ -1,11 +1,9 @@
 import React from 'react';
-import PopoverButton from './PopoverButton';
 
 const Header = (props) => {
 
     let {
-        tableManager,
-        headerRenderer
+        tableManager
     } = props;
 
     let { 
@@ -14,84 +12,30 @@ const Header = (props) => {
             searchText,
             showColumnVisibilityManager,
         },
-        renderers: {
-            columnVisibilityRenderer,
-            searchRenderer,
+        components: {
+            columnVisibilityComponent: ColumnVisibility,
+            searchComponent: Search,
         },
         columnsData: {
             columns,
         },
         handlers: {
             handleSearchChange,
-            handleColumnVisibility,
-        },
-        icons: {
-            columnVisibility: columnVisibilityIcon,
-            search: searchIcon
+            toggleColumnVisibility,
         }
     } = tableManager;
-
-    if (headerRenderer) return headerRenderer({ tableManager });
-
-    const renderSearch = ({ searchText, handleSearchChange}) => (
-        <div className='rgt-search-container'>
-            <label htmlFor="rgt-search" className='rgt-search-label'>
-            <span className='rgt-search-icon'>{ searchIcon }</span>
-                Search:
-            </label>
-            <input 
-                name="rgt-search"
-                type="search" 
-                value={searchText} 
-                onChange={e => handleSearchChange(e.target.value)} 
-                className='rgt-search-input'
-            />
-        </div>
-    )
-
-    const renderColumnVisibilityManager = ({columns, handleColumnVisibility}) => {
-
-        return (
-            <PopoverButton 
-                buttonChildren={ columnVisibilityIcon }
-                popoverChildren={
-                    columns.map((cd, idx) => {
-                        if(cd.pinned && idx === 0 || cd.pinned && idx === columns.length-1) return null;
-                        return (
-                            <div key={idx} className='rgt-clickable rgt-columns-manager-popover-row' onClick={ e => handleColumnVisibility(cd.id) } >
-                                <label htmlFor={`checkbox-${idx}`} onClick={ e => handleColumnVisibility(cd.id) } className='rgt-clickable rgt-flex-child rgt-text-truncate'>{cd.label || cd.field || cd.id}</label>
-                                <input 
-                                    id={`checkbox-${idx}`}
-                                    className='rgt-clickable'
-                                    type="checkbox" 
-                                    onChange={ e => { } } 
-                                    checked={ cd.visible !== false } 
-                                />
-                            </div>
-                        )
-                    })
-                }
-            />
-        )
-    }
 
     return (
         <div className='rgt-header-container'>
             {
                 showSearch !== false ?
-                    searchRenderer ? 
-                        searchRenderer({ searchText, handleSearchChange})
-                        :
-                        renderSearch({ searchText, handleSearchChange})
+                    <Search value={searchText} onChange={handleSearchChange} tableManager={tableManager}/>
                     :
                     <span></span>
             }
             {
                 showColumnVisibilityManager !== false ?
-                    columnVisibilityRenderer ?
-                        columnVisibilityRenderer({columns, handleColumnVisibility})
-                        :
-                        renderColumnVisibilityManager({columns, handleColumnVisibility})
+                    <ColumnVisibility columns={columns} onChange={toggleColumnVisibility} tableManager={tableManager}/>
                     :
                     <span></span>
             }

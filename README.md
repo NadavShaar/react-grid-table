@@ -152,8 +152,8 @@ export default MyAwesomeTable;
 - [The `columns` prop](#columns)
 - [The `checkbox` column](#checkbox-column)
 - [The `rows` prop](#rows)
-- [The `headerRenderer` prop](#headerRenderer)
-- [The `footerRenderer` prop](#footerRenderer)
+- [The `headerComponent` prop](#headerComponent)
+- [The `footerComponent` prop](#footerComponent)
 - [Row-Editing](#row-editing)
 - [Styling](#styling)
 
@@ -199,7 +199,7 @@ export default MyAwesomeTable;
 | disableColumnsReorder | bool | whether to disable column drag & drop | false |
 | isHeaderSticky | boolean | whether the table header will be stick to the top when scrolling or not | true |
 | showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
-| icons | object with nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
+| icons | object with refs | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
 
 ### Event props
 
@@ -216,13 +216,13 @@ A set of functions that are used for rendering custom components.
 
 | name | type | description | usage |
 |---|---|---|---|
-| headerRenderer | function | used for rendering a custom header ([details](#headerRenderer)) | `({searchText, setSearchText, handleColumnVisibility, columns}) => ( children )` |
-| footerRenderer | function | used for rendering a custom footer ([details](#footerRenderer)) | `({page, totalPages, handlePagination, pageSize, pageSizes, setPageSize, totalRows, selectedRowsLength, clearSelection, numberOfRows }) => ( children )` |
-| loaderRenderer | function | used for rendering a custom loader | `() => ( children )` |
-| noResultsRenderer | function | used for rendering a custom component when there is no data to display | `() => ( children )` |
-| searchRenderer | function | used for rendering a custom search component ([details](#headerRenderer)) | `({searchText, setSearchText}) => ( children )` |
-| columnVisibilityRenderer | function | used for rendering a custom columns visibility management component ([details](#headerRenderer)) | `({columns, handleColumnVisibility}) => ( children )` |
-| dragHandleRenderer | function | used for rendering a drag handle for the column reorder | `() => ( children )` |
+| headerComponent | function | used for rendering a custom header ([details](#headerComponent)) | `({searchText, setSearchText, toggleColumnVisibility, columns}) => ( children )` |
+| footerComponent | function | used for rendering a custom footer ([details](#footerComponent)) | `({page, totalPages, handlePagination, pageSize, pageSizes, setPageSize, totalRows, selectedRowsLength, clearSelection, numberOfRows }) => ( children )` |
+| loaderComponent | function | used for rendering a custom loader | `() => ( children )` |
+| noResultsComponent | function | used for rendering a custom component when there is no data to display | `() => ( children )` |
+| searchComponent | function | used for rendering a custom search component ([details](#headerComponent)) | `({searchText, setSearchText}) => ( children )` |
+| columnVisibilityComponent | function | used for rendering a custom columns visibility management component ([details](#headerComponent)) | `({columns, toggleColumnVisibility}) => ( children )` |
+| dragHandleComponent | function | used for rendering a drag handle for the column reorder | `() => ( children )` |
 
 ## props - detailed
 
@@ -358,14 +358,14 @@ Its `getValue` function for displaying the first and last name as a full name, w
 
 The value that returns from the `getValue` function will be used for searching, sorting etc...
 
-### headerRenderer
+### headerComponent
 **Type:** function
 
 This function is used for rendering a custom header.
 
 By default the header renders a search and column visibility manager components, but you can render your own custom components.
 
-If you just want to replace the search or the column visibility management components, you can use the `searchRenderer` or the `columnVisibilityRenderer` props.
+If you just want to replace the search or the column visibility management components, you can use the `searchComponent` or the `columnVisibilityComponent` props.
 
 **Arguments:** 
 | name | type | description | default value |
@@ -374,11 +374,11 @@ If you just want to replace the search or the column visibility management compo
 | showSearch | boolean weather to show the search | true | 
 | searchText | string | text for search | "" | 
 | setSearchText | function | a callback function to update search text | `setSearchText(searchText)` | 
-| searchRenderer | function | as was defined in the `searchRenderer` prop | --- |
+| searchComponent | function | as was defined in the `searchComponent` prop | --- |
 | searchIcon | node | the search icon as was defined in the `icons` prop or the default one | [magnifier icon] |
 | showColumnVisibilityManager | boolean | weather to show the column visibility manager | true | 
-| handleColumnVisibility | function | a callback function to update columns visibility that accepts the id of the column that should be toggled | `handleColumnVisibility(columnId)` | 
-| columnVisibilityRenderer | function | as was defined in the `columnVisibilityRenderer` prop | --- |
+| toggleColumnVisibility | function | a callback function to update columns visibility that accepts the id of the column that should be toggled | `toggleColumnVisibility(columnId)` | 
+| columnVisibilityComponent | function | as was defined in the `columnVisibilityComponent` prop | --- |
 | columnVisibilityIcon | node | the column visibility icon as was defined in the `icons` prop or the default one | [trash icon] |
 
 **Example:**
@@ -386,16 +386,16 @@ If you just want to replace the search or the column visibility management compo
 <!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
 
 ```JSX
-headerRenderer={({
+headerComponent={({
     columns,
     showSearch,
     searchText, 
     setSearchText, 
-    searchRenderer,
+    searchComponent,
     searchIcon,
     showColumnVisibilityManager,
-    handleColumnVisibility,
-    columnVisibilityRenderer,
+    toggleColumnVisibility,
+    columnVisibilityComponent,
     columnVisibilityIcon
 }) => (
     <div style={{display: 'flex', flexDirection: 'column', padding: '10px 20px', background: '#fff', width: '100%'}}>
@@ -419,7 +419,7 @@ headerRenderer={({
                         <input 
                             id={`checkbox-${idx}`}
                             type="checkbox" 
-                            onChange={ e => handleColumnVisibility(cd.id) } 
+                            onChange={ e => toggleColumnVisibility(cd.id) } 
                             checked={ cd.visible !== false } 
                         />
                         <label htmlFor={`checkbox-${idx}`} style={{flex: 1, cursor: 'pointer'}}>
@@ -433,7 +433,7 @@ headerRenderer={({
 )}
 ```
 
-### footerRenderer
+### footerComponent
 **Type:** function
 
 This function is used for rendering a custom footer.
@@ -462,7 +462,7 @@ By default the footer renders items information and pagination controls, but you
 <!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
 
 ```JSX
-footerRenderer={({
+footerComponent={({
     page, 
     totalPages, 
     handlePagination, 

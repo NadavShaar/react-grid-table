@@ -20,6 +20,12 @@ const styles = {
 	saveButton: {background: '#f3f3f3', outline: 'none', cursor: 'pointer', padding: 2, display: 'inline-flex', border: 'none', borderRadius: '50%', boxShadow: '1px 1px 2px 0px rgb(0 0 0 / .3)'}
 }
 
+const Search = props => {
+    return (
+        <input value={props.value} onChange={e => props.onChange(e.target.value)}/>
+    )
+}
+
 const App = () => {
     
 	const [editRowId, setEditRowId] = useState(null);
@@ -27,7 +33,7 @@ const App = () => {
     const [isLoading, setLoading] = useState(false);
     const [tableManager, setTableManager] = useState(null);
     let [searchText, setSearchText] = useState();
-    let [selectedItems, setSelectedItems] = useState([]);
+    let [selectedRows, setSelectedRows] = useState([]);
     let [sort, setSort] = useState({sortBy: 4, sortAsc: true});
     let [columns, setColumns] = useState([
         {
@@ -148,8 +154,8 @@ const App = () => {
             isLoading={isLoading}
             editRowId={editRowId}
             onRowEditIdChange={setEditRowId}
-            selectedItems={selectedItems}
-            onSelectedRowsChange={setSelectedItems}
+            selectedRows={selectedRows}
+            onSelectedRowsChange={setSelectedRows}
             style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
             onLoad={setTableManager}
             searchText={searchText}
@@ -157,6 +163,7 @@ const App = () => {
             sortBy={sort.sortBy}
             sortAscending={sort.sortAsc}
             onSortChange={(sortBy, sortAsc) => setSort({ sortBy, sortAsc })}
+            // searchComponent={Search}
         />
     )
 };

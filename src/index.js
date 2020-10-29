@@ -2,8 +2,6 @@ import React from 'react';
 import {SortableContainer} from 'react-sortable-hoc';
 import HeaderCell from './components/HeaderCell';
 import Row from './components/Row';
-import Header from './components/Header';
-import Footer from './components/Footer';
 import PropTypes from 'prop-types';
 import useTableManager from './hooks/useTableManager';
 import './index.css';
@@ -14,23 +12,28 @@ const GridTable = (props) => {
 
     const tableManager = useTableManager(props);
 
-    const { nodes, handlers, renderers, columnsData, params, rowsData, additionalProps, icons } = tableManager;
-
-    const Loader = () => (
-        <div className='rgt-no-data-container'>
-            { renderers.loaderRenderer?.() || icons.loader }
-        </div>
-    )
-
-    const NoResults = () => (
-        <div className='rgt-no-data-container'>
-            { renderers.noResultsRenderer?.() || 'No Results :(' }
-        </div>
-    )
+    const {
+        refs: {
+            rgtRef,
+            tableRef,
+        },
+        handlers,
+        components: {
+            headerComponent: Header,
+            footerComponent: Footer,
+            loaderComponent: Loader,
+            noResultsComponent: NoResults
+        },
+        columnsData,
+        params,
+        rowsData,
+        additionalProps,
+        icons
+    } = tableManager;
 
     let { 
         isLoading,
-        dragHandleRenderer,
+        dragHandleComponent,
     } = props;
 
     let rest = Object.keys(props).reduce((rest, key) => {
@@ -39,17 +42,16 @@ const GridTable = (props) => {
     }, {})
 
     return (
-        <div ref={nodes.rgtRef} className='rgt-wrapper' {...rest} >
-            <Header tableManager={tableManager} headerRenderer={tableManager.renderers.headerRenderer} />
+        <div ref={rgtRef} className='rgt-wrapper' {...rest} >
+            <Header tableManager={tableManager}/>
             <SortableList
-                ref={nodes.tableRef}
+                ref={tableRef}
                 className='rgt-container'
-                helperContainer={nodes.listEl}
                 axis="x" 
                 lockToContainerEdges 
                 distance={10} 
                 lockAxis="x" 
-                useDragHandle={!!dragHandleRenderer}
+                useDragHandle={!!dragHandleComponent}
                 onSortStart={handlers.handleColumnSortStart}
                 onSortEnd={handlers.handleColumnSortEnd}
                 style={{
@@ -64,9 +66,25 @@ const GridTable = (props) => {
                         <HeaderCell key={idx} index={idx} column={cd} isPinnedRight={cd.pinned && idx + 1 === columnsData.visibleColumns.length} tableManager={tableManager}/>
                     ))
                 }
-                {isLoading ? <Loader/> : rowsData.pageItems.length ? rowsData.pageItems.map((d, idx) => <Row key={idx} index={idx} data={d} tableManager={tableManager} />) : <NoResults/> }
+                {
+                    !isLoading && rowsData.pageItems.length
+                        ?
+                        rowsData.pageItems.map((d, idx) => <Row key={idx} index={idx} data={d} tableManager={tableManager} />)
+                        :
+                        <div className='rgt-no-data-container'>
+                            {
+                                isLoading
+                                    ?
+                                    <Loader tableManager={tableManager}/>
+                                    :
+                                    <NoResults tableManager={tableManager}/>
+                            }
+                        </div>
+                        
+                            
+                }
             </SortableList>
-            <Footer tableManager={tableManager} footerRenderer={tableManager.renderers.footerRenderer}/>
+            <Footer tableManager={tableManager}/>
         </div>
     )
 }
@@ -105,6 +123,7 @@ GridTable.propTypes = {
     ]),
     cellProps: PropTypes.object,
     headerCellProps: PropTypes.object,
+    selectedRows: PropTypes.array,
     // table config
     isPaginated: PropTypes.bool,
     disableColumnsReorder: PropTypes.bool,
@@ -129,15 +148,16 @@ GridTable.propTypes = {
     onSelectedRowsChange: PropTypes.func,
     onSortChange: PropTypes.func,
     onRowClick: PropTypes.func,
+    onRowEditIdChange: PropTypes.func,
     onLoad: PropTypes.func,
-    // custom renderers
-    headerRenderer: PropTypes.func,
-    footerRenderer: PropTypes.func,
+    // custom components
+    headerComponent: PropTypes.func,
+    footerComponent: PropTypes.func,
     loaderRenderer: PropTypes.func,
     noResultsRenderer: PropTypes.func,
-    searchRenderer: PropTypes.func,
-    columnVisibilityRenderer: PropTypes.func,
-    dragHandleRenderer: PropTypes.func,
+    searchComponent: PropTypes.func,
+    columnVisibilityComponent: PropTypes.func,
+    dragHandleComponent: PropTypes.func,
 };
 
 export default GridTable;

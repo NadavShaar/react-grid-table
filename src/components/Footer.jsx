@@ -3,8 +3,7 @@ import React from 'react';
 const Footer = (props) => {
 
     let { 
-        tableManager,
-        footerRenderer,
+        tableManager
     } = props;
 
     let {
@@ -16,10 +15,10 @@ const Footer = (props) => {
             tableHasSelection,
             isPaginated,
         },
-        renderers: {
+        components: {
         },
         rowsData: {
-            selectedItems,
+            selectedRows,
             pageItems,
             items,
         },
@@ -33,13 +32,11 @@ const Footer = (props) => {
         }
     } = tableManager;
 
-    if(footerRenderer) return footerRenderer({tableManager});
-
     let backButtonDisabled = page-1 < 1;
     let nextButtonDisabled = page+1 > totalPages;
 
     const renderSelectedItems = () => (
-        <span className='rgt-footer-items-information'>Total Rows: {items.length} | {isPaginated ? `Rows: ${pageItems.length * page - pageItems.length} - ${pageItems.length * page}` : ''} { tableHasSelection ? <React.Fragment>{`| ${selectedItems.length} Selected`}{selectedItems.length ? <span className="rgt-footer-clear-selection-button rgt-clickable" onClick={e => updateSelectedItems([])}>{ clearSelectionIcon }</span> : null}</React.Fragment> : ''}</span>
+        <span className='rgt-footer-items-information'>Total Rows: {items.length} | {isPaginated ? `Rows: ${pageItems.length * page - pageItems.length} - ${pageItems.length * page}` : ''} { tableHasSelection ? <React.Fragment>{`| ${selectedRows.length} Selected`}{selectedRows.length ? <span className="rgt-footer-clear-selection-button rgt-clickable" onClick={e => updateSelectedItems([])}>{ clearSelectionIcon }</span> : null}</React.Fragment> : ''}</span>
     )
 
     const renderPageSize = () => (

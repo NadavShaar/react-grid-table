@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import defaultIcons from './../defaultIcons';
+import defaultIcons from './../defaultIcons'; 
+import Search from '../components/Search';
+import ColumnVisibility from '../components/ColumnVisibility';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import Loader from '../components/Loader';
+import NoResults from '../components/NoResults';
 
 var lastPos;
 var isColumnSorting;
@@ -12,16 +18,15 @@ export default function useTableManager(props) {
     let [columns, setCols] = useState(props.columns);
     let [sortBy, setSortBy] = useState(props.sortBy || null);
     let [sortAsc, setSortAsc] = useState(props.sortAscending || null);
-    let [listEl, setListEl] = useState(null);
     let [page, setPage] = useState(1);
     let [updatedRow, setUpdatedRow] = useState(null);
     let [searchText, setSearchText] = useState(props.searchText || "");
     let [pageSize, setPageSize] = useState(props.pageSize);
-    let [selectedItems, setSelectedItems] = useState([]);
+    let [selectedRows, setSelectedRows] = useState([]);
     let [tableManager] = useState({
-        nodes: {},
+        refs: {},
         handlers: {},
-        renderers: {},
+        components: {},
         columnsData: {},
         params: {},
         rowsData: {},
@@ -39,7 +44,7 @@ export default function useTableManager(props) {
 
     searchText = props.searchText ?? searchText;
     columns = useMemo(generateColumns, [props.columns, columns, props.minColumnWidth]); 
-    selectedItems = useMemo(getSelectedItems, [props.selectedItems, selectedItems]);
+    selectedRows = useMemo(getSelectedItems, [props.selectedRows, selectedRows]);
     let sort = useMemo(getSort, [props.sortBy, sortBy, props.sortAscending, sortAsc]);
     sortBy = sort.sortBy;
     sortAsc = sort.sortAsc;
@@ -56,21 +61,20 @@ export default function useTableManager(props) {
     // check if table has a 'checkbox' column
     let tableHasSelection = !!columns.find(cd => cd.id === 'checkbox');
 
-    tableManager.nodes = Object.assign(tableManager.nodes, {
-        listEl,
+    tableManager.refs = Object.assign(tableManager.refs, {
         tableRef,
         rgtRef
     })
     tableManager.handlers = Object.assign(tableManager.handlers, {
-        setColumns,
+        // setColumns,
         // setRows,
-        setSortBy,
-        setSortAsc,
-        setPage,
-        setSearchText,
+        // setSortBy,
+        // setSortAsc,
+        // setPage,
+        // setSearchText,
         setPageSize,
         setUpdatedRow,
-        setSelectedItems,
+        setSelectedRows,
         updateSelectedItems,
         toggleItemSelection,
         toggleSelectAll,
@@ -80,7 +84,7 @@ export default function useTableManager(props) {
         handleResizeEnd,
         handleSort,
         handlePagination,
-        handleColumnVisibility,
+        toggleColumnVisibility,
         handleSearchChange,
         handleRowEditIdChange,
         getHighlightedSearch,
@@ -88,14 +92,14 @@ export default function useTableManager(props) {
         getIsRowEditable: props.getIsRowEditable,
         getIsRowSelectable: props.getIsRowSelectable
     })
-    tableManager.renderers = Object.assign(tableManager.renderers, {
-        searchRenderer: props.searchRenderer,
-        columnVisibilityRenderer: props.columnVisibilityRenderer,
-        headerRenderer: props.headerRenderer,
-        dragHandleRenderer: props.dragHandleRenderer,
-        footerRenderer: props.footerRenderer,
-        loaderRenderer: props.loaderRenderer,
-        noResultsRenderer: props.noResultsRenderer
+    tableManager.components = Object.assign(tableManager.components, {
+        searchComponent: props.searchComponent || Search,
+        columnVisibilityComponent: props.columnVisibilityComponent || ColumnVisibility,
+        headerComponent: props.headerComponent || Header,
+        footerComponent: props.footerComponent || Footer,
+        loaderComponent: props.loaderComponent || Loader,
+        noResultsComponent: props.noResultsComponent || NoResults,
+        dragHandleComponent: props.dragHandleComponent || null,
     })
     tableManager.columnsData = Object.assign(tableManager.columnsData, {
         columns,
@@ -123,7 +127,7 @@ export default function useTableManager(props) {
         items: props.rows,
         pageItems,
         updatedRow,
-        selectedItems,
+        selectedRows,
         rowIdField: props.rowIdField
     })
     tableManager.additionalProps = Object.assign(tableManager.additionalProps, {
@@ -140,13 +144,6 @@ export default function useTableManager(props) {
     })
 
     // **************** Life cycles ****************
-
-    // set grid's wrapper ref (used for auto scrolling the page to top when moving between pages)
-    useEffect(() => {
-        if(!rgtRef?.current?.children) return;
-        let children = [].slice.call(rgtRef.current.children);
-        setListEl(children.find(el => el.classList.contains('rgt-container')));
-    }, [listEl])
 
     // update search while reseting page & edit mode
     useEffect(() => {
@@ -177,7 +174,7 @@ export default function useTableManager(props) {
     }
 
     function getSelectedItems() {
-        return props.selectedItems ?? selectedItems
+        return props.selectedRows ?? selectedRows
     }
 
     function getPageItems() {
@@ -358,12 +355,12 @@ export default function useTableManager(props) {
     function handlePagination(goToPage) {
         if((goToPage >= 1) && (goToPage <= totalPages)) {
             setPage(goToPage);
-            setTimeout(() => { listEl.scrollTop = 0 }, 0);
+            setTimeout(() => { tableRef.current.container.scrollTop = 0 }, 0);
         };
     }
 
     function toggleSelectAll(selectableItemsIds, selectAllIsChecked, isSelectAllIndeterminate) {
-        let selectedIds = [...selectedItems];
+        let selectedIds = [...selectedRows];
 
         if(selectAllIsChecked || isSelectAllIndeterminate) selectedIds = selectedIds.filter(si => !selectableItemsIds.find(itemId => si === itemId));
         else selectableItemsIds.forEach(s => selectedIds.push(s));
@@ -372,22 +369,22 @@ export default function useTableManager(props) {
     }
 
     function updateSelectedItems(newSelectedItems) {
-        if (props.selectedItems === undefined) setSelectedItems(newSelectedItems);
+        if (props.selectedRows === undefined) setSelectedRows(newSelectedItems);
         props.onSelectedRowsChange?.(newSelectedItems);
     }
 
     function toggleItemSelection(rowId) {
-        selectedItems = [...selectedItems];
+        selectedRows = [...selectedRows];
 
-        let itemIndex = selectedItems.findIndex(s => s === rowId);
+        let itemIndex = selectedRows.findIndex(s => s === rowId);
 
-        if(itemIndex !== -1) selectedItems.splice(itemIndex, 1);
-        else selectedItems.push(rowId);
+        if(itemIndex !== -1) selectedRows.splice(itemIndex, 1);
+        else selectedRows.push(rowId);
 
-        updateSelectedItems(selectedItems);
+        updateSelectedItems(selectedRows);
     }
 
-    function handleColumnVisibility(colId) {
+    function toggleColumnVisibility(colId) {
         columns = [...columns];
         let colIndex = columns.findIndex(cd => cd.id === colId);
 
