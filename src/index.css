@@ -267,8 +267,8 @@
 
 .rgt-columns-manager-button {
   cursor: pointer;
-  height: 24px;
-  width: 24px;
+  height: 30px;
+  width: 30px;
   padding: 0;
   background: transparent;
   outline: none;
@@ -308,12 +308,13 @@
   display: flex;
   flex: 1;
   justify-content: space-between;
-  padding: 5px 20px;
+  position: relative;
   font-size: 14px;
   align-items: center;
 }
 
 .rgt-columns-manager-popover-title {
+  padding: 0 20px;
   font-weight: 500;
   margin-bottom: 10px;
   white-space: nowrap;
@@ -321,7 +322,16 @@
 }
 
 .rgt-columns-manager-popover-row > label {
+  padding: 5px 40px 5px 20px;
+  width: 100%;
   padding-right: 10px;
+}
+
+.rgt-columns-manager-popover-row > input {
+  margin: 0;
+  position: absolute;
+  right: 20px;
+  pointer-events: none;
 }
 
 .rgt-columns-manager-popover-row:hover {

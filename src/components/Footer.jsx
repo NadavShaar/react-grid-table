@@ -41,7 +41,7 @@ const Footer = (props) => {
 
     const renderPageSize = () => (
         <React.Fragment>
-            <span>Items per page: </span>
+            <span>Rows per page: </span>
             <select 
                 className='rgt-footer-items-per-page'
                 value={pageSize} 

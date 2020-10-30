@@ -22,7 +22,7 @@ const ColumnVisibility = props => {
                 columns.map((cd, idx) => {
                     if (cd.pinned && idx === 0 || cd.pinned && idx === columns.length - 1) return null;
                     return (
-                        <div key={idx} className='rgt-clickable rgt-columns-manager-popover-row' onClick={e => onChange(cd.id)} >
+                        <div key={idx} className='rgt-clickable rgt-columns-manager-popover-row'>
                             <label htmlFor={`checkbox-${idx}`} onClick={e => onChange(cd.id)} className='rgt-clickable rgt-flex-child rgt-text-truncate'>{cd.label || cd.field || cd.id}</label>
                             <input
                                 id={`checkbox-${idx}`}
