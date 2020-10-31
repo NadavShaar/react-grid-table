@@ -65,9 +65,7 @@ const HeaderCell = (props) => {
     
     const renderCheckboxHeaderCell = () => {
 
-        // set selectable items
         let selectableItemsIds = pageItems.filter(it => getIsRowSelectable(it)).map(item => item[rowIdField]);
-        // select all params
         let selectAllIsChecked = selectableItemsIds.length && selectableItemsIds.every(si => selectedRows.find(id => si === id));
         let selectAllIsDisabled = !selectableItemsIds.length;
         let isSelectAllIndeterminate = !!(selectedRows.length && !selectAllIsChecked && selectableItemsIds.some(si => selectedRows.find(id => si === id)));

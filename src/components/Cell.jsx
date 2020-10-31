@@ -41,12 +41,10 @@ const Cell = (props) => {
 
     let value = column.getValue?.({ value: (updatedRow?.[rowIdField] === rowId) ? updatedRow[column.field] : data[column.field], column: column })?.toString?.();
 
-    // highlight searched text if...
     if (column.searchable !== false && updatedRow?.[rowIdField] !== rowId && highlightSearch !== false && searchText && searchText.length >= searchMinChars && value?.toLowerCase?.()?.includes?.(searchText.toLowerCase())) {
         value = getHighlightedSearch(value);
     }
 
-    // class selectors
     let classNames = column.id === 'checkbox' ?
         `rgt-cell rgt-cell-checkbox rgt-row-${rowIndex} rgt-row-${(rowIndex + 1) % 2 === 0 ? 'even' : 'odd'}${column.pinned && colIndex === 0 ? ' rgt-cell-pinned rgt-cell-pinned-left' : ''}${column.pinned && colIndex === visibleColumns.length - 1 ? ' rgt-cell-pinned rgt-cell-pinned-right' : ''}${isSelected ? ' rgt-row-selected' : ''} ${column.className}`
         :
