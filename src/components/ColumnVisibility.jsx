@@ -10,6 +10,9 @@ const ColumnVisibility = props => {
     } = props;
 
     let {
+        params: {
+            textConfig
+        },
         icons: {
             columnVisibility: columnVisibilityIcon
         },
@@ -17,6 +20,7 @@ const ColumnVisibility = props => {
 
     return (
         <PopoverButton
+            title={textConfig.columnVisibility}
             buttonChildren={columnVisibilityIcon}
             popoverChildren={
                 columns.map((cd, idx) => {

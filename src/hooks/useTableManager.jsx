@@ -49,31 +49,36 @@ export default function useTableManager(props) {
     columns = useMemo(getColumns, [props.columns, columns, props.minColumnWidth]); 
     let { pageItems, totalPages } = useMemo(getPageItems, [props.rows, sort, page, pageSize, totalPages, searchText])
 
-    // set visible columns
     let visibleColumns = columns.filter(cd => cd.visible !== false);
-    // recheck if last visible column is pinned
+
     let lastColIsPinned = visibleColumns[visibleColumns.length-1]?.pinned;
-    // virtual column insertion
+
     let virtualColConfig = {id: 'virtual', visible: true, width: "auto"};
     if(!lastColIsPinned) visibleColumns.push(virtualColConfig) 
     else visibleColumns.splice(visibleColumns.length-1, 0, virtualColConfig);
-    // check if table has a 'checkbox' column
+
     let tableHasSelection = !!columns.find(cd => cd.id === 'checkbox');
+
+    let textConfig = {
+        search: 'Search:',
+        totalRows: 'Total rows:',
+        rows: 'Rows:',
+        selected: 'Selected',
+        rowsPerPage: 'Rows per page:',
+        page: 'Page:',
+        of: 'of',
+        prev: 'Prev',
+        next: 'Next',
+        columnVisibility: 'Column visibility',
+        ...props.textConfig 
+    }
 
     tableManager.refs = Object.assign(tableManager.refs, {
         tableRef,
         rgtRef
     })
     tableManager.handlers = Object.assign(tableManager.handlers, {
-        // setColumns,
-        // setRows,
-        // setSortBy,
-        // setSortAsc,
-        // setPage,
-        // setSearchText,
-        // setPageSize,
         handlePageSizeChange,
-        // setUpdatedRow,
         handleRowEdit,
         setSelectedRows,
         updateSelectedItems,
@@ -121,7 +126,8 @@ export default function useTableManager(props) {
         isHeaderSticky: props.isHeaderSticky !== false,
         isPaginated: props.isPaginated,
         disableColumnsReorder: props.disableColumnsReorder,
-        pageSizes: props.pageSizes
+        pageSizes: props.pageSizes,
+        textConfig
     })
     tableManager.rowsData = Object.assign(tableManager.rowsData, {
         items: props.rows,
@@ -145,17 +151,14 @@ export default function useTableManager(props) {
 
     // **************** Life cycles ****************
 
-    // update search while reseting page & edit mode
     useEffect(() => {
         if (page !== 1) handlePageChange(1);
     }, [searchText, pageSize])
 
-    // reset updated row if...
     useEffect(() => {
         if (updatedRow) handleRowEditIdChange(null);
     }, [searchText, sort, page])
 
-    // set item in edit mode
     useEffect(() => {
         setUpdatedRow(pageItems.find(item => item[props.rowIdField] === props.editRowId) || null);
     }, [props.editRowId])
@@ -166,6 +169,7 @@ export default function useTableManager(props) {
 
 
     // **************** Handlers ****************
+
     function getPageItems() {
         let pageItems = [...props.rows];
 
@@ -188,7 +192,6 @@ export default function useTableManager(props) {
             }));
         }
 
-        // sort
         if (sort?.colId) {
             pageItems.sort((a, b) => {
                 let aVal = conf2[sort.colId].getValue({ value: a[conf2[sort.colId].field], column: conf2[sort.colId] });
@@ -201,7 +204,6 @@ export default function useTableManager(props) {
 
         let totalPages = (pageItems.length % pageSize > 0) ? Math.trunc(pageItems.length / pageSize) + 1 : Math.trunc(pageItems.length / pageSize);
 
-        // paginate
         if (props.isPaginated !== false) pageItems = pageItems.slice((pageSize * page - pageSize), (pageSize * page));
 
         return { pageItems, totalPages }

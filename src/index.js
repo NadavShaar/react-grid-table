@@ -104,7 +104,7 @@ GridTable.defaultProps = {
     showSearch: true,
     disableColumnsReorder: false,
     getIsRowSelectable: row => true,
-    getIsRowEditable: row => true
+    getIsRowEditable: row => true,
 };
 
 GridTable.propTypes = {
@@ -137,6 +137,7 @@ GridTable.propTypes = {
     isHeaderSticky: PropTypes.bool,
     showColumnVisibilityManager: PropTypes.bool,
     icons: PropTypes.object,
+    textConfig: PropTypes.object,
     // events
     onColumnsChange: PropTypes.func,
     onSearchChange: PropTypes.func,

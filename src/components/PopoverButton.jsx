@@ -6,6 +6,7 @@ const PopoverButton = props => {
     const { ref, isComponentVisible, setIsComponentVisible } = useDetectClickOutside(false);
 
     let {
+        title,
         buttonChildren, 
         popoverChildren
     } = props;
@@ -16,7 +17,7 @@ const PopoverButton = props => {
                 { buttonChildren }
             </button>
             <div className={`rgt-columns-manager-popover${isComponentVisible ? ' rgt-columns-manager-popover-open' : ''}`}>
-                <span className='rgt-columns-manager-popover-title'>Column Visibility</span>
+                <span className='rgt-columns-manager-popover-title'>{ title }</span>
                 <div className='rgt-columns-manager-popover-body'>
                     { popoverChildren }
                 </div>

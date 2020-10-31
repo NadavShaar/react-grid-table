@@ -9,6 +9,9 @@ const Search = props => {
     } = props;
 
     let {
+        params: {
+            textConfig
+        },
         icons: {
             search: searchIcon
         },
@@ -18,7 +21,7 @@ const Search = props => {
         <div className='rgt-search-container'>
             <label htmlFor="rgt-search" className='rgt-search-label'>
                 <span className='rgt-search-icon'>{searchIcon}</span>
-                Search:
+                {textConfig.search}
             </label>
             <input
                 name="rgt-search"
