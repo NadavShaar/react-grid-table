@@ -18,6 +18,7 @@ const ColumnVisibility = props => {
         },
     } = tableManager;
 
+    
     return (
         <PopoverButton
             title={textConfig.columnVisibility}
@@ -25,9 +26,12 @@ const ColumnVisibility = props => {
             popoverChildren={
                 columns.map((cd, idx) => {
                     if (cd.pinned && idx === 0 || cd.pinned && idx === columns.length - 1) return null;
+
+                    let label = cd.label || cd.field || cd.id;
+
                     return (
                         <div key={idx} className='rgt-clickable rgt-columns-manager-popover-row'>
-                            <label htmlFor={`checkbox-${idx}`} onClick={e => onChange(cd.id)} className='rgt-clickable rgt-flex-child rgt-text-truncate'>{cd.label || cd.field || cd.id}</label>
+                            <label htmlFor={`checkbox-${idx}`} title={label} onClick={e => onChange(cd.id)} className='rgt-clickable rgt-flex-child rgt-text-truncate'>{label}</label>
                             <input
                                 id={`checkbox-${idx}`}
                                 className='rgt-clickable'
