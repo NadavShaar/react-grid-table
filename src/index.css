@@ -280,7 +280,7 @@
   transition: background .2s ease;
 }
 
-.rgt-columns-manager-button:hover {
+.rgt-columns-manager-button:hover, .rgt-columns-manager-button-active {
   background: var(--rgt-color5);
 }
 
