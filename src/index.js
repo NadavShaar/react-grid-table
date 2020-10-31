@@ -1,9 +1,8 @@
 import React from 'react';
-import {SortableContainer} from 'react-sortable-hoc';
-import HeaderCell from './components/HeaderCell';
-import Row from './components/Row';
+import { SortableContainer } from 'react-sortable-hoc';
+import { HeaderCell, Row } from './components/';
+import { useTableManager } from './hooks/';
 import PropTypes from 'prop-types';
-import useTableManager from './hooks/useTableManager';
 import './index.css';
 
 const SortableList = SortableContainer(({ style, className, children }) => <div className={className} style={style}>{children}</div>);

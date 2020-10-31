@@ -1,5 +1,5 @@
 import React from 'react';
-import PopoverButton from './PopoverButton';
+import { PopoverButton } from './';
 
 const ColumnVisibility = props => {
 

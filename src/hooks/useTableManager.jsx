@@ -1,11 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { Search, ColumnVisibility, Header, Footer, Loader, NoResults } from '../components/';
 import defaultIcons from './../defaultIcons'; 
-import Search from '../components/Search';
-import ColumnVisibility from '../components/ColumnVisibility';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import Loader from '../components/Loader';
-import NoResults from '../components/NoResults';
 
 var lastPos;
 var isColumnSorting;

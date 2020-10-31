@@ -1,5 +1,5 @@
 import React from 'react';
-import useDetectClickOutside from '../hooks/useDetectClickOutside';
+import { useDetectClickOutside } from '../hooks/';
 
 const PopoverButton = props => {
 

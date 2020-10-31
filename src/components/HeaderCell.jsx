@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
-import {SortableElement, SortableHandle} from 'react-sortable-hoc';
-import useResizeEvents from '../hooks/useResizeEvents';
+import { SortableElement, SortableHandle } from 'react-sortable-hoc';
+import { useResizeEvents } from '../hooks/';
 
 const SortableItem = SortableElement(({children, index, columnId, className}) => <div className={className} data-column-id={columnId} key={index}>{children}</div>);
 const DragHandle = SortableHandle(({children, index}) => <React.Fragment>{children}</React.Fragment>);
