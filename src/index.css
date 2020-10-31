@@ -373,7 +373,7 @@
 .rgt-search-input {
   line-height: 30px;
   margin-right: 10px;
-  width: 100%;
+  flex: 1; 
   border: none;
   outline: none;
   font-size: 16px;
