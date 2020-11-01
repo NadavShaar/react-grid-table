@@ -148,7 +148,7 @@ export default MyAwesomeTable;
 - [Props](#props)
 - [Table configuration props](#table-configuration-props)
 - [Event props](#event-props)
-- [Custom rendering props](#custom-rendering-props)
+- [Components props](#components-props)
 - [The `columns` prop](#columns)
 - [The `checkbox` column](#checkbox-column)
 - [The `rows` prop](#rows)
@@ -205,24 +205,28 @@ export default MyAwesomeTable;
 
 | name | type | description | usage |
 |---|---|---|---|
-| onColumnsChange | function | triggers when the `columns` has been changed  | `columns => { }` |
-| onSelectedRowsChange | function | triggers when rows selection has been changed  | `selectedRowsIds => { }` |
-| onSearchChange | function | used for updating the search text when controlled from outside of the component  | `searchText => { }` |
-| onSortChange | function | used for updating the sortBy and its direction when controlled from outside of the component  | `(columnId, isAscending) => { }` |
-| onRowClick | function | triggers when a row has been clicked | `({rowIndex, row, column, event}) => { }` |
+| onColumnsChange | function | triggers when the `columns` has been changed | `columns => { }` |
+| onSelectedRowsChange | function | triggers when rows selection has been changed | `selectedRowsIds => { }` |
+| onSearchChange | function | triggers when search text changed | `searchText => { }` |
+| onSortChange | function | triggers when search sort changed | `({colId, isAsc}) => { }` |
+| onRowClick | function | triggers when a row has been clicked | `({rowIndex, data, column, event}) => { }` |
+| onRowEditIdChange | function | triggers when `rowEditId` changed | `rowEditId => { }` |
+| onLoad | function | triggers when `tableManager` is initialized (<u>[details](#tableManager)</u>) | `tableManager => { }` |
 
-### Custom rendering props
-A set of functions that are used for rendering custom components.
+### Components props
 
 | name | type | description | usage |
 |---|---|---|---|
-| headerComponent | function | used for rendering a custom header ([details](#headerComponent)) | `({searchText, setSearchText, toggleColumnVisibility, columns}) => ( children )` |
-| footerComponent | function | used for rendering a custom footer ([details](#footerComponent)) | `({page, totalPages, handlePagination, pageSize, pageSizes, setPageSize, totalRows, selectedRowsLength, clearSelection, numberOfRows }) => ( children )` |
-| loaderComponent | function | used for rendering a custom loader | `() => ( children )` |
-| noResultsComponent | function | used for rendering a custom component when there is no data to display | `() => ( children )` |
-| searchComponent | function | used for rendering a custom search component ([details](#headerComponent)) | `({searchText, setSearchText}) => ( children )` |
-| columnVisibilityComponent | function | used for rendering a custom columns visibility management component ([details](#headerComponent)) | `({columns, toggleColumnVisibility}) => ( children )` |
+| headerComponent | function | used for rendering a custom header ([details](#headerComponent)) | `({tableManager}) =>  ( children )` |
+| footerComponent | function | used for rendering a custom footer ([details](#footerComponent)) | `({tableManager}) =>  ( children )` |
+| loaderComponent | function | used for rendering a custom loader | `({tableManager}) => ( children )` |
+| noResultsComponent | function | used for rendering a custom component when there is no data to display | `({tableManager}) => ( children )` |
+| searchComponent | function | used for rendering a custom search component ([details](#headerComponent)) | `({value, onChange, tableManager}) => ( children )` |
+| columnVisibilityComponent | function | used for rendering a custom columns visibility management component ([details](#headerComponent)) | `({columns, onChange, tableManager}) => ( children )` |
 | dragHandleComponent | function | used for rendering a drag handle for the column reorder | `() => ( children )` |
+| informationComponent | function | used for rendering a custom rows information component (located at the bottom left in the footer) | `({totalCount, pageCount, selectedCount, tableManager}) => ( children )` |
+| pageSizeComponent | function | used for rendering a custom page size control | `({value, onChange, options, tableManager}) => ( children )` |
+| paginationComponent | function | used for rendering a custom pagination component | `({page, onChange, tableManager}) => ( children )` |
 
 ## props - detailed
 
@@ -521,6 +525,8 @@ footerComponent={({
     </div>
 )}
 ```
+
+# tableManager
 
 # How to...
 
