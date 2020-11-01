@@ -164,7 +164,7 @@ export default MyAwesomeTable;
 
 **TABLE-BODY:** displaying data / loader / no-results, row editing & row selection. 
 
-**FOOTER (optional | customizable):** items information & pagination. 
+**FOOTER (optional | customizable):** rows information, rows per page & pagination. 
 
 
 ## props
