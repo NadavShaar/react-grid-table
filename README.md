@@ -48,10 +48,10 @@ import GridTable from '@nadavshaar/react-grid-table';
 import '@nadavshaar/react-grid-table/dist/index.css';
 
 // custom cell component
-const Username = ({value, row, column, rowIndex, searchText}) => {
+const Username = ({ tableManager, value, data, column, rowIndex, searchText }) => {
     return (
         <div className='rgt-cell-inner' style={{display: 'flex', alignItems: 'center'}}>
-            <img src={row.avatar} alt="user avatar" />
+            <img src={data.avatar} alt="user avatar" />
             <span className='rgt-text-truncate' style={{marginLeft: 10}}>{value}</span>
         </div>
     )
@@ -148,7 +148,7 @@ export default MyAwesomeTable;
 - [Props](#props)
 - [Table configuration props](#table-configuration-props)
 - [Event props](#event-props)
-- [Custom rendering props](#custom-rendering-props)
+- [Components props](#components-props)
 - [The `columns` prop](#columns)
 - [The `checkbox` column](#checkbox-column)
 - [The `rows` prop](#rows)
@@ -164,7 +164,7 @@ export default MyAwesomeTable;
 
 **TABLE-BODY:** displaying data / loader / no-results, row editing & row selection. 
 
-**FOOTER (optional | customizable):** items information & pagination. 
+**FOOTER (optional | customizable):** rows information, rows per page & pagination. 
 
 
 ## props
@@ -176,9 +176,9 @@ export default MyAwesomeTable;
 | rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be unique | 'id' |
 | selectedRowsIds | array of ids | the ids of all selected rows (<u>[details](#checkbox-column)</u>) | [ ] |
 | searchText | string | text for search | "" |
-| getIsRowSelectable | function | whether row selection for the current row is disabled or not | `row => true` |
-| getIsRowEditable | function | whether row editing for the current row is disabled or not | `row => true` |
-| editRowId | any | the id of the row to edit, (more <u>[details](#Row-Editing)</u> about row editing) | null |
+| getIsRowSelectable | function | a callback function that returns whether row selection for the current row should be disabled or not | `row => true` |
+| getIsRowEditable | function | a callback function that returns whether row editing for the current row should be disabled or not | `row => true` |
+| editRowId | any | the id of the row that should switch to inline editing mode, (more <u>[details](#Row-Editing)</u> about row editing) | null |
 | cellProps | object | global props for all data cells | { } |
 | headerCellProps | object | global props for all header cells | { } |
 
@@ -186,43 +186,47 @@ export default MyAwesomeTable;
 
 | name | type | description | default value |
 |---|---|---|---|
-| isPaginated | boolean | determine whether the pagination controls sholuld be shown in the footer and if the rows data should be splitted into pages  | true |
+| isPaginated | boolean | determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
 | pageSizes | array of numbers | page size options | [20, 50, 100] |
 | pageSize | number | the selected page size | 20 |
-| sortBy | any | the id of the column that should be sorted | null |
-| sortAscending | boolean | determine the sort direction | true |
+| sort | object | sort config when controlled. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 123, isAsc: true }` | { } |
 | minColumnWidth | number | minimum width for all columns (doesn't apply to 'checkbox' column)| 70 |
 | highlightSearch | boolean | whether to highlight the search term | true |
-| showSearch | boolean | whether to show the search in the header | true |
-| searchMinChars | number | the minimum characters to apply search and highlighting | 2 |
+| showSearch | boolean | whether to show the search component in the header | true |
+| searchMinChars | number | the minimum characters in order to apply search and highlighting | 2 |
 | isLoading | boolean | whether to render a loader | false |
-| disableColumnsReorder | bool | whether to disable column drag & drop | false |
-| isHeaderSticky | boolean | whether the table header will be stick to the top when scrolling or not | true |
+| disableColumnsReorder | boolean | whether to disable column drag & drop for repositioning | false |
+| isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
 | showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
-| icons | object with refs | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
+| icons | object of nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
+| textConfig | { } | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
 
 ### Event props
 
 | name | type | description | usage |
 |---|---|---|---|
-| onColumnsChange | function | triggers when the `columns` has been changed  | `columns => { }` |
-| onSelectedRowsChange | function | triggers when rows selection has been changed  | `selectedRowsIds => { }` |
-| onSearchChange | function | used for updating the search text when controlled from outside of the component  | `searchText => { }` |
-| onSortChange | function | used for updating the sortBy and its direction when controlled from outside of the component  | `(columnId, isAscending) => { }` |
-| onRowClick | function | triggers when a row has been clicked | `({rowIndex, row, column, event}) => { }` |
+| onColumnsChange | function | triggers when the `columns` has been changed | `columns => { }` |
+| onSelectedRowsChange | function | triggers when rows selection has been changed | `selectedRowsIds => { }` |
+| onSearchChange | function | triggers when search text changed | `searchText => { }` |
+| onSortChange | function | triggers when search sort changed | `({colId, isAsc}) => { }` |
+| onRowClick | function | triggers when a row has been clicked | `({rowIndex, data, column, event}) => { }` |
+| onRowEditIdChange | function | triggers when `rowEditId` changed | `rowEditId => { }` |
+| onLoad | function | triggers when `tableManager` is initialized (<u>[details](#tableManager)</u>) | `tableManager => { }` |
 
-### Custom rendering props
-A set of functions that are used for rendering custom components.
+### Components props
 
 | name | type | description | usage |
 |---|---|---|---|
-| headerComponent | function | used for rendering a custom header ([details](#headerComponent)) | `({searchText, setSearchText, toggleColumnVisibility, columns}) => ( children )` |
-| footerComponent | function | used for rendering a custom footer ([details](#footerComponent)) | `({page, totalPages, handlePagination, pageSize, pageSizes, setPageSize, totalRows, selectedRowsLength, clearSelection, numberOfRows }) => ( children )` |
-| loaderComponent | function | used for rendering a custom loader | `() => ( children )` |
-| noResultsComponent | function | used for rendering a custom component when there is no data to display | `() => ( children )` |
-| searchComponent | function | used for rendering a custom search component ([details](#headerComponent)) | `({searchText, setSearchText}) => ( children )` |
-| columnVisibilityComponent | function | used for rendering a custom columns visibility management component ([details](#headerComponent)) | `({columns, toggleColumnVisibility}) => ( children )` |
+| headerComponent | function | used for rendering a custom header ([details](#headerComponent)) | `({tableManager}) =>  ( children )` |
+| footerComponent | function | used for rendering a custom footer ([details](#footerComponent)) | `({tableManager}) =>  ( children )` |
+| loaderComponent | function | used for rendering a custom loader | `({tableManager}) => ( children )` |
+| noResultsComponent | function | used for rendering a custom component when there is no data to display | `({tableManager}) => ( children )` |
+| searchComponent | function | used for rendering a custom search component ([details](#headerComponent)) | `({value, onChange, tableManager}) => ( children )` |
+| columnVisibilityComponent | function | used for rendering a custom columns visibility management component ([details](#headerComponent)) | `({columns, onChange, tableManager}) => ( children )` |
 | dragHandleComponent | function | used for rendering a drag handle for the column reorder | `() => ( children )` |
+| informationComponent | function | used for rendering a custom rows information component (located at the bottom left in the footer) | `({totalCount, pageCount, selectedCount, tableManager}) => ( children )` |
+| pageSizeComponent | function | used for rendering a custom page size control | `({value, onChange, options, tableManager}) => ( children )` |
+| paginationComponent | function | used for rendering a custom pagination component | `({page, onChange, tableManager}) => ( children )` |
 
 ## props - detailed
 
@@ -521,6 +525,8 @@ footerComponent={({
     </div>
 )}
 ```
+
+# tableManager
 
 # How to...
 
