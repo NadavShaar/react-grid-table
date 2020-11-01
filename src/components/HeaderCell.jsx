@@ -37,7 +37,7 @@ const HeaderCell = (props) => {
             visibleColumns
         },
         rowsData: {
-            selectedRows,
+            selectedRowsIds,
             pageItems,
             rowIdField
         },
@@ -66,9 +66,9 @@ const HeaderCell = (props) => {
     const renderCheckboxHeaderCell = () => {
 
         let selectableItemsIds = pageItems.filter(it => getIsRowSelectable(it)).map(item => item[rowIdField]);
-        let selectAllIsChecked = selectableItemsIds.length && selectableItemsIds.every(si => selectedRows.find(id => si === id));
+        let selectAllIsChecked = selectableItemsIds.length && selectableItemsIds.every(si => selectedRowsIds.find(id => si === id));
         let selectAllIsDisabled = !selectableItemsIds.length;
-        let isSelectAllIndeterminate = !!(selectedRows.length && !selectAllIsChecked && selectableItemsIds.some(si => selectedRows.find(id => si === id)));
+        let isSelectAllIndeterminate = !!(selectedRowsIds.length && !selectAllIsChecked && selectableItemsIds.some(si => selectedRowsIds.find(id => si === id)));
 
         const onChange = () => {
             toggleSelectAll(selectableItemsIds, selectAllIsChecked, isSelectAllIndeterminate)

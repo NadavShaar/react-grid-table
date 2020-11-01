@@ -20,7 +20,7 @@ const Row = props => {
         rowsData: {
             rowIdField,
             pageItems,
-            selectedRows,
+            selectedRowsIds,
             updatedRow,
         },
         columnsData: {
@@ -31,7 +31,7 @@ const Row = props => {
     let rowId = data[rowIdField];
     let disableSelection = !getIsRowSelectable(data);
     let rowIndex = (index+1) + (pageItems.length * page - pageItems.length);
-    let isSelected = !!(selectedRows.find(si => si === rowId));
+    let isSelected = !!(selectedRowsIds.find(si => si === rowId));
     let isEdit = updatedRow?.[rowIdField] === rowId && !!getIsRowEditable(data);
 
     return visibleColumns.map((cd, colIndex) => {

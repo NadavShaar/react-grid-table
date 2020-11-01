@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Search, ColumnVisibility, Header, Footer, Loader, NoResults } from '../components/';
+import { Search, ColumnVisibility, Header, Footer, Loader, NoResults, Information, PageSize, Pagination } from '../components/';
 import defaultIcons from './../defaultIcons'; 
 
 var lastPos;
@@ -16,7 +16,7 @@ export default function useTableManager(props) {
     let [updatedRow, setUpdatedRow] = useState(null);
     let [searchText, setSearchText] = useState(props.searchText || "");
     let [pageSize, setPageSize] = useState(props.pageSize || 20);
-    let [selectedRows, setSelectedRows] = useState([]);
+    let [selectedRowsIds, setSelectedRowsIds] = useState([]);
     let [tableManager] = useState({
         refs: {},
         handlers: {},
@@ -37,7 +37,7 @@ export default function useTableManager(props) {
     // **************** Table params ****************
 
     searchText = props.searchText ?? searchText;
-    selectedRows = props.selectedRows ?? selectedRows;
+    selectedRowsIds = props.selectedRowsIds ?? selectedRowsIds;
     sort = props.sort ?? sort;
     page = props.page ?? page;
     pageSize = props.pageSize ?? pageSize;
@@ -75,7 +75,7 @@ export default function useTableManager(props) {
     tableManager.handlers = Object.assign(tableManager.handlers, {
         handlePageSizeChange,
         handleRowEdit,
-        setSelectedRows,
+        setSelectedRowsIds,
         updateSelectedItems,
         toggleItemSelection,
         toggleSelectAll,
@@ -100,6 +100,9 @@ export default function useTableManager(props) {
         footerComponent: props.footerComponent || Footer,
         loaderComponent: props.loaderComponent || Loader,
         noResultsComponent: props.noResultsComponent || NoResults,
+        informationComponent: props.informationComponent || Information,
+        pageSizeComponent: props.pageSizeComponent || PageSize,
+        paginationComponent: props.paginationComponent || Pagination,
         dragHandleComponent: props.dragHandleComponent || null,
     })
     tableManager.columnsData = Object.assign(tableManager.columnsData, {
@@ -128,7 +131,7 @@ export default function useTableManager(props) {
         items: props.rows,
         pageItems,
         updatedRow,
-        selectedRows,
+        selectedRowsIds,
         rowIdField: props.rowIdField
     })
     tableManager.additionalProps = Object.assign(tableManager.additionalProps, {
@@ -354,7 +357,7 @@ export default function useTableManager(props) {
     }
 
     function toggleSelectAll(selectableItemsIds, selectAllIsChecked, isSelectAllIndeterminate) {
-        let selectedIds = [...selectedRows];
+        let selectedIds = [...selectedRowsIds];
 
         if(selectAllIsChecked || isSelectAllIndeterminate) selectedIds = selectedIds.filter(si => !selectableItemsIds.find(itemId => si === itemId));
         else selectableItemsIds.forEach(s => selectedIds.push(s));
@@ -363,19 +366,19 @@ export default function useTableManager(props) {
     }
 
     function updateSelectedItems(newSelectedItems) {
-        if (props.selectedRows === undefined || props.onSelectedRowsChange === undefined) setSelectedRows(newSelectedItems);
+        if (props.selectedRowsIds === undefined || props.onSelectedRowsChange === undefined) setSelectedRowsIds(newSelectedItems);
         props.onSelectedRowsChange?.(newSelectedItems);
     }
 
     function toggleItemSelection(rowId) {
-        selectedRows = [...selectedRows];
+        selectedRowsIds = [...selectedRowsIds];
 
-        let itemIndex = selectedRows.findIndex(s => s === rowId);
+        let itemIndex = selectedRowsIds.findIndex(s => s === rowId);
 
-        if(itemIndex !== -1) selectedRows.splice(itemIndex, 1);
-        else selectedRows.push(rowId);
+        if(itemIndex !== -1) selectedRowsIds.splice(itemIndex, 1);
+        else selectedRowsIds.push(rowId);
 
-        updateSelectedItems(selectedRows);
+        updateSelectedItems(selectedRowsIds);
     }
 
     function toggleColumnVisibility(colId) {

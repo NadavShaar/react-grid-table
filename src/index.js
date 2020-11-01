@@ -121,7 +121,7 @@ GridTable.propTypes = {
     ]),
     cellProps: PropTypes.object,
     headerCellProps: PropTypes.object,
-    selectedRows: PropTypes.array,
+    selectedRowsIds: PropTypes.array,
     // table config
     isPaginated: PropTypes.bool,
     disableColumnsReorder: PropTypes.bool,
@@ -152,6 +152,9 @@ GridTable.propTypes = {
     noResultsRenderer: PropTypes.func,
     searchComponent: PropTypes.func,
     columnVisibilityComponent: PropTypes.func,
+    informationComponent: PropTypes.func,
+    pageSizeComponent: PropTypes.func,
+    paginationComponent: PropTypes.func,
     dragHandleComponent: PropTypes.func,
 };
 

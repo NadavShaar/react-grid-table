@@ -8,6 +8,9 @@ import NoResults from './NoResults';
 import PopoverButton from './PopoverButton';
 import Row from './Row';
 import Search from './Search';
+import Information from './Information';
+import PageSize from './PageSize';
+import Pagination from './Pagination';
 
 export {
     Cell,
@@ -19,5 +22,8 @@ export {
     NoResults,
     PopoverButton,
     Row,
-    Search
+    Search,
+    Information,
+    PageSize,
+    Pagination
 }

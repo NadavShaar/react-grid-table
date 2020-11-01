@@ -33,7 +33,7 @@ const App = () => {
     const [isLoading, setLoading] = useState(false);
     const [tableManager, setTableManager] = useState(null);
     let [searchText, setSearchText] = useState();
-    let [selectedRows, setSelectedRows] = useState([]);
+    let [selectedRowsIds, setSelectedRowsIds] = useState([]);
     let [sort, setSort] = useState({colId: 4, isAsc: true});
     let [columns, setColumns] = useState([
         {
@@ -155,8 +155,8 @@ const App = () => {
             isLoading={isLoading}
             editRowId={editRowId}
             onRowEditIdChange={setEditRowId}
-            selectedRows={selectedRows}
-            onSelectedRowsChange={setSelectedRows}
+            selectedRowsIds={selectedRowsIds}
+            onSelectedRowsChange={setSelectedRowsIds}
             style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
             onLoad={setTableManager}
             searchText={searchText}
