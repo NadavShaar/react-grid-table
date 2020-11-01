@@ -176,9 +176,9 @@ export default MyAwesomeTable;
 | rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be unique | 'id' |
 | selectedRowsIds | array of ids | the ids of all selected rows (<u>[details](#checkbox-column)</u>) | [ ] |
 | searchText | string | text for search | "" |
-| getIsRowSelectable | function | whether row selection for the current row is disabled or not | `row => true` |
-| getIsRowEditable | function | whether row editing for the current row is disabled or not | `row => true` |
-| editRowId | any | the id of the row to edit, (more <u>[details](#Row-Editing)</u> about row editing) | null |
+| getIsRowSelectable | function | a callback function that returns whether row selection for the current row should be disabled or not | `row => true` |
+| getIsRowEditable | function | a callback function that returns whether row editing for the current row should be disabled or not | `row => true` |
+| editRowId | any | the id of the row that should switch to inline editing mode, (more <u>[details](#Row-Editing)</u> about row editing) | null |
 | cellProps | object | global props for all data cells | { } |
 | headerCellProps | object | global props for all header cells | { } |
 
@@ -186,20 +186,20 @@ export default MyAwesomeTable;
 
 | name | type | description | default value |
 |---|---|---|---|
-| isPaginated | boolean | determine whether the pagination controls sholuld be shown in the footer and if the rows data should be splitted into pages  | true |
+| isPaginated | boolean | determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
 | pageSizes | array of numbers | page size options | [20, 50, 100] |
 | pageSize | number | the selected page size | 20 |
-| sortBy | any | the id of the column that should be sorted | null |
-| sortAscending | boolean | determine the sort direction | true |
+| sort | object | sort config when controlled. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 123, isAsc: true }` | { } |
 | minColumnWidth | number | minimum width for all columns (doesn't apply to 'checkbox' column)| 70 |
 | highlightSearch | boolean | whether to highlight the search term | true |
-| showSearch | boolean | whether to show the search in the header | true |
-| searchMinChars | number | the minimum characters to apply search and highlighting | 2 |
+| showSearch | boolean | whether to show the search component in the header | true |
+| searchMinChars | number | the minimum characters in order to apply search and highlighting | 2 |
 | isLoading | boolean | whether to render a loader | false |
-| disableColumnsReorder | bool | whether to disable column drag & drop | false |
-| isHeaderSticky | boolean | whether the table header will be stick to the top when scrolling or not | true |
+| disableColumnsReorder | boolean | whether to disable column drag & drop for repositioning | false |
+| isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
 | showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
-| icons | object with refs | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
+| icons | object of nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
+| textConfig | { } | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
 
 ### Event props
 
