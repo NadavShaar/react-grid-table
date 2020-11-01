@@ -48,10 +48,10 @@ import GridTable from '@nadavshaar/react-grid-table';
 import '@nadavshaar/react-grid-table/dist/index.css';
 
 // custom cell component
-const Username = ({value, row, column, rowIndex, searchText}) => {
+const Username = ({ tableManager, value, data, column, rowIndex, searchText }) => {
     return (
         <div className='rgt-cell-inner' style={{display: 'flex', alignItems: 'center'}}>
-            <img src={row.avatar} alt="user avatar" />
+            <img src={data.avatar} alt="user avatar" />
             <span className='rgt-text-truncate' style={{marginLeft: 10}}>{value}</span>
         </div>
     )
