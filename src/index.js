@@ -115,13 +115,9 @@ GridTable.propTypes = {
     searchText: PropTypes.string,
     getIsRowSelectable: PropTypes.func,
     getIsRowEditable: PropTypes.func,
-    editRowId: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number
-    ]),
+    editRowId: PropTypes.any,
     cellProps: PropTypes.object,
     headerCellProps: PropTypes.object,
-    selectedRowsIds: PropTypes.array,
     // table config
     isPaginated: PropTypes.bool,
     disableColumnsReorder: PropTypes.bool,
