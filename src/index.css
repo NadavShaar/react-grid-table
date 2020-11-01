@@ -348,6 +348,7 @@
 }
 
 .rgt-search-container {
+  width: 100%;
   z-index: 1;
   flex: 1;
   display: inline-flex;
@@ -371,6 +372,7 @@
 }
 
 .rgt-search-input {
+  width: 100%;
   line-height: 30px;
   margin-right: 10px;
   flex: 1; 
