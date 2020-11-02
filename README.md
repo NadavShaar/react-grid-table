@@ -291,7 +291,7 @@ Each column support the following properties:
 #### checkbox-column
 Rows selection is done by a predefined column, simply add a column with an `id` of 'checkbox'.
 
-Checkbox column has support the following properties:
+Checkbox column support the following properties:
 
 | name | type | description | default value  |
 |---|---|---|---|
