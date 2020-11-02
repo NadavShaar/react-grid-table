@@ -189,7 +189,7 @@ export default MyAwesomeTable;
 | isPaginated | boolean | determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
 | pageSizes | array of numbers | page size options | [20, 50, 100] |
 | pageSize | number | the selected page size | 20 |
-| sort | object | sort config when controlled. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 123, isAsc: true }` | { } |
+| sort | object | sort config when controlled. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }` | { } |
 | minColumnWidth | number | minimum width for all columns (doesn't apply to 'checkbox' column)| 70 |
 | highlightSearch | boolean | whether to highlight the search term | true |
 | showSearch | boolean | whether to show the search component in the header | true |
@@ -235,30 +235,30 @@ export default MyAwesomeTable;
 
 This prop defines the columns configuration.
 
-Each column supports the following properties:
+Each column support the following properties:
 
 | name | type | description | default value |
 |---|---|---|---|
 | id* | any | a unique identifier for the column (can be changed to a different field using the `rowIdField` prop), or you can set it to 'checkbox' which will generate a rows selction column (more [details](#checkbox-column) about checkbox column)  | --- |
 | field* | string | the name of the field as in the row data | --- |
 | label | string | the label to display in the header cell | the `field` property |
-| pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns| false |
-| visible | boolean | whether to show the column (pinned columns are always visible) | true |
+| pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns | false |
+| visible | boolean | whether to display the column (pinned columns are always visible) | true |
 | className | string | a custom class selector for all column cells | "" |
-| width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "auto" |
+| width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "max-content" |
 | minWidth | number | the minimum width of the column | `minColumnWidth` prop |
-| maxWidth | number, null | the maximum width of the column when resizing | null |
+| maxWidth | number, null | the maximum width of the column | null |
 | getValue | function | used for getting the cell value (usefull when the cell value is not a string - [details](#rows)) | `({value, column}) => value` |
-| setValue | function | used for updating the cell value (usefull when the cell value is not a string) - [details](#Row-Editing) | `({value, row, setRow, column}) => setRow({...row, [column.field]: value})` |
+| setValue | function | used for updating the cell value (usefull when the cell value is not a string - [details](#Row-Editing)) | `({value, data, setRow, column}) => setRow({...row, [column.field]: value})` |
 | searchable | boolean | whether to apply search filtering on the column | true |
 | editable | boolean | whether to allow editing for the column | true |
 | sortable | boolean | whether to allow sort for the column | true |
 | resizable | boolean | whether to allow resizing for the column | true |
-| search | function | the search function for this column | `({value, searchText}) => value.toString().toLowerCase().includes(searchText.toLowerCase())` |
-| sort | function | the sort function for this column | `({a, b, isAscending}) => { let aa = typeof a === 'string' ? a.toLowerCase() : a; let bb = typeof b === 'string' ? b.toLowerCase() : b; if(aa > bb) return isAscending ? 1 : -1; else if(aa < bb) return isAscending ? -1 : 1; return 0; }` |
-| cellRenderer | function | used for custom rendering the cell `({value, row, column, rowIndex, searchText}) => ( children )` | --- |
-| headerCellRenderer | function | used for custom rendering the header cell `({label, column}) => ( children ) ` | --- |
-| editorCellRenderer | function | used for custom rendering the cell in edit mode `({value, field, onChange, row, rows, column, rowIndex}) => ( children ) ` | --- |
+| search | function | the search function for the column | `({value, searchText}) => value.toString().toLowerCase().includes(searchText.toLowerCase())` |
+| sort | function | the sort function for the column | `({a, b, isAscending}) => { let aa = typeof a === 'string' ? a.toLowerCase() : a; let bb = typeof b === 'string' ? b.toLowerCase() : b; if(aa > bb) return isAscending ? 1 : -1; else if(aa < bb) return isAscending ? -1 : 1; return 0; }` |
+| cellRenderer | function | used for custom rendering the cell component `({ tableManager, value, data, column, rowIndex, searchText }) => ( children )` | --- |
+| headerCellRenderer | function | used for custom rendering the header cell component `({label, column}) => ( children )` | --- |
+| editorCellRenderer | function | used for custom rendering the cell component in edit mode `({ tableManager, value, field, onChange, data, column, rowIndex }) => ( children )` | --- |
 
 **Example:**
 ```javascript
@@ -280,31 +280,31 @@ Each column supports the following properties:
   searchable: true,
   visible: true,
   resizable: true,
-  // search: ({value, searchText}) => { },
-  // sort: ({a, b, isAscending}) => { },
-  // cellRenderer: ({value, row, column, rowIndex, searchText}) => { },
-  // headerCellRenderer: ({label, column}) => ( ),
-  // editorCellRenderer: ({value, field, onChange, row, rows, column, rowIndex}) => { }
+  search: ({value, searchText}) => { },
+  sort: ({a, b, isAscending}) => { },
+  cellRenderer: ({ tableManager, value, data, column, rowIndex, searchText }) => ( children ),
+  headerCellRenderer: ({label, column}) => ( children ),
+  editorCellRenderer: ({ tableManager, value, field, onChange, data, column, rowIndex }) => ( children )
 }
 ```
 
 #### checkbox-column
 Rows selection is done by a predefined column, simply add a column with an `id` of 'checkbox'.
 
-Checkbox column has supports the following properties:
+Checkbox column has support the following properties:
 
 | name | type | description | default value  |
 |---|---|---|---|
-| id* | any, 'checkbox' | a unique identifier for the column (can be changed using the `rowIdField` prop), or you can set it to 'checkbox' which will generate a rows selction column (more [details](#checkbox-column) about checkbox column) | --- |
+| id* | 'checkbox' | will generate a rows selction column | --- |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns | false |
-| visible | boolean | whether to show the column (pinned columns are always visible) | true |
+| visible | boolean | whether to display the column (pinned columns are always visible) | true |
 | className | string | a custom class for all column cells | "" |
-| width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "auto" |
+| width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "max-content" |
 | minWidth | number | the minimum width of the column | 0 |
-| maxWidth | number, null | the maximum width of the column when resizing | null |
+| maxWidth | number, null | the maximum width of the column | null |
 | resizable | boolean | whether to allow resizing for the column | false |
-| cellRenderer | function | used for custom rendering the checkbox cell `({isChecked, callback, disabled, rowIndex}) => ( <input type="checkbox" onChange={ callback } checked={ isChecked } disabled={ disabled } /> )` | --- |
-| headerCellRenderer | function | used for custom rendering the checkbox header cell `({isChecked, callback, disabled}) => ( <input type="checkbox" onChange={ callback } checked={ isChecked } disabled={ disabled } /> )` | --- |
+| cellRenderer | function | used for custom rendering the checkbox cell | `({isSelected, callback, disabled, rowIndex}) => ( <input type="checkbox" onChange={ callback } checked={ isSelected } disabled={ disabled } /> )` |
+| headerCellRenderer | function | used for custom rendering the checkbox header cell | `({isSelected, isIndeterminate, callback, disabled}) => ( <input type="checkbox" onChange={ callback } checked={ isSelected } disabled={ disabled } /> )` |
 
 **Example:**
 ```javascript
@@ -319,8 +319,8 @@ Checkbox column has supports the following properties:
   maxWidth: null,
   resizable: false,
   visible: true,
-  // cellRenderer: ({isChecked, callback, disabled, rowIndex}) => ( children )
-  // headerCellRenderer: ({isChecked, callback, disabled}) => ( children )
+  cellRenderer: ({isSelected, callback, disabled, rowIndex}) => ( children )
+  headerCellRenderer: ({isSelected, isIndeterminate, callback, disabled}) => ( children )
 }
 ```
 
