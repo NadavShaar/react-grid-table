@@ -257,8 +257,8 @@ Each column supports the following properties:
 | search | function | the search function for the column | `({value, searchText}) => value.toString().toLowerCase().includes(searchText.toLowerCase())` |
 | sort | function | the sort function for the column | `({a, b, isAscending}) => { let aa = typeof a === 'string' ? a.toLowerCase() : a; let bb = typeof b === 'string' ? b.toLowerCase() : b; if(aa > bb) return isAscending ? 1 : -1; else if(aa < bb) return isAscending ? -1 : 1; return 0; }` |
 | cellRenderer | function | used for custom rendering the cell component `({ tableManager, value, data, column, rowIndex, searchText }) => ( children )` | --- |
-| headerCellRenderer | function | used for custom rendering the header cell component `({label, column}) => ( children ) ` | --- |
-| editorCellRenderer | function | used for custom rendering the cell component in edit mode `({ tableManager, value, field, onChange, data, column, rowIndex }) => ( children ) ` | --- |
+| headerCellRenderer | function | used for custom rendering the header cell component `({label, column}) => ( children )` | --- |
+| editorCellRenderer | function | used for custom rendering the cell component in edit mode `({ tableManager, value, field, onChange, data, column, rowIndex }) => ( children )` | --- |
 
 **Example:**
 ```javascript
@@ -282,9 +282,9 @@ Each column supports the following properties:
   resizable: true,
   // search: ({value, searchText}) => { },
   // sort: ({a, b, isAscending}) => { },
-  // cellRenderer: ({value, row, column, rowIndex, searchText}) => { },
-  // headerCellRenderer: ({label, column}) => ( ),
-  // editorCellRenderer: ({value, field, onChange, row, rows, column, rowIndex}) => { }
+  // cellRenderer: ({ tableManager, value, data, column, rowIndex, searchText }) => ( children ),
+  // headerCellRenderer: ({label, column}) => ( children ),
+  // editorCellRenderer: ({ tableManager, value, field, onChange, data, column, rowIndex }) => ( children )
 }
 ```
 
