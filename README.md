@@ -374,8 +374,8 @@ If you just want to replace the search or the column visibility management compo
 **Arguments:** 
 | name | type | description | default value |
 |---|---|---|---|
-| columns | function | the `columns` configuration | [ ] | 
-| showSearch | boolean weather to show the search | true | 
+| columns | array | the `columns` configuration | [ ] | 
+| showSearch | boolean | weather to show the search | true | 
 | searchText | string | text for search | "" | 
 | setSearchText | function | a callback function to update search text | `setSearchText(searchText)` | 
 | searchComponent | function | as was defined in the `searchComponent` prop | --- |
