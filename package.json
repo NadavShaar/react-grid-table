@@ -76,6 +76,7 @@
     "dist"
   ],
   "dependencies": {
-    "react-sortable-hoc": "^1.11.0"
+    "react-sortable-hoc": "^1.11.0",
+    "react-virtual": "^2.3.0"
   }
 }

@@ -4,8 +4,9 @@ import { HeaderCell, Row } from './components/';
 import { useTableManager } from './hooks/';
 import PropTypes from 'prop-types';
 import './index.css';
+import { useVirtual } from 'react-virtual';
 
-const SortableList = SortableContainer(({ style, className, children }) => <div className={className} style={style}>{children}</div>);
+const SortableList = SortableContainer(({ style, className, children, forwardRef }) => <div ref={forwardRef} className={className} style={style}>{children}</div>);
  
 const GridTable = (props) => {
 
@@ -15,6 +16,7 @@ const GridTable = (props) => {
         refs: {
             rgtRef,
             tableRef,
+            parentRef
         },
         handlers,
         components: {
@@ -25,7 +27,9 @@ const GridTable = (props) => {
         },
         columnsData,
         params,
-        rowsData,
+        rowsData: {
+            pageItems
+        },
         additionalProps,
         icons
     } = tableManager;
@@ -40,49 +44,57 @@ const GridTable = (props) => {
         return rest;
     }, {})
 
+    const rowVirtualizer = useVirtual({
+        size: pageItems.length,
+        parentRef: parentRef
+    });
+
     return (
         <div ref={rgtRef} className='rgt-wrapper' {...rest} >
             <Header tableManager={tableManager}/>
-            <SortableList
-                ref={tableRef}
-                className='rgt-container'
-                axis="x" 
-                lockToContainerEdges 
-                distance={10} 
-                lockAxis="x" 
-                useDragHandle={!!dragHandleComponent}
-                onSortStart={handlers.handleColumnSortStart}
-                onSortEnd={handlers.handleColumnSortEnd}
-                style={{
-                    display: 'grid',
-                    overflow: 'auto',
-                    gridTemplateColumns: (columnsData.visibleColumns.map(g => g.width)).join(" "),
-                    gridTemplateRows: `repeat(${rowsData.pageItems.length+1}, max-content)`,
-                }}
-            >
-                {
-                    columnsData.visibleColumns.map((cd, idx) => (
-                        <HeaderCell key={idx} index={idx} column={cd} tableManager={tableManager}/>
-                    ))
-                }
-                {
-                    !isLoading && rowsData.pageItems.length
-                        ?
-                        rowsData.pageItems.map((d, idx) => <Row key={idx} index={idx} data={d} tableManager={tableManager} />)
-                        :
-                        <div className='rgt-no-data-container'>
-                            {
-                                isLoading
-                                    ?
-                                    <Loader tableManager={tableManager}/>
-                                    :
-                                    <NoResults tableManager={tableManager}/>
-                            }
-                        </div>
-                        
-                            
-                }
-            </SortableList>
+            <div ref={parentRef} style={{width: '100%', height: '100%', overflow: 'auto'}}>
+                <SortableList
+                    forwardRef={tableRef}
+                    className='rgt-container'
+                    axis="x"
+                    lockToContainerEdges
+                    distance={10}
+                    lockAxis="x"
+                    useDragHandle={!!dragHandleComponent}
+                    onSortStart={handlers.handleColumnSortStart}
+                    onSortEnd={handlers.handleColumnSortEnd}
+                    style={{
+                        display: 'grid',
+                        height: rowVirtualizer.totalSize,
+                        gridTemplateColumns: (columnsData.visibleColumns.map(g => g.width)).join(" "),
+                        gridTemplateRows: `repeat(${pageItems.length + 1}, max-content)`,
+                    }}
+                // onScroll={onScroll}
+                >
+                    {
+                        columnsData.visibleColumns.map((cd, idx) => (
+                            <HeaderCell key={idx} index={idx} column={cd} tableManager={tableManager} style={{ marginBottom: rowVirtualizer.virtualItems[0]?.start}}/>
+                        ))
+                    }
+                    {
+                        !isLoading && pageItems.length
+                            ?
+                            rowVirtualizer.virtualItems.map(vr => <Row key={vr.index} index={vr.index} data={pageItems[vr.index]} tableManager={tableManager} row={vr} />)
+                            :
+                            <div className='rgt-no-data-container'>
+                                {
+                                    isLoading
+                                        ?
+                                        <Loader tableManager={tableManager} />
+                                        :
+                                        <NoResults tableManager={tableManager} />
+                                }
+                            </div>
+
+
+                    }
+                </SortableList>
+            </div>
             <Footer tableManager={tableManager}/>
         </div>
     )

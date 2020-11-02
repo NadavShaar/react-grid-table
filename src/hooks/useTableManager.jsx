@@ -32,6 +32,7 @@ export default function useTableManager(props) {
 
     const tableRef = useRef(null);
     const rgtRef = useRef(null);
+    const parentRef = useRef(null);
 
 
     // **************** Table params ****************
@@ -70,7 +71,8 @@ export default function useTableManager(props) {
 
     tableManager.refs = Object.assign(tableManager.refs, {
         tableRef,
-        rgtRef
+        rgtRef,
+        parentRef
     })
     tableManager.handlers = Object.assign(tableManager.handlers, {
         handlePageSizeChange,
@@ -135,8 +137,8 @@ export default function useTableManager(props) {
         rowIdField: props.rowIdField
     })
     tableManager.additionalProps = Object.assign(tableManager.additionalProps, {
-        headerCell: props.headerCellProps,
-        cell: props.cellProps
+        headerCell: props.headerCellProps || {},
+        cell: props.cellProps || {}
     })
     tableManager.icons = Object.assign(tableManager.icons, {
         sortAscending: props.icons?.sortAscending || defaultIcons.sortAscending,
@@ -267,7 +269,7 @@ export default function useTableManager(props) {
     }
 
     function handleResize({e, target, column}) {
-        let containerEl = tableRef.current.container;
+        let containerEl = tableRef.current;
         let gridTemplateColumns = containerEl.style.gridTemplateColumns;
         let currentColWidth = target.offsetParent.clientWidth;
         if(!lastPos) lastPos = e.clientX;
@@ -292,7 +294,7 @@ export default function useTableManager(props) {
 
     function handleResizeEnd() {
         lastPos = null;
-        let containerEl = tableRef.current.container;
+        let containerEl = tableRef.current;
         let gridTemplateColumns = containerEl.style.gridTemplateColumns;
         let gtcArr = gridTemplateColumns.split(" ");
         
@@ -352,7 +354,7 @@ export default function useTableManager(props) {
     function handlePagination(goToPage) {
         if((goToPage >= 1) && (goToPage <= totalPages)) {
             handlePageChange(goToPage);
-            setTimeout(() => { tableRef.current.container.scrollTop = 0 }, 0);
+            setTimeout(() => { tableRef.current.scrollTop = 0 }, 0);
         };
     }
 

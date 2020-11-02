@@ -11,6 +11,7 @@ const HeaderCell = (props) => {
         index, 
         column,
         tableManager,
+        style = {}
     } = props;
 
     let {
@@ -62,6 +63,8 @@ const HeaderCell = (props) => {
     let classes = column.id === 'virtual' ? `rgt-cell-header rgt-cell-header-virtual-col${isHeaderSticky ? ' rgt-cell-header-sticky' : ''}`.trim() : `rgt-cell-header rgt-cell-header-${column.id === 'checkbox' ? 'checkbox' : column.field}${(column.sortable !== false && column.id !== 'checkbox' && column.id !== 'virtual') ? ' rgt-clickable' : ''}${column.sortable !== false && column.id !== 'checkbox' ? ' rgt-cell-header-sortable' : ' rgt-cell-header-not-sortable'}${isHeaderSticky ? ' rgt-cell-header-sticky' : ''}${column.resizable !== false ? ' rgt-cell-header-resizable' : ' rgt-cell-header-not-resizable'}${column.searchable !== false && column.id !== 'checkbox' ? ' rgt-cell-header-searchable' : ' rgt-cell-header-not-searchable'}${isPinnedLeft ? ' rgt-cell-header-pinned rgt-cell-header-pinned-left' : ''}${isPinnedRight ? ' rgt-cell-header-pinned rgt-cell-header-pinned-right' : ''} ${column.className}`.trim() 
 
     let sortingProps = (column.sortable !== false && column.id !== 'checkbox' && column.id !== 'virtual') ? { onClick: e => handleSort(column.id) } : {};
+
+    style = { ...style, ...additionalProps.style, minWidth: column.minWidth, maxWidth: column.maxWidth };
     
     const renderCheckboxHeaderCell = () => {
 
@@ -82,7 +85,7 @@ const HeaderCell = (props) => {
         }, [isSelectAllIndeterminate])
 
         return (
-            <div className="rgt-header-checkbox-cell">
+            <div className="rgt-header-checkbox-cell" style={style}>
                 {
                     column.headerCellRenderer ?
                         column.headerCellRenderer({ isSelected: selectAllIsChecked, isIndeterminate: isSelectAllIndeterminate, callback: onChange, disabled: selectAllIsDisabled })
@@ -104,10 +107,10 @@ const HeaderCell = (props) => {
         <div 
             data-column-id={(column.id).toString()}
             id={`rgt-column-${column.id === 'virtual' ? 'virtual' : column.id === 'checkbox' ? 'checkbox' : column.field.toLowerCase()}`}
-            style={{minWidth: column.minWidth, maxWidth: column.maxWidth}}
             className={classes}
             {...sortingProps}
-            { ...additionalProps }
+            {...additionalProps}
+            style={style}
         >
             {
                 (column.id !== 'virtual') ?

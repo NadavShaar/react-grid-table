@@ -12,6 +12,8 @@ const Cell = (props) => {
         disableSelection,
         isSelected,
         tableManager,
+        style = {},
+        forwardRef,
     } = props;
 
     let {
@@ -54,13 +56,12 @@ const Cell = (props) => {
             `rgt-cell rgt-cell-${column.field} rgt-row-${rowIndex} rgt-row-${(rowIndex + 1) % 2 === 0 ? 'even' : 'odd'}${!tableHasSelection ? '' : disableSelection ? ' rgt-row-not-selectable' : ' rgt-row-selectable'}${column.pinned && colIndex === 0 ? ' rgt-cell-pinned rgt-cell-pinned-left' : ''}${column.pinned && colIndex === visibleColumns.length - 1 ? ' rgt-cell-pinned rgt-cell-pinned-right' : ''}${isSelected ? ' rgt-row-selected' : ''}  ${column.className}`
 
     let moreProps = {};
-    let style = {};
     switch (column.id) {
         case 'virtual':
             break;
     
         default:
-            style = { ...additionalProps?.style, minWidth: column.minWidth, maxWidth: column.maxWidth }
+            style = { ...style, ...additionalProps?.style, minWidth: column.minWidth, maxWidth: column.maxWidth }
             break;
     }
     if (onRowClick) moreProps.onClick = event => onRowClick({ rowIndex, data, column, event });
@@ -75,6 +76,7 @@ const Cell = (props) => {
             {...moreProps}
             {...additionalProps}
             style={style}
+            ref={forwardRef}
         >
             {
                 column.id === 'virtual' ?

@@ -7,6 +7,8 @@ const Row = props => {
         index,
         data,
         tableManager,
+        style = {},
+        row
     } = props;
 
     let {
@@ -47,6 +49,8 @@ const Row = props => {
                 isEdit={isEdit}
                 disableSelection={disableSelection}
                 tableManager={tableManager}
+                style={style}
+                forwardRef={colIndex === 1 ? row.measureRef : undefined}
             />
         )
     })
