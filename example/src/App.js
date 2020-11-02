@@ -67,7 +67,7 @@ const App = () => {
             id: 6,
             field: 'gender',
             label: 'Gender',
-            editorCellRenderer: ({ value, field, onChange, data, column, rowIndex }) => (
+            editorCellRenderer: ({ tableManager, value, field, onChange, data, column, rowIndex }) => (
                 <select
                     style={styles.select}
                     value={value}

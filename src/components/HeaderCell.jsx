@@ -85,7 +85,7 @@ const HeaderCell = (props) => {
             <div className="rgt-header-checkbox-cell">
                 {
                     column.headerCellRenderer ?
-                        column.headerCellRenderer({ isChecked: selectAllIsChecked, isIndeterminate: isSelectAllIndeterminate, callback: onChange, disabled: selectAllIsDisabled })
+                        column.headerCellRenderer({ isSelected: selectAllIsChecked, isIndeterminate: isSelectAllIndeterminate, callback: onChange, disabled: selectAllIsDisabled })
                         :
                         <input
                             ref={selectAllRef}
