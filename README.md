@@ -360,7 +360,7 @@ Its `getValue` function for displaying the first and last name as a full name, w
 
 `getValue: ({value, column}) => value.firstName + ' ' +  value.lastName`
 
-The value that returns from the `getValue` function will be used for searching, sorting etc...
+The returned value will be used for searching, sorting etc...
 
 ### headerComponent
 **Type:** function
