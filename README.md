@@ -595,7 +595,7 @@ For columns which holds values other than string, you'll have to also define the
 
 ### Styling
 
-Styling is done by css class selectors. the table's components are mapped with pre-defined classes, and you can add your own custom class per column in the `columns` configuration.
+Styling is done by css stylesheet that can be easily overridden. the table's components are mapped with pre-defined classes that should cover any situation, and you can add your own custom class per column in the `columns` configuration using the 'className' property.
 
 | Component | All available class selectors |
 |---|---|
