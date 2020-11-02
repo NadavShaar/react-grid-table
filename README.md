@@ -235,7 +235,7 @@ export default MyAwesomeTable;
 
 This prop defines the columns configuration.
 
-Each column supports the following properties:
+Each column support the following properties:
 
 | name | type | description | default value |
 |---|---|---|---|
@@ -280,31 +280,31 @@ Each column supports the following properties:
   searchable: true,
   visible: true,
   resizable: true,
-  // search: ({value, searchText}) => { },
-  // sort: ({a, b, isAscending}) => { },
-  // cellRenderer: ({ tableManager, value, data, column, rowIndex, searchText }) => ( children ),
-  // headerCellRenderer: ({label, column}) => ( children ),
-  // editorCellRenderer: ({ tableManager, value, field, onChange, data, column, rowIndex }) => ( children )
+  search: ({value, searchText}) => { },
+  sort: ({a, b, isAscending}) => { },
+  cellRenderer: ({ tableManager, value, data, column, rowIndex, searchText }) => ( children ),
+  headerCellRenderer: ({label, column}) => ( children ),
+  editorCellRenderer: ({ tableManager, value, field, onChange, data, column, rowIndex }) => ( children )
 }
 ```
 
 #### checkbox-column
 Rows selection is done by a predefined column, simply add a column with an `id` of 'checkbox'.
 
-Checkbox column has supports the following properties:
+Checkbox column has support the following properties:
 
 | name | type | description | default value  |
 |---|---|---|---|
-| id* | any, 'checkbox' | a unique identifier for the column (can be changed using the `rowIdField` prop), or you can set it to 'checkbox' which will generate a rows selction column (more [details](#checkbox-column) about checkbox column) | --- |
+| id* | 'checkbox' | will generate a rows selction column | --- |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns | false |
-| visible | boolean | whether to show the column (pinned columns are always visible) | true |
+| visible | boolean | whether to display the column (pinned columns are always visible) | true |
 | className | string | a custom class for all column cells | "" |
-| width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "auto" |
+| width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "max-content" |
 | minWidth | number | the minimum width of the column | 0 |
-| maxWidth | number, null | the maximum width of the column when resizing | null |
+| maxWidth | number, null | the maximum width of the column | null |
 | resizable | boolean | whether to allow resizing for the column | false |
-| cellRenderer | function | used for custom rendering the checkbox cell `({isChecked, callback, disabled, rowIndex}) => ( <input type="checkbox" onChange={ callback } checked={ isChecked } disabled={ disabled } /> )` | --- |
-| headerCellRenderer | function | used for custom rendering the checkbox header cell `({isChecked, callback, disabled}) => ( <input type="checkbox" onChange={ callback } checked={ isChecked } disabled={ disabled } /> )` | --- |
+| cellRenderer | function | used for custom rendering the checkbox cell | `({isSelected, callback, disabled, rowIndex}) => ( <input type="checkbox" onChange={ callback } checked={ isSelected } disabled={ disabled } /> )` |
+| headerCellRenderer | function | used for custom rendering the checkbox header cell | `({isSelected, isIndeterminate, callback, disabled}) => ( <input type="checkbox" onChange={ callback } checked={ isSelected } disabled={ disabled } /> )` |
 
 **Example:**
 ```javascript
@@ -319,8 +319,8 @@ Checkbox column has supports the following properties:
   maxWidth: null,
   resizable: false,
   visible: true,
-  // cellRenderer: ({isChecked, callback, disabled, rowIndex}) => ( children )
-  // headerCellRenderer: ({isChecked, callback, disabled}) => ( children )
+  cellRenderer: ({isSelected, callback, disabled, rowIndex}) => ( children )
+  headerCellRenderer: ({isSelected, isIndeterminate, callback, disabled}) => ( children )
 }
 ```
 
