@@ -4,7 +4,6 @@ import { HeaderCell, Row } from './components/';
 import { useTableManager } from './hooks/';
 import PropTypes from 'prop-types';
 import './index.css';
-import { useVirtual } from 'react-virtual';
 
 const SortableList = SortableContainer(({ style, className, children, forwardRef }) => <div ref={forwardRef} className={className} style={style}>{children}</div>);
  
@@ -15,8 +14,7 @@ const GridTable = (props) => {
     const {
         refs: {
             rgtRef,
-            tableRef,
-            parentRef
+            tableRef
         },
         handlers,
         components: {
@@ -26,12 +24,15 @@ const GridTable = (props) => {
             noResultsComponent: NoResults
         },
         columnsData,
-        params,
+        params: {
+            isVirtualScrolling
+        },
         rowsData: {
             pageItems
         },
         additionalProps,
-        icons
+        icons,
+        rowVirtualizer
     } = tableManager;
 
     let { 
@@ -44,57 +45,56 @@ const GridTable = (props) => {
         return rest;
     }, {})
 
-    const rowVirtualizer = useVirtual({
-        size: pageItems.length,
-        parentRef: parentRef
-    });
-
     return (
         <div ref={rgtRef} className='rgt-wrapper' {...rest} >
             <Header tableManager={tableManager}/>
-            <div ref={parentRef} style={{width: '100%', height: '100%', overflow: 'auto'}}>
-                <SortableList
-                    forwardRef={tableRef}
-                    className='rgt-container'
-                    axis="x"
-                    lockToContainerEdges
-                    distance={10}
-                    lockAxis="x"
-                    useDragHandle={!!dragHandleComponent}
-                    onSortStart={handlers.handleColumnSortStart}
-                    onSortEnd={handlers.handleColumnSortEnd}
-                    style={{
-                        display: 'grid',
-                        height: rowVirtualizer.totalSize,
-                        gridTemplateColumns: (columnsData.visibleColumns.map(g => g.width)).join(" "),
-                        gridTemplateRows: `repeat(${pageItems.length + 1}, max-content)`,
-                    }}
-                // onScroll={onScroll}
-                >
-                    {
-                        columnsData.visibleColumns.map((cd, idx) => (
-                            <HeaderCell key={idx} index={idx} column={cd} tableManager={tableManager} style={{ marginBottom: rowVirtualizer.virtualItems[0]?.start}}/>
-                        ))
-                    }
-                    {
-                        !isLoading && pageItems.length
-                            ?
-                            rowVirtualizer.virtualItems.map(vr => <Row key={vr.index} index={vr.index} data={pageItems[vr.index]} tableManager={tableManager} row={vr} />)
+            <SortableList
+                forwardRef={tableRef}
+                className='rgt-container'
+                axis="x"
+                lockToContainerEdges
+                distance={10}
+                lockAxis="x"
+                useDragHandle={!!dragHandleComponent}
+                onSortStart={handlers.handleColumnSortStart}
+                onSortEnd={handlers.handleColumnSortEnd}
+                style={{
+                    display: 'grid',
+                    overflow: 'auto',
+                    flex: 1,
+                    gridTemplateColumns: (columnsData.visibleColumns.map(g => g.width)).join(" "),
+                    gridTemplateRows: `repeat(${pageItems.length + 1}, max-content)`,
+                }}
+            >
+                {
+                    columnsData.visibleColumns.map((cd, idx) => (
+                        <HeaderCell key={idx} index={idx} column={cd} tableManager={tableManager}/>
+                    ))
+                }
+                {
+                    !isLoading && pageItems.length
+                        ?
+                        isVirtualScrolling
+                            ? 
+                            [
+                                <Row key={'virtual-start'} index={'virtual-start'} tableManager={tableManager} />,
+                                ...rowVirtualizer.virtualItems.map(vr => <Row key={vr.index} index={vr.index} data={pageItems[vr.index]} measureRef={vr.measureRef} tableManager={tableManager} />),
+                                <Row key={'virtual-end'} index={'virtual-end'} tableManager={tableManager} />
+                            ]
                             :
-                            <div className='rgt-no-data-container'>
-                                {
-                                    isLoading
-                                        ?
-                                        <Loader tableManager={tableManager} />
-                                        :
-                                        <NoResults tableManager={tableManager} />
-                                }
-                            </div>
-
-
-                    }
-                </SortableList>
-            </div>
+                            pageItems.map((r, index) => <Row key={index} index={index} data={r} tableManager={tableManager} />)
+                        :
+                        <div className='rgt-no-data-container'>
+                            {
+                                isLoading
+                                    ?
+                                    <Loader tableManager={tableManager} />
+                                    :
+                                    <NoResults tableManager={tableManager} />
+                            }
+                        </div>
+                }
+            </SortableList>
             <Footer tableManager={tableManager}/>
         </div>
     )
@@ -112,6 +112,7 @@ GridTable.defaultProps = {
     highlightSearch: true,
     searchMinChars: 2,
     isPaginated: true,
+    isVirtualScrolling: true,
     showSearch: true,
     disableColumnsReorder: false,
     getIsRowSelectable: row => true,
@@ -130,6 +131,7 @@ GridTable.propTypes = {
     editRowId: PropTypes.any,
     cellProps: PropTypes.object,
     headerCellProps: PropTypes.object,
+    rowVirtualizerProps: PropTypes.object,
     // table config
     isPaginated: PropTypes.bool,
     disableColumnsReorder: PropTypes.bool,
@@ -142,6 +144,7 @@ GridTable.propTypes = {
     searchMinChars: PropTypes.number,
     isLoading: PropTypes.bool,
     isHeaderSticky: PropTypes.bool,
+    isVirtualScrolling: PropTypes.bool,
     showColumnVisibilityManager: PropTypes.bool,
     icons: PropTypes.object,
     textConfig: PropTypes.object,

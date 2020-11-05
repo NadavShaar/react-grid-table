@@ -28,13 +28,13 @@ const Search = props => {
 
 const App = () => {
     
-	const [editRowId, setEditRowId] = useState(null);
-	const [rowsData, setRowsData] = useState([]);
+    const [editRowId, setEditRowId] = useState(null);
+    const [rowsData, setRowsData] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const [tableManager, setTableManager] = useState(null);
     let [searchText, setSearchText] = useState();
     let [selectedRowsIds, setSelectedRowsIds] = useState([]);
-    let [sort, setSort] = useState({colId: 4, isAsc: true});
+    let [sort, setSort] = useState({ colId: 4, isAsc: true });
     let [columns, setColumns] = useState([
         {
             id: 'checkbox',
@@ -140,11 +140,11 @@ const App = () => {
     ]);
 	
     useEffect(() => {
-		setLoading(true);
-		setTimeout(() => {
-			setRowsData(MOCK_DATA.default)
-			setLoading(false);
-		}, 1500);
+        setLoading(true);
+        setTimeout(() => {
+            setRowsData(MOCK_DATA.default)
+            setLoading(false);
+        }, 1500);
     }, [])
 
 
@@ -163,6 +163,7 @@ const App = () => {
             onSearchChange={setSearchText}
             // sort={sort}
             onSortChange={setSort}
+            isVirtualScrolling={true}
             // searchComponent={Search}
         />
     )

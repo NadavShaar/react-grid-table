@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useVirtual } from 'react-virtual';
 import { Search, ColumnVisibility, Header, Footer, Loader, NoResults, Information, PageSize, Pagination } from '../components/';
 import defaultIcons from './../defaultIcons'; 
 
@@ -25,14 +26,14 @@ export default function useTableManager(props) {
         params: {},
         rowsData: {},
         additionalProps: {},
-        icons: {}
+        icons: {},
+        rowVirtualizer: {}
     });
 
     // **************** Refs ****************
 
     const tableRef = useRef(null);
     const rgtRef = useRef(null);
-    const parentRef = useRef(null);
 
 
     // **************** Table params ****************
@@ -69,10 +70,43 @@ export default function useTableManager(props) {
         ...props.textConfig 
     }
 
+    // implements smooth scrolling when using virtual scrolling
+    const scrollingRef = React.useRef();
+    const scrollToFn = React.useCallback((offset, defaultScrollTo) => {
+        const duration = 1000;
+        const start = parentRef.current.scrollTop;
+        const startTime = (scrollingRef.current = Date.now());
+
+        const run = () => {
+            if (scrollingRef.current !== startTime) return;
+            const now = Date.now();
+            const elapsed = now - startTime;
+            const progress = easeInOutQuint(Math.min(elapsed / duration, 1));
+            const interpolated = start + (offset - start) * progress;
+
+            if (elapsed < duration) {
+                defaultScrollTo(interpolated);
+                requestAnimationFrame(run);
+            } else {
+                defaultScrollTo(interpolated);
+            }
+        };
+
+        requestAnimationFrame(run);
+    }, []);
+
+    if (props.isVirtualScrolling) {
+        tableManager.rowVirtualizer = Object.assign(tableManager.rowVirtualizer, useVirtual({
+            size: pageItems.length,
+            parentRef: tableRef,
+            scrollToFn,
+            ...props.rowVirtualizerProps
+        }));
+    }
+
     tableManager.refs = Object.assign(tableManager.refs, {
         tableRef,
-        rgtRef,
-        parentRef
+        rgtRef
     })
     tableManager.handlers = Object.assign(tableManager.handlers, {
         handlePageSizeChange,
@@ -125,6 +159,7 @@ export default function useTableManager(props) {
         showColumnVisibilityManager: props.showColumnVisibilityManager,
         isHeaderSticky: props.isHeaderSticky !== false,
         isPaginated: props.isPaginated,
+        isVirtualScrolling: props.isVirtualScrolling,
         disableColumnsReorder: props.disableColumnsReorder,
         pageSizes: props.pageSizes,
         textConfig

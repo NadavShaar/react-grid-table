@@ -7,13 +7,13 @@ const Row = props => {
         index,
         data,
         tableManager,
-        style = {},
-        row
+        measureRef
     } = props;
 
     let {
         params: {
             page,
+            isVirtualScrolling
         },
         handlers: {
             getIsRowEditable,
@@ -28,7 +28,17 @@ const Row = props => {
         columnsData: {
             visibleColumns
         },
+        rowVirtualizer,
     } = tableManager;
+
+    if (isVirtualScrolling) {
+        if (index === 'virtual-start') {
+            return visibleColumns.map((vc, colIndex) => <div key={index + colIndex} style={{ minHeight: rowVirtualizer.virtualItems[0]?.start }} />)
+        }
+        if (index === 'virtual-end') {
+            return visibleColumns.map((vc, colIndex) => <div key={index + colIndex} style={{ minHeight: rowVirtualizer.totalSize - rowVirtualizer.virtualItems[rowVirtualizer.virtualItems.length - 1]?.end || 0 }} />)
+        }
+    }
 
     let rowId = data[rowIdField];
     let disableSelection = !getIsRowSelectable(data);
@@ -41,16 +51,15 @@ const Row = props => {
             <Cell 
                 key={rowIndex+colIndex}
                 rowId={rowId}
-                data={updatedRow?.[rowIdField] === rowId ? updatedRow : data} 
+                data={rowId && (updatedRow?.[rowIdField] === rowId) ? updatedRow : data} 
                 rowIndex={rowIndex} 
                 colIndex={colIndex}
-                isSelected={isSelected}
                 column={cd}
+                isSelected={isSelected}
                 isEdit={isEdit}
                 disableSelection={disableSelection}
+                forwardRef={colIndex === 0 ? measureRef : undefined}
                 tableManager={tableManager}
-                style={style}
-                forwardRef={colIndex === 1 ? row.measureRef : undefined}
             />
         )
     })
