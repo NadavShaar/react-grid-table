@@ -187,7 +187,7 @@ export default MyAwesomeTable;
 
 | name | type | description | default value |
 |---|---|---|---|
-| isVirtualScrolling | boolean | whether to render items in a virtual scroll to enhance performance (useful when you render lots of rows in a page) | true |
+| isVirtualScrolling | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
 | isPaginated | boolean | determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
 | pageSizes | array of numbers | page size options | [20, 50, 100] |
 | pageSize | number | the selected page size | 20 |
