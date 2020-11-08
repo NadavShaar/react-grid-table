@@ -181,11 +181,13 @@ export default MyAwesomeTable;
 | editRowId | any | the id of the row that should switch to inline editing mode, (more <u>[details](#Row-Editing)</u> about row editing) | null |
 | cellProps | object | global props for all data cells | { } |
 | headerCellProps | object | global props for all header cells | { } |
+| rowVirtualizerProps | object | ?????????????????? | { } |
 
 ### Table configuration props
 
 | name | type | description | default value |
 |---|---|---|---|
+| isVirtualScrolling | boolean | whether to render items in a virtual scroll to enhance performance (useful when you render lots of rows in a page) | true |
 | isPaginated | boolean | determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
 | pageSizes | array of numbers | page size options | [20, 50, 100] |
 | pageSize | number | the selected page size | 20 |
