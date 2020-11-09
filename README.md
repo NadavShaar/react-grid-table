@@ -181,11 +181,13 @@ export default MyAwesomeTable;
 | editRowId | any | the id of the row that should switch to inline editing mode, (more <u>[details](#Row-Editing)</u> about row editing) | null |
 | cellProps | object | global props for all data cells | { } |
 | headerCellProps | object | global props for all header cells | { } |
+| rowVirtualizerProps | object | ?????????????????? | { } |
 
 ### Table configuration props
 
 | name | type | description | default value |
 |---|---|---|---|
+| isVirtualScrolling | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
 | isPaginated | boolean | determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
 | pageSizes | array of numbers | page size options | [20, 50, 100] |
 | pageSize | number | the selected page size | 20 |
@@ -245,7 +247,7 @@ Each column support the following properties:
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns | false |
 | visible | boolean | whether to display the column (pinned columns are always visible) | true |
 | className | string | a custom class selector for all column cells | "" |
-| width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "max-content" |
+| width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "200px" |
 | minWidth | number | the minimum width of the column | `minColumnWidth` prop |
 | maxWidth | number, null | the maximum width of the column | null |
 | getValue | function | used for getting the cell value (usefull when the cell value is not a string - [details](#rows)) | `({value, column}) => value` |
