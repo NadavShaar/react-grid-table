@@ -428,9 +428,7 @@ const Header = ({tableManager}) => {
 }
 
 const MyAwesomeTable = props => {
-
     ...
-    
     return (
         <GridTable
             ...
