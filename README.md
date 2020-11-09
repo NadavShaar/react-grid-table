@@ -601,13 +601,13 @@ For columns that holds values other than string, you'll need to define the `setV
 **Example:**
 
 ```JSX
-    setValue: ({value, data, setRow, column}) => {
-        // value: '35', 
-        // data: { ..., { fieldToUpdate: '27' }} 
-        let rowClone = { ...data };
-        rowClone[column.field].fieldToUpdate = value;
-        setRow(rowClone);
-    }
+setValue: ({value, data, setRow, column}) => {
+    // value: '35', 
+    // data: { ..., { fieldToUpdate: '27' }} 
+    let rowClone = { ...data };
+    rowClone[column.field].fieldToUpdate = value;
+    setRow(rowClone);
+}
 ```
 
 ### Styling
