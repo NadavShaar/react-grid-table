@@ -603,7 +603,7 @@ For columns that holds values other than string, you'll need to define the `setV
 ```JSX
 setValue: ({value, data, setRow, column}) => {
     // value: '35', 
-    // data: { ..., { fieldToUpdate: '27' }} 
+    // data: { ..., columnField: { fieldToUpdate: '27' }} 
     let rowClone = { ...data };
     rowClone[column.field].fieldToUpdate = value;
     setRow(rowClone);
