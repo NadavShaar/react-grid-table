@@ -383,7 +383,7 @@ If you just want to replace the search or the column visibility management compo
 <!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
 
 ```JSX
-headerComponent={({tableManager}) => {
+const Header = ({tableManager}) => {
 
     const { params, handlers, columnsData } = tableManager;
 
@@ -408,7 +408,7 @@ headerComponent={({tableManager}) => {
             <div style={{display: 'flex', marginTop: 10}}>
                 <span style={{ marginRight: 10, fontWeight: 500 }}>Columns:</span>
                 {
-                    columns.filter(col => !col.pinned).map((cd, idx) => (
+                    columns.map((cd, idx) => (
                         <div key={idx} style={{flex: 1}}>
                             <input 
                                 id={`checkbox-${idx}`}
@@ -425,7 +425,20 @@ headerComponent={({tableManager}) => {
             </div>
         </div>
     )
-}}
+}
+
+const MyAwesomeTable = props => {
+
+    ...
+    
+    return (
+        <GridTable
+            ...
+            headerComponent={Header}
+            ...
+        />
+    )
+}
 ```
 
 ### footerComponent
