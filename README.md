@@ -538,7 +538,7 @@ const MyAwesomeTable = props => {
 # How to...
 
 ### Row-Editing
-Row editing can be done by rendering your row edit button using the `cellRenderer` property in the column configuration, then when clicked, it will set a state proprty with the clicked row id, and that row id would be used in the `editRowId` prop, then the table will render the editing components for columns that are defined as `editable` (true by default), and as was defined in the `editorCellRenderer` which by default will render a text input.
+Row editing can be done by rendering the edit button using the `cellRenderer` property in the column configuration, then when clicked, it will control the `editRowId` prop, then the table will render the editing components for columns that are defined as `editable` (true by default), and as was defined in the `editorCellRenderer` which by default will render a text input.
 
 <!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
 
@@ -554,26 +554,36 @@ let columns = [
     id: 'my-buttons-column',
     field: 'buttons', 
     label: '',
+    width: 'max-content',
     pinned: true,
     sortable: false,
     resizable: false,
-    cellRenderer: ({value, row, column, rowIndex, searchText}) => (
-      <button onClick={e => setEditRowId(row.id)}>Edit</button>
+    cellRenderer: ({ tableManager, value, data, column, rowIndex, searchText }) => (
+        <button 
+            style={{marginLeft: 20}} 
+            onClick={e => tableManager.handlers.handleRowEditIdChange(data.id)}
+        >&#x270E;</button>
     ),
-    editorCellRenderer: ({value, field, onChange, row, rows, column, rowIndex}) => (
-      <div style={{display: 'inline-flex'}}>
-        <button onClick={e => setEditRowId(null)}>Cancel</button>
-        <button onClick={e => {
-          let rowsClone = [...rows];
-          let updatedRowIndex = rowsClone.findIndex(r => r.id === row.id);
-          rowsClone[updatedRowIndex] = row;
+    editorCellRenderer: ({ tableManager, value, field, onChange, data, column, rowIndex }) => (
+        <div style={{display: 'inline-flex'}}>
+            <button 
+                style={{marginLeft: 20}} 
+                onClick={e => tableManager.handlers.handleRowEditIdChange(null)}
+            >&#x2716;</button>
+            <button 
+                style={{marginLeft: 10, marginRight: 20}} 
+                onClick={e => {
+                    let rowsClone = [...tableManager.rowsData.items];
+                    let updatedRowIndex = rowsClone.findIndex(r => r.id === data.id);
+                    rowsClone[updatedRowIndex] = data;
 
-          setRows(rowsClone);
-          setEditRowId(null);
-        }}>Save</button>
-      </div>
+                    setRowsData(rowsClone);
+                    tableManager.handlers.handleRowEditIdChange(null);
+                }
+            }>&#x2714;</button>
+        </div>
     )
-  }
+}
 ];
 
 // render
