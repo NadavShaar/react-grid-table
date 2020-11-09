@@ -376,7 +376,7 @@ If you just want to replace the search or the column visibility management compo
 **Arguments:** 
 | name | type | description | default value |
 |---|---|---|---|
-| tableManger | object | the API object, it containes every data, functions and parameters used by the table (more [details](#tableManager)) | --- |
+| tableManger | object | the API object, it containes all data, functions and parameters used by the table (more [details](#tableManager)) | --- |
 
 **Example:**
 
@@ -388,7 +388,7 @@ headerComponent={({tableManager}) => {
     const { params, handlers, columnsData } = tableManager;
 
     const { searchText } = params;
-    const { onSearchChange, toggleColumnVisibility } = handlers;
+    const { handleSearchChange, toggleColumnVisibility } = handlers;
     const { columns } = columnsData;
 
     return (
@@ -401,7 +401,7 @@ headerComponent={({tableManager}) => {
                     name="my-search"
                     type="search" 
                     value={searchText} 
-                    onChange={e => onSearchChange(e.target.value)} 
+                    onChange={e => handleSearchChange(e.target.value)} 
                     style={{width: 300}}
                 />
             </div>
