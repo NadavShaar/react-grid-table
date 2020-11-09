@@ -279,7 +279,7 @@ export default function useTableManager(props) {
             return {
                 label: cd.field,
                 className: '',
-                width: 'max-content',
+                width: '200px',
                 minWidth: cd.minWidth || props.minColumnWidth,
                 maxWidth: null,
                 getValue: ({value, column}) => value, 

@@ -97,6 +97,7 @@ const App = () => {
             id: 9,
             field: 'buttons',
             label: '',
+            width: 'max-content',
             pinned: true,
             sortable: false,
             resizable: true,
