@@ -517,7 +517,7 @@ const MyAwesomeTable = props => {
     return (
         <GridTable
             ...
-            headerComponent={Header}
+            footerComponent={Footer}
         />
     )
 }
