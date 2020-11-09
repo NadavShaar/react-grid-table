@@ -549,41 +549,41 @@ const [editRowId, setEditRowId] = useState(null)
 
 // columns
 let columns = [
-  ...,
-  {
-    id: 'my-buttons-column',
-    field: 'buttons', 
-    label: '',
-    width: 'max-content',
-    pinned: true,
-    sortable: false,
-    resizable: false,
-    cellRenderer: ({ tableManager, value, data, column, rowIndex, searchText }) => (
-        <button 
-            style={{marginLeft: 20}} 
-            onClick={e => tableManager.handlers.handleRowEditIdChange(data.id)}
-        >&#x270E;</button>
-    ),
-    editorCellRenderer: ({ tableManager, value, field, onChange, data, column, rowIndex }) => (
-        <div style={{display: 'inline-flex'}}>
+    ...,
+    {
+        id: 'my-buttons-column',
+        field: 'buttons', 
+        label: '',
+        width: 'max-content',
+        pinned: true,
+        sortable: false,
+        resizable: false,
+        cellRenderer: ({ tableManager, value, data, column, rowIndex, searchText }) => (
             <button 
                 style={{marginLeft: 20}} 
-                onClick={e => tableManager.handlers.handleRowEditIdChange(null)}
-            >&#x2716;</button>
-            <button 
-                style={{marginLeft: 10, marginRight: 20}} 
-                onClick={e => {
-                    let rowsClone = [...tableManager.rowsData.items];
-                    let updatedRowIndex = rowsClone.findIndex(r => r.id === data.id);
-                    rowsClone[updatedRowIndex] = data;
+                onClick={e => tableManager.handlers.handleRowEditIdChange(data.id)}
+            >&#x270E;</button>
+        ),
+        editorCellRenderer: ({ tableManager, value, field, onChange, data, column, rowIndex }) => (
+            <div style={{display: 'inline-flex'}}>
+                <button 
+                    style={{marginLeft: 20}} 
+                    onClick={e => tableManager.handlers.handleRowEditIdChange(null)}
+                >&#x2716;</button>
+                <button 
+                    style={{marginLeft: 10, marginRight: 20}} 
+                    onClick={e => {
+                        let rowsClone = [...tableManager.rowsData.items];
+                        let updatedRowIndex = rowsClone.findIndex(r => r.id === data.id);
+                        rowsClone[updatedRowIndex] = data;
 
-                    setRowsData(rowsClone);
-                    tableManager.handlers.handleRowEditIdChange(null);
-                }
-            }>&#x2714;</button>
-        </div>
-    )
-}
+                        setRowsData(rowsClone);
+                        tableManager.handlers.handleRowEditIdChange(null);
+                    }
+                }>&#x2714;</button>
+            </div>
+        )
+    }
 ];
 
 // render
@@ -596,7 +596,7 @@ let columns = [
 
 ```
 
-For columns which holds values other than string, you'll have to also define the `setValue` function on the column so the updated value won't override the original value.
+For columns that holds values other than string, you'll need to define the `setValue` function on the column so the updated value won't override the original value.
 
 **Example:**
 
