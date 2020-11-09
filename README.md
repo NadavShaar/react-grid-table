@@ -408,16 +408,16 @@ const Header = ({tableManager}) => {
             <div style={{display: 'flex', marginTop: 10}}>
                 <span style={{ marginRight: 10, fontWeight: 500 }}>Columns:</span>
                 {
-                    columns.map((cd, idx) => (
+                    columns.map((column, idx) => (
                         <div key={idx} style={{flex: 1}}>
                             <input 
                                 id={`checkbox-${idx}`}
                                 type="checkbox" 
-                                onChange={ e => toggleColumnVisibility(cd.id) } 
-                                checked={ cd.visible !== false } 
+                                onChange={ e => toggleColumnVisibility(column.id) } 
+                                checked={ column.visible !== false } 
                             />
                             <label htmlFor={`checkbox-${idx}`} style={{flex: 1, cursor: 'pointer'}}>
-                                {cd.label || cd.field}
+                                {column.label}
                             </label>
                         </div>
                     ))
@@ -433,7 +433,6 @@ const MyAwesomeTable = props => {
         <GridTable
             ...
             headerComponent={Header}
-            ...
         />
     )
 }
@@ -442,26 +441,16 @@ const MyAwesomeTable = props => {
 ### footerComponent
 **Type:** function
 
-This function is used for rendering a custom footer.
+The component that will be used as the footer component, if you don't want a footer at all, simply return `null`.
 
 By default the footer renders items information and pagination controls, but you can render your own custom components.
 
+If you just want to replace the rows information, rows per page or the pagination components, you can use the `informationComponent`, `pageSizeComponent` or the `paginationComponent` props respectively.
+
 **Arguments:** 
-| name | type | description | default value |
-|---|---|---|---|
-| page | number | the current page | 1 |
-| totalPages | number | the total number of pages | 0 | 
-| handlePagination | function | sets the page to display | `handlePagination(pageNumber)` | 
-| pageSizes | array of numbers | page size options | [20, 50, 100] |
-| pageSize | number | the selected page size | 20 |
-| setPageSize | function | updates the page size | `setPageSize(pageSizeOption)` | 
-| totalRows | number | total number of rows in the table | 0 | 
-| selectedRowsLength | number | total number of selected rows | 0 | 
-| numberOfRows | number | total number of rows in the page | 0 | 
-| tableHasSelection | boolean | weather table has a [checkbox](#checkbox-column) column | --- | 
-| isPaginated | boolean | weather table has pagination | true | 
-| clearSelection | function | function to unselect all selected rows | --- | 
-| clearSelectionIcon | node | the clear selection icon as was defined in the `icons` prop or the default one | [trash icon] | 
+| name | type | description |
+|---|---|---|
+| tableManger | object | the API object, it containes all data, functions and parameters used by the table (more [details](#tableManager)) |
 
 **Example:**
 
