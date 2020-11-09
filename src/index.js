@@ -47,7 +47,7 @@ const GridTable = (props) => {
 
     return (
         <div ref={rgtRef} className='rgt-wrapper' {...rest} >
-            <Header tableManager={tableManager}/>
+            <Header tableManager={tableManager} />
             <SortableList
                 forwardRef={tableRef}
                 className='rgt-container'
@@ -63,7 +63,7 @@ const GridTable = (props) => {
                     overflow: 'auto',
                     flex: 1,
                     gridTemplateColumns: (columnsData.visibleColumns.map(g => g.width)).join(" "),
-                    gridTemplateRows: `repeat(${pageItems.length + 1}, max-content)`,
+                    gridTemplateRows: `repeat(${pageItems.length + 1 + (isVirtualScrolling ? 1 : 0)}, max-content)`,
                 }}
             >
                 {
@@ -72,7 +72,7 @@ const GridTable = (props) => {
                     ))
                 }
                 {
-                    !isLoading && pageItems.length
+                    !isLoading && pageItems.length && columnsData.visibleColumns.length > 1
                         ?
                         isVirtualScrolling
                             ? 
@@ -159,8 +159,8 @@ GridTable.propTypes = {
     // custom components
     headerComponent: PropTypes.func,
     footerComponent: PropTypes.func,
-    loaderRenderer: PropTypes.func,
-    noResultsRenderer: PropTypes.func,
+    loaderComponent: PropTypes.func,
+    noResultsComponent: PropTypes.func,
     searchComponent: PropTypes.func,
     columnVisibilityComponent: PropTypes.func,
     informationComponent: PropTypes.func,

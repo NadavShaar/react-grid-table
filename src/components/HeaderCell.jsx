@@ -5,6 +5,57 @@ import { useResizeEvents } from '../hooks/';
 const SortableItem = SortableElement(({children, index, columnId, className}) => <div className={className} data-column-id={columnId} key={index}>{children}</div>);
 const DragHandle = SortableHandle(({children, index}) => <React.Fragment>{children}</React.Fragment>);
 
+const SelectAll = ({tableManager, column, style}) => {
+
+    let selectAllRef = useRef(null);
+
+    let {
+        handlers: {
+            toggleSelectAll,
+            getIsRowSelectable
+        },
+        rowsData: {
+            selectedRowsIds,
+            pageItems,
+            rowIdField
+        }
+    } = tableManager;
+
+    let selectableItemsIds = pageItems.filter(it => getIsRowSelectable(it)).map(item => item[rowIdField]);
+    let selectAllIsChecked = selectableItemsIds.length && selectableItemsIds.every(si => selectedRowsIds.find(id => si === id));
+    let selectAllIsDisabled = !selectableItemsIds.length;
+    let isSelectAllIndeterminate = !!(selectedRowsIds.length && !selectAllIsChecked && selectableItemsIds.some(si => selectedRowsIds.find(id => si === id)));
+
+    useEffect(() => {
+        if (!selectAllRef.current) return;
+
+        if (isSelectAllIndeterminate) selectAllRef.current.indeterminate = true;
+        else selectAllRef.current.indeterminate = false;
+    }, [isSelectAllIndeterminate])
+
+    const onChange = () => {
+        toggleSelectAll(selectableItemsIds, selectAllIsChecked, isSelectAllIndeterminate)
+    }
+
+    return (
+        <div className="rgt-header-checkbox-cell" style={style}>
+            {
+                column.headerCellRenderer ?
+                    column.headerCellRenderer({ isSelected: selectAllIsChecked, isIndeterminate: isSelectAllIndeterminate, callback: onChange, disabled: selectAllIsDisabled })
+                    :
+                    <input
+                        ref={selectAllRef}
+                        className={selectAllIsDisabled ? 'rgt-disabled' : 'rgt-clickable'}
+                        disabled={selectAllIsDisabled}
+                        type="checkbox"
+                        onChange={onChange}
+                        checked={selectAllIsChecked}
+                    />
+            }
+        </div>
+    )
+}
+
 const HeaderCell = (props) => {
 
     let {
@@ -25,10 +76,8 @@ const HeaderCell = (props) => {
         },
         handlers: {
             handleSort,
-            toggleSelectAll,
             handleResizeEnd,
             handleResize,
-            getIsRowSelectable
         },
         icons: {
             sortAscending: sortAscendingIcon,
@@ -37,18 +86,12 @@ const HeaderCell = (props) => {
         columnsData: {
             visibleColumns
         },
-        rowsData: {
-            selectedRowsIds,
-            pageItems,
-            rowIdField
-        },
         additionalProps: {
             headerCell: additionalProps
         }
     } = tableManager;
     
     let resizeHandleRef = useRef(null);
-    let selectAllRef = useRef(null);
 
     const [target, setTarget] = useState(resizeHandleRef?.current || null);
 
@@ -65,43 +108,6 @@ const HeaderCell = (props) => {
     let sortingProps = (column.sortable !== false && column.id !== 'checkbox' && column.id !== 'virtual') ? { onClick: e => handleSort(column.id) } : {};
 
     style = { ...style, ...additionalProps.style, minWidth: column.minWidth, maxWidth: column.maxWidth };
-    
-    const renderCheckboxHeaderCell = () => {
-
-        let selectableItemsIds = pageItems.filter(it => getIsRowSelectable(it)).map(item => item[rowIdField]);
-        let selectAllIsChecked = selectableItemsIds.length && selectableItemsIds.every(si => selectedRowsIds.find(id => si === id));
-        let selectAllIsDisabled = !selectableItemsIds.length;
-        let isSelectAllIndeterminate = !!(selectedRowsIds.length && !selectAllIsChecked && selectableItemsIds.some(si => selectedRowsIds.find(id => si === id)));
-
-        const onChange = () => {
-            toggleSelectAll(selectableItemsIds, selectAllIsChecked, isSelectAllIndeterminate)
-        }
-
-        useEffect(() => {
-            if (!selectAllRef.current) return;
-
-            if (isSelectAllIndeterminate) selectAllRef.current.indeterminate = true;
-            else selectAllRef.current.indeterminate = false;
-        }, [isSelectAllIndeterminate])
-
-        return (
-            <div className="rgt-header-checkbox-cell" style={style}>
-                {
-                    column.headerCellRenderer ?
-                        column.headerCellRenderer({ isSelected: selectAllIsChecked, isIndeterminate: isSelectAllIndeterminate, callback: onChange, disabled: selectAllIsDisabled })
-                        :
-                        <input
-                            ref={selectAllRef}
-                            className={selectAllIsDisabled ? 'rgt-disabled' : 'rgt-clickable'}
-                            disabled={selectAllIsDisabled}
-                            type="checkbox"
-                            onChange={onChange}
-                            checked={selectAllIsChecked}
-                        />
-                }
-            </div>
-        )
-    }
 
     return (
         <div 
@@ -130,7 +136,7 @@ const HeaderCell = (props) => {
                             }
                             {
                                 (column.id === 'checkbox') ? 
-                                    renderCheckboxHeaderCell()
+                                    <SelectAll tableManager={tableManager} column={column} style={style} />
                                     :
                                     column.headerCellRenderer ? 
                                         column.headerCellRenderer({label: (typeof column.label === 'string' ? column.label : column.field), column: column})

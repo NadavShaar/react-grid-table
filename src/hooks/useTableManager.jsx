@@ -263,7 +263,7 @@ export default function useTableManager(props) {
         return cols.map((cd, idx) => { 
 
             let isPinnedColumn =  idx === 0 && cd.pinned || idx === cols.length-1 && cd.pinned;
-            let isVisibleColumn =  isPinnedColumn || cd.visible !== false;
+            let isVisibleColumn = cd.visible !== false;
             
             if(cd.id === 'checkbox') return {
                 className: '',

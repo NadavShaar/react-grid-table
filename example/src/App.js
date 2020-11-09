@@ -20,9 +20,47 @@ const styles = {
 	saveButton: {background: '#f3f3f3', outline: 'none', cursor: 'pointer', padding: 2, display: 'inline-flex', border: 'none', borderRadius: '50%', boxShadow: '1px 1px 2px 0px rgb(0 0 0 / .3)'}
 }
 
-const Search = props => {
+const Header = ({tableManager}) => {
+
+    const { params, handlers, columnsData } = tableManager;
+
+    const { searchText } = params;
+    const { handleSearchChange, toggleColumnVisibility } = handlers;
+    const { columns } = columnsData;
+
     return (
-        <input value={props.value} onChange={e => props.onChange(e.target.value)}/>
+        <div style={{display: 'flex', flexDirection: 'column', padding: '10px 20px', background: '#fff', width: '100%'}}>
+            <div>
+                <label htmlFor="my-search" style={{fontWeight: 500, marginRight: 10}}>
+                    Search for:
+                </label>
+                <input 
+                    name="my-search"
+                    type="search" 
+                    value={searchText} 
+                    onChange={e => handleSearchChange(e.target.value)} 
+                    style={{width: 300}}
+                />
+            </div>
+            <div style={{display: 'flex', marginTop: 10}}>
+                <span style={{ marginRight: 10, fontWeight: 500 }}>Columns:</span>
+                {
+                    columns.map((cd, idx) => (
+                        <div key={idx} style={{flex: 1}}>
+                            <input 
+                                id={`checkbox-${idx}`}
+                                type="checkbox" 
+                                onChange={ e => toggleColumnVisibility(cd.id) } 
+                                checked={ cd.visible !== false } 
+                            />
+                            <label htmlFor={`checkbox-${idx}`} style={{flex: 1, cursor: 'pointer'}}>
+                                {cd.label || cd.field}
+                            </label>
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
     )
 }
 
@@ -39,7 +77,8 @@ const App = () => {
         {
             id: 'checkbox',
             pinned: true,
-            width: '54px'
+            width: '54px',
+            label: 'Select'
         },
         {
             id: 2,
@@ -166,6 +205,8 @@ const App = () => {
             onSortChange={setSort}
             isVirtualScrolling={true}
             // searchComponent={Search}
+            // isVirtualScrolling={false}
+            // headerComponent={Header}
         />
     )
 };

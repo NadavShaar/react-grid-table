@@ -24,9 +24,7 @@ const ColumnVisibility = props => {
             title={textConfig.columnVisibility}
             buttonChildren={columnVisibilityIcon}
             popoverChildren={
-                columns.map((cd, idx) => {
-                    if (cd.pinned && idx === 0 || cd.pinned && idx === columns.length - 1) return null;
-
+                columns.filter(col => !col.pinned).map((cd, idx) => {
                     let label = cd.label || cd.field || cd.id;
 
                     return (
