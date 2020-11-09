@@ -376,67 +376,56 @@ If you just want to replace the search or the column visibility management compo
 **Arguments:** 
 | name | type | description | default value |
 |---|---|---|---|
-| columns | array | the `columns` configuration | [ ] | 
-| showSearch | boolean | weather to show the search | true | 
-| searchText | string | text for search | "" | 
-| setSearchText | function | a callback function to update search text | `setSearchText(searchText)` | 
-| searchComponent | function | as was defined in the `searchComponent` prop | --- |
-| searchIcon | node | the search icon as was defined in the `icons` prop or the default one | [magnifier icon] |
-| showColumnVisibilityManager | boolean | weather to show the column visibility manager | true | 
-| toggleColumnVisibility | function | a callback function to update columns visibility that accepts the id of the column that should be toggled | `toggleColumnVisibility(columnId)` | 
-| columnVisibilityComponent | function | as was defined in the `columnVisibilityComponent` prop | --- |
-| columnVisibilityIcon | node | the column visibility icon as was defined in the `icons` prop or the default one | [trash icon] |
+| tableManger | object | the API object, it containes every data, functions and parameters used by the table (more [details](#tableManager)) | --- |
 
 **Example:**
 
 <!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
 
 ```JSX
-headerComponent={({
-    columns,
-    showSearch,
-    searchText, 
-    setSearchText, 
-    searchComponent,
-    searchIcon,
-    showColumnVisibilityManager,
-    toggleColumnVisibility,
-    columnVisibilityComponent,
-    columnVisibilityIcon
-}) => (
-    <div style={{display: 'flex', flexDirection: 'column', padding: '10px 20px', background: '#fff', width: '100%'}}>
-        <div>
-            <label htmlFor="my-search" style={{fontWeight: 500, marginRight: 10}}>
-                Search for:
-            </label>
-            <input 
-                name="my-search"
-                type="search" 
-                value={searchText} 
-                onChange={e => setSearchText(e.target.value)} 
-                style={{width: 300}}
-            />
+headerComponent={({tableManager}) => {
+
+    const { params, handlers, columnsData } = tableManager;
+
+    const { searchText } = params;
+    const { onSearchChange, toggleColumnVisibility } = handlers;
+    const { columns } = columnsData;
+
+    return (
+        <div style={{display: 'flex', flexDirection: 'column', padding: '10px 20px', background: '#fff', width: '100%'}}>
+            <div>
+                <label htmlFor="my-search" style={{fontWeight: 500, marginRight: 10}}>
+                    Search for:
+                </label>
+                <input 
+                    name="my-search"
+                    type="search" 
+                    value={searchText} 
+                    onChange={e => onSearchChange(e.target.value)} 
+                    style={{width: 300}}
+                />
+            </div>
+            <div style={{display: 'flex', marginTop: 10}}>
+                <span style={{ marginRight: 10, fontWeight: 500 }}>Columns:</span>
+                {
+                    columns.filter(col => !col.pinned).map((cd, idx) => (
+                        <div key={idx} style={{flex: 1}}>
+                            <input 
+                                id={`checkbox-${idx}`}
+                                type="checkbox" 
+                                onChange={ e => toggleColumnVisibility(cd.id) } 
+                                checked={ cd.visible !== false } 
+                            />
+                            <label htmlFor={`checkbox-${idx}`} style={{flex: 1, cursor: 'pointer'}}>
+                                {cd.label || cd.field}
+                            </label>
+                        </div>
+                    ))
+                }
+            </div>
         </div>
-        <div style={{display: 'flex', marginTop: 10}}>
-            <span style={{ marginRight: 10, fontWeight: 500 }}>Columns:</span>
-            {
-                columns.map((cd, idx) => (
-                    <div key={idx} style={{flex: 1}}>
-                        <input 
-                            id={`checkbox-${idx}`}
-                            type="checkbox" 
-                            onChange={ e => toggleColumnVisibility(cd.id) } 
-                            checked={ cd.visible !== false } 
-                        />
-                        <label htmlFor={`checkbox-${idx}`} style={{flex: 1, cursor: 'pointer'}}>
-                            {cd.label || cd.field}
-                        </label>
-                    </div>
-                ))
-            }
-        </div>
-    </div>
-)}
+    )
+}}
 ```
 
 ### footerComponent
