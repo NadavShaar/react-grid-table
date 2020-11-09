@@ -472,7 +472,17 @@ const Footer = ({tableManager}) => {
                 {`Total Rows: ${items.length} 
                 | Rows: ${pageItems.length * page - pageItems.length} - ${pageItems.length * page} 
                 | ${selectedRowsIds.length} Selected`}
-                { selectedRowsIds.length ? <button style={{marginLeft: 10}} onClick={e => updateSelectedItems([])}>{clearSelectionIcon}</button> : null }
+                { 
+                    selectedRowsIds.length ? 
+                        <button 
+                            style={{marginLeft: 10, padding: 0}} 
+                            onClick={e => updateSelectedItems([])}
+                        >
+                            {clearSelectionIcon}
+                        </button> 
+                        : 
+                        null 
+                }
             </div>
             <div style={{display: 'flex'}}>
                 <div style={{width: 200, marginRight: 50}}>
