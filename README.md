@@ -601,18 +601,18 @@ For columns that holds values other than string, you'll need to define the `setV
 **Example:**
 
 ```JSX
-  setValue: ({value, row, setRow, column}) => {
-    // value: '35', 
-    // row: { ..., { fieldToUpdate: '27' }} 
-    let rowClone = { ...row };
-    rowClone[column.field].fieldToUpdate = value;
-    setRow(rowClone);
-  }
+    setValue: ({value, data, setRow, column}) => {
+        // value: '35', 
+        // data: { ..., { fieldToUpdate: '27' }} 
+        let rowClone = { ...data };
+        rowClone[column.field].fieldToUpdate = value;
+        setRow(rowClone);
+    }
 ```
 
 ### Styling
 
-Styling is done by css stylesheet that can be easily overridden. the table's components are mapped with pre-defined classes that should cover any situation, and you can add your own custom class per column in the `columns` configuration using the `className` property.
+Styling is done by css classes that can be easily overridden. the table's components are mapped with pre-defined classes that should cover any situation, and you can add your own custom class per column in the `columns` configuration using the `className` property.
 
 | Component | All available class selectors |
 |---|---|
