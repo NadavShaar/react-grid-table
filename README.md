@@ -457,64 +457,70 @@ If you just want to replace the rows information, rows per page or the paginatio
 <!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
 
 ```JSX
-footerComponent={({
-    page, 
-    totalPages, 
-    handlePagination, 
-    pageSizes, 
-    pageSize, 
-    setPageSize, 
-    totalRows,
-    selectedRowsLength,
-    numberOfRows,
-    tableHasSelection,
-    isPaginated,
-    clearSelection,
-    clearSelectionIcon
-}) => (
-    <div style={{display: 'flex', justifyContent: 'space-between', flex: 1, padding: '12px 20px', background: '#fff'}}>
-        <div style={{display: 'flex'}}>
-            {`Total Rows: ${totalRows} 
-            | Rows: ${numberOfRows * page - numberOfRows} - ${numberOfRows * page} 
-            | ${selectedRowsLength} Selected`}
-            { selectedRowsLength ? <button style={{marginLeft: 10}} onClick={clearSelection}>{clearSelectionIcon}</button> : null }
-        </div>
-        <div style={{display: 'flex'}}>
-            <div style={{width: 200, marginRight: 50}}>
-                <span>Items per page: </span>
-                <select 
-                    value={pageSize} 
-                    onChange={e => {setPageSize(e.target.value); handlePagination(1)}}
-                >
-                    { pageSizes.map((op, idx) => <option key={idx} value={op}>{op}</option>) }
-                </select>
-            </div>
-            <div style={{display: 'flex', justifyContent: 'space-between', width: 280}}>
-                <button 
-                    disabled={page-1 < 1} 
-                    onClick={e => handlePagination(page-1)}
-                >Back</button>
+const Footer = ({tableManager}) => {
 
-                <div>
-                    <span>Page: </span>
-                    <input 
-                        style={{width: 50, marginRight: 5}}
-                        onClick={e => e.target.select()}
-                        type='number' 
-                        value={totalPages ? page : 0} 
-                        onChange={e => handlePagination(e.target.value*1)}
-                    />
-                    <span>of {totalPages}</span>
+    let {
+        params: { page, pageSize, pageSizes, totalPages },
+        rowsData: { items, pageItems, selectedRowsIds },
+        icons: { clearSelection: clearSelectionIcon },
+        handlers: { updateSelectedItems, handlePageSizeChange, handlePagination },
+    } = tableManager;
+
+    return (
+        <div style={{display: 'flex', justifyContent: 'space-between', padding: '12px 20px', background: '#fff'}}>
+            <div style={{display: 'flex'}}>
+                {`Total Rows: ${items.length} 
+                | Rows: ${pageItems.length * page - pageItems.length} - ${pageItems.length * page} 
+                | ${selectedRowsIds.length} Selected`}
+                { selectedRowsIds.length ? <button style={{marginLeft: 10}} onClick={e => updateSelectedItems([])}>{clearSelectionIcon}</button> : null }
+            </div>
+            <div style={{display: 'flex'}}>
+                <div style={{width: 200, marginRight: 50}}>
+                    <span>Items per page: </span>
+                    <select 
+                        value={pageSize} 
+                        onChange={e => {handlePageSizeChange(e.target.value)}}
+                    >
+                        { pageSizes.map((op, idx) => <option key={idx} value={op}>{op}</option>) }
+                    </select>
                 </div>
+                <div style={{display: 'flex', justifyContent: 'space-between', width: 280}}>
+                    <button 
+                        disabled={page-1 < 1} 
+                        onClick={e => handlePagination(page-1)}
+                    >Back</button>
 
-                <button 
-                    disabled={page+1 > totalPages} 
-                    onClick={e => handlePagination(page+1)}
-                >Next</button>
+                    <div>
+                        <span>Page: </span>
+                        <input 
+                            style={{width: 50, marginRight: 5}}
+                            onClick={e => e.target.select()}
+                            type='number' 
+                            value={totalPages ? page : 0} 
+                            onChange={e => handlePagination(e.target.value*1)}
+                        />
+                        <span>of {totalPages}</span>
+                    </div>
+
+                    <button 
+                        disabled={page+1 > totalPages} 
+                        onClick={e => handlePagination(page+1)}
+                    >Next</button>
+                </div>
             </div>
         </div>
-    </div>
-)}
+    )
+}
+
+const MyAwesomeTable = props => {
+    ...
+    return (
+        <GridTable
+            ...
+            headerComponent={Header}
+        />
+    )
+}
 ```
 
 # tableManager
