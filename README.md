@@ -367,7 +367,7 @@ The returned value will be used for searching, sorting etc...
 ### headerComponent
 **Type:** function
 
-This function is used for rendering a custom header.
+The component that will be used as the header component, if you don't want a header at all, simply return `null`.
 
 By default the header renders a search and column visibility manager components, but you can render your own custom components.
 
