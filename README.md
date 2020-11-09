@@ -374,9 +374,9 @@ By default the header renders a search and column visibility manager components,
 If you just want to replace the search or the column visibility management components, you can use the `searchComponent` or the `columnVisibilityComponent` props.
 
 **Arguments:** 
-| name | type | description | default value |
-|---|---|---|---|
-| tableManger | object | the API object, it containes all data, functions and parameters used by the table (more [details](#tableManager)) | --- |
+| name | type | description |
+|---|---|---|
+| tableManger | object | the API object, it containes all data, functions and parameters used by the table (more [details](#tableManager)) |
 
 **Example:**
 
