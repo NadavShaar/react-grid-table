@@ -181,7 +181,7 @@ export default MyAwesomeTable;
 | editRowId | any | the id of the row that should switch to inline editing mode, (more <u>[details](#Row-Editing)</u> about row editing) | null |
 | cellProps | object | global props for all data cells | { } |
 | headerCellProps | object | global props for all header cells | { } |
-| rowVirtualizerProps | object | ?????????????????? | { } |
+| rowVirtualizerProps | object | props for the virtualized row when `isVirtualScrolling` is true as documeneted in [react-virtual](https://github.com/tannerlinsley/react-virtual) | { } |
 
 ### Table configuration props
 
