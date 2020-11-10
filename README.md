@@ -154,6 +154,7 @@ export default MyAwesomeTable;
 - [The `rows` prop](#rows)
 - [The `headerComponent` prop](#headerComponent)
 - [The `footerComponent` prop](#footerComponent)
+- [`tableManager`](#tableManager)
 - [Row-Editing](#row-editing)
 - [Styling](#styling)
 
