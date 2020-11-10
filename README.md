@@ -583,8 +583,6 @@ let columns = [
     ...,
     {
         id: 'my-buttons-column',
-        field: 'buttons', 
-        label: '',
         width: 'max-content',
         pinned: true,
         sortable: false,
