@@ -197,6 +197,7 @@ export default MyAwesomeTable;
 | minColumnWidth | number | minimum width for all columns (doesn't apply to 'checkbox' column)| 70 |
 | highlightSearch | boolean | whether to highlight the search term | true |
 | showSearch | boolean | whether to show the search component in the header | true |
+| showRowsInformation | boolean | whether to show the rows information component in the footer on the left | true |
 | searchMinChars | number | the minimum characters in order to apply search and highlighting | 2 |
 | isLoading | boolean | whether to render a loader | false |
 | disableColumnsReorder | boolean | whether to disable column drag & drop for repositioning | false |
@@ -571,13 +572,6 @@ The API is devided into the following categories:
 ### components
 all [components](#components-props) that are not part of the table itself.
 
-### columnsData
-
-| name | type | description |
-|---|---|---|
-| columns | array of objects | the `columns` configuration |
-| visibleColumns | array of objects | all columns that has `visible` true |
-
 ### rowsData
 
 | name | type | description | default value |
@@ -587,6 +581,37 @@ all [components](#components-props) that are not part of the table itself.
 | updatedRow | object | the row that is currently in editing mode | null |
 | selectedRowsIds | array | array containing the selected rows ids | [ ] |
 | rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be unique | 'id' |
+
+### columnsData
+
+| name | type | description |
+|---|---|---|
+| columns | array of objects | the `columns` configuration |
+| visibleColumns | array of objects | all columns that has `visible` true |
+
+### params
+
+| name | type | description | default value |
+|---|---|---|---|
+| lastColIsPinned | wether the last column is pinned | --- |
+| sort |
+| page |
+| searchText |
+| highlightSearch |
+| searchMinChars |
+| totalPages |
+| pageSize |
+| tableHasSelection |
+| showSearch |
+| showRowsInformation |
+| showColumnVisibilityManager |
+| isHeaderSticky |
+| isPaginated |
+| isVirtualScrolling |
+| disableColumnsReorder |
+| pageSizes |
+| textConfig |
+
 
 ### additionalProps
 
