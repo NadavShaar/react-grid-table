@@ -593,7 +593,7 @@ all [components](#components-props) that are not part of the table itself.
 
 | name | type | description | default value |
 |---|---|---|---|
-| sort | object | 	sort config when controlled. accepts colId for the id of the column that should be sorted, and isAsc to define the sort direction. example: { colId: 'some-column-id', isAsc: true } | { } |
+| sort | object | sort config when controlled. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }` | { } |
 | lastColIsPinned | boolean | wether the last column is pinned | --- |
 | page | number | the current page number | 0 |
 | searchText | string | text for search | "" |
