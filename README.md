@@ -562,7 +562,7 @@ The API is devided into following categories:
 ### handlers
 
 | name | type | description | usage |
-|---|---|---|
+|---|---|---|---|
 | handlePageSizeChange | function | handles the page size change | `handlePageSizeChange(pageSize)` |
 
 
