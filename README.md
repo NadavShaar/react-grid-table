@@ -15,6 +15,7 @@
 - Inline row editing
 - Column pinning (pre-configured)
 - Column visibility management
+- Virtual scroll
 - Sticky header
 - Dynamic row height
 
@@ -154,6 +155,7 @@ export default MyAwesomeTable;
 - [The `rows` prop](#rows)
 - [The `headerComponent` prop](#headerComponent)
 - [The `footerComponent` prop](#footerComponent)
+- [`tableManager`](#tableManager)
 - [Row-Editing](#row-editing)
 - [Styling](#styling)
 
@@ -217,6 +219,8 @@ export default MyAwesomeTable;
 
 ### Components props
 
+All components are getting the `tableManager` object ([details](#tableManager)).
+
 | name | type | description | usage |
 |---|---|---|---|
 | headerComponent | function | used for rendering a custom header ([details](#headerComponent)) | `({tableManager}) =>  ( children )` |
@@ -242,7 +246,7 @@ Each column support the following properties:
 | name | type | description | default value |
 |---|---|---|---|
 | id* | any | a unique identifier for the column (can be changed to a different field using the `rowIdField` prop), or you can set it to 'checkbox' which will generate a rows selction column (more [details](#checkbox-column) about checkbox column)  | --- |
-| field* | string | the name of the field as in the row data | --- |
+| field | string | the name of the field as in the row data, not necessary when the column is not rendering data from `rows` | --- |
 | label | string | the label to display in the header cell | the `field` property |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns | false |
 | visible | boolean | whether to display the column | true |
@@ -535,6 +539,33 @@ const MyAwesomeTable = props => {
 
 # tableManager
 
+This is the API object used by the internal components, you can use it to do anything that the API provides, outside of the component.
+
+The API is devided into following categories:
+
+- **refs:** refs objects of the table and its wrapper
+- **handlers:** all functionality handlers
+- **components:** all [components](#components-props) that are not part of the table itself
+- **rowsData:** all rows related data
+- **columnsData:** all columns related data
+- **params:** table configuration properties
+- **additionalProps:** additional props
+- **icons:** icons configuration
+
+### refs
+
+| name | type | description |
+|---|---|---|
+| rgtRef | object | ref for the wrapper element |
+| tableRef | object | ref for the table container element |
+
+### handlers
+
+| name | type | description | usage |
+|---|---|---|---|
+| handlePageSizeChange | function | handles the page size change | `handlePageSizeChange(pageSize)` |
+
+
 # How to...
 
 ### Row-Editing
@@ -552,8 +583,6 @@ let columns = [
     ...,
     {
         id: 'my-buttons-column',
-        field: 'buttons', 
-        label: '',
         width: 'max-content',
         pinned: true,
         sortable: false,
