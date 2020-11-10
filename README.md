@@ -542,14 +542,14 @@ const MyAwesomeTable = props => {
 This is the API object used by the internal components, you can use it to do anything that the API provides, outside of the component.
 The API is devided into following categories:
 
-- refs: refs objects of the table and its wrapper
-- handlers: all functionality handlers
-- components: all [components](#components-props) that are not part of the table itself
-- rowsData: all rows related data
-- columnsData: all columns related data
-- params: table configuration properties
-- additionalProps: additional props
-- icons: icons configuration
+- **refs:** refs objects of the table and its wrapper
+- **handlers:** all functionality handlers
+- **components:** all [components](#components-props) that are not part of the table itself
+- **rowsData:** all rows related data
+- **columnsData:** all columns related data
+- **params:** table configuration properties
+- **additionalProps:** additional props
+- **icons:** icons configuration
 
 
 | name | type | description |
