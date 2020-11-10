@@ -219,6 +219,8 @@ export default MyAwesomeTable;
 
 ### Components props
 
+All components are getting the `tableManager` object ([details](#tableManager)).
+
 | name | type | description | usage |
 |---|---|---|---|
 | headerComponent | function | used for rendering a custom header ([details](#headerComponent)) | `({tableManager}) =>  ( children )` |
