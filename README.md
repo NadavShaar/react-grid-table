@@ -408,16 +408,16 @@ const Header = ({tableManager}) => {
             <div style={{display: 'flex', marginTop: 10}}>
                 <span style={{ marginRight: 10, fontWeight: 500 }}>Columns:</span>
                 {
-                    columns.map((cd, idx) => (
+                    columns.map((column, idx) => (
                         <div key={idx} style={{flex: 1}}>
                             <input 
                                 id={`checkbox-${idx}`}
                                 type="checkbox" 
-                                onChange={ e => toggleColumnVisibility(cd.id) } 
-                                checked={ cd.visible !== false } 
+                                onChange={ e => toggleColumnVisibility(column.id) } 
+                                checked={ column.visible !== false } 
                             />
                             <label htmlFor={`checkbox-${idx}`} style={{flex: 1, cursor: 'pointer'}}>
-                                {cd.label || cd.field}
+                                {column.label}
                             </label>
                         </div>
                     ))
@@ -433,7 +433,6 @@ const MyAwesomeTable = props => {
         <GridTable
             ...
             headerComponent={Header}
-            ...
         />
     )
 }
@@ -442,90 +441,96 @@ const MyAwesomeTable = props => {
 ### footerComponent
 **Type:** function
 
-This function is used for rendering a custom footer.
+The component that will be used as the footer component, if you don't want a footer at all, simply return `null`.
 
 By default the footer renders items information and pagination controls, but you can render your own custom components.
 
+If you just want to replace the rows information, rows per page or the pagination components, you can use the `informationComponent`, `pageSizeComponent` or the `paginationComponent` props respectively.
+
 **Arguments:** 
-| name | type | description | default value |
-|---|---|---|---|
-| page | number | the current page | 1 |
-| totalPages | number | the total number of pages | 0 | 
-| handlePagination | function | sets the page to display | `handlePagination(pageNumber)` | 
-| pageSizes | array of numbers | page size options | [20, 50, 100] |
-| pageSize | number | the selected page size | 20 |
-| setPageSize | function | updates the page size | `setPageSize(pageSizeOption)` | 
-| totalRows | number | total number of rows in the table | 0 | 
-| selectedRowsLength | number | total number of selected rows | 0 | 
-| numberOfRows | number | total number of rows in the page | 0 | 
-| tableHasSelection | boolean | weather table has a [checkbox](#checkbox-column) column | --- | 
-| isPaginated | boolean | weather table has pagination | true | 
-| clearSelection | function | function to unselect all selected rows | --- | 
-| clearSelectionIcon | node | the clear selection icon as was defined in the `icons` prop or the default one | [trash icon] | 
+| name | type | description |
+|---|---|---|
+| tableManger | object | the API object, it containes all data, functions and parameters used by the table (more [details](#tableManager)) |
 
 **Example:**
 
 <!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
 
 ```JSX
-footerComponent={({
-    page, 
-    totalPages, 
-    handlePagination, 
-    pageSizes, 
-    pageSize, 
-    setPageSize, 
-    totalRows,
-    selectedRowsLength,
-    numberOfRows,
-    tableHasSelection,
-    isPaginated,
-    clearSelection,
-    clearSelectionIcon
-}) => (
-    <div style={{display: 'flex', justifyContent: 'space-between', flex: 1, padding: '12px 20px', background: '#fff'}}>
-        <div style={{display: 'flex'}}>
-            {`Total Rows: ${totalRows} 
-            | Rows: ${numberOfRows * page - numberOfRows} - ${numberOfRows * page} 
-            | ${selectedRowsLength} Selected`}
-            { selectedRowsLength ? <button style={{marginLeft: 10}} onClick={clearSelection}>{clearSelectionIcon}</button> : null }
-        </div>
-        <div style={{display: 'flex'}}>
-            <div style={{width: 200, marginRight: 50}}>
-                <span>Items per page: </span>
-                <select 
-                    value={pageSize} 
-                    onChange={e => {setPageSize(e.target.value); handlePagination(1)}}
-                >
-                    { pageSizes.map((op, idx) => <option key={idx} value={op}>{op}</option>) }
-                </select>
-            </div>
-            <div style={{display: 'flex', justifyContent: 'space-between', width: 280}}>
-                <button 
-                    disabled={page-1 < 1} 
-                    onClick={e => handlePagination(page-1)}
-                >Back</button>
+const Footer = ({tableManager}) => {
 
-                <div>
-                    <span>Page: </span>
-                    <input 
-                        style={{width: 50, marginRight: 5}}
-                        onClick={e => e.target.select()}
-                        type='number' 
-                        value={totalPages ? page : 0} 
-                        onChange={e => handlePagination(e.target.value*1)}
-                    />
-                    <span>of {totalPages}</span>
+    let {
+        params: { page, pageSize, pageSizes, totalPages },
+        rowsData: { items, pageItems, selectedRowsIds },
+        icons: { clearSelection: clearSelectionIcon },
+        handlers: { updateSelectedItems, handlePageSizeChange, handlePagination },
+    } = tableManager;
+
+    return (
+        <div style={{display: 'flex', justifyContent: 'space-between', padding: '12px 20px', background: '#fff'}}>
+            <div style={{display: 'flex'}}>
+                {`Total Rows: ${items.length} 
+                | Rows: ${pageItems.length * page - pageItems.length} - ${pageItems.length * page} 
+                | ${selectedRowsIds.length} Selected`}
+                { 
+                    selectedRowsIds.length ? 
+                        <button 
+                            style={{marginLeft: 10, padding: 0}} 
+                            onClick={e => updateSelectedItems([])}
+                        >
+                            {clearSelectionIcon}
+                        </button> 
+                        : 
+                        null 
+                }
+            </div>
+            <div style={{display: 'flex'}}>
+                <div style={{width: 200, marginRight: 50}}>
+                    <span>Items per page: </span>
+                    <select 
+                        value={pageSize} 
+                        onChange={e => {handlePageSizeChange(e.target.value)}}
+                    >
+                        { pageSizes.map((op, idx) => <option key={idx} value={op}>{op}</option>) }
+                    </select>
                 </div>
+                <div style={{display: 'flex', justifyContent: 'space-between', width: 280}}>
+                    <button 
+                        disabled={page-1 < 1} 
+                        onClick={e => handlePagination(page-1)}
+                    >Back</button>
 
-                <button 
-                    disabled={page+1 > totalPages} 
-                    onClick={e => handlePagination(page+1)}
-                >Next</button>
+                    <div>
+                        <span>Page: </span>
+                        <input 
+                            style={{width: 50, marginRight: 5}}
+                            onClick={e => e.target.select()}
+                            type='number' 
+                            value={totalPages ? page : 0} 
+                            onChange={e => handlePagination(e.target.value*1)}
+                        />
+                        <span>of {totalPages}</span>
+                    </div>
+
+                    <button 
+                        disabled={page+1 > totalPages} 
+                        onClick={e => handlePagination(page+1)}
+                    >Next</button>
+                </div>
             </div>
         </div>
-    </div>
-)}
+    )
+}
+
+const MyAwesomeTable = props => {
+    ...
+    return (
+        <GridTable
+            ...
+            footerComponent={Footer}
+        />
+    )
+}
 ```
 
 # tableManager
@@ -533,7 +538,7 @@ footerComponent={({
 # How to...
 
 ### Row-Editing
-Row editing can be done by rendering your row edit button using the `cellRenderer` property in the column configuration, then when clicked, it will set a state proprty with the clicked row id, and that row id would be used in the `editRowId` prop, then the table will render the editing components for columns that are defined as `editable` (true by default), and as was defined in the `editorCellRenderer` which by default will render a text input.
+Row editing can be done by rendering the edit button using the `cellRenderer` property in the column configuration, then when clicked, it will control the `editRowId` prop, then the table will render the editing components for columns that are defined as `editable` (true by default), and as was defined in the `editorCellRenderer` which by default will render a text input.
 
 <!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
 
@@ -544,31 +549,41 @@ const [editRowId, setEditRowId] = useState(null)
 
 // columns
 let columns = [
-  ...,
-  {
-    id: 'my-buttons-column',
-    field: 'buttons', 
-    label: '',
-    pinned: true,
-    sortable: false,
-    resizable: false,
-    cellRenderer: ({value, row, column, rowIndex, searchText}) => (
-      <button onClick={e => setEditRowId(row.id)}>Edit</button>
-    ),
-    editorCellRenderer: ({value, field, onChange, row, rows, column, rowIndex}) => (
-      <div style={{display: 'inline-flex'}}>
-        <button onClick={e => setEditRowId(null)}>Cancel</button>
-        <button onClick={e => {
-          let rowsClone = [...rows];
-          let updatedRowIndex = rowsClone.findIndex(r => r.id === row.id);
-          rowsClone[updatedRowIndex] = row;
+    ...,
+    {
+        id: 'my-buttons-column',
+        field: 'buttons', 
+        label: '',
+        width: 'max-content',
+        pinned: true,
+        sortable: false,
+        resizable: false,
+        cellRenderer: ({ tableManager, value, data, column, rowIndex, searchText }) => (
+            <button 
+                style={{marginLeft: 20}} 
+                onClick={e => tableManager.handlers.handleRowEditIdChange(data.id)}
+            >&#x270E;</button>
+        ),
+        editorCellRenderer: ({ tableManager, value, field, onChange, data, column, rowIndex }) => (
+            <div style={{display: 'inline-flex'}}>
+                <button 
+                    style={{marginLeft: 20}} 
+                    onClick={e => tableManager.handlers.handleRowEditIdChange(null)}
+                >&#x2716;</button>
+                <button 
+                    style={{marginLeft: 10, marginRight: 20}} 
+                    onClick={e => {
+                        let rowsClone = [...tableManager.rowsData.items];
+                        let updatedRowIndex = rowsClone.findIndex(r => r.id === data.id);
+                        rowsClone[updatedRowIndex] = data;
 
-          setRows(rowsClone);
-          setEditRowId(null);
-        }}>Save</button>
-      </div>
-    )
-  }
+                        setRowsData(rowsClone);
+                        tableManager.handlers.handleRowEditIdChange(null);
+                    }
+                }>&#x2714;</button>
+            </div>
+        )
+    }
 ];
 
 // render
@@ -581,36 +596,38 @@ let columns = [
 
 ```
 
-For columns which holds values other than string, you'll have to also define the `setValue` function on the column so the updated value won't override the original value.
+For columns that holds values other than string, you'll need to define the `setValue` function on the column so the updated value won't override the original value.
 
 **Example:**
 
 ```JSX
-  setValue: ({value, row, setRow, column}) => {
+setValue: ({value, data, setRow, column}) => {
     // value: '35', 
-    // row: { ..., { fieldToUpdate: '27' }} 
-    let rowClone = { ...row };
+    // data: { ..., columnField: { fieldToUpdate: '27' }} 
+    let rowClone = { ...data };
     rowClone[column.field].fieldToUpdate = value;
     setRow(rowClone);
-  }
+}
 ```
 
 ### Styling
 
-Styling is done by css stylesheet that can be easily overridden. the table's components are mapped with pre-defined classes that should cover any situation, and you can add your own custom class per column in the `columns` configuration using the `className` property.
+Styling is done by css classes that can be easily overridden. the table's components are mapped with pre-defined classes that should cover any situation, and you can add your own custom class per column in the `columns` configuration using the `className` property.
 
 | Component | All available class selectors |
 |---|---|
 | Wrapper | `rgt-wrapper` |
 | Header | `rgt-header-container` |
 | Search | `rgt-search-container` `rgt-search-label` `rgt-search-icon` `rgt-search-input` `rgt-search-highlight` |
-| Columns Visibility Manager | `rgt-columns-manager-wrapper` `rgt-columns-manager-button` `rgt-columns-manager-popover` `rgt-columns-manager-popover-open` `rgt-columns-manager-popover-row` `rgt-columns-manager-popover-title` `rgt-columns-manager-popover-body` |
+| Columns Visibility Manager | `rgt-columns-manager-wrapper` `rgt-columns-manager-button` `rgt-columns-manager-button-active` `rgt-columns-manager-popover` `rgt-columns-manager-popover-open` `rgt-columns-manager-popover-row` `rgt-columns-manager-popover-title` `rgt-columns-manager-popover-body` |
 | Table | `rgt-container` |
-| Header Cell | `rgt-cell-header` `rgt-cell-header-checkbox / rgt-cell-header-[column.field]` `rgt-cell-header-sortable / rgt-cell-header-not-sortable` `rgt-cell-header-sticky` `rgt-cell-header-resizable / rgt-cell-header-not-resizable` `rgt-cell-header-searchable / rgt-cell-header-not-searchable` `rgt-cell-header-pinned` `rgt-cell-header-pinned-left / rgt-cell-header-pinned-right` `[column.className]` `rgt-cell-header-inner` `rgt-cell-header-inner-checkbox-column` `rgt-resize-handle` `rgt-sort-icon` `rgt-sort-icon-ascending / rgt-sort-icon-descending` `rgt-column-sort-ghost` |
-| Cell | `rgt-cell` `rgt-cell-[column.field]` `rgt-row-[rowNumber]` `rgt-row-odd / rgt-row-even` `rgt-row-hover` `rgt-row-selectable / rgt-row-not-selectable` `rgt-cell-inner` `rgt-cell-checkbox` `rgt-cell-pinned` `rgt-cell-pinned-left / rgt-cell-pinned-right` `rgt-cell-editor` `rgt-cell-editor-inner` `rgt-cell-editor-input` `rgt-row-selected` |
+| Header Cell | `rgt-cell-header` `rgt-cell-header-[column.field]` `rgt-cell-header-select-all` `rgt-cell-header-virtual-col` `rgt-cell-header-sortable / rgt-cell-header-not-sortable` `rgt-cell-header-sticky` `rgt-cell-header-resizable / rgt-cell-header-not-resizable` `rgt-cell-header-searchable / rgt-cell-header-not-searchable` `rgt-cell-header-pinned` `rgt-cell-header-pinned-left / rgt-cell-header-pinned-right` `[column.className]` `rgt-cell-header-inner` `rgt-cell-header-inner-checkbox-column` `rgt-resize-handle` `rgt-sort-icon` `rgt-sort-icon-ascending / rgt-sort-icon-descending` `rgt-column-sort-ghost` |
+| Cell | `rgt-cell` `rgt-cell-[column.field]` `rgt-row-[rowNumber]` `rgt-row-odd / rgt-row-even` `rgt-row-hover` `rgt-row-selectable / rgt-row-not-selectable` `rgt-cell-inner` `rgt-cell-checkbox` `rgt-cell-virtual` `rgt-cell-pinned` `rgt-cell-pinned-left / rgt-cell-pinned-right` `rgt-cell-editor` `rgt-cell-editor-inner` `rgt-cell-editor-input` `rgt-row-selected` |
+| Footer | `rgt-footer` `rgt-footer-right-container` |
 | Pagination | `rgt-footer-items-per-page` `rgt-footer-pagination-button` `rgt-footer-pagination-container` `rgt-footer-page-input` |
-| Footer | `rgt-footer` `rgt-footer-items-information` `rgt-footer-right-container` |
-| Utils | `rgt-text-truncate` `rgt-clickable` `rgt-disabled` `rgt-disabled-button` `rgt-flex-child` |
+| Information | `rgt-footer-items-information` |
+| PageSize | `rgt-footer-items-per-page` |
+| (Utils) | `rgt-text-truncate` `rgt-clickable` `rgt-disabled` `rgt-disabled-button` `rgt-flex-child` |
 
 ## License
 
