@@ -557,8 +557,8 @@ The API is devided into the following categories:
 
 | name | type | description |
 |---|---|---|
-| rgtRef | object | ref for the wrapper element |
-| tableRef | object | ref for the table container element |
+| rgtRef | object | the `ref` object of the wrapper element |
+| tableRef | object | the `ref` object of the table container element |
 
 ### handlers
 
