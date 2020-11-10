@@ -567,8 +567,38 @@ The API is devided into the following categories:
 | handleRowEdit | function | updates the row in edit mode, used as the onChange callback for the `editorCellRenderer` propery in the column, and should be used when `editRowId` is set to the id of the edited row | `handleRowEdit(updatedRow)` |
 | updateSelectedItems | function | updates the rows selection, contains array of rows ids | `updateSelectedItems([])` |
 | toggleItemSelection | function | toggles the row selection by row id | `toggleItemSelection(rowId)` |
-| toggleSelectAll | function | 
 
+### components
+all [components](#components-props) that are not part of the table itself.
+
+### columnsData
+
+| name | type | description |
+|---|---|---|
+| columns | array of objects | the `columns` configuration |
+| visibleColumns | array of objects | all columns that has `visible` true |
+
+### rowsData
+
+| name | type | description | default value |
+|---|---|---|---|
+| items | array of objects | the `rows` data |
+| pageItems | array of objects | all rows data in the current page | [ ] |
+| updatedRow | object | the row that is currently in editing mode | null |
+| selectedRowsIds | array | array containing the selected rows ids | [ ] |
+| rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be unique | 'id' |
+
+### additionalProps
+
+| name | type | description | default value |
+|---|---|---|---|
+| cell | object | props passed to all data cells using `cellProps` | { } |
+| headerCell | object | props passed to all header cells using `headerCellProps` | { } |
+| rowVirtualizer | object | props passed to the row virtualizer using `rowVirtualizerProps` | { } |
+
+### icons
+
+the icons configuration as documented under [Table configuration props](#table-configuration-props).
 
 # How to...
 
