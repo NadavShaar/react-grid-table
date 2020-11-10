@@ -45,7 +45,7 @@ import React from "react";
 
 // importing the table component
 import GridTable from '@nadavshaar/react-grid-table';
-// importing the component's styles - required
+// importing the table's styles - required
 import '@nadavshaar/react-grid-table/dist/index.css';
 
 // custom cell component
@@ -197,6 +197,7 @@ export default MyAwesomeTable;
 | minColumnWidth | number | minimum width for all columns (doesn't apply to 'checkbox' column)| 70 |
 | highlightSearch | boolean | whether to highlight the search term | true |
 | showSearch | boolean | whether to show the search component in the header | true |
+| showRowsInformation | boolean | whether to show the rows information component in the footer on the left | true |
 | searchMinChars | number | the minimum characters in order to apply search and highlighting | 2 |
 | isLoading | boolean | whether to render a loader | false |
 | disableColumnsReorder | boolean | whether to disable column drag & drop for repositioning | false |
@@ -541,7 +542,7 @@ const MyAwesomeTable = props => {
 
 This is the API object used by the internal components, you can use it to do anything that the API provides, outside of the component.
 
-The API is devided into following categories:
+The API is devided into the following categories:
 
 - **refs:** refs objects of the table and its wrapper
 - **handlers:** all functionality handlers
@@ -564,7 +565,65 @@ The API is devided into following categories:
 | name | type | description | usage |
 |---|---|---|---|
 | handlePageSizeChange | function | handles the page size change | `handlePageSizeChange(pageSize)` |
+| handleRowEdit | function | updates the row in edit mode, used as the onChange callback for the `editorCellRenderer` propery in the column, and should be used when `editRowId` is set to the id of the edited row | `handleRowEdit(updatedRow)` |
+| updateSelectedItems | function | updates the rows selection, contains array of rows ids | `updateSelectedItems([])` |
+| toggleItemSelection | function | toggles the row selection by row id | `toggleItemSelection(rowId)` |
 
+### components
+all [components](#components-props) that are not part of the table itself.
+
+### rowsData
+
+| name | type | description | default value |
+|---|---|---|---|
+| items | array of objects | the `rows` data |
+| pageItems | array of objects | all rows data in the current page | [ ] |
+| updatedRow | object | the row that is currently in editing mode | null |
+| selectedRowsIds | array | array containing the selected rows ids | [ ] |
+| rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be unique | 'id' |
+
+### columnsData
+
+| name | type | description |
+|---|---|---|
+| columns | array of objects | the `columns` configuration |
+| visibleColumns | array of objects | all columns that has `visible` true |
+
+### params
+
+| name | type | description | default value |
+|---|---|---|---|
+| lastColIsPinned | wether the last column is pinned | --- |
+| sort |
+| page |
+| searchText |
+| highlightSearch |
+| searchMinChars |
+| totalPages |
+| pageSize |
+| tableHasSelection |
+| showSearch |
+| showRowsInformation |
+| showColumnVisibilityManager |
+| isHeaderSticky |
+| isPaginated |
+| isVirtualScrolling |
+| disableColumnsReorder |
+| pageSizes |
+| textConfig |
+
+
+### additionalProps
+
+| name | type | description | default value |
+|---|---|---|---|
+| cell | object | props passed to all data cells using `cellProps` | { } |
+| headerCell | object | props passed to all header cells using `headerCellProps` | { } |
+| rowVirtualizer | object | props passed to the row virtualizer using `rowVirtualizerProps` | { } |
+
+### icons
+
+the icons configuration as documented under [Table configuration props](#table-configuration-props).
 
 # How to...
 
