@@ -580,7 +580,6 @@ The API is devided into the following categories:
 | handleSort | function | sets the sort by the column's id and the sort direction which can be either: `true`, `false` or `null` | `handleSort(colId, isAsc)` |
 | onResize | function | triggers when column resize occur | `onResize={({event, target, column}) => { ... }}` |
 | onResizeEnd | function | triggers when column resize ended | `onResizeEnd={() => { ... }}` |
-| onColumnSortStart | function | triggers on column drag, the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) | `onColumnSortStart={sortData => { ... }}` |
 | onColumnSortStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `onColumnSortStart={sortData => { ... }}` |
 | onColumnSortEnd | function | triggers on column drop. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `onColumnSortEnd={sortData => { ... }}` |
 
