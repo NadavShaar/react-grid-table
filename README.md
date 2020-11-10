@@ -155,9 +155,9 @@ export default MyAwesomeTable;
 - [The `rows` prop](#rows)
 - [The `headerComponent` prop](#headerComponent)
 - [The `footerComponent` prop](#footerComponent)
-- [`tableManager`](#tableManager)
-- [Row-Editing](#row-editing)
-- [Styling](#styling)
+- [The `tableManager` API](#tableManager)
+- [How-To: Row-Editing](#row-editing)
+- [How-To: Styling](#styling)
 
 ## Main components
 **HEADER (optional | customizable):** search & column visibility management. 
@@ -197,14 +197,14 @@ export default MyAwesomeTable;
 | minColumnWidth | number | minimum width for all columns (doesn't apply to 'checkbox' column)| 70 |
 | highlightSearch | boolean | whether to highlight the search term | true |
 | showSearch | boolean | whether to show the search component in the header | true |
-| showRowsInformation | boolean | whether to show the rows information component in the footer on the left | true |
+| showRowsInformation | boolean | whether to show the rows information component (located at the left side of the footer) | true |
 | searchMinChars | number | the minimum characters in order to apply search and highlighting | 2 |
 | isLoading | boolean | whether to render a loader | false |
 | disableColumnsReorder | boolean | whether to disable column drag & drop for repositioning | false |
 | isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
 | showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
 | icons | object of nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
-| textConfig | { } | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
+| textConfig | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
 
 ### Event props
 
@@ -214,7 +214,7 @@ export default MyAwesomeTable;
 | onSelectedRowsChange | function | triggers when rows selection has been changed | `selectedRowsIds => { }` |
 | onSearchChange | function | triggers when search text changed | `searchText => { }` |
 | onSortChange | function | triggers when search sort changed | `({colId, isAsc}) => { }` |
-| onRowClick | function | triggers when a row has been clicked | `({rowIndex, data, column, event}) => { }` |
+| onRowClick | function | triggers when a row is clicked | `({rowIndex, data, column, event}) => { }` |
 | onRowEditIdChange | function | triggers when `rowEditId` changed | `rowEditId => { }` |
 | onLoad | function | triggers when `tableManager` is initialized (<u>[details](#tableManager)</u>) | `tableManager => { }` |
 
@@ -557,17 +557,31 @@ The API is devided into the following categories:
 
 | name | type | description |
 |---|---|---|
-| rgtRef | object | ref for the wrapper element |
-| tableRef | object | ref for the table container element |
+| rgtRef | object | the `ref` object of the wrapper element |
+| tableRef | object | the `ref` object of the table container element |
 
 ### handlers
 
 | name | type | description | usage |
 |---|---|---|---|
+| setColumns | function | sets a columns configuration | setColumns(columns) |
 | handlePageSizeChange | function | handles the page size change | `handlePageSizeChange(pageSize)` |
 | handleRowEdit | function | updates the row in edit mode, used as the onChange callback for the `editorCellRenderer` propery in the column, and should be used when `editRowId` is set to the id of the edited row | `handleRowEdit(updatedRow)` |
 | updateSelectedItems | function | updates the rows selection, contains array of rows ids | `updateSelectedItems([])` |
 | toggleItemSelection | function | toggles the row selection by row id | `toggleItemSelection(rowId)` |
+| handlePagination | function | navigate to a page | `handlePagination(pageNumber)` |
+| toggleColumnVisibility | function | toggles column visibility by column id | `toggleColumnVisibility(colId)` |
+| handleSearchChange | function | updates the search | `handleSearchChange(searchText)` |
+| handleRowEditIdChange | function | will set a row to switch to edit mode by its id, you can pass null to switch back from edit mode | `handleRowEditIdChange(rowEditId)` |
+| getHighlightedSearch | function | gets the cell's value and returns html with highlighted search term | `getHighlightedSearch(cellValue)` |
+| onRowClick | function | triggers when a row is clicked | `({rowIndex, data, column, event}) => { }` |
+| getIsRowEditable | | a callback function that returns whether row editing for the current row should be disabled or not | `row => true` |
+| getIsRowSelectable | | a callback function that returns whether row selection for the current row should be disabled or not | `row => true` |
+| handleSort | function | sets the sort by the column's id and the sort direction which can be either: `true`, `false` or `null` | `handleSort(colId, isAsc)` |
+| onResize | function | triggers when column resize occur | `onResize={({event, target, column}) => { ... }}` |
+| onResizeEnd | function | triggers when column resize ended, and only if the column changed its position | `onResizeEnd={() => { ... }}` |
+| onColumnSortStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `onColumnSortStart={sortData => { ... }}` |
+| onColumnSortEnd | function | triggers on column drop. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `onColumnSortEnd={sortData => { ... }}` |
 
 ### components
 all [components](#components-props) that are not part of the table itself.
@@ -593,24 +607,24 @@ all [components](#components-props) that are not part of the table itself.
 
 | name | type | description | default value |
 |---|---|---|---|
-| lastColIsPinned | wether the last column is pinned | --- |
-| sort |
-| page |
-| searchText |
-| highlightSearch |
-| searchMinChars |
-| totalPages |
-| pageSize |
-| tableHasSelection |
-| showSearch |
-| showRowsInformation |
-| showColumnVisibilityManager |
-| isHeaderSticky |
-| isPaginated |
-| isVirtualScrolling |
-| disableColumnsReorder |
-| pageSizes |
-| textConfig |
+| sort | object | sort config when controlled. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }` | { } |
+| lastColIsPinned | boolean | wether the last column is pinned | --- |
+| page | number | the current page number | 0 |
+| searchText | string | text for search | "" |
+| highlightSearch | boolean | whether to highlight the search term | true |
+| searchMinChars | number | the minimum characters in order to apply search and highlighting | 2 |
+| totalPages | number | the total number of pages | 0 |
+| pageSize | number | the selected page size | 20 |
+| pageSizes | array of numbers | page size options | [20, 50, 100] |
+| tableHasSelection | boolean | wether table has a checkbox column to conrol rows selection | --- |
+| showSearch | boolean | whether to show the search component in the header | true |
+| showRowsInformation | boolean | whether to show the rows information component (located at the left side of the footer) | true |
+| showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
+| isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
+| isPaginated | boolean | 	determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
+| isVirtualScrolling | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
+| disableColumnsReorder | boolean | whether to disable column drag & drop for repositioning | false |
+| textConfig | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
 
 
 ### additionalProps
@@ -623,7 +637,7 @@ all [components](#components-props) that are not part of the table itself.
 
 ### icons
 
-the icons configuration as documented under [Table configuration props](#table-configuration-props).
+the `icons` configuration as documented under [Table configuration props](#table-configuration-props).
 
 # How to...
 
