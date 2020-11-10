@@ -565,9 +565,9 @@ The API is devided into the following categories:
 |---|---|---|---|
 | handlePageSizeChange | function | handles the page size change | `handlePageSizeChange(pageSize)` |
 | handleRowEdit | function | updates the row in edit mode, used as the onChange callback for the `editorCellRenderer` propery in the column, and should be used when `editRowId` is set to the id of the edited row | `handleRowEdit(updatedRow)` |
-| updateSelectedItems | function | updates the rows selection, contains array of rows ids | updateSelectedItems([]) |
-| toggleItemSelection | function | toggles the row selection by row id | toggleItemSelection(rowId) |
-
+| updateSelectedItems | function | updates the rows selection, contains array of rows ids | `updateSelectedItems([])` |
+| toggleItemSelection | function | toggles the row selection by row id | `toggleItemSelection(rowId)` |
+| toggleSelectAll | function | 
 
 
 # How to...
