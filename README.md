@@ -623,7 +623,7 @@ all [components](#components-props) that are not part of the table itself.
 
 ### icons
 
-the icons configuration as documented under [Table configuration props](#table-configuration-props).
+the `icons` configuration as documented under [Table configuration props](#table-configuration-props).
 
 # How to...
 
