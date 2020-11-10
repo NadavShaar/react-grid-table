@@ -205,7 +205,7 @@
   font-size: 12px;
 }
 
-.rgt-header-checkbox-cell {
+.rgt-cell-header-select-all {
   padding: 0 16px;
   display: flex;
   flex: 1;

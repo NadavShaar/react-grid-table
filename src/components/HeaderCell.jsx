@@ -38,7 +38,7 @@ const SelectAll = ({tableManager, column, style}) => {
     }
 
     return (
-        <div className="rgt-header-checkbox-cell" style={style}>
+        <div className="rgt-cell-header-select-all" style={style}>
             {
                 column.headerCellRenderer ?
                     column.headerCellRenderer({ isSelected: selectAllIsChecked, isIndeterminate: isSelectAllIndeterminate, callback: onChange, disabled: selectAllIsDisabled })
