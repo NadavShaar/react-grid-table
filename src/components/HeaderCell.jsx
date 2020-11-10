@@ -112,7 +112,6 @@ const HeaderCell = (props) => {
     return (
         <div 
             data-column-id={(column.id).toString()}
-            id={`rgt-column-${column.id === 'virtual' ? 'virtual' : column.id === 'checkbox' ? 'checkbox' : column.field.toLowerCase()}`}
             className={classes}
             {...sortingProps}
             {...additionalProps}
