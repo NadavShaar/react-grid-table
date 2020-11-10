@@ -199,9 +199,10 @@ const App = () => {
             onLoad={setTableManager}
             searchText={searchText}
             onSearchChange={setSearchText}
+            // showRowsInformation={false}
             // sort={sort}
             onSortChange={setSort}
-            isVirtualScrolling={true}
+            // isVirtualScrolling={true}
             // searchComponent={Search}
             // isVirtualScrolling={false}
             // headerComponent={Header}

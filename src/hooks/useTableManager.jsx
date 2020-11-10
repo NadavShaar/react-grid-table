@@ -111,7 +111,6 @@ export default function useTableManager(props) {
     tableManager.handlers = Object.assign(tableManager.handlers, {
         handlePageSizeChange,
         handleRowEdit,
-        setSelectedRowsIds,
         updateSelectedItems,
         toggleItemSelection,
         toggleSelectAll,
@@ -156,6 +155,7 @@ export default function useTableManager(props) {
         pageSize,
         tableHasSelection,
         showSearch: props.showSearch,
+        showRowsInformation: props.showRowsInformation,
         showColumnVisibilityManager: props.showColumnVisibilityManager,
         isHeaderSticky: props.isHeaderSticky !== false,
         isPaginated: props.isPaginated,
@@ -173,7 +173,8 @@ export default function useTableManager(props) {
     })
     tableManager.additionalProps = Object.assign(tableManager.additionalProps, {
         headerCell: props.headerCellProps || {},
-        cell: props.cellProps || {}
+        cell: props.cellProps || {},
+        rowVirtualizer: props.rowVirtualizerProps || {}
     })
     tableManager.icons = Object.assign(tableManager.icons, {
         sortAscending: props.icons?.sortAscending || defaultIcons.sortAscending,

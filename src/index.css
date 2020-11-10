@@ -149,6 +149,12 @@
   align-items: center;
 }
 
+.rgt-footer-items-information-inner {
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+
 .rgt-footer-clear-selection-button {
   display: inline-flex;
   margin-left: 5px;

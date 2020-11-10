@@ -25,7 +25,7 @@ const Information = props => {
     } = tableManager;
 
     return (
-        <div className='rgt-footer-items-information'>
+        <div className='rgt-footer-items-information-inner'>
             { textConfig.totalRows } { totalCount } | { isPaginated ? `${textConfig.rows} ${pageCount * page - pageCount} - ${pageCount * page}` : ''} { tableHasSelection ? <React.Fragment>{`| ${selectedCount} ${textConfig.selected}`}{selectedCount ? <span className="rgt-footer-clear-selection-button rgt-clickable" onClick={e => updateSelectedItems([])}>{ clearSelectionIcon }</span> : null}</React.Fragment> : ''}
         </div>
     )
