@@ -541,7 +541,7 @@ const MyAwesomeTable = props => {
 
 This is the API object used by the internal components, you can use it to do anything that the API provides, outside of the component.
 
-The API is devided into following categories:
+The API is devided into the following categories:
 
 - **refs:** refs objects of the table and its wrapper
 - **handlers:** all functionality handlers
