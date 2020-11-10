@@ -15,6 +15,7 @@
 - Inline row editing
 - Column pinning (pre-configured)
 - Column visibility management
+- Virtual scroll
 - Sticky header
 - Dynamic row height
 
