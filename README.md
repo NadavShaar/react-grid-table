@@ -197,14 +197,14 @@ export default MyAwesomeTable;
 | minColumnWidth | number | minimum width for all columns (doesn't apply to 'checkbox' column)| 70 |
 | highlightSearch | boolean | whether to highlight the search term | true |
 | showSearch | boolean | whether to show the search component in the header | true |
-| showRowsInformation | boolean | whether to show the rows information component in the footer on the left | true |
+| showRowsInformation | boolean | whether to show the rows information component (located at the left side of the footer) | true |
 | searchMinChars | number | the minimum characters in order to apply search and highlighting | 2 |
 | isLoading | boolean | whether to render a loader | false |
 | disableColumnsReorder | boolean | whether to disable column drag & drop for repositioning | false |
 | isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
 | showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
 | icons | object of nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
-| textConfig | { } | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
+| textConfig | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
 
 ### Event props
 
@@ -594,23 +594,23 @@ all [components](#components-props) that are not part of the table itself.
 | name | type | description | default value |
 |---|---|---|---|
 | lastColIsPinned | wether the last column is pinned | --- |
-| sort |
-| page |
-| searchText |
-| highlightSearch |
-| searchMinChars |
-| totalPages |
-| pageSize |
-| tableHasSelection |
-| showSearch |
-| showRowsInformation |
-| showColumnVisibilityManager |
-| isHeaderSticky |
-| isPaginated |
-| isVirtualScrolling |
-| disableColumnsReorder |
-| pageSizes |
-| textConfig |
+| sort | object | 	sort config when controlled. accepts colId for the id of the column that should be sorted, and isAsc to define the sort direction. example: { colId: 'some-column-id', isAsc: true } | { } |
+| page | number | the current page number | 0 |
+| searchText | string | text for search | "" |
+| highlightSearch | boolean | whether to highlight the search term | true |
+| searchMinChars | number | the minimum characters in order to apply search and highlighting | 2 |
+| totalPages | number | the total number of pages | 0 |
+| pageSize | number | the selected page size | 20 |
+| pageSizes | array of numbers | page size options | [20, 50, 100] |
+| tableHasSelection | boolean | wether table has a checkbox column to conrol rows selection | --- |
+| showSearch | boolean | whether to show the search component in the header | true |
+| showRowsInformation | boolean | whether to show the rows information component (located at the left side of the footer) | true |
+| showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
+| isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
+| isPaginated | boolean | 	determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
+| isVirtualScrolling | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
+| disableColumnsReorder | boolean | whether to disable column drag & drop for repositioning | false |
+| textConfig | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
 
 
 ### additionalProps
