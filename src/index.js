@@ -16,14 +16,21 @@ const GridTable = (props) => {
             rgtRef,
             tableRef
         },
-        handlers,
+        handlers: {
+            setColumns,
+            onColumnSortStart,
+            onColumnSortEnd
+        },
         components: {
             headerComponent: Header,
             footerComponent: Footer,
             loaderComponent: Loader,
             noResultsComponent: NoResults
         },
-        columnsData,
+        columnsData: {
+            columns,
+            visibleColumns
+        },
         params: {
             isVirtualScrolling
         },
@@ -34,6 +41,24 @@ const GridTable = (props) => {
         icons,
         rowVirtualizer
     } = tableManager;
+
+    function handleColumnSortStart(sortData) {
+        sortData.helper.classList.add('rgt-column-sort-ghost');
+        onColumnSortStart?.(sortData);
+    }
+
+    function handleColumnSortEnd(sortData) {
+        if(sortData.oldIndex === sortData.newIndex) return;
+
+        let colDefNewIndex = columns.findIndex(oc => oc.id === visibleColumns[sortData.newIndex].id);
+        let colDefOldIndex = columns.findIndex(oc => oc.id === visibleColumns[sortData.oldIndex].id);
+
+        let columnsClone = [...columns];
+        columnsClone.splice(colDefNewIndex, 0, ...columnsClone.splice(colDefOldIndex, 1));
+        
+        setColumns(columnsClone);
+        onColumnSortEnd?.(sortData);
+    }
 
     let { 
         isLoading,
@@ -56,23 +81,23 @@ const GridTable = (props) => {
                 distance={10}
                 lockAxis="x"
                 useDragHandle={!!dragHandleComponent}
-                onSortStart={handlers.handleColumnSortStart}
-                onSortEnd={handlers.handleColumnSortEnd}
+                onSortStart={handleColumnSortStart}
+                onSortEnd={handleColumnSortEnd}
                 style={{
                     display: 'grid',
                     overflow: 'auto',
                     flex: 1,
-                    gridTemplateColumns: (columnsData.visibleColumns.map(g => g.width)).join(" "),
+                    gridTemplateColumns: (visibleColumns.map(g => g.width)).join(" "),
                     gridTemplateRows: `repeat(${pageItems.length + 1 + (isVirtualScrolling ? 1 : 0)}, max-content)`,
                 }}
             >
                 {
-                    columnsData.visibleColumns.map((cd, idx) => (
+                    visibleColumns.map((cd, idx) => (
                         <HeaderCell key={idx} index={idx} column={cd} tableManager={tableManager}/>
                     ))
                 }
                 {
-                    !isLoading && pageItems.length && columnsData.visibleColumns.length > 1
+                    !isLoading && pageItems.length && visibleColumns.length > 1
                         ?
                         isVirtualScrolling
                             ? 
@@ -158,6 +183,10 @@ GridTable.propTypes = {
     onRowClick: PropTypes.func,
     onRowEditIdChange: PropTypes.func,
     onLoad: PropTypes.func,
+    onResize: PropTypes.func,
+    onResizeEnd: PropTypes.func,
+    onColumnSortStart: PropTypes.func,
+    onColumnSortEnd: PropTypes.func,
     // custom components
     headerComponent: PropTypes.func,
     footerComponent: PropTypes.func,

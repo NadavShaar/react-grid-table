@@ -11,8 +11,8 @@ const SelectAll = ({tableManager, column, style}) => {
 
     let {
         handlers: {
-            toggleSelectAll,
-            getIsRowSelectable
+            getIsRowSelectable,
+            updateSelectedItems
         },
         rowsData: {
             selectedRowsIds,
@@ -34,7 +34,12 @@ const SelectAll = ({tableManager, column, style}) => {
     }, [isSelectAllIndeterminate])
 
     const onChange = () => {
-        toggleSelectAll(selectableItemsIds, selectAllIsChecked, isSelectAllIndeterminate)
+        let selectedIds = [...selectedRowsIds];
+
+        if(selectAllIsChecked || isSelectAllIndeterminate) selectedIds = selectedIds.filter(si => !selectableItemsIds.find(itemId => si === itemId));
+        else selectableItemsIds.forEach(s => selectedIds.push(s));
+        
+        updateSelectedItems(selectedIds);
     }
 
     return (
@@ -56,6 +61,8 @@ const SelectAll = ({tableManager, column, style}) => {
     )
 }
 
+var lastPos;
+
 const HeaderCell = (props) => {
 
     let {
@@ -66,6 +73,9 @@ const HeaderCell = (props) => {
     } = props;
 
     let {
+        refs: {
+            tableRef
+        },
         params: {
             sort,
             isHeaderSticky,
@@ -76,14 +86,16 @@ const HeaderCell = (props) => {
         },
         handlers: {
             handleSort,
-            handleResizeEnd,
-            handleResize,
+            setColumns,
+            onResize,
+            onResizeEnd
         },
         icons: {
             sortAscending: sortAscendingIcon,
             sortDescending: sortDescendingIcon,
         },
         columnsData: {
+            columns,
             visibleColumns
         },
         additionalProps: {
@@ -95,6 +107,47 @@ const HeaderCell = (props) => {
 
     const [target, setTarget] = useState(resizeHandleRef?.current || null);
 
+    function handleResize({e, target, column}) {
+        let containerEl = tableRef.current;
+        let gridTemplateColumns = containerEl.style.gridTemplateColumns;
+        let currentColWidth = target.offsetParent.clientWidth;
+        if(!lastPos) lastPos = e.clientX;
+        
+        let diff = lastPos - e.clientX;
+
+        let colIndex = visibleColumns.findIndex(cd => cd.id === column.id);
+
+        if (e.clientX > lastPos || e.clientX < lastPos && currentColWidth - diff > column.minWidth) {
+            let gtcArr = gridTemplateColumns.split(" ");
+            
+            if((column.minWidth && ((currentColWidth - diff) <= column.minWidth)) || (column.maxWidth && ((currentColWidth - diff) >= column.maxWidth))) return;
+
+            gtcArr[colIndex] = `${currentColWidth - diff}px`;
+            let newGridTemplateColumns = gtcArr.join(" ");
+
+            containerEl.style.gridTemplateColumns = newGridTemplateColumns;
+        }
+        
+        lastPos = e.clientX;
+        onResize?.({event: e, target, column});
+    }
+
+    function handleResizeEnd() {
+        lastPos = null;
+        let containerEl = tableRef.current;
+        let gridTemplateColumns = containerEl.style.gridTemplateColumns;
+        let gtcArr = gridTemplateColumns.split(" ");
+        
+        columns.forEach(col => {
+            let colIndex = visibleColumns.findIndex(cd => cd.id === col.id);
+            if (col.visible) {
+                col.width = gtcArr[colIndex];
+            }
+        })
+        setColumns(columns);
+        onResizeEnd?.();
+    }
+
     useResizeEvents(target, column, handleResize, handleResizeEnd);
 
     useEffect(() => {
@@ -105,7 +158,11 @@ const HeaderCell = (props) => {
     let isPinnedLeft = column.pinned && index === 0;
     let classes = column.id === 'virtual' ? `rgt-cell-header rgt-cell-header-virtual-col${isHeaderSticky ? ' rgt-cell-header-sticky' : ''}`.trim() : `rgt-cell-header rgt-cell-header-${column.id === 'checkbox' ? 'checkbox' : column.field}${(column.sortable !== false && column.id !== 'checkbox' && column.id !== 'virtual') ? ' rgt-clickable' : ''}${column.sortable !== false && column.id !== 'checkbox' ? ' rgt-cell-header-sortable' : ' rgt-cell-header-not-sortable'}${isHeaderSticky ? ' rgt-cell-header-sticky' : ''}${column.resizable !== false ? ' rgt-cell-header-resizable' : ' rgt-cell-header-not-resizable'}${column.searchable !== false && column.id !== 'checkbox' ? ' rgt-cell-header-searchable' : ' rgt-cell-header-not-searchable'}${isPinnedLeft ? ' rgt-cell-header-pinned rgt-cell-header-pinned-left' : ''}${isPinnedRight ? ' rgt-cell-header-pinned rgt-cell-header-pinned-right' : ''} ${column.className}`.trim() 
 
-    let sortingProps = (column.sortable !== false && column.id !== 'checkbox' && column.id !== 'virtual') ? { onClick: e => handleSort(column.id) } : {};
+    let colId = column.id;
+    let isAsc = true;
+    if (sort.colId === colId) isAsc = sort.isAsc ? false : sort.isAsc === false ? null : true;
+    if (isAsc === null) colId = null;
+    let sortingProps = (column.sortable !== false && column.id !== 'checkbox' && column.id !== 'virtual') ? { onClick: e => handleSort(column.id, isAsc) } : {};
 
     style = { ...style, ...additionalProps.style, minWidth: column.minWidth, maxWidth: column.maxWidth };
 

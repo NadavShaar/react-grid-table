@@ -3,7 +3,6 @@ import { useVirtual } from 'react-virtual';
 import { Search, ColumnVisibility, Header, Footer, Loader, NoResults, Information, PageSize, Pagination } from '../components/';
 import defaultIcons from './../defaultIcons'; 
 
-var lastPos;
 var isColumnSorting;
 
 export default function useTableManager(props) {
@@ -113,12 +112,6 @@ export default function useTableManager(props) {
         handleRowEdit,
         updateSelectedItems,
         toggleItemSelection,
-        toggleSelectAll,
-        handleResize,
-        handleColumnSortStart,
-        handleColumnSortEnd,
-        handleResizeEnd,
-        handleSort,
         handlePagination,
         toggleColumnVisibility,
         handleSearchChange,
@@ -126,7 +119,13 @@ export default function useTableManager(props) {
         getHighlightedSearch,
         onRowClick: props.onRowClick,
         getIsRowEditable: props.getIsRowEditable,
-        getIsRowSelectable: props.getIsRowSelectable
+        getIsRowSelectable: props.getIsRowSelectable,
+        handleSort,
+        setColumns,
+        onResize: props.onResize,
+        onResizeEnd: props.onResizeEnd,
+        onColumnSortStart,
+        onColumnSortEnd
     })
     tableManager.components = Object.assign(tableManager.components, {
         searchComponent: props.searchComponent || Search,
@@ -304,69 +303,18 @@ export default function useTableManager(props) {
         });
     }
 
-    function handleResize({e, target, column}) {
-        let containerEl = tableRef.current;
-        let gridTemplateColumns = containerEl.style.gridTemplateColumns;
-        let currentColWidth = target.offsetParent.clientWidth;
-        if(!lastPos) lastPos = e.clientX;
-        
-        let diff = lastPos - e.clientX;
-
-        let colIndex = visibleColumns.findIndex(cd => cd.id === column.id);
-
-        if (e.clientX > lastPos || e.clientX < lastPos && currentColWidth - diff > column.minWidth) {
-            let gtcArr = gridTemplateColumns.split(" ");
-            
-            if((column.minWidth && ((currentColWidth - diff) <= column.minWidth)) || (column.maxWidth && ((currentColWidth - diff) >= column.maxWidth))) return;
-
-            gtcArr[colIndex] = `${currentColWidth - diff}px`;
-            let newGridTemplateColumns = gtcArr.join(" ");
-
-            containerEl.style.gridTemplateColumns = newGridTemplateColumns;
-        }
-        
-        lastPos = e.clientX;
-    }
-
-    function handleResizeEnd() {
-        lastPos = null;
-        let containerEl = tableRef.current;
-        let gridTemplateColumns = containerEl.style.gridTemplateColumns;
-        let gtcArr = gridTemplateColumns.split(" ");
-        
-        columns.forEach(col => {
-            let colIndex = visibleColumns.findIndex(cd => cd.id === col.id);
-            if (col.visible) {
-                col.width = gtcArr[colIndex];
-            }
-        })
-        setColumns(columns)
-    }
-
-    function handleColumnSortStart(obj) {
-        obj.helper.classList.add('rgt-column-sort-ghost');
+    function onColumnSortStart(sortData) {
         isColumnSorting = true;
+        props.onColumnSortStart?.(sortData);
     }
 
-    function handleColumnSortEnd(sortObj) {
+    function onColumnSortEnd(sortData) {
         setTimeout(() => { isColumnSorting = false }, 0);
-        if(sortObj.oldIndex === sortObj.newIndex) return;
-
-        let colDefNewIndex = columns.findIndex(oc => oc.id === visibleColumns[sortObj.newIndex].id);
-        let colDefOldIndex = columns.findIndex(oc => oc.id === visibleColumns[sortObj.oldIndex].id);
-
-        columns = [...columns];
-        columns.splice(colDefNewIndex, 0, ...columns.splice(colDefOldIndex, 1));
-        
-        setColumns(columns);
+        props.onColumnSortEnd?.(sortData);
     }
 
-    function handleSort(colId) {
+    function handleSort(colId, isAsc) {
         if (isColumnSorting) return;
-        
-        let isAsc = true;
-        if (sort.colId === colId) isAsc = sort.isAsc ? false : null;
-        if (isAsc === null) colId = null;
 
         if (props.sort === undefined || props.onSortChange === undefined) setSort({colId, isAsc});
         props.onSortChange?.({colId, isAsc});
@@ -392,15 +340,6 @@ export default function useTableManager(props) {
             handlePageChange(goToPage);
             setTimeout(() => { tableRef.current.scrollTop = 0 }, 0);
         };
-    }
-
-    function toggleSelectAll(selectableItemsIds, selectAllIsChecked, isSelectAllIndeterminate) {
-        let selectedIds = [...selectedRowsIds];
-
-        if(selectAllIsChecked || isSelectAllIndeterminate) selectedIds = selectedIds.filter(si => !selectableItemsIds.find(itemId => si === itemId));
-        else selectableItemsIds.forEach(s => selectedIds.push(s));
-        
-        updateSelectedItems(selectedIds);
     }
 
     function updateSelectedItems(newSelectedItems) {
