@@ -564,6 +564,7 @@ The API is devided into the following categories:
 
 | name | type | description | usage |
 |---|---|---|---|
+| setColumns | function | sets a columns configuration | setColumns(columns) |
 | handlePageSizeChange | function | handles the page size change | `handlePageSizeChange(pageSize)` |
 | handleRowEdit | function | updates the row in edit mode, used as the onChange callback for the `editorCellRenderer` propery in the column, and should be used when `editRowId` is set to the id of the edited row | `handleRowEdit(updatedRow)` |
 | updateSelectedItems | function | updates the rows selection, contains array of rows ids | `updateSelectedItems([])` |
@@ -576,6 +577,9 @@ The API is devided into the following categories:
 | onRowClick | function | triggers when a row is clicked | `({rowIndex, data, column, event}) => { }` |
 | getIsRowEditable | | a callback function that returns whether row editing for the current row should be disabled or not | `row => true` |
 | getIsRowSelectable | | a callback function that returns whether row selection for the current row should be disabled or not | `row => true` |
+| handleSort | function | sets the sort by the column's id and the sort direction which can be either: `true`, `false` or `null` | `handleSort(colId, isAsc)` |
+| onResize | function | triggers when column resize occur | `onResize={({event, target, column}) => { ... }}` |
+| onResizeEnd | function | triggers when column resize ended | `onResizeEnd={() => { ... }}` |
 
 ### components
 all [components](#components-props) that are not part of the table itself.
