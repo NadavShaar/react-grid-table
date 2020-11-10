@@ -540,6 +540,7 @@ const MyAwesomeTable = props => {
 # tableManager
 
 This is the API object used by the internal components, you can use it to do anything that the API provides, outside of the component.
+
 The API is devided into following categories:
 
 - **refs:** refs objects of the table and its wrapper
@@ -551,9 +552,19 @@ The API is devided into following categories:
 - **additionalProps:** additional props
 - **icons:** icons configuration
 
+### refs
 
 | name | type | description |
 |---|---|---|
+| rgtRef | object | ref for the wrapper element |
+| tableRef | object | ref for the table container element |
+
+### handlers
+
+| name | type | description | usage |
+|---|---|---|
+| handlePageSizeChange | function | handles the page size change | `handlePageSizeChange(pageSize)` |
+
 
 # How to...
 
