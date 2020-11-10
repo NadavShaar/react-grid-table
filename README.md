@@ -214,7 +214,7 @@ export default MyAwesomeTable;
 | onSelectedRowsChange | function | triggers when rows selection has been changed | `selectedRowsIds => { }` |
 | onSearchChange | function | triggers when search text changed | `searchText => { }` |
 | onSortChange | function | triggers when search sort changed | `({colId, isAsc}) => { }` |
-| onRowClick | function | triggers when a row has been clicked | `({rowIndex, data, column, event}) => { }` |
+| onRowClick | function | triggers when a row is clicked | `({rowIndex, data, column, event}) => { }` |
 | onRowEditIdChange | function | triggers when `rowEditId` changed | `rowEditId => { }` |
 | onLoad | function | triggers when `tableManager` is initialized (<u>[details](#tableManager)</u>) | `tableManager => { }` |
 
@@ -568,6 +568,14 @@ The API is devided into the following categories:
 | handleRowEdit | function | updates the row in edit mode, used as the onChange callback for the `editorCellRenderer` propery in the column, and should be used when `editRowId` is set to the id of the edited row | `handleRowEdit(updatedRow)` |
 | updateSelectedItems | function | updates the rows selection, contains array of rows ids | `updateSelectedItems([])` |
 | toggleItemSelection | function | toggles the row selection by row id | `toggleItemSelection(rowId)` |
+| handlePagination | function | navigate to a page | `handlePagination(pageNumber)` |
+| toggleColumnVisibility | function | toggles column visibility by column id | `toggleColumnVisibility(colId)` |
+| handleSearchChange | function | updates the search | `handleSearchChange(searchText)` |
+| handleRowEditIdChange | function | will set a row to switch to edit mode by its id, you can pass null to switch back from edit mode | `handleRowEditIdChange(rowEditId)` |
+| getHighlightedSearch | function | gets the cell's value and returns html with highlighted search term | `getHighlightedSearch(cellValue)` |
+| onRowClick | function | triggers when a row is clicked | `({rowIndex, data, column, event}) => { }` |
+| getIsRowEditable | | a callback function that returns whether row editing for the current row should be disabled or not | `row => true` |
+| getIsRowSelectable | | a callback function that returns whether row selection for the current row should be disabled or not | `row => true` |
 
 ### components
 all [components](#components-props) that are not part of the table itself.
