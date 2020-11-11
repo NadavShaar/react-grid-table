@@ -1,6 +1,6 @@
 # react-grid-table
 
-> A modular table, based on CSS grid layout, optimized for customization.
+> A modular table, based on a CSS grid layout, optimized for customization.
 
 [![NPM](https://img.shields.io/npm/v/@nadavshaar/react-grid-table.svg)](https://www.npmjs.com/package/@nadavshaar/react-grid-table) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
@@ -217,6 +217,10 @@ export default MyAwesomeTable;
 | onRowClick | function | triggers when a row is clicked | `({rowIndex, data, column, event}) => { }` |
 | onRowEditIdChange | function | triggers when `rowEditId` changed | `rowEditId => { }` |
 | onLoad | function | triggers when `tableManager` is initialized (<u>[details](#tableManager)</u>) | `tableManager => { }` |
+| onResize | function | triggers when column resize occur | `({event, target, column}) => { }` |
+| onResizeEnd | function | triggers when column resize ended, and only if the column changed its position | `() => { }` |
+| onColumnSortStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `sortData => { }` |
+| onColumnSortEnd | function | triggers on column drop. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `sortData => { }` |
 
 ### Components props
 
@@ -544,7 +548,7 @@ This is the API object used by the internal components, you can use it to do any
 
 The API is devided into the following categories:
 
-- **refs:** refs objects of the table and its wrapper
+- **refs:** ref objects of the table and its wrapper
 - **handlers:** all functionality handlers
 - **components:** all [components](#components-props) that are not part of the table itself
 - **rowsData:** all rows related data
@@ -578,10 +582,10 @@ The API is devided into the following categories:
 | getIsRowEditable | | a callback function that returns whether row editing for the current row should be disabled or not | `row => true` |
 | getIsRowSelectable | | a callback function that returns whether row selection for the current row should be disabled or not | `row => true` |
 | handleSort | function | sets the sort by the column's id and the sort direction which can be either: `true`, `false` or `null` | `handleSort(colId, isAsc)` |
-| onResize | function | triggers when column resize occur | `onResize={({event, target, column}) => { ... }}` |
-| onResizeEnd | function | triggers when column resize ended, and only if the column changed its position | `onResizeEnd={() => { ... }}` |
-| onColumnReorderStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `onColumnReorderStart={sortData => { ... }}` |
-| onColumnReorderEnd | function | triggers on column drop. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `onColumnReorderEnd={sortData => { ... }}` |
+| onResize | function | triggers when column resize occur | `({event, target, column}) => { }` |
+| onResizeEnd | function | triggers when column resize ended, and only if the column changed its position | `() => { }` |
+| onColumnReorderStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `sortData => { }` |
+| onColumnReorderEnd | function | triggers on column drop. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `sortData => { }` |
 
 ### components
 all [components](#components-props) that are not part of the table itself.
