@@ -74,9 +74,6 @@
 .rgt-cell-inner {
   margin: 0 20px;
   display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   width: 100%;
 }
 
@@ -274,8 +271,8 @@
 
 .rgt-columns-manager-button {
   cursor: pointer;
-  height: 30px;
-  width: 30px;
+  height: 26px;
+  width: 26px;
   padding: 0;
   background: transparent;
   outline: none;

@@ -97,7 +97,7 @@ const Cell = (props) => {
                     :
                 column.editable !== false && isEdit ?
                     column.editorCellRenderer ?
-                                column.editorCellRenderer({ tableManager, value, field: column.field, onChange: handleRowEdit, data, column, rowIndex })
+                        column.editorCellRenderer({ tableManager, value, field: column.field, onChange: handleRowEdit, data, column, rowIndex })
                         :
                         <div className='rgt-cell-inner rgt-cell-editor'>
                             {
@@ -117,7 +117,7 @@ const Cell = (props) => {
                     column.cellRenderer ?
                         column.cellRenderer({ tableManager, value, data, column, rowIndex, searchText })
                         :
-                        <div className='rgt-cell-inner'>{value}</div>
+                        <div className='rgt-cell-inner rgt-text-truncate'>{value}</div>
             }
         </div>
     )

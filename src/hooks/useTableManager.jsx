@@ -366,32 +366,44 @@ export default function useTableManager(props) {
         setColumns(columns);
     }
 
-    function getHighlightedSearch(cellValue) {
-        if(cellValue === searchText) return <span className='rgt-search-highlight'>{cellValue}</span> ;
+    function getHighlightedSearch(text) {
+        if(text === searchText) return <span className='rgt-search-highlight'>{text}</span> ;
 
         let re = new RegExp(searchText,"gi");
-        let restArr = cellValue.split(re, cellValue.length);
+        let restArr = text.split(re, text.length);
         let restItemsLength = 0;
 
-        return restArr.map((a, idx) => {
+        let highlightedSearch = restArr.map((a, idx) => {
             restItemsLength += a.length;
+            let el = null;
 
-            const el = (
-                <span key={idx}>
-                    {a} 
-                    { 
-                        (restArr.length !== idx+1) ? 
-                            <span className='rgt-search-highlight'>
-                                {cellValue.slice(restItemsLength, searchText.length + restItemsLength)}
-                            </span> 
-                            : null
-                    }
-                </span>
-            )
+            if(a) {
+                el = (
+                    <React.Fragment key={idx}>
+                        <span>{a}</span> 
+                        { 
+                            (restArr.length !== idx+1) ? 
+                                <span className='rgt-search-highlight'>
+                                    {text.slice(restItemsLength, searchText.length + restItemsLength)}
+                                </span> 
+                                : null
+                        }
+                    </React.Fragment>
+                )      
+            } else if(restArr.length !== idx+1) {
+                el = (
+                    <span key={idx} className='rgt-search-highlight'>
+                        {text.slice(restItemsLength, searchText.length + restItemsLength)}
+                    </span> 
+                )      
+            }
+
             restItemsLength += searchText.length;
 
             return el;
-        })
+        });
+
+        return <span>{highlightedSearch}</span>;
     }
 
     return tableManager
