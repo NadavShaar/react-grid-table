@@ -26,6 +26,7 @@
 ![table](https://user-images.githubusercontent.com/8030614/94979139-cad9c700-0529-11eb-8774-324eb4dfe4f6.gif)
 
 ## Install
+Not published yet!
 <!--
 ```bash
 npm install --save @nadavshaar/react-grid-table
@@ -218,9 +219,9 @@ export default MyAwesomeTable;
 | onRowEditIdChange | function | triggers when `rowEditId` changed | `rowEditId => { }` |
 | onLoad | function | triggers when `tableManager` is initialized (<u>[details](#tableManager)</u>) | `tableManager => { }` |
 | onResize | function | triggers when column resize occur | `({event, target, column}) => { }` |
-| onResizeEnd | function | triggers when column resize ended, and only if the column changed its position | `() => { }` |
-| onColumnSortStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `sortData => { }` |
-| onColumnSortEnd | function | triggers on column drop. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `sortData => { }` |
+| onResizeEnd | function | triggers when column resize ended | `() => { }` |
+| onColumnReorderStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `sortData => { }` |
+| onColumnReorderEnd | function | triggers on column drop, and only if the column changed its position. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `sortData => { }` |
 
 ### Components props
 
@@ -577,15 +578,15 @@ The API is devided into the following categories:
 | toggleColumnVisibility | function | toggles column visibility by column id | `toggleColumnVisibility(colId)` |
 | handleSearchChange | function | updates the search | `handleSearchChange(searchText)` |
 | handleRowEditIdChange | function | will set a row to switch to edit mode by its id, you can pass null to switch back from edit mode | `handleRowEditIdChange(rowEditId)` |
-| getHighlightedSearch | function | gets the cell's value and returns html with highlighted search term | `getHighlightedSearch(cellValue)` |
+| getHighlightedSearch | function | gets text and returns html with highlighted search term | `getHighlightedSearch(text)` |
 | onRowClick | function | triggers when a row is clicked | `({rowIndex, data, column, event}) => { }` |
 | getIsRowEditable | | a callback function that returns whether row editing for the current row should be disabled or not | `row => true` |
 | getIsRowSelectable | | a callback function that returns whether row selection for the current row should be disabled or not | `row => true` |
 | handleSort | function | sets the sort by the column's id and the sort direction which can be either: `true`, `false` or `null` | `handleSort(colId, isAsc)` |
 | onResize | function | triggers when column resize occur | `({event, target, column}) => { }` |
-| onResizeEnd | function | triggers when column resize ended, and only if the column changed its position | `() => { }` |
+| onResizeEnd | function | triggers when column resize ended | `() => { }` |
 | onColumnReorderStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `sortData => { }` |
-| onColumnReorderEnd | function | triggers on column drop. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `sortData => { }` |
+| onColumnReorderEnd | function | triggers on column drop, and only if the column changed its position. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `sortData => { }` |
 
 ### components
 all [components](#components-props) that are not part of the table itself.
