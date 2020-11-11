@@ -578,7 +578,7 @@ The API is devided into the following categories:
 | toggleColumnVisibility | function | toggles column visibility by column id | `toggleColumnVisibility(colId)` |
 | handleSearchChange | function | updates the search | `handleSearchChange(searchText)` |
 | handleRowEditIdChange | function | will set a row to switch to edit mode by its id, you can pass null to switch back from edit mode | `handleRowEditIdChange(rowEditId)` |
-| getHighlightedSearch | function | gets the cell's value and returns html with highlighted search term | `getHighlightedSearch(cellValue)` |
+| getHighlightedSearch | function | gets text and returns html with highlighted search term | `getHighlightedSearch(text)` |
 | onRowClick | function | triggers when a row is clicked | `({rowIndex, data, column, event}) => { }` |
 | getIsRowEditable | | a callback function that returns whether row editing for the current row should be disabled or not | `row => true` |
 | getIsRowSelectable | | a callback function that returns whether row selection for the current row should be disabled or not | `row => true` |
