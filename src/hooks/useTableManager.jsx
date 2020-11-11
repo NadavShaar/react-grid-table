@@ -3,7 +3,7 @@ import { useVirtual } from 'react-virtual';
 import { Search, ColumnVisibility, Header, Footer, Loader, NoResults, Information, PageSize, Pagination } from '../components/';
 import defaultIcons from './../defaultIcons'; 
 
-var isColumnSorting;
+var isColumnReordering;
 
 export default function useTableManager(props) {
 
@@ -124,8 +124,8 @@ export default function useTableManager(props) {
         setColumns,
         onResize: props.onResize,
         onResizeEnd: props.onResizeEnd,
-        onColumnSortStart,
-        onColumnSortEnd
+        onColumnReorderStart,
+        onColumnReorderEnd
     })
     tableManager.components = Object.assign(tableManager.components, {
         searchComponent: props.searchComponent || Search,
@@ -303,18 +303,18 @@ export default function useTableManager(props) {
         });
     }
 
-    function onColumnSortStart(sortData) {
-        isColumnSorting = true;
-        props.onColumnSortStart?.(sortData);
+    function onColumnReorderStart(sortData) {
+        isColumnReordering = true;
+        props.onColumnReorderStart?.(sortData);
     }
 
-    function onColumnSortEnd(sortData) {
-        setTimeout(() => { isColumnSorting = false }, 0);
-        props.onColumnSortEnd?.(sortData);
+    function onColumnReorderEnd(sortData) {
+        setTimeout(() => { isColumnReordering = false }, 0);
+        props.onColumnReorderEnd?.(sortData);
     }
 
     function handleSort(colId, isAsc) {
-        if (isColumnSorting) return;
+        if (isColumnReordering) return;
 
         if (props.sort === undefined || props.onSortChange === undefined) setSort({colId, isAsc});
         props.onSortChange?.({colId, isAsc});

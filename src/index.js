@@ -18,8 +18,8 @@ const GridTable = (props) => {
         },
         handlers: {
             setColumns,
-            onColumnSortStart,
-            onColumnSortEnd
+            onColumnReorderStart,
+            onColumnReorderEnd
         },
         components: {
             headerComponent: Header,
@@ -42,12 +42,12 @@ const GridTable = (props) => {
         rowVirtualizer
     } = tableManager;
 
-    function handleColumnSortStart(sortData) {
+    function handleColumnReorderStart(sortData) {
         sortData.helper.classList.add('rgt-column-sort-ghost');
-        onColumnSortStart?.(sortData);
+        onColumnReorderStart?.(sortData);
     }
 
-    function handleColumnSortEnd(sortData) {
+    function handleColumnReorderEnd(sortData) {
         if(sortData.oldIndex === sortData.newIndex) return;
 
         let colDefNewIndex = columns.findIndex(oc => oc.id === visibleColumns[sortData.newIndex].id);
@@ -57,7 +57,7 @@ const GridTable = (props) => {
         columnsClone.splice(colDefNewIndex, 0, ...columnsClone.splice(colDefOldIndex, 1));
         
         setColumns(columnsClone);
-        onColumnSortEnd?.(sortData);
+        onColumnReorderEnd?.(sortData);
     }
 
     let { 
@@ -81,8 +81,8 @@ const GridTable = (props) => {
                 distance={10}
                 lockAxis="x"
                 useDragHandle={!!dragHandleComponent}
-                onSortStart={handleColumnSortStart}
-                onSortEnd={handleColumnSortEnd}
+                onSortStart={handleColumnReorderStart}
+                onSortEnd={handleColumnReorderEnd}
                 style={{
                     display: 'grid',
                     overflow: 'auto',
@@ -185,8 +185,8 @@ GridTable.propTypes = {
     onLoad: PropTypes.func,
     onResize: PropTypes.func,
     onResizeEnd: PropTypes.func,
-    onColumnSortStart: PropTypes.func,
-    onColumnSortEnd: PropTypes.func,
+    onColumnReorderStart: PropTypes.func,
+    onColumnReorderEnd: PropTypes.func,
     // custom components
     headerComponent: PropTypes.func,
     footerComponent: PropTypes.func,
