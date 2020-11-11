@@ -26,6 +26,7 @@
 ![table](https://user-images.githubusercontent.com/8030614/94979139-cad9c700-0529-11eb-8774-324eb4dfe4f6.gif)
 
 ## Install
+Not published yet!
 <!--
 ```bash
 npm install --save @nadavshaar/react-grid-table
