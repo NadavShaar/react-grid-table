@@ -219,8 +219,8 @@ export default MyAwesomeTable;
 | onLoad | function | triggers when `tableManager` is initialized (<u>[details](#tableManager)</u>) | `tableManager => { }` |
 | onResize | function | triggers when column resize occur | `({event, target, column}) => { }` |
 | onResizeEnd | function | triggers when column resize ended, and only if the column changed its position | `() => { }` |
-| onColumnSortStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `sortData => { }` |
-| onColumnSortEnd | function | triggers on column drop. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `sortData => { }` |
+| onColumnReorderStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `sortData => { }` |
+| onColumnReorderEnd | function | triggers on column drop. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `sortData => { }` |
 
 ### Components props
 
