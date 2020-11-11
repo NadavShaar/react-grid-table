@@ -544,7 +544,7 @@ This is the API object used by the internal components, you can use it to do any
 
 The API is devided into the following categories:
 
-- **refs:** refs objects of the table and its wrapper
+- **refs:** ref objects of the table and its wrapper
 - **handlers:** all functionality handlers
 - **components:** all [components](#components-props) that are not part of the table itself
 - **rowsData:** all rows related data
