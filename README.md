@@ -192,6 +192,7 @@ export default MyAwesomeTable;
 |---|---|---|---|
 | isVirtualScrolling | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
 | isPaginated | boolean | determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
+| page | number | current page number | 1 |
 | pageSizes | array of numbers | page size options | [20, 50, 100] |
 | pageSize | number | the selected page size | 20 |
 | sort | object | sort config when controlled. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }` | { } |
@@ -213,6 +214,8 @@ export default MyAwesomeTable;
 |---|---|---|---|
 | onColumnsChange | function | triggers when the `columns` has been changed | `columns => { }` |
 | onSelectedRowsChange | function | triggers when rows selection has been changed | `selectedRowsIds => { }` |
+| onPageChange | function | triggers when page is changed | `nextPage => { }` |
+| onPageSizeChange | function | triggers when page size is changed | `newPageSize => { }` |
 | onSearchChange | function | triggers when search text changed | `searchText => { }` |
 | onSortChange | function | triggers when search sort changed | `({colId, isAsc}) => { }` |
 | onRowClick | function | triggers when a row is clicked | `({rowIndex, data, column, event}) => { }` |

@@ -97,10 +97,8 @@ const GridTable = (props) => {
                     ))
                 }
                 {
-                    !isLoading && pageItems.length && visibleColumns.length > 1
-                        ?
-                        isVirtualScrolling
-                            ? 
+                    !isLoading && pageItems.length && visibleColumns.length > 1 ?
+                        isVirtualScrolling ? 
                             [
                                 <Row key={'virtual-start'} index={'virtual-start'} tableManager={tableManager} />,
                                 ...rowVirtualizer.virtualItems.map(vr => <Row key={vr.index} index={vr.index} data={pageItems[vr.index]} measureRef={vr.measureRef} tableManager={tableManager} />),
@@ -163,6 +161,7 @@ GridTable.propTypes = {
     disableColumnsReorder: PropTypes.bool,
     pageSizes: PropTypes.arrayOf(PropTypes.number),
     pageSize: PropTypes.number,
+    page: PropTypes.number,
     sort: PropTypes.object,
     minColumnWidth: PropTypes.number,
     highlightSearch: PropTypes.bool,
@@ -182,6 +181,8 @@ GridTable.propTypes = {
     onSortChange: PropTypes.func,
     onRowClick: PropTypes.func,
     onRowEditIdChange: PropTypes.func,
+    onPageChange: PropTypes.func,
+    onPageSizeChange: PropTypes.func,
     onLoad: PropTypes.func,
     onResize: PropTypes.func,
     onResizeEnd: PropTypes.func,

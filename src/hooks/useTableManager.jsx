@@ -12,7 +12,7 @@ export default function useTableManager(props) {
 
     let [columns, setCols] = useState(props.columns);
     let [sort, setSort] = useState(props.sort || {});
-    let [page, setPage] = useState(1);
+    let [page, setPage] = useState(props.page || 1);
     let [updatedRow, setUpdatedRow] = useState(null);
     let [searchText, setSearchText] = useState(props.searchText || "");
     let [pageSize, setPageSize] = useState(props.pageSize || 20);
@@ -33,7 +33,7 @@ export default function useTableManager(props) {
 
     const tableRef = useRef(null);
     const rgtRef = useRef(null);
-
+    const isInitialMount = useRef(true);
 
     // **************** Table params ****************
 
@@ -187,7 +187,8 @@ export default function useTableManager(props) {
     // **************** Life cycles ****************
 
     useEffect(() => {
-        if (page !== 1) handlePageChange(1);
+        if (isInitialMount.current) isInitialMount.current = false;
+        else if (page !== 1) handlePageChange(1);
     }, [searchText, pageSize])
 
     useEffect(() => {
