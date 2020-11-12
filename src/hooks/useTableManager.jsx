@@ -116,7 +116,7 @@ export default function useTableManager(props) {
         toggleColumnVisibility,
         handleSearchChange,
         handleRowEditIdChange,
-        getHighlightedSearch,
+        getHighlightedText,
         onRowClick: props.onRowClick,
         getIsRowEditable: props.getIsRowEditable,
         getIsRowSelectable: props.getIsRowSelectable,
@@ -366,10 +366,10 @@ export default function useTableManager(props) {
         setColumns(columns);
     }
 
-    function getHighlightedSearch(text) {
-        if(text === searchText) return <span className='rgt-search-highlight'>{text}</span> ;
+    function getHighlightedText(text, searchTerm) {
+        if(text === searchTerm) return <span className='rgt-search-highlight'>{text}</span> ;
 
-        let re = new RegExp(searchText,"gi");
+        let re = new RegExp(searchTerm,"gi");
         let restArr = text.split(re, text.length);
         let restItemsLength = 0;
 
@@ -384,7 +384,7 @@ export default function useTableManager(props) {
                         { 
                             (restArr.length !== idx+1) ? 
                                 <span className='rgt-search-highlight'>
-                                    {text.slice(restItemsLength, searchText.length + restItemsLength)}
+                                    {text.slice(restItemsLength, searchTerm.length + restItemsLength)}
                                 </span> 
                                 : null
                         }
@@ -393,12 +393,12 @@ export default function useTableManager(props) {
             } else if(restArr.length !== idx+1) {
                 el = (
                     <span key={idx} className='rgt-search-highlight'>
-                        {text.slice(restItemsLength, searchText.length + restItemsLength)}
+                        {text.slice(restItemsLength, searchTerm.length + restItemsLength)}
                     </span> 
                 )      
             }
 
-            restItemsLength += searchText.length;
+            restItemsLength += searchTerm.length;
 
             return el;
         });

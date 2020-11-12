@@ -26,7 +26,7 @@ const Cell = (props) => {
         handlers: {
             onRowClick,
             handleRowEdit,
-            getHighlightedSearch,
+            getHighlightedText,
             toggleItemSelection
         },
         rowsData: {
@@ -44,7 +44,7 @@ const Cell = (props) => {
     let value = column.getValue?.({ value: (updatedRow?.[rowIdField] === rowId) ? updatedRow[column.field] : data[column.field], column: column })?.toString?.();
 
     if (column.searchable !== false && updatedRow?.[rowIdField] !== rowId && highlightSearch !== false && searchText && searchText.length >= searchMinChars && value?.toLowerCase?.()?.includes?.(searchText.toLowerCase())) {
-        value = getHighlightedSearch(value);
+        value = getHighlightedText(value, searchText);
     }
 
     let classNames = column.id === 'checkbox' ?

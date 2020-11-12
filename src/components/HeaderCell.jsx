@@ -162,7 +162,7 @@ const HeaderCell = (props) => {
     let isAsc = true;
     if (sort.colId === colId) isAsc = sort.isAsc ? false : sort.isAsc === false ? null : true;
     if (isAsc === null) colId = null;
-    let sortingProps = (column.sortable !== false && column.id !== 'checkbox' && column.id !== 'virtual') ? { onClick: e => handleSort(column.id, isAsc) } : {};
+    let sortingProps = (column.sortable !== false && column.id !== 'checkbox' && column.id !== 'virtual') ? { onClick: e => handleSort(colId, isAsc) } : {};
 
     style = { ...style, ...additionalProps.style, minWidth: column.minWidth, maxWidth: column.maxWidth };
 
