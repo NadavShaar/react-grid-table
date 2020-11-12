@@ -7,7 +7,7 @@ const Username = ({tableManager, value, field, onChange, isEdit, data, column, r
             {
                 isEdit ?
                     <React.Fragment>
-                        <img src={data.avatar} alt="avatar" />    
+                        <img style={{minWidth: 32}} src={data.avatar} alt="avatar" />    
                         <input
                             autoFocus 
                             style={{position: 'absolute', height: 28, width: 'calc(100% - 82px)', top: 10, right: 20, bottom: 0, border: 'none', borderBottom: '1px solid #eee', outline: 'none', fontSize: 16, padding: 0, fontFamily: 'inherit'}} 
@@ -18,7 +18,7 @@ const Username = ({tableManager, value, field, onChange, isEdit, data, column, r
                     </React.Fragment>
                     :
                     <React.Fragment>
-                        <img src={data.avatar} alt="avatar" />
+                        <img style={{minWidth: 32}} src={data.avatar} alt="avatar" />
                         <span style={{marginLeft: 10, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{value}</span>
                     </React.Fragment>
             }
