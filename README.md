@@ -251,7 +251,7 @@ All components are getting the `tableManager` object ([details](#tableManager)).
 
 This prop defines the columns configuration.
 
-Each column support the following properties:
+Each column (except for '[checkbox](#checkbox-column)' column) support the following properties:
 
 | name | type | description | default value |
 |---|---|---|---|
