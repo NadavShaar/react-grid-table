@@ -256,7 +256,7 @@ Each column (except for '[checkbox](#checkbox-column)' column) support the follo
 | name | type | description | default value |
 |---|---|---|---|
 | id* | any | a unique identifier for the column (can be changed to a different field using the `rowIdField` prop), or you can set it to 'checkbox' which will generate a rows selction column (more [details](#checkbox-column) about checkbox column)  | --- |
-| field | string | the name of the field as in the row data, not necessary when the column is not rendering data from `rows` | --- |
+| field | string | the name of the field as in the row data, not necessary when the column is not using data from `rows` | --- |
 | label | string | the label to display in the header cell | the `field` property |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns | false |
 | visible | boolean | whether to display the column | true |
