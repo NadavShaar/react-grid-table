@@ -218,7 +218,7 @@ export default MyAwesomeTable;
 | onPageChange | function | triggers when page is changed | `nextPage => { }` |
 | onPageSizeChange | function | triggers when page size is changed | `newPageSize => { }` |
 | onSearchChange | function | triggers when search text changed | `searchText => { }` |
-| onSortChange | function | triggers when search sort changed | `({colId, isAsc}) => { }` |
+| onSortChange | function | triggers when sort changed | `({colId, isAsc}) => { }` |
 | onRowClick | function | triggers when a row is clicked | `({rowIndex, data, column, event}) => { }` |
 | onRowEditIdChange | function | triggers when `rowEditId` changed | `rowEditId => { }` |
 | onLoad | function | triggers when `tableManager` is initialized (<u>[details](#tableManager)</u>) | `tableManager => { }` |
@@ -586,7 +586,7 @@ The API is devided into the following categories:
 | onRowClick | function | triggers when a row is clicked | `({rowIndex, data, column, event}) => { }` |
 | getIsRowEditable | | a callback function that returns whether row editing for the current row should be disabled or not | `row => true` |
 | getIsRowSelectable | | a callback function that returns whether row selection for the current row should be disabled or not | `row => true` |
-| handleSort | function | sets the sort by the column's id and the sort direction which can be either: `true`, `false` or `null` | `handleSort(colId, isAsc)` |
+| handleSort | function | sets the sort by the column's id and the sort direction, both can be either: `true`, `false` or `null` | `handleSort(colId, isAsc)` |
 | onResize | function | triggers when column resize occur | `({event, target, column}) => { }` |
 | onResizeEnd | function | triggers when column resize ended | `() => { }` |
 | onColumnReorderStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `sortData => { }` |
