@@ -251,7 +251,7 @@ All components are getting the `tableManager` object ([details](#tableManager)).
 
 This prop defines the columns configuration.
 
-Each column (except for '[checkbox](#checkbox-column)' column) support the following properties:
+Each column (except for '[checkbox](#checkbox-column)' column) has support for the following properties:
 
 | name | type | description | default value |
 |---|---|---|---|
@@ -307,7 +307,7 @@ Each column (except for '[checkbox](#checkbox-column)' column) support the follo
 #### checkbox-column
 Rows selection is done by a predefined column, simply add a column with an `id` of 'checkbox'.
 
-Checkbox column support the following properties:
+Checkbox column has support for the following properties:
 
 | name | type | description | default value  |
 |---|---|---|---|
