@@ -196,7 +196,7 @@ export default MyAwesomeTable;
 | page | number | current page number | 1 |
 | pageSizes | array of numbers | page size options | [20, 50, 100] |
 | pageSize | number | the selected page size | 20 |
-| sort | object | sort config when controlled. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }`, to unsort simply pass a `colId` and `isAsc` as `null` | { } |
+| sort | object | sort config. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }`, to unsort simply pass a `colId` and `isAsc` as `null` | { } |
 | minColumnWidth | number | minimum width for all columns (doesn't apply to 'checkbox' column)| 70 |
 | highlightSearch | boolean | whether to highlight the search term | true |
 | showSearch | boolean | whether to show the search component in the header | true |
@@ -616,7 +616,7 @@ all [components](#components-props) that are not part of the table itself.
 
 | name | type | description | default value |
 |---|---|---|---|
-| sort | object | sort config when controlled. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }` | { } |
+| sort | object | sort config. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }`, to unsort simply pass a `colId` and `isAsc` as `null` | { } |
 | lastColIsPinned | boolean | wether the last column is pinned | --- |
 | page | number | the current page number | 0 |
 | searchText | string | text for search | "" |
