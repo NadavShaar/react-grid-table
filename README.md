@@ -584,8 +584,8 @@ The API is devided into the following categories:
 | handleRowEditIdChange | function | will set a row to switch to edit mode by its id, you can pass null to switch back from edit mode | `handleRowEditIdChange(rowEditId)` |
 | getHighlightedText | function | gets text and a search term and returns html with highlighted search term | `getHighlightedText(text, searchTerm)` |
 | onRowClick | function | triggers when a row is clicked | `({rowIndex, data, column, event}) => { }` |
-| getIsRowEditable | | a callback function that returns whether row editing for the current row should be disabled or not | `row => true` |
-| getIsRowSelectable | | a callback function that returns whether row selection for the current row should be disabled or not | `row => true` |
+| getIsRowEditable | function | a callback function that returns whether row editing for the current row should be disabled or not | `row => true` |
+| getIsRowSelectable | function | a callback function that returns whether row selection for the current row should be disabled or not | `row => true` |
 | handleSort | function | accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }`, to unsort simply pass a `colId` and `isAsc` as `null | `handleSort(colId, isAsc)` |
 | onResize | function | triggers when column resize occur | `({event, target, column}) => { }` |
 | onResizeEnd | function | triggers when column resize ended | `() => { }` |
