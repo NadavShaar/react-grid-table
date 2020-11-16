@@ -94,20 +94,20 @@ export default function useTableManager(props) {
         requestAnimationFrame(run);
     }, []);
 
-    if (props.isVirtualScrolling) {
-        tableManager.rowVirtualizer = Object.assign(tableManager.rowVirtualizer, useVirtual({
-            size: pageItems.length,
-            parentRef: tableRef,
-            scrollToFn,
-            ...props.rowVirtualizerProps
-        }));
+    let useVirtualProps = {
+        size: props.isVirtualScrolling ? pageItems.length : 0,
+        parentRef: tableRef,
+        scrollToFn,
+        ...props.rowVirtualizerProps
     }
+        
+    Object.assign(tableManager.rowVirtualizer, useVirtual(useVirtualProps));
 
-    tableManager.refs = Object.assign(tableManager.refs, {
+    Object.assign(tableManager.refs, {
         tableRef,
         rgtRef
     })
-    tableManager.handlers = Object.assign(tableManager.handlers, {
+    Object.assign(tableManager.handlers, {
         handlePageSizeChange,
         handleRowEdit,
         updateSelectedItems,
@@ -127,7 +127,7 @@ export default function useTableManager(props) {
         onColumnReorderStart,
         onColumnReorderEnd
     })
-    tableManager.components = Object.assign(tableManager.components, {
+    Object.assign(tableManager.components, {
         searchComponent: props.searchComponent || Search,
         columnVisibilityComponent: props.columnVisibilityComponent || ColumnVisibility,
         headerComponent: props.headerComponent || Header,
@@ -139,11 +139,11 @@ export default function useTableManager(props) {
         paginationComponent: props.paginationComponent || Pagination,
         dragHandleComponent: props.dragHandleComponent || null,
     })
-    tableManager.columnsData = Object.assign(tableManager.columnsData, {
+    Object.assign(tableManager.columnsData, {
         columns,
         visibleColumns,
     })
-    tableManager.params = Object.assign(tableManager.params, {
+    Object.assign(tableManager.params, {
         lastColIsPinned,
         sort,
         page,
@@ -163,19 +163,19 @@ export default function useTableManager(props) {
         pageSizes: props.pageSizes,
         textConfig
     })
-    tableManager.rowsData = Object.assign(tableManager.rowsData, {
+    Object.assign(tableManager.rowsData, {
         items: props.rows,
         pageItems,
         updatedRow,
         selectedRowsIds,
         rowIdField: props.rowIdField
     })
-    tableManager.additionalProps = Object.assign(tableManager.additionalProps, {
+    Object.assign(tableManager.additionalProps, {
         headerCell: props.headerCellProps || {},
         cell: props.cellProps || {},
         rowVirtualizer: props.rowVirtualizerProps || {}
     })
-    tableManager.icons = Object.assign(tableManager.icons, {
+    Object.assign(tableManager.icons, {
         sortAscending: props.icons?.sortAscending || defaultIcons.sortAscending,
         sortDescending: props.icons?.sortDescending || defaultIcons.sortDescending,
         clearSelection: props.icons?.clearSelection || defaultIcons.clearSelection,

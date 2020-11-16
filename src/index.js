@@ -202,3 +202,8 @@ GridTable.propTypes = {
 };
 
 export default GridTable;
+
+export {
+    HeaderCell,
+    Row
+}
