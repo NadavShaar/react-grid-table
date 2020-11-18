@@ -97,7 +97,7 @@ const GridTable = (props) => {
                     ))
                 }
                 {
-                    !isLoading && pageItems.length && visibleColumns.length > 1 ?
+                    pageItems.length && visibleColumns.length > 1 ?
                         isVirtualScrolling ? 
                             [
                                 <Row key={'virtual-start'} index={'virtual-start'} tableManager={tableManager} />,
@@ -174,6 +174,7 @@ GridTable.propTypes = {
     showColumnVisibilityManager: PropTypes.bool,
     icons: PropTypes.object,
     textConfig: PropTypes.object,
+    totalRows: PropTypes.number,
     // events
     onColumnsChange: PropTypes.func,
     onSearchChange: PropTypes.func,
@@ -187,7 +188,9 @@ GridTable.propTypes = {
     onResize: PropTypes.func,
     onResizeEnd: PropTypes.func,
     onColumnReorderStart: PropTypes.func,
-    onColumnReorderEnd: PropTypes.func,
+    onColumnReorderEnd: PropTypes.func, 
+    onNewRowsRequest: PropTypes.func, 
+    onRowsReset: PropTypes.func, 
     // custom components
     headerComponent: PropTypes.func,
     footerComponent: PropTypes.func,

@@ -26,7 +26,11 @@ export default function useTableManager(props) {
         rowsData: {},
         additionalProps: {},
         icons: {},
-        rowVirtualizer: {}
+        rowVirtualizer: {},
+        request: {
+            from: -1,
+            to: 0
+        }
     });
 
     // **************** Refs ****************
@@ -41,10 +45,12 @@ export default function useTableManager(props) {
     selectedRowsIds = props.selectedRowsIds ?? selectedRowsIds;
     sort = props.sort ?? sort;
     page = props.page ?? page;
-    pageSize = props.pageSize ?? pageSize;
+    pageSize = props.pageSize ?? pageSize; 
+    let isVirtualScrolling = props.isVirtualScrolling || props.onNewRowsRequest; 
+    let totalRows = props.totalRows ?? props.rows.length;
     columns = useMemo(getColumns, [props.columns, columns, props.minColumnWidth]); 
-    let { pageItems, totalPages } = useMemo(getPageItems, [props.rows, sort, page, pageSize, totalPages, searchText])
-
+    let { pageItems, totalPages } = useMemo(getPageItems, [props.rows, sort, page, pageSize, totalPages, searchText, props.isPaginated, props.onNewRowsRequest, totalRows]);
+    console.log('pageItems', pageItems);
     let visibleColumns = columns.filter(cd => cd.visible !== false);
 
     let lastColIsPinned = visibleColumns[visibleColumns.length-1]?.pinned;
@@ -95,7 +101,7 @@ export default function useTableManager(props) {
     }, []);
 
     let useVirtualProps = {
-        size: props.isVirtualScrolling ? pageItems.length : 0,
+        size: props.isPaginated ? (totalPages === page) ? (totalRows - (totalPages - 1) * pageSize) : pageSize : totalRows,
         parentRef: tableRef,
         scrollToFn,
         ...props.rowVirtualizerProps
@@ -158,7 +164,7 @@ export default function useTableManager(props) {
         showColumnVisibilityManager: props.showColumnVisibilityManager,
         isHeaderSticky: props.isHeaderSticky !== false,
         isPaginated: props.isPaginated,
-        isVirtualScrolling: props.isVirtualScrolling,
+        isVirtualScrolling: isVirtualScrolling,
         disableColumnsReorder: props.disableColumnsReorder,
         pageSizes: props.pageSizes,
         textConfig
@@ -168,7 +174,8 @@ export default function useTableManager(props) {
         pageItems,
         updatedRow,
         selectedRowsIds,
-        rowIdField: props.rowIdField
+        rowIdField: props.rowIdField,
+        totalRows
     })
     Object.assign(tableManager.additionalProps, {
         headerCell: props.headerCellProps || {},
@@ -187,9 +194,21 @@ export default function useTableManager(props) {
     // **************** Life cycles ****************
 
     useEffect(() => {
-        if (isInitialMount.current) isInitialMount.current = false;
-        else if (page !== 1) handlePageChange(1);
+        if (isInitialMount.current) return isInitialMount.current = false;
+        if (page === 1) return;
+        
+        handlePageChange(1);
     }, [searchText, pageSize])
+
+    useEffect(() => {
+        if (props.onNewRowsRequest) {
+            tableManager.request = {
+                from: -1,
+                to: 0
+            }
+            props.onRowsReset?.();
+        }
+    }, [searchText, sort])
 
     useEffect(() => {
         if (updatedRow) handleRowEditIdChange(null);
@@ -200,7 +219,7 @@ export default function useTableManager(props) {
     }, [props.editRowId])
 
     useEffect(() => {
-        props.onLoad?.(tableManager)
+        props.onLoad?.(tableManager);
     }, [])
 
 
@@ -209,36 +228,38 @@ export default function useTableManager(props) {
     function getPageItems() {
         let pageItems = [...props.rows];
 
-        var conf = columns.reduce((conf, coldef) => {
-            conf[coldef.field] = coldef;
-            return conf;
-        }, {})
-        var conf2 = columns.reduce((conf, coldef) => {
-            conf[coldef.id] = coldef;
-            return conf;
-        }, {})
+        if (!props.onNewRowsRequest) {
+            var conf = columns.reduce((conf, coldef) => {
+                conf[coldef.field] = coldef;
+                return conf;
+            }, {})
+            var conf2 = columns.reduce((conf, coldef) => {
+                conf[coldef.id] = coldef;
+                return conf;
+            }, {})
 
-        if (searchText.length >= props.searchMinChars) {
-            pageItems = pageItems.filter(item => Object.keys(item).some(key => {
-                if (conf[key] && conf[key].searchable !== false) {
-                    let displayValue = conf[key].getValue({ value: item[key], column: conf[key] });
-                    return conf[key].search({ value: displayValue.toString(), searchText: searchText });
-                }
-                return false;
-            }));
+            if (searchText.length >= props.searchMinChars) {
+                pageItems = pageItems.filter(item => Object.keys(item).some(key => {
+                    if (conf[key] && conf[key].searchable !== false) {
+                        let displayValue = conf[key].getValue({ value: item[key], column: conf[key] });
+                        return conf[key].search({ value: displayValue.toString(), searchText: searchText });
+                    }
+                    return false;
+                }));
+            }
+
+            if (sort?.colId) {
+                pageItems.sort((a, b) => {
+                    let aVal = conf2[sort.colId].getValue({ value: a[conf2[sort.colId].field], column: conf2[sort.colId] });
+                    let bVal = conf2[sort.colId].getValue({ value: b[conf2[sort.colId].field], column: conf2[sort.colId] });
+
+                    if (conf2[sort.colId].sortable === false) return 0;
+                    return conf2[sort.colId].sort({ a: aVal, b: bVal, isAscending: sort.isAsc });
+                });
+            }
         }
 
-        if (sort?.colId) {
-            pageItems.sort((a, b) => {
-                let aVal = conf2[sort.colId].getValue({ value: a[conf2[sort.colId].field], column: conf2[sort.colId] });
-                let bVal = conf2[sort.colId].getValue({ value: b[conf2[sort.colId].field], column: conf2[sort.colId] });
-
-                if (conf2[sort.colId].sortable === false) return 0;
-                return conf2[sort.colId].sort({ a: aVal, b: bVal, isAscending: sort.isAsc });
-            });
-        }
-
-        let totalPages = (pageItems.length % pageSize > 0) ? Math.trunc(pageItems.length / pageSize) + 1 : Math.trunc(pageItems.length / pageSize);
+        let totalPages = (totalRows % pageSize > 0) ? Math.trunc(totalRows / pageSize) + 1 : Math.trunc(totalRows / pageSize);
 
         if (props.isPaginated !== false) pageItems = pageItems.slice((pageSize * page - pageSize), (pageSize * page));
 
@@ -302,6 +323,20 @@ export default function useTableManager(props) {
                 visible: isVisibleColumn
             }
         });
+    }
+
+    function onNewRowsRequest() {
+        let lastIndex = tableManager.rowVirtualizer.virtualItems[tableManager.rowVirtualizer.virtualItems.length - 1]?.index + ((page - 1) * pageSize);
+
+        if (lastIndex <= tableManager.request.to) return;
+
+        let from = tableManager.request.to;
+        tableManager.request = {
+            from,
+            to: from + Math.min(pageSize, totalRows - from)
+        }
+
+        props.onNewRowsRequest?.(tableManager.request, tableManager)
     }
 
     function onColumnReorderStart(sortData) {
@@ -406,6 +441,8 @@ export default function useTableManager(props) {
 
         return <span>{highlightedSearch}</span>;
     }
+
+    onNewRowsRequest();
 
     return tableManager
 }

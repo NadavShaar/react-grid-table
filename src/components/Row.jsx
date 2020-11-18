@@ -40,11 +40,11 @@ const Row = props => {
         }
     }
 
-    let rowId = data[rowIdField];
-    let disableSelection = !getIsRowSelectable(data);
     let rowIndex = (index+1) + (pageItems.length * page - pageItems.length);
-    let isSelected = !!(selectedRowsIds.find(si => si === rowId));
-    let isEdit = updatedRow?.[rowIdField] === rowId && !!getIsRowEditable(data);
+    let rowId = data?.[rowIdField] || rowIndex;
+    let disableSelection = !data || !getIsRowSelectable(data);
+    let isSelected = !!data && !!(selectedRowsIds.find(si => si === rowId));
+    let isEdit = !!data && updatedRow?.[rowIdField] === rowId && !!getIsRowEditable(data);
 
     return visibleColumns.map((cd, colIndex) => {
         return (

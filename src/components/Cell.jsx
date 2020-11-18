@@ -41,9 +41,9 @@ const Cell = (props) => {
         }
     } = tableManager;
 
-    let value = column.getValue?.({ value: (updatedRow?.[rowIdField] === rowId) ? updatedRow[column.field] : data[column.field], column: column })?.toString?.();
+    let value = data && column.getValue?.({ value: (updatedRow?.[rowIdField] === rowId) ? updatedRow[column.field] : data[column.field], column: column })?.toString?.();
 
-    if (column.searchable !== false && updatedRow?.[rowIdField] !== rowId && highlightSearch !== false && searchText && searchText.length >= searchMinChars && value?.toLowerCase?.()?.includes?.(searchText.toLowerCase())) {
+    if (value && column.searchable !== false && updatedRow?.[rowIdField] !== rowId && highlightSearch !== false && searchText && searchText.length >= searchMinChars && value?.toLowerCase?.()?.includes?.(searchText.toLowerCase())) {
         value = getHighlightedText(value, searchText);
     }
 
@@ -79,7 +79,7 @@ const Cell = (props) => {
             ref={forwardRef}
         >
             {
-                column.id === 'virtual' ?
+                !data || column.id === 'virtual' ?
                     null
                     :
                 column.id === 'checkbox' ?
@@ -108,7 +108,7 @@ const Cell = (props) => {
                                         className='rgt-cell-editor-input'
                                         type="text"
                                         value={value}
-                                                onChange={e => column.setValue({ value: e.target.value, data, setRow: handleRowEdit, column })}
+                                        onChange={e => column.setValue({ value: e.target.value, data, setRow: handleRowEdit, column })}
                                     />
                                 </div>
                             }

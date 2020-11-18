@@ -17,7 +17,7 @@ const Footer = (props) => {
         rowsData: {
             selectedRowsIds,
             pageItems,
-            items,
+            totalRows,
         },
         components: {
             informationComponent: Information,
@@ -37,7 +37,7 @@ const Footer = (props) => {
                 {
                     showRowsInformation !== false ?
                         <Information 
-                            totalCount={ items.length } 
+                            totalCount={ totalRows } 
                             pageCount={ pageItems.length } 
                             selectedCount={ selectedRowsIds.length } 
                             tableManager={ tableManager } 
