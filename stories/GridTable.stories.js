@@ -114,11 +114,11 @@ const baseColumns = [
                     title="Save"
                     style={styles.saveButton}
                     onClick={e => {
-                        let rowsClone = [...tableManager.rowsData.items];
+                        let rowsClone = [...tableManager.rowsData.allRows];
                         let updatedRowIndex = rowsClone.findIndex(r => r.id === data.id);
                         rowsClone[updatedRowIndex] = data;
 
-                        setRowsData(rowsClone);
+                        tableManager.handlers.onRowsChange(rowsClone);
                         tableManager.handlers.handleRowEditIdChange(null);
                     }}
                 >
@@ -204,6 +204,7 @@ export const ClientSide = () => {
             isLoading={isLoading}
             editRowId={editRowId}
             onRowEditIdChange={setEditRowId}
+            onRowsChange={setRowsData}
             // selectedRowsIds={boolean('Controlled Selection', false) ? array('Selection', selectedRowsIds) : undefined}
             // onSelectedRowsChange={setSelectedRowsIds}
             style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
@@ -228,15 +229,15 @@ export const ServerSide = () => {
     const [tableManager, setTableManager] = useState(null);
     let [searchText, setSearchText] = useState('');
     let [selectedRowsIds, setSelectedRowsIds] = useState([]);
-    let [sort, setSort] = useState({ colId: 4, isAsc: true });
+    let [totalRows, setTotalRows] = useState(MOCK_DATA.length);
     let [columns, setColumns] = useState(baseColumns);
+    let [sort, setSort] = useState({});
 
 
-    const onNewRowsRequest = (requestData, tableManager) => {
-        console.log('requestData', requestData);
+    const onRowsRequest = (requestData, tableManager) => {
         setLoading(true);
         setTimeout(() => {
-            let allItems = [...MOCK_DATA];
+            let rows = [...MOCK_DATA];
             let {
                 params: {
                     sort,
@@ -244,7 +245,7 @@ export const ServerSide = () => {
                     searchMinChars
                 },
                 rowsData: {
-                    items,
+                    allRows,
                 },
                 columnsData: {
                     columns
@@ -261,7 +262,7 @@ export const ServerSide = () => {
             }, {})
 
             if (searchText.length >= searchMinChars) {
-                allItems = allItems.filter(item => Object.keys(item).some(key => {
+                rows = rows.filter(item => Object.keys(item).some(key => {
                     if (conf[key] && conf[key].searchable !== false) {
                         let displayValue = conf[key].getValue({ value: item[key], column: conf[key] });
                         return conf[key].search({ value: displayValue.toString(), searchText: searchText });
@@ -271,7 +272,7 @@ export const ServerSide = () => {
             }
 
             if (sort?.colId) {
-                allItems.sort((a, b) => {
+                rows.sort((a, b) => {
                     let aVal = conf2[sort.colId].getValue({ value: a[conf2[sort.colId].field], column: conf2[sort.colId] });
                     let bVal = conf2[sort.colId].getValue({ value: b[conf2[sort.colId].field], column: conf2[sort.colId] });
 
@@ -279,14 +280,14 @@ export const ServerSide = () => {
                     return conf2[sort.colId].sort({ a: aVal, b: bVal, isAscending: sort.isAsc });
                 });
             }
-            setRowsData(items.concat(allItems.slice(requestData.from, requestData.to)))
+            setRowsData(allRows.concat(rows.slice(requestData.from, requestData.to)));
+            setTotalRows(rows.length)
             setLoading(false);
         }, 1500);
     }
     const onRowsReset = () => {
         setRowsData([])
     }
-    // console.log('rowsData', rowsData);
     return (
         <GridTable
             columns={columns}
@@ -294,6 +295,7 @@ export const ServerSide = () => {
             isLoading={isLoading}
             editRowId={editRowId}
             onRowEditIdChange={setEditRowId}
+            onRowsChange={setRowsData}
             // selectedRowsIds={boolean('Controlled Selection', false) ? array('Selection', selectedRowsIds) : undefined}
             // onSelectedRowsChange={setSelectedRowsIds}
             style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
@@ -301,15 +303,15 @@ export const ServerSide = () => {
             // searchText={boolean('Controlled Search', false) ? text('Search Text', searchText) : undefined}
             // onSearchChange={setSearchText}
             showRowsInformation={boolean('Show Rows Information', true)}
-            // sort={boolean('Controlled Sort', false) ? object('Sort', sort) : undefined}
-            // onSortChange={setSort}
+            sort={sort}
+            onSortChange={setSort}
             isVirtualScrolling={boolean(' Use Virtual Scrolling', false)}
             // searchComponent={boolean('Use Custom Search', false) ? undefined : Search}
             // headerComponent={boolean('Use Custom Header', false) ? Header : undefined}
-            isPaginated={boolean('Use Pagination', false)}
-            onNewRowsRequest={onNewRowsRequest}
+            isPaginated={boolean('Use Pagination', true)}
+            onRowsRequest={onRowsRequest}
             onRowsReset={onRowsReset}
-            totalRows={MOCK_DATA.length}
+            totalRows={totalRows}
         />
     )
 }

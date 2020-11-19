@@ -1,4 +1,5 @@
 import React from 'react';
+import { getHighlightedText } from '../hooks/';
 
 const Cell = (props) => {
 
@@ -26,7 +27,6 @@ const Cell = (props) => {
         handlers: {
             onRowClick,
             handleRowEdit,
-            getHighlightedText,
             toggleItemSelection
         },
         rowsData: {

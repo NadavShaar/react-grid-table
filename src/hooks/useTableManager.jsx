@@ -1,22 +1,28 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { useVirtual } from 'react-virtual';
-import { Search, ColumnVisibility, Header, Footer, Loader, NoResults, Information, PageSize, Pagination } from '../components/';
-import defaultIcons from './../defaultIcons'; 
-
-var isColumnReordering;
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { useRowVirtualizer, useColumns, useSort, useSearch, usePagination, useRowSelection, useRowEdit, useRows, useOnRowsRequest } from '../hooks/';
+import defaultIcons from '../defaultIcons'; 
 
 export default function useTableManager(props) {
-
+    props = {
+        ...props,
+        isVirtualScrolling: props.isVirtualScrolling || (!props.isPaginated && props.onRowsRequest),
+        textConfig: {
+            search: 'Search:',
+            totalRows: 'Total rows:',
+            rows: 'Rows:',
+            selected: 'Selected',
+            rowsPerPage: 'Rows per page:',
+            page: 'Page:',
+            of: 'of',
+            prev: 'Prev',
+            next: 'Next',
+            columnVisibility: 'Column visibility',
+            ...props.textConfig
+        }
+    }
 
     // **************** State ****************
 
-    let [columns, setCols] = useState(props.columns);
-    let [sort, setSort] = useState(props.sort || {});
-    let [page, setPage] = useState(props.page || 1);
-    let [updatedRow, setUpdatedRow] = useState(null);
-    let [searchText, setSearchText] = useState(props.searchText || "");
-    let [pageSize, setPageSize] = useState(props.pageSize || 20);
-    let [selectedRowsIds, setSelectedRowsIds] = useState([]);
     let [tableManager] = useState({
         refs: {},
         handlers: {},
@@ -30,88 +36,22 @@ export default function useTableManager(props) {
         request: {
             from: -1,
             to: 0
-        }
+        },
+        isMounted: false,
+        isColumnReordering: false
     });
-
-    // **************** Refs ****************
-
-    const tableRef = useRef(null);
-    const rgtRef = useRef(null);
-    const isInitialMount = useRef(true);
-
+    let [{ columns, visibleColumns }, setColumns, toggleColumnVisibility, onColumnReorderStart, onColumnReorderEnd] = useColumns(props, tableManager);
+    let [sort, handleSort] = useSort(props, tableManager);
+    let [searchText, handleSearchChange] = useSearch(props, tableManager);
+    let [selectedRowsIds, updateSelectedItems, toggleItemSelection] = useRowSelection(props, tableManager);
+    let [updatedRow, handleRowEdit, handleRowEditIdChange] = useRowEdit(props, tableManager);
+    let { rows, totalRows } = useRows(props, tableManager, { sort, searchText, columns });
+    let [{ page, pageSize, totalPages, pageRows }, handlePagination, handlePageSizeChange] = usePagination(props, tableManager, { rows, totalRows });
     // **************** Table params ****************
 
-    searchText = props.searchText ?? searchText;
-    selectedRowsIds = props.selectedRowsIds ?? selectedRowsIds;
-    sort = props.sort ?? sort;
-    page = props.page ?? page;
-    pageSize = props.pageSize ?? pageSize; 
-    let isVirtualScrolling = props.isVirtualScrolling || props.onNewRowsRequest; 
-    let totalRows = props.totalRows ?? props.rows.length;
-    columns = useMemo(getColumns, [props.columns, columns, props.minColumnWidth]); 
-    let { pageItems, totalPages } = useMemo(getPageItems, [props.rows, sort, page, pageSize, totalPages, searchText, props.isPaginated, props.onNewRowsRequest, totalRows]);
-    console.log('pageItems', pageItems);
-    let visibleColumns = columns.filter(cd => cd.visible !== false);
-
-    let lastColIsPinned = visibleColumns[visibleColumns.length-1]?.pinned;
-
-    let virtualColConfig = {id: 'virtual', visible: true, width: "auto"};
-    if(!lastColIsPinned) visibleColumns.push(virtualColConfig) 
-    else visibleColumns.splice(visibleColumns.length-1, 0, virtualColConfig);
-
-    let tableHasSelection = !!columns.find(cd => cd.id === 'checkbox');
-
-    let textConfig = {
-        search: 'Search:',
-        totalRows: 'Total rows:',
-        rows: 'Rows:',
-        selected: 'Selected',
-        rowsPerPage: 'Rows per page:',
-        page: 'Page:',
-        of: 'of',
-        prev: 'Prev',
-        next: 'Next',
-        columnVisibility: 'Column visibility',
-        ...props.textConfig 
-    }
-
-    // implements smooth scrolling when using virtual scrolling
-    const scrollingRef = React.useRef();
-    const scrollToFn = React.useCallback((offset, defaultScrollTo) => {
-        const duration = 1000;
-        const start = parentRef.current.scrollTop;
-        const startTime = (scrollingRef.current = Date.now());
-
-        const run = () => {
-            if (scrollingRef.current !== startTime) return;
-            const now = Date.now();
-            const elapsed = now - startTime;
-            const progress = easeInOutQuint(Math.min(elapsed / duration, 1));
-            const interpolated = start + (offset - start) * progress;
-
-            if (elapsed < duration) {
-                defaultScrollTo(interpolated);
-                requestAnimationFrame(run);
-            } else {
-                defaultScrollTo(interpolated);
-            }
-        };
-
-        requestAnimationFrame(run);
-    }, []);
-
-    let useVirtualProps = {
-        size: props.isPaginated ? (totalPages === page) ? (totalRows - (totalPages - 1) * pageSize) : pageSize : totalRows,
-        parentRef: tableRef,
-        scrollToFn,
-        ...props.rowVirtualizerProps
-    }
-        
-    Object.assign(tableManager.rowVirtualizer, useVirtual(useVirtualProps));
-
     Object.assign(tableManager.refs, {
-        tableRef,
-        rgtRef
+        tableRef: useRef(null),
+        rgtRef: useRef(null)
     })
     Object.assign(tableManager.handlers, {
         handlePageSizeChange,
@@ -122,7 +62,6 @@ export default function useTableManager(props) {
         toggleColumnVisibility,
         handleSearchChange,
         handleRowEditIdChange,
-        getHighlightedText,
         onRowClick: props.onRowClick,
         getIsRowEditable: props.getIsRowEditable,
         getIsRowSelectable: props.getIsRowSelectable,
@@ -131,47 +70,48 @@ export default function useTableManager(props) {
         onResize: props.onResize,
         onResizeEnd: props.onResizeEnd,
         onColumnReorderStart,
-        onColumnReorderEnd
+        onColumnReorderEnd,
+        onRowsChange: props.onRowsChange
     })
     Object.assign(tableManager.components, {
-        searchComponent: props.searchComponent || Search,
-        columnVisibilityComponent: props.columnVisibilityComponent || ColumnVisibility,
-        headerComponent: props.headerComponent || Header,
-        footerComponent: props.footerComponent || Footer,
-        loaderComponent: props.loaderComponent || Loader,
-        noResultsComponent: props.noResultsComponent || NoResults,
-        informationComponent: props.informationComponent || Information,
-        pageSizeComponent: props.pageSizeComponent || PageSize,
-        paginationComponent: props.paginationComponent || Pagination,
-        dragHandleComponent: props.dragHandleComponent || null,
+        searchComponent: props.searchComponent,
+        columnVisibilityComponent: props.columnVisibilityComponent,
+        headerComponent: props.headerComponent,
+        footerComponent: props.footerComponent,
+        loaderComponent: props.loaderComponent,
+        noResultsComponent: props.noResultsComponent,
+        informationComponent: props.informationComponent,
+        pageSizeComponent: props.pageSizeComponent,
+        paginationComponent: props.paginationComponent,
+        dragHandleComponent: props.dragHandleComponent,
     })
     Object.assign(tableManager.columnsData, {
         columns,
         visibleColumns,
     })
     Object.assign(tableManager.params, {
-        lastColIsPinned,
         sort,
         page,
         searchText,
-        highlightSearch: props.highlightSearch,
-        searchMinChars: props.searchMinChars,
         totalPages,
         pageSize,
-        tableHasSelection,
+        tableHasSelection: !!columns.find(cd => cd.id === 'checkbox'),
+        highlightSearch: props.highlightSearch,
+        searchMinChars: props.searchMinChars,
         showSearch: props.showSearch,
         showRowsInformation: props.showRowsInformation,
         showColumnVisibilityManager: props.showColumnVisibilityManager,
-        isHeaderSticky: props.isHeaderSticky !== false,
+        isHeaderSticky: props.isHeaderSticky,
         isPaginated: props.isPaginated,
-        isVirtualScrolling: isVirtualScrolling,
+        isVirtualScrolling: props.isVirtualScrolling,
         disableColumnsReorder: props.disableColumnsReorder,
         pageSizes: props.pageSizes,
-        textConfig
+        textConfig: props.textConfig
     })
     Object.assign(tableManager.rowsData, {
-        items: props.rows,
-        pageItems,
+        allRows: props.rows,
+        rows,
+        pageItems: pageRows,
         updatedRow,
         selectedRowsIds,
         rowIdField: props.rowIdField,
@@ -183,30 +123,31 @@ export default function useTableManager(props) {
         rowVirtualizer: props.rowVirtualizerProps || {}
     })
     Object.assign(tableManager.icons, {
-        sortAscending: props.icons?.sortAscending || defaultIcons.sortAscending,
-        sortDescending: props.icons?.sortDescending || defaultIcons.sortDescending,
-        clearSelection: props.icons?.clearSelection || defaultIcons.clearSelection,
-        columnVisibility: props.icons?.columnVisibility || defaultIcons.columnVisibility,
-        loader: props.icons?.loader || defaultIcons.loader,
-        search: props.icons?.search || defaultIcons.search
+        ...defaultIcons,
+        ...props.icons
     })
+
+    Object.assign(tableManager.rowVirtualizer, useRowVirtualizer(tableManager));
 
     // **************** Life cycles ****************
 
     useEffect(() => {
-        if (isInitialMount.current) return isInitialMount.current = false;
+        if (!tableManager.isMounted) return;
         if (page === 1) return;
         
-        handlePageChange(1);
+        handlePagination(1);
     }, [searchText, pageSize])
 
     useEffect(() => {
-        if (props.onNewRowsRequest) {
+        if (!tableManager.isMounted) return;
+        
+        if (props.onRowsRequest) {
             tableManager.request = {
                 from: -1,
                 to: 0
             }
             props.onRowsReset?.();
+            updateSelectedItems([]);
         }
     }, [searchText, sort])
 
@@ -215,234 +156,14 @@ export default function useTableManager(props) {
     }, [searchText, sort, page])
 
     useEffect(() => {
-        setUpdatedRow(pageItems.find(item => item[props.rowIdField] === props.editRowId) || null);
-    }, [props.editRowId])
-
-    useEffect(() => {
+        tableManager.isMounted = true;
         props.onLoad?.(tableManager);
     }, [])
 
 
     // **************** Handlers ****************
 
-    function getPageItems() {
-        let pageItems = [...props.rows];
-
-        if (!props.onNewRowsRequest) {
-            var conf = columns.reduce((conf, coldef) => {
-                conf[coldef.field] = coldef;
-                return conf;
-            }, {})
-            var conf2 = columns.reduce((conf, coldef) => {
-                conf[coldef.id] = coldef;
-                return conf;
-            }, {})
-
-            if (searchText.length >= props.searchMinChars) {
-                pageItems = pageItems.filter(item => Object.keys(item).some(key => {
-                    if (conf[key] && conf[key].searchable !== false) {
-                        let displayValue = conf[key].getValue({ value: item[key], column: conf[key] });
-                        return conf[key].search({ value: displayValue.toString(), searchText: searchText });
-                    }
-                    return false;
-                }));
-            }
-
-            if (sort?.colId) {
-                pageItems.sort((a, b) => {
-                    let aVal = conf2[sort.colId].getValue({ value: a[conf2[sort.colId].field], column: conf2[sort.colId] });
-                    let bVal = conf2[sort.colId].getValue({ value: b[conf2[sort.colId].field], column: conf2[sort.colId] });
-
-                    if (conf2[sort.colId].sortable === false) return 0;
-                    return conf2[sort.colId].sort({ a: aVal, b: bVal, isAscending: sort.isAsc });
-                });
-            }
-        }
-
-        let totalPages = (totalRows % pageSize > 0) ? Math.trunc(totalRows / pageSize) + 1 : Math.trunc(totalRows / pageSize);
-
-        if (props.isPaginated !== false) pageItems = pageItems.slice((pageSize * page - pageSize), (pageSize * page));
-
-        return { pageItems, totalPages }
-    }
-
-    function setColumns(cols){
-        if (!props.onColumnsChange) setCols(cols);
-        else props.onColumnsChange(cols);
-    }
-
-    function handleRowEditIdChange(rowEditId){
-        setUpdatedRow(rowEditId && pageItems.find(item => item[props.rowIdField] === rowEditId) || null);
-        props.onRowEditIdChange?.(rowEditId);
-    }
-
-    function handleRowEdit(updatedRow) {
-        setUpdatedRow(updatedRow);
-    }
-
-    function getColumns() {
-        let cols = props.onColumnsChange ? props.columns : columns;
-        return cols.map((cd, idx) => { 
-
-            let isPinnedColumn =  idx === 0 && cd.pinned || idx === cols.length-1 && cd.pinned;
-            let isVisibleColumn = cd.visible !== false;
-            
-            if(cd.id === 'checkbox') return {
-                className: '',
-                width: 'max-content',
-                minWidth: 0,
-                maxWidth: null,
-                resizable: false,
-                ...cd,
-                pinned: isPinnedColumn,
-                visible: isVisibleColumn
-            };
-            
-            return {
-                label: cd.field,
-                className: '',
-                width: '200px',
-                minWidth: cd.minWidth || props.minColumnWidth,
-                maxWidth: null,
-                getValue: ({value, column}) => value, 
-                setValue: ({ value, data, setRow, column }) => { setRow({ ...data, [column.field]: value}) },
-                searchable: true,
-                editable: true,
-                sortable: true,
-                resizable: true,
-                search: ({value, searchText}) => value.toString().toLowerCase().includes(searchText.toLowerCase()), 
-                sort: ({a, b, isAscending}) => {
-                    let aa = typeof a === 'string' ? a.toLowerCase() : a;
-                    let bb = typeof b === 'string' ? b.toLowerCase() : b;
-                    if(aa > bb) return isAscending ? 1 : -1;
-                    else if(aa < bb) return isAscending ? -1 : 1;
-                    return 0;
-                }, 
-                ...cd,
-                pinned: isPinnedColumn,
-                visible: isVisibleColumn
-            }
-        });
-    }
-
-    function onNewRowsRequest() {
-        let lastIndex = tableManager.rowVirtualizer.virtualItems[tableManager.rowVirtualizer.virtualItems.length - 1]?.index + ((page - 1) * pageSize);
-
-        if (lastIndex <= tableManager.request.to) return;
-
-        let from = tableManager.request.to;
-        tableManager.request = {
-            from,
-            to: from + Math.min(pageSize, totalRows - from)
-        }
-
-        props.onNewRowsRequest?.(tableManager.request, tableManager)
-    }
-
-    function onColumnReorderStart(sortData) {
-        isColumnReordering = true;
-        props.onColumnReorderStart?.(sortData);
-    }
-
-    function onColumnReorderEnd(sortData) {
-        setTimeout(() => { isColumnReordering = false }, 0);
-        props.onColumnReorderEnd?.(sortData);
-    }
-
-    function handleSort(colId, isAsc) {
-        if (isColumnReordering) return;
-
-        if (props.sort === undefined || props.onSortChange === undefined) setSort({colId, isAsc});
-        props.onSortChange?.({colId, isAsc});
-    }
-
-    function handleSearchChange(searchText) {
-        if (props.searchText === undefined || props.onSearchChange === undefined) setSearchText(searchText);
-        props.onSearchChange?.(searchText);
-    }
-
-    function handlePageChange(page) {
-        if (props.page === undefined || props.onPageChange === undefined) setPage(page);
-        props.onPageChange?.(page);
-    }
-
-    function handlePageSizeChange(pageSize) {
-        if (props.pageSize === undefined || props.onPageSizeChange === undefined) setPageSize(pageSize);
-        props.onPageSizeChange?.(pageSize);
-    }
-
-    function handlePagination(goToPage) {
-        if((goToPage >= 1) && (goToPage <= totalPages)) {
-            handlePageChange(goToPage);
-            setTimeout(() => { tableRef.current.scrollTop = 0 }, 0);
-        };
-    }
-
-    function updateSelectedItems(newSelectedItems) {
-        if (props.selectedRowsIds === undefined || props.onSelectedRowsChange === undefined) setSelectedRowsIds(newSelectedItems);
-        props.onSelectedRowsChange?.(newSelectedItems);
-    }
-
-    function toggleItemSelection(rowId) {
-        selectedRowsIds = [...selectedRowsIds];
-
-        let itemIndex = selectedRowsIds.findIndex(s => s === rowId);
-
-        if(itemIndex !== -1) selectedRowsIds.splice(itemIndex, 1);
-        else selectedRowsIds.push(rowId);
-
-        updateSelectedItems(selectedRowsIds);
-    }
-
-    function toggleColumnVisibility(colId) {
-        columns = [...columns];
-        let colIndex = columns.findIndex(cd => cd.id === colId);
-
-        columns[colIndex].visible = !columns[colIndex].visible;
-        setColumns(columns);
-    }
-
-    function getHighlightedText(text, searchTerm) {
-        if(text === searchTerm) return <span className='rgt-search-highlight'>{text}</span> ;
-
-        let re = new RegExp(searchTerm,"gi");
-        let restArr = text.split(re, text.length);
-        let restItemsLength = 0;
-
-        let highlightedSearch = restArr.map((a, idx) => {
-            restItemsLength += a.length;
-            let el = null;
-
-            if(a) {
-                el = (
-                    <React.Fragment key={idx}>
-                        <span>{a}</span> 
-                        { 
-                            (restArr.length !== idx+1) ? 
-                                <span className='rgt-search-highlight'>
-                                    {text.slice(restItemsLength, searchTerm.length + restItemsLength)}
-                                </span> 
-                                : null
-                        }
-                    </React.Fragment>
-                )      
-            } else if(restArr.length !== idx+1) {
-                el = (
-                    <span key={idx} className='rgt-search-highlight'>
-                        {text.slice(restItemsLength, searchTerm.length + restItemsLength)}
-                    </span> 
-                )      
-            }
-
-            restItemsLength += searchTerm.length;
-
-            return el;
-        });
-
-        return <span>{highlightedSearch}</span>;
-    }
-
-    onNewRowsRequest();
+    useOnRowsRequest(props, tableManager);
 
     return tableManager
 }

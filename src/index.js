@@ -1,6 +1,6 @@
 import React from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
-import { HeaderCell, Row } from './components/';
+import { HeaderCell, Row, Search, ColumnVisibility, Header, Footer, Loader, NoResults, Information, PageSize, Pagination } from './components/';
 import { useTableManager } from './hooks/';
 import PropTypes from 'prop-types';
 import './index.css';
@@ -141,6 +141,16 @@ GridTable.defaultProps = {
     disableColumnsReorder: false,
     getIsRowSelectable: row => true,
     getIsRowEditable: row => true,
+    searchComponent: Search,
+    columnVisibilityComponent: ColumnVisibility,
+    headerComponent: Header,
+    footerComponent: Footer,
+    loaderComponent: Loader,
+    noResultsComponent: NoResults,
+    informationComponent: Information,
+    pageSizeComponent: PageSize,
+    paginationComponent: Pagination,
+    dragHandleComponent: null,
 };
 
 GridTable.propTypes = {
@@ -189,8 +199,9 @@ GridTable.propTypes = {
     onResizeEnd: PropTypes.func,
     onColumnReorderStart: PropTypes.func,
     onColumnReorderEnd: PropTypes.func, 
-    onNewRowsRequest: PropTypes.func, 
-    onRowsReset: PropTypes.func, 
+    onRowsRequest: PropTypes.func, 
+    onRowsReset: PropTypes.func,
+    onRowsChange: PropTypes.func, 
     // custom components
     headerComponent: PropTypes.func,
     footerComponent: PropTypes.func,
