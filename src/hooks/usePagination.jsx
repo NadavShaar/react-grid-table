@@ -10,6 +10,7 @@ const usePagination = (props, tableManager, { rows, totalRows }) => {
     if (props.isPaginated) rows = rows.slice((pageSize * page - pageSize), (pageSize * page));
 
     const onPageChange = useCallback(page => {
+        page = ~~page;
         if ((page < 1) || (totalPages < page)) return;
 
         if (props.page === undefined || props.onPageChange === undefined) setPage(page);
@@ -19,6 +20,7 @@ const usePagination = (props, tableManager, { rows, totalRows }) => {
     })
 
     const onPageSizeChange = useCallback(pageSize => {
+        pageSize = ~~pageSize;
         if (props.pageSize === undefined || props.onPageSizeChange === undefined) setPageSize(pageSize);
         props.onPageSizeChange?.(pageSize);
     })

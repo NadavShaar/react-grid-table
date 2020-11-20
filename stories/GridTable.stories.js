@@ -229,7 +229,7 @@ export const ServerSide = () => {
     const [tableManager, setTableManager] = useState(null);
     let [searchText, setSearchText] = useState('');
     let [selectedRowsIds, setSelectedRowsIds] = useState([]);
-    let [totalRows, setTotalRows] = useState(MOCK_DATA.length);
+    let [totalRows, setTotalRows] = useState();
     let [columns, setColumns] = useState(baseColumns);
     let [sort, setSort] = useState({});
 
@@ -287,7 +287,9 @@ export const ServerSide = () => {
     }
     const onRowsReset = () => {
         setRowsData([])
+        setTotalRows()
     }
+
     return (
         <GridTable
             columns={columns}
