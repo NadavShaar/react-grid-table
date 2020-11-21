@@ -1,6 +1,6 @@
 import { useVirtual } from 'react-virtual';
 
-const useRowVirtualizer = (tableManager) => {
+const useRowVirtualizer = (props, tableManager) => {
     const {
         refs: {
             tableRef
@@ -21,7 +21,7 @@ const useRowVirtualizer = (tableManager) => {
 
     let useVirtualProps = {
         size: isPaginated ? (totalPages === page) ? (totalRows - (totalPages - 1) * pageSize) : pageSize : totalRows,
-        parentRef: tableRef,
+        parentRef: props.isVirtualScrolling ? tableRef : {},
         ...rowVirtualizerProps,
     }
 

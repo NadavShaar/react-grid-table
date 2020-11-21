@@ -127,7 +127,7 @@ export default function useTableManager(props) {
         ...props.icons
     })
 
-    Object.assign(tableManager.rowVirtualizer, useRowVirtualizer(tableManager));
+    Object.assign(tableManager.rowVirtualizer, useRowVirtualizer(props, tableManager));
 
     // **************** Life cycles ****************
 
