@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { withKnobs, boolean } from '@storybook/addon-knobs';
+import { withKnobs, boolean, number } from '@storybook/addon-knobs';
 
 import GridTable from '../src';
 
@@ -174,6 +174,7 @@ export const ClientSide = () => {
             // searchComponent={boolean('Use Custom Search', false) ? undefined : Search}
             // headerComponent={boolean('Use Custom Header', false) ? Header : undefined}
             isPaginated={boolean('Use Pagination', true)}
+            // additionalProps={{ rowVirtualizer: { overscan: number('Overscan', 3) }}}
         />
     )
 }
@@ -241,6 +242,7 @@ export const ServerSide = () => {
             onRowsRequest={onRowsRequest}
             onRowsReset={onRowsReset}
             totalRows={totalRows}
+            rowVirtualizerProps={number('Overscan', 3)}
         />
     )
 }

@@ -26,6 +26,7 @@ export default (props, tableManager) => {
 
     let useVirtualProps = {
         size: isPaginated ? (totalPages === page) ? (totalRows - (totalPages - 1) * pageSize) : pageSize : totalRows,
+        overscan: 20,
         parentRef: rowVirtualizer.isVirtualScrolling ? tableRef : {},
         ...rowVirtualizerProps,
     }

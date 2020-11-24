@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { SortableElement, SortableHandle } from 'react-sortable-hoc';
-import { useResizeEvents } from '../hooks/';
 
 const SortableItem = SortableElement(({children, index, columnId, className}) => <div className={className} data-column-id={columnId} key={index}>{children}</div>);
 const SortableDragHandle = SortableHandle(({children, index}) => <React.Fragment>{children}</React.Fragment>);
@@ -61,8 +60,6 @@ const SelectAll = ({tableManager, column, style}) => {
     )
 }
 
-var lastPos;
-
 export default (props) => {
 
     let {
@@ -92,15 +89,14 @@ export default (props) => {
             disableColumnsReorder,
         },
         columnsResizeApi: {
-            onResize,
-            onResizeEnd
+            useResizeRef
         },
         additionalProps: {
             headerCell: additionalProps
         }
     } = tableManager;
     
-    let resizeHandleRef = useResizeEvents(column, onResize, onResizeEnd);
+    let resizeHandleRef = useResizeRef(column);
 
     let isPinnedRight = column.pinned && index === visibleColumns.length - 1;
     let isPinnedLeft = column.pinned && index === 0;

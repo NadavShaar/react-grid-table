@@ -222,8 +222,9 @@ export default MyAwesomeTable;
 | onRowClick | function | triggers when a row is clicked | `({rowIndex, data, column, event}) => { }` |
 | onRowEditIdChange | function | triggers when `rowEditId` changed | `rowEditId => { }` |
 | onLoad | function | triggers when `tableManager` is initialized (<u>[details](#tableManager)</u>) | `tableManager => { }` |
-| onResize | function | triggers when column resize occur | `({event, target, column}) => { }` |
-| onResizeEnd | function | triggers when column resize ended | `() => { }` |
+| onColumnResizeStart | function | triggers when column resize starts | `({event, target, column}) => { }` |
+| onColumnResize | function | triggers when column resize occur | `({event, target, column}) => { }` |
+| onColumnResizeEnd | function | triggers when column resize ended | `({event, target, column}) => { }` |
 | onColumnReorderStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `sortData => { }` |
 | onColumnReorderEnd | function | triggers on column drop, and only if the column changed its position. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `sortData => { }` |
 
@@ -587,10 +588,7 @@ The API is devided into the following categories:
 | getIsRowEditable | function | a callback function that returns whether row editing for the current row should be disabled or not | `row => true` |
 | getIsRowSelectable | function | a callback function that returns whether row selection for the current row should be disabled or not | `row => true` |
 | handleSort | function | accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }`, to unsort simply pass a `colId` and `isAsc` as `null | `handleSort(colId, isAsc)` |
-| onResize | function | triggers when column resize occur | `({event, target, column}) => { }` |
-| onResizeEnd | function | triggers when column resize ended | `() => { }` |
-| onColumnReorderStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `sortData => { }` |
-| onColumnReorderEnd | function | triggers on column drop, and only if the column changed its position. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `sortData => { }` |
+
 
 ### components
 all [components](#components-props) that are not part of the table itself.

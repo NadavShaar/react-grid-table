@@ -7,7 +7,6 @@ export default (props, tableManager) => {
         columnsApi: {
             columns,
         },
-        columnsReorderApi
     } = tableManager;
 
     let [sort, setSort] = useState(props.sort || {});
@@ -15,7 +14,17 @@ export default (props, tableManager) => {
     sortApi.sort = props.sort ?? sort;
 
     sortApi.setSort = useCallback((colId, isAsc) => {
-        if (columnsReorderApi.isColumnReordering) return;
+        let {
+            columnsReorderApi: {
+                isColumnReordering
+            },
+            columnsResizeApi: {
+                isColumnResizing
+            }
+        } = tableManager;
+
+        if (isColumnReordering) return;
+        if (isColumnResizing) return;
 
         if (props.sort === undefined || props.onSortChange === undefined) setSort({ colId, isAsc });
         props.onSortChange?.({ colId, isAsc });

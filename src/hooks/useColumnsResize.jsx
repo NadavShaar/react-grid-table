@@ -1,4 +1,5 @@
 import { useCallback, useRef } from 'react';
+import { useResizeEvents } from './';
 
 export default (props, tableManager) => {
     const columnsResizeApi = useRef({
@@ -15,6 +16,11 @@ export default (props, tableManager) => {
             setColumns
         }
     } = tableManager;
+
+    columnsResizeApi.onResizeStart = useCallback(({ e, target, column }) => {
+        columnsResizeApi.isColumnResizing = true;
+        props.onColumnResizeStart?.({ e, target, column });
+    })
 
     columnsResizeApi.onResize = useCallback(({ e, target, column }) => {
         let containerEl = tableRef.current;
@@ -38,10 +44,10 @@ export default (props, tableManager) => {
         }
 
         columnsResizeApi.lastPos = e.clientX;
-        props.onResize?.({ event: e, target, column });
+        props.onColumnResize?.({ event: e, target, column });
     })
 
-    columnsResizeApi.onResizeEnd = useCallback(() => {
+    columnsResizeApi.onResizeEnd = useCallback(({ e, target, column }) => {
         columnsResizeApi.lastPos = null;
         let containerEl = tableRef.current;
         let gridTemplateColumns = containerEl.style.gridTemplateColumns;
@@ -54,8 +60,17 @@ export default (props, tableManager) => {
             }
         })
         setColumns(columns);
-        props.onResizeEnd?.();
+        props.onColumnResizeEnd?.({ e, target, column });
+        setTimeout(() => columnsResizeApi.isColumnResizing = false, 0);
     })
+
+    columnsResizeApi.useResizeRef = column => {
+        let resizeHandleRef = useRef(null);
+
+        useResizeEvents(resizeHandleRef, column, columnsResizeApi.onResizeStart, columnsResizeApi.onResize, columnsResizeApi.onResizeEnd);
+
+        return resizeHandleRef;
+    }
 
     return columnsResizeApi;
 }

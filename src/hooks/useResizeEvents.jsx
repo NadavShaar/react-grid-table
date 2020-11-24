@@ -1,33 +1,31 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
-export default (column, sortCallback, sortEndCallback) => {
-    let resizeHandleRef = useRef(null);
+export default (resizeHandleRef, column, onResizeStart, onResize, onResizeEnd) => {
 
     useEffect(() => {
-        if(resizeHandleRef.current) resizeHandleRef.current.addEventListener('mousedown', onResize);
+        if(resizeHandleRef.current) resizeHandleRef.current.addEventListener('mousedown', onMouseDown);
 
         return () => {
-            if(resizeHandleRef.current) resizeHandleRef.current.removeEventListener('mousedown', onResize)
-            window.removeEventListener('mousemove', handleResize);
-            window.removeEventListener('mouseup', removeResizeListeners);
+            if (resizeHandleRef.current) resizeHandleRef.current.removeEventListener('mousedown', onMouseDown)
+            window.removeEventListener('mousemove', onMouseMove);
+            window.removeEventListener('mouseup', onMouseUp);
         }
-    }, [resizeHandleRef.current, column, sortCallback, sortEndCallback])
+    }, [resizeHandleRef.current, column, onResizeStart, onResize, onResizeEnd])
 
-    const onResize = (e) => {
-        e.stopPropagation()
-        window.addEventListener('mousemove', handleResize);
-        window.addEventListener('mouseup', removeResizeListeners);
+    const onMouseDown = (e) => {
+        e.stopPropagation();
+        onResizeStart({ e, target: resizeHandleRef.current, column });
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mouseup', onMouseUp);
     }
 
-    const handleResize = (e) => {
-        sortCallback({e, target: resizeHandleRef.current, column});
+    const onMouseMove = (e) => {
+        onResize({e, target: resizeHandleRef.current, column});
     }
     
-    const removeResizeListeners = (e) => {
-        sortEndCallback();
-        window.removeEventListener('mousemove', handleResize);
-        window.removeEventListener('mouseup', removeResizeListeners);
+    const onMouseUp = (e) => {
+        onResizeEnd({ e, target: resizeHandleRef.current, column });
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', onMouseUp);
     }
-
-    return resizeHandleRef;
 }

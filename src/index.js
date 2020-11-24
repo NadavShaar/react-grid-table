@@ -5,7 +5,7 @@ import { useTableManager } from './hooks/';
 import PropTypes from 'prop-types';
 import './index.css';
 
-const SortableList = SortableContainer(({ style, className, children, forwardRef }) => <div ref={forwardRef} className={className} style={style}>{children}</div>);
+const SortableList = SortableContainer(({ forwardRef, className, style, children }) => <div ref={forwardRef} className={className} style={style}>{children}</div>);
  
 const GridTable = (props) => {
 
@@ -174,8 +174,8 @@ GridTable.propTypes = {
     onPageChange: PropTypes.func,
     onPageSizeChange: PropTypes.func,
     onLoad: PropTypes.func,
-    onResize: PropTypes.func,
-    onResizeEnd: PropTypes.func,
+    onColumnResize: PropTypes.func,
+    onColumnResizeEnd: PropTypes.func,
     onColumnReorderStart: PropTypes.func,
     onColumnReorderEnd: PropTypes.func, 
     onRowsRequest: PropTypes.func, 
@@ -196,7 +196,4 @@ GridTable.propTypes = {
 
 export default GridTable;
 
-export {
-    HeaderCell,
-    Row
-}
+export * from './components';

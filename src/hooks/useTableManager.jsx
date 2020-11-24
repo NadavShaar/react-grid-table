@@ -24,6 +24,14 @@ export default (props) => {
         isMounted: false,
         isInitialized: false
     }).current;
+    
+    // initialization
+    useEffect(() => {
+        tableManager.isMounted = true;
+        props.onLoad?.(tableManager);
+
+        return () => tableManager.isMounted = false;
+    }, [])
 
     tableManager.onResize = props.onResize;
     tableManager.onResizeEnd = props.onResizeEnd;
@@ -50,28 +58,19 @@ export default (props) => {
     tableManager.rowSelectionApi = useRowSelection(props, tableManager);
     tableManager.rowEditApi = useRowEdit(props, tableManager);
     tableManager.rowVirtualizer = useRowVirtualizer(props, tableManager);
-
-
-    // initialization
-    useEffect(() => {
-        tableManager.isMounted = true;
-        props.onLoad?.(tableManager);
-
-        return () => tableManager.isMounted = false;
-    }, [])
-
+    
     // reset page number
     useEffect(() => {
         if (!tableManager.isInitialized) return;
         if (tableManager.paginationApi.page === 1) return;
-        
+
         tableManager.paginationApi.setPage(1);
     }, [tableManager.searchApi.searchText, tableManager.paginationApi.pageSize])
 
     // reset rows
     useEffect(() => {
         if (!tableManager.isInitialized) return;
-        
+
         if (props.onRowsRequest) {
             tableManager.rowsApi.requestRowsData = {
                 from: -1,
