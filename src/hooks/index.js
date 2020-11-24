@@ -9,10 +9,6 @@ import usePagination from './usePagination';
 import useRowSelection from './useRowSelection'; 
 import useRowEdit from './useRowEdit'; 
 import useRows from './useRows'; 
-import useIcons from './useIcons';
-import useAdditionalProps from './useAdditionalProps'; 
-import useTexts from './useTexts'; 
-import useComponents from './useComponents';
 import useColumnsReorder from './useColumnsReorder'; 
 import useColumnsVisibility from './useColumnsVisibility'; 
 import useColumnsResize from './useColumnsResize'; 
@@ -29,10 +25,6 @@ export {
     useRowSelection,
     useRowEdit,
     useRows,
-    useIcons,
-    useAdditionalProps,
-    useTexts,
-    useComponents,
     useColumnsReorder,
     useColumnsVisibility,
     useColumnsResize,

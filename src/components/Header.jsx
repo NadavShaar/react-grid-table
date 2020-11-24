@@ -7,7 +7,6 @@ export default (props) => {
     } = props;
 
     let { 
-        showColumnVisibilityManager,
         components: {
             ColumnVisibility,
             Search,
@@ -17,6 +16,7 @@ export default (props) => {
         },
         columnsVisibilityApi: {
             toggleColumnVisibility,
+            showColumnVisibilityManager,
         },
         searchApi: {
             showSearch,

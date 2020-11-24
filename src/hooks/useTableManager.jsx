@@ -1,6 +1,8 @@
-//TODO: add params maybe
-//TODO: extract highlight text condition
+//TODO: fill the config
+
 import { useEffect, useRef } from 'react';
+import * as components from '../components';
+import { additionalProps, icons, texts } from '../defaults';
 import {
     useRowVirtualizer,
     useColumns,
@@ -10,10 +12,6 @@ import {
     useRowSelection,
     useRowEdit,
     useRows,
-    useIcons,
-    useAdditionalProps,
-    useTexts,
-    useComponents,
     useColumnsReorder,
     useColumnsVisibility,
     useColumnsResize
@@ -33,20 +31,19 @@ export default (props) => {
         return () => tableManager.isMounted = false;
     }, [])
 
-    tableManager.onResize = props.onResize;
-    tableManager.onResizeEnd = props.onResizeEnd;
-    tableManager.showColumnVisibilityManager = props.showColumnVisibilityManager;
-    tableManager.showRowsInformation = props.showRowsInformation;
-    tableManager.isHeaderSticky = props.isHeaderSticky;
+    tableManager.components = { ...components, ...props.components };
+    tableManager.additionalProps = { ...additionalProps, ...props.additionalProps };
+    tableManager.icons = { ...icons, ...props.icons };
+    tableManager.texts = { ...texts, ...props.texts };
+    tableManager.config = {
+        showRowsInformation: props.showRowsInformation,
+        isHeaderSticky: props.isHeaderSticky
+    }
 
     tableManager.refs = {
         tableRef: useRef(null),
         rgtRef: useRef(null)
     }
-    tableManager.components = useComponents(props, tableManager);
-    tableManager.texts = useTexts(props, tableManager);
-    tableManager.icons = useIcons(props, tableManager);
-    tableManager.additionalProps = useAdditionalProps(props, tableManager);
     tableManager.columnsApi = useColumns(props, tableManager);
     tableManager.columnsReorderApi = useColumnsReorder(props, tableManager);
     tableManager.columnsResizeApi = useColumnsResize(props, tableManager);

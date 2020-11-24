@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 
 export default (props, tableManager) => {
     const columnsVisibilityApi = useRef({}).current;
@@ -9,6 +9,8 @@ export default (props, tableManager) => {
             setColumns
         }
     } = tableManager;
+
+    columnsVisibilityApi.showColumnVisibilityManager = props.showColumnVisibilityManager;
 
     columnsVisibilityApi.toggleColumnVisibility = useCallback((colId) =>{
         columns = [...columns];

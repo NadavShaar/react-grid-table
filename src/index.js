@@ -119,17 +119,7 @@ GridTable.defaultProps = {
     showRowsInformation: true,
     disableColumnsReorder: false,
     getIsRowSelectable: row => true,
-    getIsRowEditable: row => true,
-    searchComponent: Search,
-    columnVisibilityComponent: ColumnVisibility,
-    headerComponent: Header,
-    footerComponent: Footer,
-    loaderComponent: Loader,
-    noResultsComponent: NoResults,
-    informationComponent: Information,
-    pageSizeComponent: PageSize,
-    paginationComponent: Pagination,
-    dragHandleComponent: null,
+    getIsRowEditable: row => true
 };
 
 GridTable.propTypes = {
@@ -182,16 +172,7 @@ GridTable.propTypes = {
     onRowsReset: PropTypes.func,
     onRowsChange: PropTypes.func, 
     // custom components
-    headerComponent: PropTypes.func,
-    footerComponent: PropTypes.func,
-    loaderComponent: PropTypes.func,
-    noResultsComponent: PropTypes.func,
-    searchComponent: PropTypes.func,
-    columnVisibilityComponent: PropTypes.func,
-    informationComponent: PropTypes.func,
-    pageSizeComponent: PropTypes.func,
-    paginationComponent: PropTypes.func,
-    dragHandleComponent: PropTypes.func,
+    components: PropTypes.object,
 };
 
 export default GridTable;

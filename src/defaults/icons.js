@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 const LOADER = <svg width="46" height="46" viewBox="-2 -2 42 42" xmlns="http://www.w3.org/2000/svg">
     <g fill="none" fillRule="evenodd">
@@ -36,16 +36,11 @@ const SORT_DESCENDING_ICON = <React.Fragment>&darr;</React.Fragment>;
 
 const SEARCH_ICON = <React.Fragment>&#9906;</React.Fragment>;
 
-export default (props, tableManager) => {
-    return useMemo(() => {
-        return {
-            loader: LOADER,
-            clearSelection: TRASH_ICON,
-            columnVisibility: MENU_ICON,
-            sortAscending: SORT_ASCENDING_ICON,
-            sortDescending: SORT_DESCENDING_ICON,
-            search: SEARCH_ICON,
-            ...props.icons
-        }
-    }, [props.icons]);
+export default {
+    loader: LOADER,
+    clearSelection: TRASH_ICON,
+    columnVisibility: MENU_ICON,
+    sortAscending: SORT_ASCENDING_ICON,
+    sortDescending: SORT_DESCENDING_ICON,
+    search: SEARCH_ICON
 }

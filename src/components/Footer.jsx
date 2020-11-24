@@ -7,7 +7,9 @@ export default (props) => {
     } = props;
 
     let {
-        showRowsInformation,
+        config: {
+            showRowsInformation
+        },
         rowsApi: {
             totalRows,
         },

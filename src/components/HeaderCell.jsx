@@ -70,7 +70,9 @@ export default (props) => {
     } = props;
 
     let {
-        isHeaderSticky,
+        config: {
+            isHeaderSticky
+        },
         sortApi: {
             sort,
             setSort,
