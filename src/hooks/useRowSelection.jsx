@@ -1,27 +1,35 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo, useRef } from 'react';
 
-const useRowSelection = (props, tableManager) => {
+export default (props, tableManager) => {
+    const rowSelectionApi = useRef({}).current;
+
+    let {
+        columnsApi: {
+            columns
+        }
+    } = tableManager;
+
     let [selectedRowsIds, setSelectedRowsIds] = useState([]);
 
-    selectedRowsIds = props.selectedRowsIds ?? selectedRowsIds;
+    rowSelectionApi.selectedRowsIds = props.selectedRowsIds ?? selectedRowsIds;
+    rowSelectionApi.getIsRowSelectable = props.getIsRowSelectable;
+    rowSelectionApi.tableHasSelection = useMemo(() => !!columns.find(cd => cd.id === 'checkbox'), [columns]);
     
-    const updateSelectedItems = useCallback(newSelectedItems => {
+    rowSelectionApi.setSelectedRowsIds = useCallback(newSelectedItems => {
         if (props.selectedRowsIds === undefined || props.onSelectedRowsChange === undefined) setSelectedRowsIds(newSelectedItems);
         props.onSelectedRowsChange?.(newSelectedItems);
     })
 
-    const toggleItemSelection = useCallback(rowId => {
-        selectedRowsIds = [...selectedRowsIds];
+    rowSelectionApi.toggleRowSelection = useCallback(rowId => {
+        selectedRowsIds = [...rowSelectionApi.selectedRowsIds];
 
         let itemIndex = selectedRowsIds.findIndex(s => s === rowId);
 
         if (itemIndex !== -1) selectedRowsIds.splice(itemIndex, 1);
         else selectedRowsIds.push(rowId);
 
-        updateSelectedItems(selectedRowsIds);
+        rowSelectionApi.setSelectedRowsIds(selectedRowsIds);
     })
 
-    return [selectedRowsIds, updateSelectedItems, toggleItemSelection];
+    return rowSelectionApi;
 }
-
-export default useRowSelection;

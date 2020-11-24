@@ -1,13 +1,16 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useRef } from 'react';
 
-const useColumns = (props) => {
-    let [columns, setCols] = useState(props.columns);
+export default (props, tableManager) => {
+    const columnsApi = useRef({}).current;
 
-    columns = useMemo(() => {
-        let cols = props.onColumnsChange ? props.columns : columns;
-        return cols.map((cd, idx) => {
+    let [columns, setColumns] = useState(props.columns);
 
-            let isPinnedColumn = idx === 0 && cd.pinned || idx === cols.length - 1 && cd.pinned;
+    columns = props.onColumnsChange ? props.columns : columns;
+
+    columnsApi.columns = useMemo(() => {
+        return columns.map((cd, idx) => {
+
+            let isPinnedColumn = idx === 0 && cd.pinned || idx === columns.length - 1 && cd.pinned;
             let isVisibleColumn = cd.visible !== false;
 
             if (cd.id === 'checkbox') return {
@@ -15,6 +18,9 @@ const useColumns = (props) => {
                 width: 'max-content',
                 minWidth: 0,
                 maxWidth: null,
+                searchable: false,
+                editable: false,
+                sortable: false,
                 resizable: false,
                 ...cd,
                 pinned: isPinnedColumn,
@@ -46,39 +52,21 @@ const useColumns = (props) => {
                 visible: isVisibleColumn
             }
         })
-    }, [props.columns, columns, props.minColumnWidth]); 
+    }, [columns, props.minColumnWidth]); 
 
-    const setColumns = useCallback(cols => {
-        if (!props.onColumnsChange) setCols(cols);
+    columnsApi.visibleColumns = useMemo(() => {
+        let visibleColumns = columnsApi.columns.filter(cd => cd.visible !== false);
+
+        let virtualColIndex = visibleColumns.length;
+        if (visibleColumns[visibleColumns.length - 1]?.pinned) virtualColIndex--;
+        visibleColumns.splice(virtualColIndex, 0, { id: 'virtual', visible: true, width: "auto" });
+        return visibleColumns;
+    }, [columnsApi.columns])
+
+    columnsApi.setColumns = useCallback(cols => {
+        if (!props.onColumnsChange) setColumns(cols);
         else props.onColumnsChange(cols);
     })
 
-    const toggleColumnVisibility = useCallback((colId) =>{
-        columns = [...columns];
-        let colIndex = columns.findIndex(cd => cd.id === colId);
-
-        columns[colIndex].visible = !columns[colIndex].visible;
-        setColumns(columns);
-    })
-
-    const onColumnReorderStart = useCallback(sortData => {
-        tableManager.isColumnReordering = true;
-        props.onColumnReorderStart?.(sortData);
-    })
-
-    const onColumnReorderEnd = useCallback(sortData => {
-        setTimeout(() => { tableManager.isColumnReordering = false }, 0);
-        props.onColumnReorderEnd?.(sortData);
-    })
-
-    let visibleColumns = columns.filter(cd => cd.visible !== false);
-
-    let lastColIsPinned = visibleColumns[visibleColumns.length - 1]?.pinned;
-    let virtualColConfig = { id: 'virtual', visible: true, width: "auto" };
-    if (!lastColIsPinned) visibleColumns.push(virtualColConfig)
-    else visibleColumns.splice(visibleColumns.length - 1, 0, virtualColConfig);
-
-    return [{ columns, visibleColumns }, setColumns, toggleColumnVisibility, onColumnReorderStart, onColumnReorderEnd];
+    return columnsApi;
 }
-
-export default useColumns;

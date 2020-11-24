@@ -16,54 +16,33 @@ const GridTable = (props) => {
             rgtRef,
             tableRef
         },
-        handlers: {
-            setColumns,
+        columnsApi: {
+            visibleColumns,
+        },
+        columnsReorderApi: {
             onColumnReorderStart,
             onColumnReorderEnd
         },
+        rowsApi: {
+            isLoading
+        },
         components: {
-            headerComponent: Header,
-            footerComponent: Footer,
-            loaderComponent: Loader,
-            noResultsComponent: NoResults
+            Header,
+            Footer,
+            Loader,
+            NoResults
         },
-        columnsData: {
-            columns,
-            visibleColumns
+        rowVirtualizer: {
+            isVirtualScrolling,
+            virtualItems
         },
-        params: {
-            isVirtualScrolling
+        paginationApi: {
+            pageRows
         },
-        rowsData: {
-            pageItems
-        },
-        additionalProps,
-        icons,
-        rowVirtualizer
+        components: {
+            dragHandleComponent
+        }
     } = tableManager;
-
-    function handleColumnReorderStart(sortData) {
-        sortData.helper.classList.add('rgt-column-sort-ghost');
-        onColumnReorderStart?.(sortData);
-    }
-
-    function handleColumnReorderEnd(sortData) {
-        if(sortData.oldIndex === sortData.newIndex) return;
-
-        let colDefNewIndex = columns.findIndex(oc => oc.id === visibleColumns[sortData.newIndex].id);
-        let colDefOldIndex = columns.findIndex(oc => oc.id === visibleColumns[sortData.oldIndex].id);
-
-        let columnsClone = [...columns];
-        columnsClone.splice(colDefNewIndex, 0, ...columnsClone.splice(colDefOldIndex, 1));
-        
-        setColumns(columnsClone);
-        onColumnReorderEnd?.(sortData);
-    }
-
-    let { 
-        isLoading,
-        dragHandleComponent,
-    } = props;
 
     let rest = Object.keys(props).reduce((rest, key) => {
         if (GridTable.propTypes[key] === undefined) rest = { ...rest, [key]: props[key] };
@@ -81,14 +60,14 @@ const GridTable = (props) => {
                 distance={10}
                 lockAxis="x"
                 useDragHandle={!!dragHandleComponent}
-                onSortStart={handleColumnReorderStart}
-                onSortEnd={handleColumnReorderEnd}
+                onSortStart={onColumnReorderStart}
+                onSortEnd={onColumnReorderEnd}
                 style={{
                     display: 'grid',
                     overflow: 'auto',
                     flex: 1,
                     gridTemplateColumns: (visibleColumns.map(g => g.width)).join(" "),
-                    gridTemplateRows: `repeat(${pageItems.length + 1 + (isVirtualScrolling ? 1 : 0)}, max-content)`,
+                    gridTemplateRows: `repeat(${pageRows.length + 1 + (isVirtualScrolling ? 1 : 0)}, max-content)`,
                 }}
             >
                 {
@@ -97,15 +76,15 @@ const GridTable = (props) => {
                     ))
                 }
                 {
-                    pageItems.length && visibleColumns.length > 1 ?
+                    pageRows.length && visibleColumns.length > 1 ?
                         isVirtualScrolling ? 
                             [
                                 <Row key={'virtual-start'} index={'virtual-start'} tableManager={tableManager} />,
-                                ...rowVirtualizer.virtualItems.map(vr => <Row key={vr.index} index={vr.index} data={pageItems[vr.index]} measureRef={vr.measureRef} tableManager={tableManager} />),
+                                ...virtualItems.map(vr => <Row key={vr.index} index={vr.index} data={pageRows[vr.index]} measureRef={vr.measureRef} tableManager={tableManager} />),
                                 <Row key={'virtual-end'} index={'virtual-end'} tableManager={tableManager} />
                             ]
                             :
-                            pageItems.map((r, index) => <Row key={index} index={index} data={r} tableManager={tableManager} />)
+                            pageRows.map((r, index) => <Row key={index} index={index} data={r} tableManager={tableManager} />)
                         :
                         <div className='rgt-no-data-container'>
                             {
@@ -183,7 +162,7 @@ GridTable.propTypes = {
     isVirtualScrolling: PropTypes.bool,
     showColumnVisibilityManager: PropTypes.bool,
     icons: PropTypes.object,
-    textConfig: PropTypes.object,
+    texts: PropTypes.object,
     totalRows: PropTypes.number,
     // events
     onColumnsChange: PropTypes.func,

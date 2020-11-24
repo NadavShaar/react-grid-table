@@ -1,23 +1,23 @@
 import React from 'react';
 
-const Information = props => {
-
+export default props => {
     let { 
         totalCount, 
+        pageSize,
         pageCount, 
         selectedCount,
         tableManager
     } = props;
 
     let {
-        params: {
+        texts,
+        paginationApi: {
             page,
-            tableHasSelection,
             isPaginated,
-            textConfig
         },
-        handlers: {
-            updateSelectedItems
+        rowSelectionApi: {
+            tableHasSelection,
+            setSelectedRowsIds
         },
         icons: {
             clearSelection: clearSelectionIcon
@@ -26,9 +26,7 @@ const Information = props => {
 
     return (
         <div className='rgt-footer-items-information-inner'>
-            { textConfig.totalRows } { totalCount } | { isPaginated ? `${textConfig.rows} ${pageCount * page - pageCount} - ${pageCount * page}` : ''} { tableHasSelection ? <React.Fragment>{`| ${selectedCount} ${textConfig.selected}`}{selectedCount ? <span className="rgt-footer-clear-selection-button rgt-clickable" onClick={e => updateSelectedItems([])}>{ clearSelectionIcon }</span> : null}</React.Fragment> : ''}
+            { texts.totalRows} { totalCount} | { isPaginated ? `${texts.rows} ${pageSize * (page - 1)} - ${pageSize * (page - 1) + pageCount}` : ''} { tableHasSelection ? <React.Fragment>{`| ${selectedCount} ${texts.selected}`}{selectedCount ? <span className="rgt-footer-clear-selection-button rgt-clickable" onClick={e => setSelectedRowsIds([])}>{ clearSelectionIcon }</span> : null}</React.Fragment> : ''}
         </div>
     )
 }
-
-export default Information;

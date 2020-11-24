@@ -1,16 +1,17 @@
-import {useEffect} from 'react';
+import { useEffect, useRef } from 'react';
 
-const useResizeEvents = (target, column, sortCallback, sortEndCallback) => {
+export default (column, sortCallback, sortEndCallback) => {
+    let resizeHandleRef = useRef(null);
 
     useEffect(() => {
-        if(target) target.addEventListener('mousedown', onResize);
+        if(resizeHandleRef.current) resizeHandleRef.current.addEventListener('mousedown', onResize);
 
         return () => {
-            if(target) target.removeEventListener('mousedown', onResize)
+            if(resizeHandleRef.current) resizeHandleRef.current.removeEventListener('mousedown', onResize)
             window.removeEventListener('mousemove', handleResize);
             window.removeEventListener('mouseup', removeResizeListeners);
         }
-    }, [target, column, sortCallback, sortEndCallback])
+    }, [resizeHandleRef.current, column, sortCallback, sortEndCallback])
 
     const onResize = (e) => {
         e.stopPropagation()
@@ -19,7 +20,7 @@ const useResizeEvents = (target, column, sortCallback, sortEndCallback) => {
     }
 
     const handleResize = (e) => {
-        sortCallback({e, target, column});
+        sortCallback({e, target: resizeHandleRef.current, column});
     }
     
     const removeResizeListeners = (e) => {
@@ -27,6 +28,6 @@ const useResizeEvents = (target, column, sortCallback, sortEndCallback) => {
         window.removeEventListener('mousemove', handleResize);
         window.removeEventListener('mouseup', removeResizeListeners);
     }
-}
 
-export default useResizeEvents;
+    return resizeHandleRef;
+}

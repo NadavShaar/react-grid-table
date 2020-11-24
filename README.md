@@ -207,7 +207,7 @@ export default MyAwesomeTable;
 | isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
 | showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
 | icons | object of nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
-| textConfig | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
+| texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
 
 ### Event props
 
@@ -402,7 +402,7 @@ const Header = ({tableManager}) => {
     const { params, handlers, columnsData } = tableManager;
 
     const { searchText } = params;
-    const { handleSearchChange, toggleColumnVisibility } = handlers;
+    const { setSearchText, toggleColumnVisibility } = handlers;
     const { columns } = columnsData;
 
     return (
@@ -415,7 +415,7 @@ const Header = ({tableManager}) => {
                     name="my-search"
                     type="search" 
                     value={searchText} 
-                    onChange={e => handleSearchChange(e.target.value)} 
+                    onChange={e => setSearchText(e.target.value)} 
                     style={{width: 300}}
                 />
             </div>
@@ -475,22 +475,22 @@ const Footer = ({tableManager}) => {
 
     let {
         params: { page, pageSize, pageSizes, totalPages },
-        rowsData: { items, pageItems, selectedRowsIds },
+        rowsData: { items, pageRows, selectedRowsIds },
         icons: { clearSelection: clearSelectionIcon },
-        handlers: { updateSelectedItems, handlePageSizeChange, handlePagination },
+        handlers: { setSelectedRowsIds, setPageSize, handlePagination },
     } = tableManager;
 
     return (
         <div style={{display: 'flex', justifyContent: 'space-between', padding: '12px 20px', background: '#fff'}}>
             <div style={{display: 'flex'}}>
                 {`Total Rows: ${items.length} 
-                | Rows: ${pageItems.length * page - pageItems.length} - ${pageItems.length * page} 
+                | Rows: ${pageRows.length * page - pageRows.length} - ${pageRows.length * page} 
                 | ${selectedRowsIds.length} Selected`}
                 { 
                     selectedRowsIds.length ? 
                         <button 
                             style={{marginLeft: 10, padding: 0}} 
-                            onClick={e => updateSelectedItems([])}
+                            onClick={e => setSelectedRowsIds([])}
                         >
                             {clearSelectionIcon}
                         </button> 
@@ -503,7 +503,7 @@ const Footer = ({tableManager}) => {
                     <span>Items per page: </span>
                     <select 
                         value={pageSize} 
-                        onChange={e => {handlePageSizeChange(e.target.value)}}
+                        onChange={e => {setPageSize(e.target.value)}}
                     >
                         { pageSizes.map((op, idx) => <option key={idx} value={op}>{op}</option>) }
                     </select>
@@ -574,14 +574,14 @@ The API is devided into the following categories:
 | name | type | description | usage |
 |---|---|---|---|
 | setColumns | function | sets a columns configuration | setColumns(columns) |
-| handlePageSizeChange | function | handles the page size change | `handlePageSizeChange(pageSize)` |
-| handleRowEdit | function | updates the row in edit mode, used as the onChange callback for the `editorCellRenderer` propery in the column, and should be used when `editRowId` is set to the id of the edited row | `handleRowEdit(updatedRow)` |
-| updateSelectedItems | function | updates the rows selection, contains array of rows ids | `updateSelectedItems([])` |
-| toggleItemSelection | function | toggles the row selection by row id | `toggleItemSelection(rowId)` |
+| setPageSize | function | handles the page size change | `setPageSize(pageSize)` |
+| setEditRow | function | updates the row in edit mode, used as the onChange callback for the `editorCellRenderer` propery in the column, and should be used when `editRowId` is set to the id of the edited row | `setEditRow(editRow)` |
+| setSelectedRowsIds | function | updates the rows selection, contains array of rows ids | `setSelectedRowsIds([])` |
+| toggleRowSelection | function | toggles the row selection by row id | `toggleRowSelection(rowId)` |
 | handlePagination | function | navigate to a page | `handlePagination(pageNumber)` |
 | toggleColumnVisibility | function | toggles column visibility by column id | `toggleColumnVisibility(colId)` |
-| handleSearchChange | function | updates the search | `handleSearchChange(searchText)` |
-| handleRowEditIdChange | function | will set a row to switch to edit mode by its id, you can pass null to switch back from edit mode | `handleRowEditIdChange(rowEditId)` |
+| setSearchText | function | updates the search | `setSearchText(searchText)` |
+| onRowEditIdChange | function | will set a row to switch to edit mode by its id, you can pass null to switch back from edit mode | `onRowEditIdChange(rowEditId)` |
 | getHighlightedText | function | gets text and a search term and returns html with highlighted search term | `getHighlightedText(text, searchTerm)` |
 | onRowClick | function | triggers when a row is clicked | `({rowIndex, data, column, event}) => { }` |
 | getIsRowEditable | function | a callback function that returns whether row editing for the current row should be disabled or not | `row => true` |
@@ -600,8 +600,8 @@ all [components](#components-props) that are not part of the table itself.
 | name | type | description | default value |
 |---|---|---|---|
 | items | array of objects | the `rows` data |
-| pageItems | array of objects | all rows data in the current page | [ ] |
-| updatedRow | object | the row that is currently in editing mode | null |
+| pageRows | array of objects | all rows data in the current page | [ ] |
+| editRow | object | the row that is currently in editing mode | null |
 | selectedRowsIds | array | array containing the selected rows ids | [ ] |
 | rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be unique | 'id' |
 
@@ -632,7 +632,7 @@ all [components](#components-props) that are not part of the table itself.
 | isPaginated | boolean | 	determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
 | isVirtualScrolling | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
 | disableColumnsReorder | boolean | whether to disable column drag & drop for repositioning | false |
-| textConfig | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
+| texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
 
 
 ### additionalProps
@@ -671,14 +671,14 @@ let columns = [
         cellRenderer: ({ tableManager, value, data, column, rowIndex, searchText }) => (
             <button 
                 style={{marginLeft: 20}} 
-                onClick={e => tableManager.handlers.handleRowEditIdChange(data.id)}
+                onClick={e => tableManager.handlers.onRowEditIdChange(data.id)}
             >&#x270E;</button>
         ),
         editorCellRenderer: ({ tableManager, value, field, onChange, data, column, rowIndex }) => (
             <div style={{display: 'inline-flex'}}>
                 <button 
                     style={{marginLeft: 20}} 
-                    onClick={e => tableManager.handlers.handleRowEditIdChange(null)}
+                    onClick={e => tableManager.handlers.onRowEditIdChange(null)}
                 >&#x2716;</button>
                 <button 
                     style={{marginLeft: 10, marginRight: 20}} 
@@ -688,7 +688,7 @@ let columns = [
                         rowsClone[updatedRowIndex] = data;
 
                         setRowsData(rowsClone);
-                        tableManager.handlers.handleRowEditIdChange(null);
+                        tableManager.handlers.onRowEditIdChange(null);
                     }
                 }>&#x2714;</button>
             </div>

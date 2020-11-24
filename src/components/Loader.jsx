@@ -1,9 +1,4 @@
-const Loader = props => {
-
-    let {
-        tableManager,
-    } = props;
-
+export default ({ tableManager }) => {
     let {
         icons: {
             loader: loaderIcon
@@ -12,5 +7,3 @@ const Loader = props => {
 
     return loaderIcon
 }
-
-export default Loader;

@@ -1,35 +1,35 @@
 import React from 'react';
 
-const Header = (props) => {
+export default (props) => {
 
     let {
         tableManager
     } = props;
 
     let { 
-        params: {
-            showSearch,
-            searchText,
-            showColumnVisibilityManager,
-        },
+        showColumnVisibilityManager,
         components: {
-            columnVisibilityComponent: ColumnVisibility,
-            searchComponent: Search,
+            ColumnVisibility,
+            Search,
         },
-        columnsData: {
+        columnsApi: {
             columns,
         },
-        handlers: {
-            handleSearchChange,
+        columnsVisibilityApi: {
             toggleColumnVisibility,
-        }
+        },
+        searchApi: {
+            showSearch,
+            setSearchText,
+            searchText,
+        },
     } = tableManager;
 
     return (
         <div className='rgt-header-container'>
             {
                 showSearch !== false ?
-                    <Search value={searchText} onChange={handleSearchChange} tableManager={tableManager}/>
+                    <Search value={searchText} onChange={setSearchText} tableManager={tableManager}/>
                     :
                     <span></span>
             }
@@ -42,5 +42,3 @@ const Header = (props) => {
         </div>
     )
 }
-
-export default Header;

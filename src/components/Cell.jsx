@@ -1,7 +1,7 @@
 import React from 'react';
-import { getHighlightedText } from '../hooks/';
+import { getHighlightedText } from '../utils/';
 
-const Cell = (props) => {
+export default props => {
 
     let {
         rowId,
@@ -18,22 +18,24 @@ const Cell = (props) => {
     } = props;
 
     let {
-        params: {
-            searchText,
-            highlightSearch,
-            searchMinChars,
+        rowsApi: {
+            rowIdField,
+            onRowClick,
+        },
+        rowEditApi: {
+            editRow,
+            setEditRow,
+        },
+        rowSelectionApi: {
+            toggleRowSelection,
             tableHasSelection,
         },
-        handlers: {
-            onRowClick,
-            handleRowEdit,
-            toggleItemSelection
+        searchApi: {
+            searchText,
+            highlightSearch,
+            valuePassesSearch,
         },
-        rowsData: {
-            rowIdField,
-            updatedRow,
-        },
-        columnsData: {
+        columnsApi: {
             visibleColumns
         },
         additionalProps: {
@@ -41,9 +43,10 @@ const Cell = (props) => {
         }
     } = tableManager;
 
-    let value = data && column.getValue?.({ value: (updatedRow?.[rowIdField] === rowId) ? updatedRow[column.field] : data[column.field], column: column })?.toString?.();
+    let isEditRow = editRow?.[rowIdField] === rowId;
+    let value = data && column.getValue?.({ value: isEditRow ? editRow[column.field] : data[column.field], column: column })?.toString?.();
 
-    if (value && column.searchable !== false && updatedRow?.[rowIdField] !== rowId && highlightSearch !== false && searchText && searchText.length >= searchMinChars && value?.toLowerCase?.()?.includes?.(searchText.toLowerCase())) {
+    if (!isEditRow && highlightSearch && valuePassesSearch(value, column)) {
         value = getHighlightedText(value, searchText);
     }
 
@@ -84,12 +87,12 @@ const Cell = (props) => {
                     :
                 column.id === 'checkbox' ?
                     (column.cellRenderer) ?
-                            column.cellRenderer({ isSelected, callback: e => toggleItemSelection(rowId), disabled: disableSelection, rowIndex })
+                            column.cellRenderer({ isSelected, callback: e => toggleRowSelection(rowId), disabled: disableSelection, rowIndex })
                         :
                         <input
                             className={disableSelection ? 'rgt-disabled' : 'rgt-clickable'}
                             type="checkbox"
-                            onChange={e => toggleItemSelection(rowId)}
+                            onChange={e => toggleRowSelection(rowId)}
                             onClick={e => e.stopPropagation()}
                             checked={isSelected}
                             disabled={disableSelection}
@@ -97,7 +100,7 @@ const Cell = (props) => {
                     :
                 column.editable !== false && isEdit ?
                     column.editorCellRenderer ?
-                        column.editorCellRenderer({ tableManager, value, field: column.field, onChange: handleRowEdit, data, column, rowIndex })
+                        column.editorCellRenderer({ tableManager, value, field: column.field, onChange: setEditRow, data, column, rowIndex })
                         :
                         <div className='rgt-cell-inner rgt-cell-editor'>
                             {
@@ -108,7 +111,7 @@ const Cell = (props) => {
                                         className='rgt-cell-editor-input'
                                         type="text"
                                         value={value}
-                                        onChange={e => column.setValue({ value: e.target.value, data, setRow: handleRowEdit, column })}
+                                        onChange={e => column.setValue({ value: e.target.value, data, setRow: setEditRow, column })}
                                     />
                                 </div>
                             }
@@ -122,5 +125,3 @@ const Cell = (props) => {
         </div>
     )
 }
-
-export default Cell;

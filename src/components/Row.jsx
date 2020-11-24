@@ -1,7 +1,7 @@
 import React from 'react';
 import { Cell } from './';
 
-const Row = props => {
+export default props => {
 
     let {
         index,
@@ -11,47 +11,52 @@ const Row = props => {
     } = props;
 
     let {
-        params: {
-            page,
-            isVirtualScrolling
-        },
-        handlers: {
-            getIsRowEditable,
-            getIsRowSelectable
-        },
-        rowsData: {
+        rowsApi: {
             rowIdField,
-            pageItems,
-            selectedRowsIds,
-            updatedRow,
         },
-        columnsData: {
+        rowEditApi: {
+            editRow,
+            getIsRowEditable,
+        },
+        rowSelectionApi: {
+            getIsRowSelectable,
+            selectedRowsIds,
+        },
+        columnsApi: {
             visibleColumns
         },
-        rowVirtualizer,
+        paginationApi: {
+            pageRows,
+            page
+        },
+        rowVirtualizer: {
+            isVirtualScrolling,
+            virtualItems,
+            totalSize
+        },
     } = tableManager;
 
     if (isVirtualScrolling) {
         if (index === 'virtual-start') {
-            return visibleColumns.map((vc, colIndex) => <div key={index + colIndex} style={{ minHeight: rowVirtualizer.virtualItems[0]?.start }} />)
+            return visibleColumns.map((vc, colIndex) => <div key={index + colIndex} style={{ minHeight: virtualItems[0]?.start }} />)
         }
         if (index === 'virtual-end') {
-            return visibleColumns.map((vc, colIndex) => <div key={index + colIndex} style={{ minHeight: rowVirtualizer.totalSize - rowVirtualizer.virtualItems[rowVirtualizer.virtualItems.length - 1]?.end || 0 }} />)
+            return visibleColumns.map((vc, colIndex) => <div key={index + colIndex} style={{ minHeight: totalSize - virtualItems[virtualItems.length - 1]?.end || 0 }} />)
         }
     }
 
-    let rowIndex = (index+1) + (pageItems.length * page - pageItems.length);
+    let rowIndex = (index+1) + (pageRows.length * page - pageRows.length);
     let rowId = data?.[rowIdField] || rowIndex;
     let disableSelection = !data || !getIsRowSelectable(data);
     let isSelected = !!data && !!(selectedRowsIds.find(si => si === rowId));
-    let isEdit = !!data && updatedRow?.[rowIdField] === rowId && !!getIsRowEditable(data);
+    let isEdit = !!data && editRow?.[rowIdField] === rowId && !!getIsRowEditable(data);
 
     return visibleColumns.map((cd, colIndex) => {
         return (
             <Cell 
                 key={rowIndex+colIndex}
                 rowId={rowId}
-                data={rowId && (updatedRow?.[rowIdField] === rowId) ? updatedRow : data} 
+                data={rowId && (editRow?.[rowIdField] === rowId) ? editRow : data} 
                 rowIndex={rowIndex} 
                 colIndex={colIndex}
                 column={cd}
@@ -64,5 +69,3 @@ const Row = props => {
         )
     })
 }
-
-export default Row;

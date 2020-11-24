@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { withKnobs, text, boolean, array, object } from '@storybook/addon-knobs';
+import React, { useState, useEffect, useRef } from "react";
+import { withKnobs, boolean } from '@storybook/addon-knobs';
 
 import GridTable from '../src';
 
@@ -95,7 +95,7 @@ const baseColumns = [
                 <button
                     title="Edit"
                     style={styles.editButton}
-                    onClick={e => tableManager.handlers.handleRowEditIdChange(data.id)}
+                    onClick={e => tableManager.rowEditApi.onRowEditIdChange(data.id)}
                 >
                     {EDIT_SVG}
                 </button>
@@ -106,7 +106,7 @@ const baseColumns = [
                 <button
                     title="Cancel"
                     style={styles.cancelButton}
-                    onClick={e => tableManager.handlers.handleRowEditIdChange(null)}
+                    onClick={e => tableManager.rowEditApi.onRowEditIdChange(null)}
                 >
                     {CANCEL_SVG}
                 </button>
@@ -114,12 +114,12 @@ const baseColumns = [
                     title="Save"
                     style={styles.saveButton}
                     onClick={e => {
-                        let rowsClone = [...tableManager.rowsData.allRows];
+                        let rowsClone = [...tableManager.rowsApi.allRows];
                         let updatedRowIndex = rowsClone.findIndex(r => r.id === data.id);
                         rowsClone[updatedRowIndex] = data;
 
-                        tableManager.handlers.onRowsChange(rowsClone);
-                        tableManager.handlers.handleRowEditIdChange(null);
+                        tableManager.rowsApi.setRows(rowsClone);
+                        tableManager.rowEditApi.onRowEditIdChange(null);
                     }}
                 >
                     {SAVE_SVG}
@@ -128,50 +128,6 @@ const baseColumns = [
         )
     }
 ]
-
-const Header = ({tableManager}) => {
-
-    const { params, handlers, columnsData } = tableManager;
-
-    const { searchText } = params;
-    const { handleSearchChange, toggleColumnVisibility } = handlers;
-    const { columns } = columnsData;
-
-    return (
-        <div style={{display: 'flex', flexDirection: 'column', padding: '10px 20px', background: '#fff', width: '100%'}}>
-            <div>
-                <label htmlFor="my-search" style={{fontWeight: 500, marginRight: 10}}>
-                    Search for:
-                </label>
-                <input 
-                    name="my-search"
-                    type="search" 
-                    value={searchText} 
-                    onChange={e => handleSearchChange(e.target.value)} 
-                    style={{width: 300}}
-                />
-            </div>
-            <div style={{display: 'flex', marginTop: 10}}>
-                <span style={{ marginRight: 10, fontWeight: 500 }}>Columns:</span>
-                {
-                    columns.map((cd, idx) => (
-                        <div key={idx} style={{flex: 1}}>
-                            <input 
-                                id={`checkbox-${idx}`}
-                                type="checkbox" 
-                                onChange={ e => toggleColumnVisibility(cd.id) } 
-                                checked={ cd.visible !== false } 
-                            />
-                            <label htmlFor={`checkbox-${idx}`} style={{flex: 1, cursor: 'pointer'}}>
-                                {cd.label || cd.field}
-                            </label>
-                        </div>
-                    ))
-                }
-            </div>
-        </div>
-    )
-}
 
 export default {
     title: 'Grid Table',
@@ -232,58 +188,29 @@ export const ServerSide = () => {
     let [totalRows, setTotalRows] = useState();
     let [columns, setColumns] = useState(baseColumns);
     let [sort, setSort] = useState({});
-
+    let rowsRef = useRef(rowsData);
 
     const onRowsRequest = (requestData, tableManager) => {
+        let {
+            sortApi: {
+                sortRows
+            },
+            searchApi: {
+                searchRows
+            },
+        } = tableManager;
         setLoading(true);
         setTimeout(() => {
-            let rows = [...MOCK_DATA];
-            let {
-                params: {
-                    sort,
-                    searchText,
-                    searchMinChars
-                },
-                rowsData: {
-                    allRows,
-                },
-                columnsData: {
-                    columns
-                },
-            } = tableManager;
+            let allRows = [...MOCK_DATA];
 
-            var conf = columns.reduce((conf, coldef) => {
-                conf[coldef.field] = coldef;
-                return conf;
-            }, {})
-            var conf2 = columns.reduce((conf, coldef) => {
-                conf[coldef.id] = coldef;
-                return conf;
-            }, {})
+            allRows = searchRows(allRows);
+            allRows = sortRows(allRows);
 
-            if (searchText.length >= searchMinChars) {
-                rows = rows.filter(item => Object.keys(item).some(key => {
-                    if (conf[key] && conf[key].searchable !== false) {
-                        let displayValue = conf[key].getValue({ value: item[key], column: conf[key] });
-                        return conf[key].search({ value: displayValue.toString(), searchText: searchText });
-                    }
-                    return false;
-                }));
-            }
-
-            if (sort?.colId) {
-                rows.sort((a, b) => {
-                    let aVal = conf2[sort.colId].getValue({ value: a[conf2[sort.colId].field], column: conf2[sort.colId] });
-                    let bVal = conf2[sort.colId].getValue({ value: b[conf2[sort.colId].field], column: conf2[sort.colId] });
-
-                    if (conf2[sort.colId].sortable === false) return 0;
-                    return conf2[sort.colId].sort({ a: aVal, b: bVal, isAscending: sort.isAsc });
-                });
-            }
-            setRowsData(allRows.concat(rows.slice(requestData.from, requestData.to)));
-            setTotalRows(rows.length)
+            rowsRef.current = rowsRef.current.concat(allRows.slice(requestData.from, requestData.to))
+            setRowsData(rowsRef.current);
+            setTotalRows(allRows.length)
             setLoading(false);
-        }, 1500);
+        }, 500);
     }
     const onRowsReset = () => {
         setRowsData([])
