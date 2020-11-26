@@ -1,6 +1,5 @@
 import React from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
-import { HeaderCell, Row, Search, ColumnVisibility, Header, Footer, Loader, NoResults, Information, PageSize, Pagination } from './components/';
 import { useTableManager } from './hooks/';
 import PropTypes from 'prop-types';
 import './index.css';
@@ -12,6 +11,19 @@ const GridTable = (props) => {
     const tableManager = useTableManager(props);
 
     const {
+        isLoading,
+        config: {
+            isVirtualScroll,
+            components: {
+                Header,
+                HeaderCell,
+                Row,
+                Footer,
+                Loader,
+                NoResults,
+                DragHandle
+            },
+        },
         refs: {
             rgtRef,
             tableRef
@@ -23,25 +35,12 @@ const GridTable = (props) => {
             onColumnReorderStart,
             onColumnReorderEnd
         },
-        rowsApi: {
-            isLoading
-        },
-        components: {
-            Header,
-            Footer,
-            Loader,
-            NoResults
-        },
         rowVirtualizer: {
-            isVirtualScrolling,
             virtualItems
         },
         paginationApi: {
             pageRows
         },
-        components: {
-            dragHandleComponent
-        }
     } = tableManager;
 
     let rest = Object.keys(props).reduce((rest, key) => {
@@ -59,7 +58,7 @@ const GridTable = (props) => {
                 lockToContainerEdges
                 distance={10}
                 lockAxis="x"
-                useDragHandle={!!dragHandleComponent}
+                useDragHandle={!!DragHandle}
                 onSortStart={onColumnReorderStart}
                 onSortEnd={onColumnReorderEnd}
                 style={{
@@ -67,7 +66,7 @@ const GridTable = (props) => {
                     overflow: 'auto',
                     flex: 1,
                     gridTemplateColumns: (visibleColumns.map(g => g.width)).join(" "),
-                    gridTemplateRows: `repeat(${pageRows.length + 1 + (isVirtualScrolling ? 1 : 0)}, max-content)`,
+                    gridTemplateRows: `repeat(${pageRows.length + 1 + (isVirtualScroll ? 1 : 0)}, max-content)`,
                 }}
             >
                 {
@@ -77,7 +76,7 @@ const GridTable = (props) => {
                 }
                 {
                     pageRows.length && visibleColumns.length > 1 ?
-                        isVirtualScrolling ? 
+                        isVirtualScroll ? 
                             [
                                 <Row key={'virtual-start'} index={'virtual-start'} tableManager={tableManager} />,
                                 ...virtualItems.map(vr => <Row key={vr.index} index={vr.index} data={pageRows[vr.index]} measureRef={vr.measureRef} tableManager={tableManager} />),
@@ -114,7 +113,7 @@ GridTable.defaultProps = {
     highlightSearch: true,
     searchMinChars: 2,
     isPaginated: true,
-    isVirtualScrolling: true,
+    isVirtualScroll: true,
     showSearch: true,
     showRowsInformation: true,
     disableColumnsReorder: false,
@@ -126,16 +125,13 @@ GridTable.propTypes = {
     // general
     columns: PropTypes.arrayOf(PropTypes.object).isRequired,
     rows: PropTypes.arrayOf(PropTypes.object).isRequired,
-    rowIdField: PropTypes.string,
     selectedRowsIds: PropTypes.array,
     searchText: PropTypes.string,
     getIsRowSelectable: PropTypes.func,
     getIsRowEditable: PropTypes.func,
     editRowId: PropTypes.any,
-    cellProps: PropTypes.object,
-    headerCellProps: PropTypes.object,
-    rowVirtualizerProps: PropTypes.object,
     // table config
+    rowIdField: PropTypes.string,
     isPaginated: PropTypes.bool,
     disableColumnsReorder: PropTypes.bool,
     pageSizes: PropTypes.arrayOf(PropTypes.number),
@@ -146,13 +142,15 @@ GridTable.propTypes = {
     highlightSearch: PropTypes.bool,
     showSearch: PropTypes.bool,
     showRowsInformation: PropTypes.bool,
+    showColumnVisibilityManager: PropTypes.bool,
     searchMinChars: PropTypes.number,
     isLoading: PropTypes.bool,
     isHeaderSticky: PropTypes.bool,
-    isVirtualScrolling: PropTypes.bool,
-    showColumnVisibilityManager: PropTypes.bool,
+    isVirtualScroll: PropTypes.bool,
     icons: PropTypes.object,
     texts: PropTypes.object,
+    additionalProps: PropTypes.object,
+    components: PropTypes.object,
     totalRows: PropTypes.number,
     // events
     onColumnsChange: PropTypes.func,
@@ -160,10 +158,11 @@ GridTable.propTypes = {
     onSelectedRowsChange: PropTypes.func,
     onSortChange: PropTypes.func,
     onRowClick: PropTypes.func,
-    onRowEditIdChange: PropTypes.func,
+    onEditRowIdChange: PropTypes.func,
     onPageChange: PropTypes.func,
     onPageSizeChange: PropTypes.func,
     onLoad: PropTypes.func,
+    onColumnResizeStart: PropTypes.func,
     onColumnResize: PropTypes.func,
     onColumnResizeEnd: PropTypes.func,
     onColumnReorderStart: PropTypes.func,
@@ -171,8 +170,6 @@ GridTable.propTypes = {
     onRowsRequest: PropTypes.func, 
     onRowsReset: PropTypes.func,
     onRowsChange: PropTypes.func, 
-    // custom components
-    components: PropTypes.object,
 };
 
 export default GridTable;

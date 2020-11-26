@@ -1,26 +1,26 @@
 import { useState, useCallback, useRef } from 'react';
 
 export default (props, tableManager) => {
-    const paginationApi = useRef({}).current;
-
     let {
+        config: {
+            isPaginated
+        },
         rowsApi: {
             rows,
             totalRows
         }
     } = tableManager;
 
+    const paginationApi = useRef({}).current;
     let [page, setPage] = useState(props.page || 1);
     let [pageSize, setPageSize] = useState(props.pageSize || 20);
 
     paginationApi.page = props.page ?? page;
     paginationApi.pageSize = props.pageSize ?? pageSize;
     paginationApi.totalPages = Math.ceil(totalRows / paginationApi.pageSize);
-    paginationApi.isPaginated = props.isPaginated;
-    paginationApi.pageSizes = props.pageSizes;
     paginationApi.pageRows = rows;
 
-    if (paginationApi.isPaginated) paginationApi.pageRows = rows.slice((paginationApi.pageSize * paginationApi.page - paginationApi.pageSize), (paginationApi.pageSize * paginationApi.page));
+    if (isPaginated) paginationApi.pageRows = rows.slice((paginationApi.pageSize * paginationApi.page - paginationApi.pageSize), (paginationApi.pageSize * paginationApi.page));
 
     paginationApi.setPage = useCallback(page => {
         page = ~~page;

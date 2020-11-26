@@ -1,15 +1,19 @@
 import { useState, useCallback, useRef } from 'react';
 
-export default (props, tableManager) => {
-    const sortApi = useRef({}).current;
+const DEFAULT_SORT = {
+    colId: null,
+    isAsc: null
+}
 
+export default (props, tableManager) => {
     let {
         columnsApi: {
             columns,
         },
     } = tableManager;
 
-    let [sort, setSort] = useState(props.sort || {});
+    const sortApi = useRef({}).current;
+    let [sort, setSort] = useState(DEFAULT_SORT);
 
     sortApi.sort = props.sort ?? sort;
 

@@ -8,13 +8,13 @@ const SelectAll = ({tableManager, column, style}) => {
     let selectAllRef = useRef(null);
 
     let {
+        config: {
+            rowIdField
+        },
         rowSelectionApi: {
             getIsRowSelectable,
             setSelectedRowsIds,
             selectedRowsIds,
-        },
-        rowsApi: {
-            rowIdField
         },
         paginationApi: {
             pageRows,
@@ -71,31 +71,31 @@ export default (props) => {
 
     let {
         config: {
-            isHeaderSticky
+            isHeaderSticky,
+            components: {
+                DragHandle
+            },
+            additionalProps: {
+                headerCell: additionalProps
+            },
+            icons: {
+                sortAscending: sortAscendingIcon,
+                sortDescending: sortDescendingIcon,
+            },
         },
         sortApi: {
             sort,
             setSort,
         },
-        components: {
-            DragHandle
-        },
-        icons: {
-            sortAscending: sortAscendingIcon,
-            sortDescending: sortDescendingIcon,
-        },
         columnsApi: {
             visibleColumns,
         },
-        columnsReorderApi: {
+        config: {
             disableColumnsReorder,
         },
         columnsResizeApi: {
             useResizeRef
         },
-        additionalProps: {
-            headerCell: additionalProps
-        }
     } = tableManager;
     
     let resizeHandleRef = useResizeRef(column);

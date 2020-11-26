@@ -2,9 +2,14 @@ import { useRef } from 'react';
 import { useVirtual } from 'react-virtual';
 
 export default (props, tableManager) => {
-    const rowVirtualizer = useRef({}).current;
-
     const {
+        config: {
+            isPaginated,
+            isVirtualScroll,
+            additionalProps: {
+                rowVirtualizer: rowVirtualizerProps
+            },
+        },
         refs: {
             tableRef
         },
@@ -12,22 +17,18 @@ export default (props, tableManager) => {
             page,
             pageSize,
             totalPages,
-            isPaginated
         },
         rowsApi: {
             totalRows
         },
-        additionalProps: {
-            rowVirtualizer: rowVirtualizerProps
-        },
     } = tableManager;
 
-    rowVirtualizer.isVirtualScrolling = props.isVirtualScrolling || (!isPaginated && props.onRowsRequest);
-
+    const rowVirtualizer = useRef({}).current;
+    
     let useVirtualProps = {
         size: isPaginated ? (totalPages === page) ? (totalRows - (totalPages - 1) * pageSize) : pageSize : totalRows,
         overscan: 20,
-        parentRef: rowVirtualizer.isVirtualScrolling ? tableRef : {},
+        parentRef: isVirtualScroll ? tableRef : {},
         ...rowVirtualizerProps,
     }
 

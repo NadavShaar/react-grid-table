@@ -7,16 +7,18 @@ export default (props) => {
     } = props;
 
     let { 
-        components: {
-            ColumnVisibility,
-            Search,
+        config: {
+            showColumnVisibilityManager,
+            components: {
+                ColumnVisibility,
+                Search,
+            },
         },
         columnsApi: {
             columns,
         },
         columnsVisibilityApi: {
             toggleColumnVisibility,
-            showColumnVisibilityManager,
         },
         searchApi: {
             showSearch,

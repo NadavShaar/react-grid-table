@@ -11,7 +11,8 @@ export default props => {
     } = props;
 
     let {
-        rowsApi: {
+        config: {
+            isVirtualScroll,
             rowIdField,
         },
         rowEditApi: {
@@ -30,13 +31,12 @@ export default props => {
             page
         },
         rowVirtualizer: {
-            isVirtualScrolling,
             virtualItems,
             totalSize
         },
     } = tableManager;
 
-    if (isVirtualScrolling) {
+    if (isVirtualScroll) {
         if (index === 'virtual-start') {
             return visibleColumns.map((vc, colIndex) => <div key={index + colIndex} style={{ minHeight: virtualItems[0]?.start }} />)
         }

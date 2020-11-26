@@ -8,7 +8,14 @@ export default (props) => {
 
     let {
         config: {
-            showRowsInformation
+            isPaginated,
+            showRowsInformation,
+            pageSizes,
+            components: {
+                Information,
+                PageSize,
+                Pagination
+            }
         },
         rowsApi: {
             totalRows,
@@ -16,16 +23,9 @@ export default (props) => {
         rowSelectionApi: {
             selectedRowsIds,
         },
-        components: {
-            Information,
-            PageSize,
-            Pagination
-        },
         paginationApi: {
             page,
             pageSize,
-            pageSizes,
-            isPaginated,
             setPage,
             setPageSize,
             pageRows,

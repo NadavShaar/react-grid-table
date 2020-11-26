@@ -1,10 +1,8 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 
 export default (props, tableManager) => {
-    const rowEditApi = useRef({}).current;
-
     let {
-        rowsApi: {
+        config: {
             rowIdField
         },
         paginationApi: {
@@ -12,20 +10,22 @@ export default (props, tableManager) => {
         }
     } = tableManager;
 
+    const rowEditApi = useRef({}).current;
     let [editRow, setEditRow] = useState(null);
 
+    rowEditApi.editRowId = props.editRowId;
     rowEditApi.setEditRow = setEditRow;
     rowEditApi.editRow = editRow;
     rowEditApi.getIsRowEditable = props.getIsRowEditable;
 
-    rowEditApi.onRowEditIdChange = useCallback(rowEditId => {
+    rowEditApi.setEditRowId = useCallback(rowEditId => {
         setEditRow(rowEditId && pageRows.find(item => item[rowIdField] === rowEditId) || null);
-        props.onRowEditIdChange?.(rowEditId);
+        props.onEditRowIdChange?.(rowEditId);
     })
 
     useEffect(() => {
-        setEditRow(pageRows.find(item => item[rowIdField] === props.editRowId) || null);
-    }, [props.editRowId, pageRows, rowIdField])
+        setEditRow(pageRows.find(item => item[rowIdField] === rowEditApi.editRowId) || null);
+    }, [rowEditApi.editRowId, pageRows, rowIdField])
 
     return rowEditApi;
 }

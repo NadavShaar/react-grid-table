@@ -2,18 +2,10 @@ import { useState, useCallback, useMemo, useRef } from 'react';
 
 export default (props, tableManager) => {
     const rowSelectionApi = useRef({}).current;
-
-    let {
-        columnsApi: {
-            columns
-        }
-    } = tableManager;
-
     let [selectedRowsIds, setSelectedRowsIds] = useState([]);
 
     rowSelectionApi.selectedRowsIds = props.selectedRowsIds ?? selectedRowsIds;
     rowSelectionApi.getIsRowSelectable = props.getIsRowSelectable;
-    rowSelectionApi.tableHasSelection = useMemo(() => !!columns.find(cd => cd.id === 'checkbox'), [columns]);
     
     rowSelectionApi.setSelectedRowsIds = useCallback(newSelectedItems => {
         if (props.selectedRowsIds === undefined || props.onSelectedRowsChange === undefined) setSelectedRowsIds(newSelectedItems);

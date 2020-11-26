@@ -1,4 +1,5 @@
-//TODO: fill the config
+// move sort toggle to sortApi
+// switch disableColumnsReorder to positive
 
 import { useEffect, useRef } from 'react';
 import * as components from '../components';
@@ -22,6 +23,9 @@ export default (props) => {
         isMounted: false,
         isInitialized: false
     }).current;
+
+    Object.defineProperty(tableManager, "columnsReorderApi", { enumerable: false, writable: true });
+    Object.defineProperty(tableManager, "columnsResizeApi", { enumerable: false, writable: true })
     
     // initialization
     useEffect(() => {
@@ -31,13 +35,25 @@ export default (props) => {
         return () => tableManager.isMounted = false;
     }, [])
 
-    tableManager.components = { ...components, ...props.components };
-    tableManager.additionalProps = { ...additionalProps, ...props.additionalProps };
-    tableManager.icons = { ...icons, ...props.icons };
-    tableManager.texts = { ...texts, ...props.texts };
+    tableManager.isLoading = props.isLoading;
     tableManager.config = {
         showRowsInformation: props.showRowsInformation,
-        isHeaderSticky: props.isHeaderSticky
+        minColumnWidth: props.minColumnWidth,
+        isHeaderSticky: props.isHeaderSticky,
+        isPaginated: props.isPaginated,
+        disableColumnsReorder: props.disableColumnsReorder,
+        showColumnVisibilityManager: props.showColumnVisibilityManager,
+        highlightSearch: props.highlightSearch,
+        showSearch: props.showSearch,
+        searchMinChars: props.searchMinChars,
+        pageSizes: props.pageSizes,
+        rowIdField: props.rowIdField,
+        isVirtualScroll: props.isVirtualScroll || (!props.isPaginated && props.onRowsRequest),
+        tableHasSelection: !!props.columns.find(cd => cd.id === 'checkbox'),
+        components: { ...components, ...props.components },
+        additionalProps: { ...additionalProps, ...props.additionalProps },
+        icons: { ...icons, ...props.icons },
+        texts: { ...texts, ...props.texts },
     }
 
     tableManager.refs = {
@@ -69,18 +85,14 @@ export default (props) => {
         if (!tableManager.isInitialized) return;
 
         if (props.onRowsRequest) {
-            tableManager.rowsApi.requestRowsData = {
-                from: -1,
-                to: 0
-            }
-            props.onRowsReset?.();
+            tableManager.rowsApi.resetRows();
             tableManager.rowSelectionApi.setSelectedRowsIds([]);
         }
     }, [tableManager.searchApi.searchText, tableManager.sortApi.sort])
 
     // reset edit row
     useEffect(() => {
-        if (tableManager.rowEditApi.editRow) tableManager.rowEditApi.onRowEditIdChange(null);
+        if (tableManager.rowEditApi.editRow) tableManager.rowEditApi.setEditRowId(null);
     }, [tableManager.searchApi.searchText, tableManager.sortApi.sort, tableManager.paginationApi.page])
 
     // initialization completion

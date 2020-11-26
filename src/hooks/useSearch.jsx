@@ -1,20 +1,19 @@
 import { useState, useCallback, useRef } from 'react';
 
 export default (props, tableManager) => {
-    const searchApi = useRef({}).current;
-
     let {
+        config: {
+            searchMinChars
+        },
         columnsApi: {
             columns
         }
     } = tableManager;
 
-    let [searchText, setSearchText] = useState(props.searchText || "");
+    const searchApi = useRef({}).current;
+    let [searchText, setSearchText] = useState("");
 
     searchApi.searchText = props.searchText ?? searchText;
-    searchApi.highlightSearch = props.highlightSearch; 
-    searchApi.searchMinChars = props.searchMinChars;
-    searchApi.showSearch = props.showSearch;
 
     searchApi.setSearchText = useCallback(searchText => {
         if (props.searchText === undefined || props.onSearchChange === undefined) setSearchText(searchText);
@@ -24,7 +23,7 @@ export default (props, tableManager) => {
     searchApi.valuePassesSearch = useCallback((value, column) => {
         if (!value) return false;
         if (!column?.searchable) return false;
-        if (searchApi.searchText.length < searchApi.searchMinChars) return false;
+        if (searchApi.searchText.length < searchMinChars) return false;
 
         return column.search({ value: value.toString(), searchText: searchApi.searchText });
     })
@@ -34,7 +33,7 @@ export default (props, tableManager) => {
             cols[coldef.field] = coldef;
             return cols;
         }, {})
-        if (searchApi.searchText.length >= searchApi.searchMinChars) {
+        if (searchApi.searchText.length >= searchMinChars) {
             rows = rows.filter(item => Object.keys(item).some(key => {
                 if (cols[key] && cols[key].searchable) {
                     let value = cols[key].getValue({ value: item[key], column: cols[key] });

@@ -95,7 +95,7 @@ const baseColumns = [
                 <button
                     title="Edit"
                     style={styles.editButton}
-                    onClick={e => tableManager.rowEditApi.onRowEditIdChange(data.id)}
+                    onClick={e => tableManager.rowEditApi.setEditRowId(data.id)}
                 >
                     {EDIT_SVG}
                 </button>
@@ -106,7 +106,7 @@ const baseColumns = [
                 <button
                     title="Cancel"
                     style={styles.cancelButton}
-                    onClick={e => tableManager.rowEditApi.onRowEditIdChange(null)}
+                    onClick={e => tableManager.rowEditApi.setEditRowId(null)}
                 >
                     {CANCEL_SVG}
                 </button>
@@ -119,7 +119,7 @@ const baseColumns = [
                         rowsClone[updatedRowIndex] = data;
 
                         tableManager.rowsApi.setRows(rowsClone);
-                        tableManager.rowEditApi.onRowEditIdChange(null);
+                        tableManager.rowEditApi.setEditRowId(null);
                     }}
                 >
                     {SAVE_SVG}
@@ -159,7 +159,7 @@ export const ClientSide = () => {
             rows={rowsData}
             isLoading={isLoading}
             editRowId={editRowId}
-            onRowEditIdChange={setEditRowId}
+            onEditRowIdChange={setEditRowId}
             onRowsChange={setRowsData}
             // selectedRowsIds={boolean('Controlled Selection', false) ? array('Selection', selectedRowsIds) : undefined}
             // onSelectedRowsChange={setSelectedRowsIds}
@@ -170,7 +170,7 @@ export const ClientSide = () => {
             showRowsInformation={boolean('Show Rows Information', true)}
             // sort={boolean('Controlled Sort', false) ? object('Sort', sort) : undefined}
             // onSortChange={setSort}
-            isVirtualScrolling={boolean(' Use Virtual Scrolling', true)}
+            isVirtualScroll={boolean(' Use Virtual Scrolling', true)}
             // searchComponent={boolean('Use Custom Search', false) ? undefined : Search}
             // headerComponent={boolean('Use Custom Header', false) ? Header : undefined}
             isPaginated={boolean('Use Pagination', true)}
@@ -209,13 +209,14 @@ export const ServerSide = () => {
 
             rowsRef.current = rowsRef.current.concat(allRows.slice(requestData.from, requestData.to))
             setRowsData(rowsRef.current);
-            setTotalRows(allRows.length)
-            setLoading(false);
+            setTotalRows(allRows.length);
+            if (tableManager.rowsApi.requestRowsData.current === requestData) setLoading(false);
         }, 500);
     }
     const onRowsReset = () => {
-        setRowsData([])
-        setTotalRows()
+        rowsRef.current = [];
+        setRowsData(rowsRef.current);
+        setTotalRows();
     }
 
     return (
@@ -224,7 +225,7 @@ export const ServerSide = () => {
             rows={rowsData}
             isLoading={isLoading}
             editRowId={editRowId}
-            onRowEditIdChange={setEditRowId}
+            onEditRowIdChange={setEditRowId}
             onRowsChange={setRowsData}
             // selectedRowsIds={boolean('Controlled Selection', false) ? array('Selection', selectedRowsIds) : undefined}
             // onSelectedRowsChange={setSelectedRowsIds}
@@ -235,7 +236,7 @@ export const ServerSide = () => {
             showRowsInformation={boolean('Show Rows Information', true)}
             sort={sort}
             onSortChange={setSort}
-            isVirtualScrolling={boolean(' Use Virtual Scrolling', false)}
+            isVirtualScroll={boolean(' Use Virtual Scrolling', false)}
             // searchComponent={boolean('Use Custom Search', false) ? undefined : Search}
             // headerComponent={boolean('Use Custom Header', false) ? Header : undefined}
             isPaginated={boolean('Use Pagination', true)}

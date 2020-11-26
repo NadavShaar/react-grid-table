@@ -10,23 +10,29 @@ export default props => {
     } = props;
 
     let {
-        texts,
+        config: {
+            isPaginated,
+            tableHasSelection,
+            texts: {
+                totalRows: totalRowsText,
+                rows: rowsText,
+                selected: selectedText
+            },
+            icons: {
+                clearSelection: clearSelectionIcon
+            }
+        },
         paginationApi: {
             page,
-            isPaginated,
         },
         rowSelectionApi: {
-            tableHasSelection,
             setSelectedRowsIds
         },
-        icons: {
-            clearSelection: clearSelectionIcon
-        }
     } = tableManager;
 
     return (
         <div className='rgt-footer-items-information-inner'>
-            { texts.totalRows} { totalCount} { isPaginated ? `| ${texts.rows} ${pageSize * (page - 1)} - ${pageSize * (page - 1) + pageCount}` : ''} { tableHasSelection ? <React.Fragment>{`| ${selectedCount} ${texts.selected}`}{selectedCount ? <span className="rgt-footer-clear-selection-button rgt-clickable" onClick={e => setSelectedRowsIds([])}>{ clearSelectionIcon }</span> : null}</React.Fragment> : ''}
+            { totalRowsText} { totalCount} { isPaginated ? `| ${rowsText} ${pageSize * (page - 1)} - ${pageSize * (page - 1) + pageCount}` : ''} { tableHasSelection ? <React.Fragment>{`| ${selectedCount} ${selectedText}`}{selectedCount ? <span className="rgt-footer-clear-selection-button rgt-clickable" onClick={e => setSelectedRowsIds([])}>{ clearSelectionIcon }</span> : null}</React.Fragment> : ''}
         </div>
     )
 }

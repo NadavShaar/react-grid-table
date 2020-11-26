@@ -1,8 +1,6 @@
-import { useState, useMemo, useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 
 export default (props, tableManager) => {
-    const columnsReorderApi = useRef({}).current;
-
     let {
         columnsApi: {
             columns,
@@ -11,7 +9,12 @@ export default (props, tableManager) => {
         }
     } = tableManager;
 
-    columnsReorderApi.disableColumnsReorder = props.disableColumnsReorder;
+    const columnsReorderApi = useRef({}).current;
+
+    Object.defineProperty(columnsReorderApi, "onColumnReorderStart", { enumerable: false, writable: true })
+    Object.defineProperty(columnsReorderApi, "onColumnReorderEnd", { enumerable: false, writable: true })
+
+    columnsReorderApi.isColumnReordering = false;
 
     columnsReorderApi.onColumnReorderStart = useCallback(sortData => {
         columnsReorderApi.isColumnReordering = true;

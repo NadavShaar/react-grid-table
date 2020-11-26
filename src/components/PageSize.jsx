@@ -10,12 +10,16 @@ export default props => {
     } = props;
 
     let {
-        texts,
+        config: {
+            texts: {
+                rowsPerPage: rowsPerPageText
+            },
+        }
     } = tableManager;
 
     return (
         <React.Fragment>
-            <span>{texts.rowsPerPage} </span>
+            <span>{rowsPerPageText} </span>
             <select 
                 className='rgt-footer-items-per-page'
                 value={value} 

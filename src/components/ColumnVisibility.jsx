@@ -10,16 +10,20 @@ export default props => {
     } = props;
 
     let {
-        texts,
-        icons: {
-            columnVisibility: columnVisibilityIcon
-        },
+        config: {
+            texts: {
+                columnVisibility: columnVisibilityText
+            },
+            icons: {
+                columnVisibility: columnVisibilityIcon
+            },
+        }
     } = tableManager;
 
     
     return (
         <PopoverButton
-            title={texts.columnVisibility}
+            title={columnVisibilityText}
             buttonChildren={columnVisibilityIcon}
             popoverChildren={
                 columns.filter(col => !col.pinned).map((cd, idx) => {

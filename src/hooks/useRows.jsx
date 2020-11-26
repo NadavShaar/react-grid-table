@@ -1,13 +1,11 @@
-import { useMemo, useRef, useEffect } from 'react';
+import { useMemo, useRef, useEffect, useCallback } from 'react';
+
+const DEFAULT_ROWS_REQUEST_DATA = {
+    from: -1,
+    to: 0
+}
 
 export default (props, tableManager) => {
-    const rowsApi = useRef({
-        requestRowsData: {
-            from: -1,
-            to: 0
-        }
-    }).current;
-
     let {
         searchApi: {
             searchRows,
@@ -17,11 +15,14 @@ export default (props, tableManager) => {
         }
     } = tableManager;
 
-    rowsApi.onRowClick = props.onRowClick;
-    rowsApi.setRows = props.onRowsChange;
+    const rowsApi = useRef({}).current;
+    const requestRowsData = useRef(DEFAULT_ROWS_REQUEST_DATA);
+
+    Object.defineProperty(rowsApi, "onRowClick", { enumerable: false, writable: true });
+    
     rowsApi.allRows = props.rows
-    rowsApi.rowIdField = props.rowIdField;
-    rowsApi.isLoading = props.isLoading;
+    rowsApi.onRowClick = props.onRowClick
+    rowsApi.requestRowsData = props.requestRowsData
 
     rowsApi.rows = useMemo(() => {
         let rows = props.rows;
@@ -32,33 +33,45 @@ export default (props, tableManager) => {
         }
 
         return rows;
-    }, [props.rows, props.onRowsRequest, searchRows, sortRows]);
+    }, [rowsApi.allRows, props.onRowsRequest, searchRows, sortRows]);
 
     rowsApi.totalRows = props.totalRows ?? rowsApi.rows.length;
+
+    rowsApi.resetRows = useCallback(() => {
+        if (!props.onRowsRequest) return;
+
+        requestRowsData.current = DEFAULT_ROWS_REQUEST_DATA;
+        props.onRowsReset?.();
+    })
 
     useEffect(() => {
         if (!props.onRowsRequest) return;
 
         let {
+            config: {
+                isPaginated,
+                isVirtualScroll,
+            },
             paginationApi: {
                 page,
                 pageSize,
-                isPaginated,
             },
             rowVirtualizer: {
                 virtualItems,
-                isVirtualScrolling
             },
         } = tableManager;
         
         let {
             from,
             to
-        } = rowsApi.requestRowsData
+        } = requestRowsData.current
 
-        let lastIndex = virtualItems[virtualItems.length - 1]?.index + ((page - 1) * pageSize) || 0;
-        if (isPaginated && !isVirtualScrolling) {
-            lastIndex = Math.min(page * pageSize, rowsApi.totalRows);
+        let lastIndex = 0;
+        if (isPaginated && !isVirtualScroll) {
+            lastIndex = page * pageSize;
+        }
+        else {
+            lastIndex = virtualItems[virtualItems.length - 1]?.index + ((page - 1) * pageSize) || 0;
         }
         lastIndex = Math.min(lastIndex, rowsApi.totalRows);
 
@@ -67,11 +80,11 @@ export default (props, tableManager) => {
         from = to;
         to = from + pageSize - (isPaginated ? ((from) % pageSize) : 0);
         if (Number(rowsApi.totalRows)) to = Math.min(to, rowsApi.totalRows);
-        rowsApi.requestRowsData = {
+        requestRowsData.current = {
             from,
             to
         }
-        props.onRowsRequest(rowsApi.requestRowsData, tableManager)
+        props.onRowsRequest(requestRowsData.current, tableManager)
     });
 
     return rowsApi;

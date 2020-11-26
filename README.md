@@ -185,13 +185,13 @@ export default MyAwesomeTable;
 | editRowId | any | the id of the row that should switch to inline editing mode, (more <u>[details](#Row-Editing)</u> about row editing) | null |
 | cellProps | object | global props for all data cells | { } |
 | headerCellProps | object | global props for all header cells | { } |
-| rowVirtualizerProps | object | props for the row virtualizer when `isVirtualScrolling` is true, as documeneted in [react-virtual](https://github.com/tannerlinsley/react-virtual) | { } |
+| rowVirtualizerProps | object | props for the row virtualizer when `isVirtualScroll` is true, as documeneted in [react-virtual](https://github.com/tannerlinsley/react-virtual) | { } |
 
 ### Table configuration props
 
 | name | type | description | default value |
 |---|---|---|---|
-| isVirtualScrolling | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
+| isVirtualScroll | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
 | isPaginated | boolean | determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
 | page | number | current page number | 1 |
 | pageSizes | array of numbers | page size options | [20, 50, 100] |
@@ -220,7 +220,7 @@ export default MyAwesomeTable;
 | onSearchChange | function | triggers when search text changed | `searchText => { }` |
 | onSortChange | function | triggers when sort changed | `({colId, isAsc}) => { }` |
 | onRowClick | function | triggers when a row is clicked | `({rowIndex, data, column, event}) => { }` |
-| onRowEditIdChange | function | triggers when `rowEditId` changed | `rowEditId => { }` |
+| onEditRowIdChange | function | triggers when `rowEditId` changed | `rowEditId => { }` |
 | onLoad | function | triggers when `tableManager` is initialized (<u>[details](#tableManager)</u>) | `tableManager => { }` |
 | onColumnResizeStart | function | triggers when column resize starts | `({event, target, column}) => { }` |
 | onColumnResize | function | triggers when column resize occur | `({event, target, column}) => { }` |
@@ -582,7 +582,7 @@ The API is devided into the following categories:
 | handlePagination | function | navigate to a page | `handlePagination(pageNumber)` |
 | toggleColumnVisibility | function | toggles column visibility by column id | `toggleColumnVisibility(colId)` |
 | setSearchText | function | updates the search | `setSearchText(searchText)` |
-| onRowEditIdChange | function | will set a row to switch to edit mode by its id, you can pass null to switch back from edit mode | `onRowEditIdChange(rowEditId)` |
+| setEditRowId | function | will set a row to switch to edit mode by its id, you can pass null to switch back from edit mode | `setEditRowId(rowEditId)` |
 | getHighlightedText | function | gets text and a search term and returns html with highlighted search term | `getHighlightedText(text, searchTerm)` |
 | onRowClick | function | triggers when a row is clicked | `({rowIndex, data, column, event}) => { }` |
 | getIsRowEditable | function | a callback function that returns whether row editing for the current row should be disabled or not | `row => true` |
@@ -628,7 +628,7 @@ all [components](#components-props) that are not part of the table itself.
 | showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
 | isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
 | isPaginated | boolean | 	determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
-| isVirtualScrolling | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
+| isVirtualScroll | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
 | disableColumnsReorder | boolean | whether to disable column drag & drop for repositioning | false |
 | texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
 
@@ -669,14 +669,14 @@ let columns = [
         cellRenderer: ({ tableManager, value, data, column, rowIndex, searchText }) => (
             <button 
                 style={{marginLeft: 20}} 
-                onClick={e => tableManager.handlers.onRowEditIdChange(data.id)}
+                onClick={e => tableManager.handlers.setEditRowId(data.id)}
             >&#x270E;</button>
         ),
         editorCellRenderer: ({ tableManager, value, field, onChange, data, column, rowIndex }) => (
             <div style={{display: 'inline-flex'}}>
                 <button 
                     style={{marginLeft: 20}} 
-                    onClick={e => tableManager.handlers.onRowEditIdChange(null)}
+                    onClick={e => tableManager.handlers.setEditRowId(null)}
                 >&#x2716;</button>
                 <button 
                     style={{marginLeft: 10, marginRight: 20}} 
@@ -686,7 +686,7 @@ let columns = [
                         rowsClone[updatedRowIndex] = data;
 
                         setRowsData(rowsClone);
-                        tableManager.handlers.onRowEditIdChange(null);
+                        tableManager.handlers.setEditRowId(null);
                     }
                 }>&#x2714;</button>
             </div>

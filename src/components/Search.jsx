@@ -9,17 +9,21 @@ export default props => {
     } = props;
 
     let {
-        texts,
-        icons: {
-            search: searchIcon
-        },
+        config: {
+            texts: {
+                search: searchText
+            },
+            icons: {
+                search: searchIcon
+            },
+        }
     } = tableManager;
 
     return (
         <div className='rgt-search-container'>
             <label htmlFor="rgt-search" className='rgt-search-label'>
                 <span className='rgt-search-icon'>{searchIcon}</span>
-                {texts.search}
+                {searchText}
             </label>
             <input
                 name="rgt-search"

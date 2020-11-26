@@ -1,8 +1,13 @@
 import { useState, useMemo, useCallback, useRef } from 'react';
 
 export default (props, tableManager) => {
-    const columnsApi = useRef({}).current;
+    let {
+        config: {
+            minColumnWidth
+        }
+    } = tableManager;
 
+    const columnsApi = useRef({}).current;
     let [columns, setColumns] = useState(props.columns);
 
     columns = props.onColumnsChange ? props.columns : columns;
@@ -31,7 +36,7 @@ export default (props, tableManager) => {
                 label: cd.field,
                 className: '',
                 width: '200px',
-                minWidth: cd.minWidth || props.minColumnWidth,
+                minWidth: cd.minWidth || minColumnWidth,
                 maxWidth: null,
                 getValue: ({ value, column }) => value,
                 setValue: ({ value, data, setRow, column }) => { setRow({ ...data, [column.field]: value }) },
@@ -52,7 +57,7 @@ export default (props, tableManager) => {
                 visible: isVisibleColumn
             }
         })
-    }, [columns, props.minColumnWidth]); 
+    }, [columns, minColumnWidth]); 
 
     columnsApi.visibleColumns = useMemo(() => {
         let visibleColumns = columnsApi.columns.filter(cd => cd.visible !== false);

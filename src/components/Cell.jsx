@@ -18,8 +18,15 @@ export default props => {
     } = props;
 
     let {
-        rowsApi: {
+        config: {
+            highlightSearch,
+            tableHasSelection,
             rowIdField,
+            additionalProps: {
+                cell: additionalProps
+            }
+        },
+        rowsApi: {
             onRowClick,
         },
         rowEditApi: {
@@ -28,19 +35,14 @@ export default props => {
         },
         rowSelectionApi: {
             toggleRowSelection,
-            tableHasSelection,
         },
         searchApi: {
             searchText,
-            highlightSearch,
             valuePassesSearch,
         },
         columnsApi: {
             visibleColumns
         },
-        additionalProps: {
-            cell: additionalProps
-        }
     } = tableManager;
 
     let isEditRow = editRow?.[rowIdField] === rowId;
@@ -58,16 +60,20 @@ export default props => {
             :
             `rgt-cell rgt-cell-${column.field} rgt-row-${rowIndex} rgt-row-${(rowIndex + 1) % 2 === 0 ? 'even' : 'odd'}${!tableHasSelection ? '' : disableSelection ? ' rgt-row-not-selectable' : ' rgt-row-selectable'}${column.pinned && colIndex === 0 ? ' rgt-cell-pinned rgt-cell-pinned-left' : ''}${column.pinned && colIndex === visibleColumns.length - 1 ? ' rgt-cell-pinned rgt-cell-pinned-right' : ''}${isSelected ? ' rgt-row-selected' : ''}  ${column.className}`
 
-    let moreProps = {};
     switch (column.id) {
         case 'virtual':
             break;
     
         default:
-            style = { ...style, ...additionalProps?.style, minWidth: column.minWidth, maxWidth: column.maxWidth }
+            style = { ...style, ...additionalProps.style, minWidth: column.minWidth, maxWidth: column.maxWidth }
             break;
     }
-    if (onRowClick) moreProps.onClick = event => onRowClick({ rowIndex, data, column, event });
+    if (onRowClick) {
+        additionalProps = {
+            onClick: event => onRowClick({ rowIndex, data, column, event }),
+            ...additionalProps
+        };
+    }
     return (
         <div
             className={classNames.trim()}
@@ -76,7 +82,6 @@ export default props => {
             data-row-id={(rowId).toString()}
             data-row-index={rowIndex.toString()}
             data-column-id={column.id.toString()}
-            {...moreProps}
             {...additionalProps}
             style={style}
             ref={forwardRef}

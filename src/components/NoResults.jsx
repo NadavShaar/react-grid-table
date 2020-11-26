@@ -1,8 +1,10 @@
 export default ({ tableManager }) => {
     let {
-        texts: {
-            noResults
-        },
+        config: {
+            texts: {
+                noResults
+            },
+        }
     } = tableManager;
 
     return noResults
