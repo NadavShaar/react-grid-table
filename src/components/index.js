@@ -1,4 +1,7 @@
 import Cell from './Cell';
+import CellRenderer from './CellRenderer';
+import EditorCellRenderer from './EditorCellRenderer';
+import SelectionCellRenderer from './SelectionCellRenderer';
 import ColumnVisibility from './ColumnVisibility';
 import Footer from './Footer';
 import Header from './Header';
@@ -14,6 +17,9 @@ import Pagination from './Pagination';
 
 export {
     Cell,
+    CellRenderer,
+    EditorCellRenderer,
+    SelectionCellRenderer,
     ColumnVisibility,
     Footer, 
     Header,

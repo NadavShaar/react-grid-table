@@ -1,6 +1,5 @@
-// move sort toggle to sortApi
-// switch disableColumnsReorder to positive
-
+//TODO: is column.setValue useful?
+//TODO: make sure all callback get tableManager
 import { useEffect, useRef } from 'react';
 import * as components from '../components';
 import { additionalProps, icons, texts } from '../defaults';
@@ -25,7 +24,7 @@ export default (props) => {
     }).current;
 
     Object.defineProperty(tableManager, "columnsReorderApi", { enumerable: false, writable: true });
-    Object.defineProperty(tableManager, "columnsResizeApi", { enumerable: false, writable: true })
+    Object.defineProperty(tableManager, "columnsResizeApi", { enumerable: false, writable: true });
     
     // initialization
     useEffect(() => {
@@ -37,17 +36,17 @@ export default (props) => {
 
     tableManager.isLoading = props.isLoading;
     tableManager.config = {
-        showRowsInformation: props.showRowsInformation,
+        rowIdField: props.rowIdField,
         minColumnWidth: props.minColumnWidth,
+        minSearchChars: props.minSearchChars,
         isHeaderSticky: props.isHeaderSticky,
         isPaginated: props.isPaginated,
-        disableColumnsReorder: props.disableColumnsReorder,
-        showColumnVisibilityManager: props.showColumnVisibilityManager,
+        allowColumnsReorder: props.allowColumnsReorder,
         highlightSearch: props.highlightSearch,
         showSearch: props.showSearch,
-        searchMinChars: props.searchMinChars,
+        showRowsInformation: props.showRowsInformation,
+        showColumnVisibilityManager: props.showColumnVisibilityManager,
         pageSizes: props.pageSizes,
-        rowIdField: props.rowIdField,
         isVirtualScroll: props.isVirtualScroll || (!props.isPaginated && props.onRowsRequest),
         tableHasSelection: !!props.columns.find(cd => cd.id === 'checkbox'),
         components: { ...components, ...props.components },

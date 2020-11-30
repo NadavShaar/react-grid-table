@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { withKnobs, boolean, number } from '@storybook/addon-knobs';
+import { withKnobs, boolean, number, array } from '@storybook/addon-knobs';
 
 import GridTable from '../src';
 
@@ -166,7 +166,7 @@ export const ClientSide = () => {
             style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
             onLoad={setTableManager}
             // searchText={boolean('Controlled Search', false) ? text('Search Text', searchText) : undefined}
-            // onSearchChange={setSearchText}
+            // onSearchTextChange={setSearchText}
             showRowsInformation={boolean('Show Rows Information', true)}
             // sort={boolean('Controlled Sort', false) ? object('Sort', sort) : undefined}
             // onSortChange={setSort}
@@ -184,14 +184,16 @@ export const ServerSide = () => {
     const [rowsData, setRowsData] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const [tableManager, setTableManager] = useState(null);
-    let [searchText, setSearchText] = useState('');
+    let [searchText, setSearchText] = useState('sdf');
     let [selectedRowsIds, setSelectedRowsIds] = useState([]);
     let [totalRows, setTotalRows] = useState();
     let [columns, setColumns] = useState(baseColumns);
     let [sort, setSort] = useState({});
     let rowsRef = useRef(rowsData);
 
+    let currentRequestData;
     const onRowsRequest = (requestData, tableManager) => {
+        currentRequestData = requestData;
         let {
             sortApi: {
                 sortRows
@@ -210,7 +212,7 @@ export const ServerSide = () => {
             rowsRef.current = rowsRef.current.concat(allRows.slice(requestData.from, requestData.to))
             setRowsData(rowsRef.current);
             setTotalRows(allRows.length);
-            if (tableManager.rowsApi.requestRowsData.current === requestData) setLoading(false);
+            if (currentRequestData === requestData) setLoading(false);
         }, 500);
     }
     const onRowsReset = () => {
@@ -227,12 +229,12 @@ export const ServerSide = () => {
             editRowId={editRowId}
             onEditRowIdChange={setEditRowId}
             onRowsChange={setRowsData}
-            // selectedRowsIds={boolean('Controlled Selection', false) ? array('Selection', selectedRowsIds) : undefined}
+            // selectedRowsIds={boolean('Controlled Selection', false) ? selectedRowsIds : undefined}
             // onSelectedRowsChange={setSelectedRowsIds}
             style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
             onLoad={setTableManager}
-            // searchText={boolean('Controlled Search', false) ? text('Search Text', searchText) : undefined}
-            // onSearchChange={setSearchText}
+            // searchText={boolean('Controlled Search', false) ? searchText : undefined}
+            // onSearchTextChange={setSearchText}
             showRowsInformation={boolean('Show Rows Information', true)}
             sort={sort}
             onSortChange={setSort}
@@ -244,6 +246,7 @@ export const ServerSide = () => {
             onRowsReset={onRowsReset}
             totalRows={totalRows}
             rowVirtualizerProps={number('Overscan', 3)}
+            // getIsRowEditable={data => data.id % 2}
         />
     )
 }

@@ -22,7 +22,6 @@ export default (props, tableManager) => {
     
     rowsApi.allRows = props.rows
     rowsApi.onRowClick = props.onRowClick
-    rowsApi.requestRowsData = props.requestRowsData
 
     rowsApi.rows = useMemo(() => {
         let rows = props.rows;

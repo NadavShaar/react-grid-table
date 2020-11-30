@@ -3,7 +3,7 @@ import { useState, useCallback, useRef } from 'react';
 export default (props, tableManager) => {
     let {
         config: {
-            searchMinChars
+            minSearchChars
         },
         columnsApi: {
             columns
@@ -16,14 +16,14 @@ export default (props, tableManager) => {
     searchApi.searchText = props.searchText ?? searchText;
 
     searchApi.setSearchText = useCallback(searchText => {
-        if (props.searchText === undefined || props.onSearchChange === undefined) setSearchText(searchText);
-        props.onSearchChange?.(searchText);
+        if (props.searchText === undefined || props.onSearchTextChange === undefined) setSearchText(searchText);
+        props.onSearchTextChange?.(searchText);
     })
 
     searchApi.valuePassesSearch = useCallback((value, column) => {
         if (!value) return false;
         if (!column?.searchable) return false;
-        if (searchApi.searchText.length < searchMinChars) return false;
+        if (searchApi.searchText.length < minSearchChars) return false;
 
         return column.search({ value: value.toString(), searchText: searchApi.searchText });
     })
@@ -33,7 +33,7 @@ export default (props, tableManager) => {
             cols[coldef.field] = coldef;
             return cols;
         }, {})
-        if (searchApi.searchText.length >= searchMinChars) {
+        if (searchApi.searchText.length >= minSearchChars) {
             rows = rows.filter(item => Object.keys(item).some(key => {
                 if (cols[key] && cols[key].searchable) {
                     let value = cols[key].getValue({ value: item[key], column: cols[key] });

@@ -201,9 +201,9 @@ export default MyAwesomeTable;
 | highlightSearch | boolean | whether to highlight the search term | true |
 | showSearch | boolean | whether to show the search component in the header | true |
 | showRowsInformation | boolean | whether to show the rows information component (located at the left side of the footer) | true |
-| searchMinChars | number | the minimum characters in order to apply search and highlighting | 2 |
+| minSearchChars | number | the minimum characters in order to apply search and highlighting | 2 |
 | isLoading | boolean | whether to render a loader | false |
-| disableColumnsReorder | boolean | whether to disable column drag & drop for repositioning | false |
+| allowColumnsReorder | boolean | whether to allow column drag & drop for repositioning | true |
 | isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
 | showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
 | icons | object of nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
@@ -217,7 +217,7 @@ export default MyAwesomeTable;
 | onSelectedRowsChange | function | triggers when rows selection has been changed | `selectedRowsIds => { }` |
 | onPageChange | function | triggers when page is changed | `nextPage => { }` |
 | onPageSizeChange | function | triggers when page size is changed | `newPageSize => { }` |
-| onSearchChange | function | triggers when search text changed | `searchText => { }` |
+| onSearchTextChange | function | triggers when search text changed | `searchText => { }` |
 | onSortChange | function | triggers when sort changed | `({colId, isAsc}) => { }` |
 | onRowClick | function | triggers when a row is clicked | `({rowIndex, data, column, event}) => { }` |
 | onEditRowIdChange | function | triggers when `rowEditId` changed | `rowEditId => { }` |
@@ -618,7 +618,7 @@ all [components](#components-props) that are not part of the table itself.
 | page | number | the current page number | 0 |
 | searchText | string | text for search | "" |
 | highlightSearch | boolean | whether to highlight the search term | true |
-| searchMinChars | number | the minimum characters in order to apply search and highlighting | 2 |
+| minSearchChars | number | the minimum characters in order to apply search and highlighting | 2 |
 | totalPages | number | the total number of pages | 0 |
 | pageSize | number | the selected page size | 20 |
 | pageSizes | array of numbers | page size options | [20, 50, 100] |
@@ -629,7 +629,7 @@ all [components](#components-props) that are not part of the table itself.
 | isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
 | isPaginated | boolean | 	determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
 | isVirtualScroll | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
-| disableColumnsReorder | boolean | whether to disable column drag & drop for repositioning | false |
+| allowColumnsReorder | boolean | whether to allow column drag & drop for repositioning | true |
 | texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
 
 

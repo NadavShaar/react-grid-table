@@ -85,13 +85,13 @@ export default (props) => {
         },
         sortApi: {
             sort,
-            setSort,
+            toggleSort,
         },
         columnsApi: {
             visibleColumns,
         },
         config: {
-            disableColumnsReorder,
+            allowColumnsReorder,
         },
         columnsResizeApi: {
             useResizeRef
@@ -104,21 +104,28 @@ export default (props) => {
     let isPinnedLeft = column.pinned && index === 0;
     let classes = column.id === 'virtual' ? `rgt-cell-header rgt-cell-header-virtual-col${isHeaderSticky ? ' rgt-cell-header-sticky' : ''}`.trim() : `rgt-cell-header rgt-cell-header-${column.id === 'checkbox' ? 'checkbox' : column.field}${(column.sortable !== false && column.id !== 'checkbox' && column.id !== 'virtual') ? ' rgt-clickable' : ''}${column.sortable !== false && column.id !== 'checkbox' ? ' rgt-cell-header-sortable' : ' rgt-cell-header-not-sortable'}${isHeaderSticky ? ' rgt-cell-header-sticky' : ''}${column.resizable !== false ? ' rgt-cell-header-resizable' : ' rgt-cell-header-not-resizable'}${column.searchable !== false && column.id !== 'checkbox' ? ' rgt-cell-header-searchable' : ' rgt-cell-header-not-searchable'}${isPinnedLeft ? ' rgt-cell-header-pinned rgt-cell-header-pinned-left' : ''}${isPinnedRight ? ' rgt-cell-header-pinned rgt-cell-header-pinned-right' : ''} ${column.className}`.trim() 
 
-    let colId = column.id;
-    let isAsc = true;
-    if (sort.colId === colId) isAsc = sort.isAsc ? false : sort.isAsc === false ? null : true;
-    if (isAsc === null) colId = null;
-    let sortingProps = (column.sortable !== false && column.id !== 'checkbox' && column.id !== 'virtual') ? { onClick: e => setSort(colId, isAsc) } : {};
-
-    style = { ...style, ...additionalProps.style, minWidth: column.minWidth, maxWidth: column.maxWidth };
+    additionalProps = {
+        ...additionalProps,
+        style: {
+            ...style,
+            ...additionalProps.style,
+            minWidth: column.minWidth,
+            maxWidth: column.maxWidth
+        }
+    }
+    if (column.sortable) {
+        let onClick = additionalProps.onClick;
+        additionalProps.onClick = e => {
+            toggleSort(column.id);
+            onClick?.(e)
+        }
+    }
 
     return (
         <div 
             data-column-id={(column.id).toString()}
             className={classes}
-            {...sortingProps}
             {...additionalProps}
-            style={style}
         >
             {
                 (column.id !== 'virtual') ?
@@ -126,7 +133,7 @@ export default (props) => {
                         <SortableItem 
                             className={`rgt-cell-header-inner${column.id === 'checkbox' ? ' rgt-cell-header-inner-checkbox-column' : ''}${!isPinnedRight ? ' rgt-cell-header-inner-not-pinned-right' : '' }`}
                             index={index} 
-                            disabled={disableColumnsReorder || isPinnedLeft || isPinnedRight}
+                            disabled={!allowColumnsReorder || isPinnedLeft || isPinnedRight}
                             columnId={(column.id).toString()}
                             collection={isPinnedLeft || isPinnedRight ? 0 : 1}
                         >

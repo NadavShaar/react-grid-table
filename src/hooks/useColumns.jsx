@@ -3,7 +3,12 @@ import { useState, useMemo, useCallback, useRef } from 'react';
 export default (props, tableManager) => {
     let {
         config: {
-            minColumnWidth
+            minColumnWidth,
+            components: {
+                CellRenderer,
+                EditorCellRenderer,
+                SelectionCellRenderer,
+            }
         }
     } = tableManager;
 
@@ -27,6 +32,7 @@ export default (props, tableManager) => {
                 editable: false,
                 sortable: false,
                 resizable: false,
+                cellRenderer: SelectionCellRenderer,
                 ...cd,
                 pinned: isPinnedColumn,
                 visible: isVisibleColumn
@@ -52,6 +58,8 @@ export default (props, tableManager) => {
                     else if (aa < bb) return isAscending ? -1 : 1;
                     return 0;
                 },
+                cellRenderer: CellRenderer,
+                editorCellRenderer: EditorCellRenderer,
                 ...cd,
                 pinned: isPinnedColumn,
                 visible: isVisibleColumn
