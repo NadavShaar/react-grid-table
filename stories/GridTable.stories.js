@@ -101,7 +101,7 @@ const baseColumns = [
                 </button>
             </div>
         ),
-        editorCellRenderer: ({ tableManager, value, field, onChange, data, column, rowIndex }) => (
+        editorCellRenderer: ({ onRowsChange, tableManager, value, field, onChange, data, column, rowIndex }) => (
             <div style={styles.buttonsCellEditorContainer}>
                 <button
                     title="Cancel"
@@ -118,7 +118,7 @@ const baseColumns = [
                         let updatedRowIndex = rowsClone.findIndex(r => r.id === data.id);
                         rowsClone[updatedRowIndex] = data;
 
-                        tableManager.rowsApi.setRows(rowsClone);
+                        onRowsChange(rowsClone);
                         tableManager.rowEditApi.setEditRowId(null);
                     }}
                 >
@@ -143,7 +143,7 @@ export const ClientSide = () => {
     let [searchText, setSearchText] = useState('');
     let [selectedRowsIds, setSelectedRowsIds] = useState([]);
     let [sort, setSort] = useState({ colId: 4, isAsc: true });
-    let [columns, setColumns] = useState(baseColumns);
+    let [columns, setColumns] = useState(baseColumns.map(c => c.id === 9 ? { ...c, editorCellRenderer: props => c.editorCellRenderer({ ...props, onRowsChange: setRowsData})} : c));
 
     useEffect(() => {
         setLoading(true);
@@ -187,7 +187,7 @@ export const ServerSide = () => {
     let [searchText, setSearchText] = useState('sdf');
     let [selectedRowsIds, setSelectedRowsIds] = useState([]);
     let [totalRows, setTotalRows] = useState();
-    let [columns, setColumns] = useState(baseColumns);
+    let [columns, setColumns] = useState(baseColumns.map(c => c.id === 9 ? { ...c, editorCellRenderer: props => c.editorCellRenderer({ ...props, onRowsChange: setRowsData }) } : c));
     let [sort, setSort] = useState({});
     let rowsRef = useRef(rowsData);
 
