@@ -31,7 +31,7 @@ export default (props, tableManager) => {
         if (isColumnResizing) return;
 
         if (props.sort === undefined || props.onSortChange === undefined) setSort({ colId, isAsc });
-        props.onSortChange?.({ colId, isAsc });
+        props.onSortChange?.({ colId, isAsc }, tableManager);
     })
 
     sortApi.sortRows = useCallback(rows => {

@@ -91,7 +91,7 @@ export default (props) => {
             visibleColumns,
         },
         config: {
-            allowColumnsReorder,
+            enableColumnsReorder,
         },
         columnsResizeApi: {
             useResizeRef
@@ -133,7 +133,7 @@ export default (props) => {
                         <SortableItem 
                             className={`rgt-cell-header-inner${column.id === 'checkbox' ? ' rgt-cell-header-inner-checkbox-column' : ''}${!isPinnedRight ? ' rgt-cell-header-inner-not-pinned-right' : '' }`}
                             index={index} 
-                            disabled={!allowColumnsReorder || isPinnedLeft || isPinnedRight}
+                            disabled={!enableColumnsReorder || isPinnedLeft || isPinnedRight}
                             columnId={(column.id).toString()}
                             collection={isPinnedLeft || isPinnedRight ? 0 : 1}
                         >

@@ -9,7 +9,7 @@ export default (props, tableManager) => {
     
     rowSelectionApi.setSelectedRowsIds = useCallback(newSelectedItems => {
         if (props.selectedRowsIds === undefined || props.onSelectedRowsChange === undefined) setSelectedRowsIds(newSelectedItems);
-        props.onSelectedRowsChange?.(newSelectedItems);
+        props.onSelectedRowsChange?.(newSelectedItems, tableManager);
     })
 
     rowSelectionApi.toggleRowSelection = useCallback(rowId => {

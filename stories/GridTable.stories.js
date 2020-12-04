@@ -160,7 +160,6 @@ export const ClientSide = () => {
             isLoading={isLoading}
             editRowId={editRowId}
             onEditRowIdChange={setEditRowId}
-            onRowsChange={setRowsData}
             // selectedRowsIds={boolean('Controlled Selection', false) ? array('Selection', selectedRowsIds) : undefined}
             // onSelectedRowsChange={setSelectedRowsIds}
             style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
@@ -228,7 +227,6 @@ export const ServerSide = () => {
             isLoading={isLoading}
             editRowId={editRowId}
             onEditRowIdChange={setEditRowId}
-            onRowsChange={setRowsData}
             // selectedRowsIds={boolean('Controlled Selection', false) ? selectedRowsIds : undefined}
             // onSelectedRowsChange={setSelectedRowsIds}
             style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}

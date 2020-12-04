@@ -1,4 +1,3 @@
-//TODO: is column.setValue useful?
 //TODO: make sure all callback get tableManager
 import { useEffect, useRef } from 'react';
 import * as components from '../components';
@@ -41,7 +40,7 @@ export default (props) => {
         minSearchChars: props.minSearchChars,
         isHeaderSticky: props.isHeaderSticky,
         isPaginated: props.isPaginated,
-        allowColumnsReorder: props.allowColumnsReorder,
+        enableColumnsReorder: props.enableColumnsReorder,
         highlightSearch: props.highlightSearch,
         showSearch: props.showSearch,
         showRowsInformation: props.showRowsInformation,

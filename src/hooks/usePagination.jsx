@@ -27,7 +27,7 @@ export default (props, tableManager) => {
         if ((page < 1) || (paginationApi.totalPages < page)) return;
 
         if (props.page === undefined || props.onPageChange === undefined) setPage(page);
-        props.onPageChange?.(page);
+        props.onPageChange?.(page, tableManager);
 
         setTimeout(() => { tableManager.refs.tableRef.current.scrollTop = 0 }, 0);
     })
@@ -35,7 +35,7 @@ export default (props, tableManager) => {
     paginationApi.setPageSize = useCallback(pageSize => {
         pageSize = ~~pageSize;
         if (props.pageSize === undefined || props.onPageSizeChange === undefined) setPageSize(pageSize);
-        props.onPageSizeChange?.(pageSize);
+        props.onPageSizeChange?.(pageSize, tableManager);
     })
 
     return paginationApi;

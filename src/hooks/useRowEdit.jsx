@@ -20,7 +20,7 @@ export default (props, tableManager) => {
 
     rowEditApi.setEditRowId = useCallback(rowEditId => {
         setEditRow(rowEditId && pageRows.find(item => item[rowIdField] === rowEditId) || null);
-        props.onEditRowIdChange?.(rowEditId);
+        props.onEditRowIdChange?.(rowEditId, tableManager);
     })
 
     useEffect(() => {

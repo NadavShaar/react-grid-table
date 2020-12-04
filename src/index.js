@@ -116,7 +116,7 @@ GridTable.defaultProps = {
     showSearch: true,
     showRowsInformation: true,
     showColumnVisibilityManager: true,
-    allowColumnsReorder: true,
+    enableColumnsReorder: true,
     getIsRowSelectable: row => true,
     getIsRowEditable: row => true
 };
@@ -133,7 +133,7 @@ GridTable.propTypes = {
     // table config
     rowIdField: PropTypes.string,
     isPaginated: PropTypes.bool,
-    allowColumnsReorder: PropTypes.bool,
+    enableColumnsReorder: PropTypes.bool,
     pageSizes: PropTypes.arrayOf(PropTypes.number),
     pageSize: PropTypes.number,
     page: PropTypes.number,
@@ -169,7 +169,6 @@ GridTable.propTypes = {
     onColumnReorderEnd: PropTypes.func, 
     onRowsRequest: PropTypes.func, 
     onRowsReset: PropTypes.func,
-    onRowsChange: PropTypes.func, 
 };
 
 export default GridTable;

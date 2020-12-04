@@ -13,7 +13,9 @@ export default (props, tableManager) => {
         }
     } = tableManager;
 
-    const columnsResizeApi = useRef({}).current;
+    const columnsResizeApi = useRef({
+        isColumnResizing: false
+    }).current;
     const lastPos = useRef(null);
 
     Object.defineProperty(columnsResizeApi, "onResizeStart", { enumerable: false, writable: true });
@@ -21,11 +23,9 @@ export default (props, tableManager) => {
     Object.defineProperty(columnsResizeApi, "onResizeEnd", { enumerable: false, writable: true });
     Object.defineProperty(columnsResizeApi, "useResizeRef", { enumerable: false, writable: true });
 
-    columnsResizeApi.isColumnResizing = false;
-
     columnsResizeApi.onResizeStart = useCallback(({ e, target, column }) => {
         columnsResizeApi.isColumnResizing = true;
-        props.onColumnResizeStart?.({ e, target, column });
+        props.onColumnResizeStart?.({ event: e, target, column }, tableManager);
     })
 
     columnsResizeApi.onResize = useCallback(({ e, target, column }) => {
@@ -50,7 +50,7 @@ export default (props, tableManager) => {
         }
 
         lastPos.current = e.clientX;
-        props.onColumnResize?.({ event: e, target, column });
+        props.onColumnResize?.({ event: e, target, column }, tableManager);
     })
 
     columnsResizeApi.onResizeEnd = useCallback(({ e, target, column }) => {
@@ -66,7 +66,7 @@ export default (props, tableManager) => {
             }
         })
         setColumns(columns);
-        props.onColumnResizeEnd?.({ e, target, column });
+        props.onColumnResizeEnd?.({ event: e, target, column }, tableManager);
         setTimeout(() => columnsResizeApi.isColumnResizing = false, 0);
     })
 

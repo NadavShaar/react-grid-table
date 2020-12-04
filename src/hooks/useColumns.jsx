@@ -78,7 +78,7 @@ export default (props, tableManager) => {
 
     columnsApi.setColumns = useCallback(cols => {
         if (!props.onColumnsChange) setColumns(cols);
-        else props.onColumnsChange(cols);
+        else props.onColumnsChange(cols, tableManager);
     })
 
     return columnsApi;

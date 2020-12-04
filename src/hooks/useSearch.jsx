@@ -17,7 +17,7 @@ export default (props, tableManager) => {
 
     searchApi.setSearchText = useCallback(searchText => {
         if (props.searchText === undefined || props.onSearchTextChange === undefined) setSearchText(searchText);
-        props.onSearchTextChange?.(searchText);
+        props.onSearchTextChange?.(searchText, tableManager);
     })
 
     searchApi.valuePassesSearch = useCallback((value, column) => {

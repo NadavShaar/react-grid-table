@@ -203,7 +203,7 @@ export default MyAwesomeTable;
 | showRowsInformation | boolean | whether to show the rows information component (located at the left side of the footer) | true |
 | minSearchChars | number | the minimum characters in order to apply search and highlighting | 2 |
 | isLoading | boolean | whether to render a loader | false |
-| allowColumnsReorder | boolean | whether to allow column drag & drop for repositioning | true |
+| enableColumnsReorder | boolean | whether to allow column drag & drop for repositioning | true |
 | isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
 | showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
 | icons | object of nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
@@ -629,7 +629,7 @@ all [components](#components-props) that are not part of the table itself.
 | isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
 | isPaginated | boolean | 	determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
 | isVirtualScroll | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
-| allowColumnsReorder | boolean | whether to allow column drag & drop for repositioning | true |
+| enableColumnsReorder | boolean | whether to allow column drag & drop for repositioning | true |
 | texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
 
 

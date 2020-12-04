@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useMemo } from 'react';
 
 export default (props, tableManager) => {
     let {
@@ -9,19 +9,19 @@ export default (props, tableManager) => {
         }
     } = tableManager;
 
-    const columnsReorderApi = useRef({}).current;
+    const columnsReorderApi = useRef({
+        isColumnReordering: false
+    }).current;
 
     Object.defineProperty(columnsReorderApi, "onColumnReorderStart", { enumerable: false, writable: true })
     Object.defineProperty(columnsReorderApi, "onColumnReorderEnd", { enumerable: false, writable: true })
-
-    columnsReorderApi.isColumnReordering = false;
 
     columnsReorderApi.onColumnReorderStart = useCallback(sortData => {
         columnsReorderApi.isColumnReordering = true;
 
         sortData.helper.classList.add('rgt-column-sort-ghost');
 
-        props.onColumnReorderStart?.(sortData);
+        props.onColumnReorderStart?.(sortData, tableManager);
     })
 
     columnsReorderApi.onColumnReorderEnd = useCallback(sortData => {
@@ -35,7 +35,7 @@ export default (props, tableManager) => {
 
         setColumns(columns);
 
-        props.onColumnReorderEnd?.(sortData);
+        props.onColumnReorderEnd?.(sortData, tableManager);
         setTimeout(() => columnsReorderApi.isColumnReordering = false, 0);
     })
 

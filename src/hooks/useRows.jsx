@@ -40,7 +40,7 @@ export default (props, tableManager) => {
         if (!props.onRowsRequest) return;
 
         requestRowsData.current = DEFAULT_ROWS_REQUEST_DATA;
-        props.onRowsReset?.();
+        props.onRowsReset?.(tableManager);
     })
 
     useEffect(() => {

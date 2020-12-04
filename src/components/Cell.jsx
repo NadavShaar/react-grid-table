@@ -69,7 +69,7 @@ export default props => {
     }
     if (data && onRowClick) {
         additionalProps = {
-            onClick: event => onRowClick({ tableManager, rowIndex, data, column, event }),
+            onClick: event => onRowClick({ rowIndex, data, column, event }, tableManager),
             ...additionalProps
         };
     }
