@@ -1,64 +1,8 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React from 'react';
 import { SortableElement, SortableHandle } from 'react-sortable-hoc';
 
 const SortableItem = SortableElement(({children, index, columnId, className}) => <div className={className} data-column-id={columnId} key={index}>{children}</div>);
 const SortableDragHandle = SortableHandle(({children, index}) => <React.Fragment>{children}</React.Fragment>);
-
-const SelectAll = ({tableManager, column, style}) => {
-    let selectAllRef = useRef(null);
-
-    let {
-        config: {
-            rowIdField
-        },
-        rowSelectionApi: {
-            getIsRowSelectable,
-            setSelectedRowsIds,
-            selectedRowsIds,
-        },
-        paginationApi: {
-            pageRows,
-        },
-    } = tableManager;
-
-    let selectableItemsIds = pageRows.filter(getIsRowSelectable).map(item => item[rowIdField]);
-    let selectAllIsDisabled = !selectableItemsIds.length;
-    let selectAllIsChecked = selectableItemsIds.length && selectableItemsIds.every(si => selectedRowsIds.find(id => si === id));
-    let isSelectAllIndeterminate = !!(selectedRowsIds.length && !selectAllIsChecked && selectableItemsIds.some(si => selectedRowsIds.find(id => si === id)));
-
-    useEffect(() => {
-        if (!selectAllRef.current) return;
-
-        selectAllRef.current.indeterminate = isSelectAllIndeterminate;
-    }, [isSelectAllIndeterminate])
-
-    const onChange = () => {
-        let selectedIds = [...selectedRowsIds];
-
-        if(selectAllIsChecked || isSelectAllIndeterminate) selectedIds = selectedIds.filter(si => !selectableItemsIds.find(itemId => si === itemId));
-        else selectableItemsIds.forEach(s => selectedIds.push(s));
-        
-        setSelectedRowsIds(selectedIds);
-    }
-
-    return (
-        <div className="rgt-cell-header-select-all" style={style}>
-            {
-                column.headerCellRenderer ?
-                    column.headerCellRenderer({ isSelected: selectAllIsChecked, isIndeterminate: isSelectAllIndeterminate, callback: onChange, disabled: selectAllIsDisabled })
-                    :
-                    <input
-                        ref={selectAllRef}
-                        className={selectAllIsDisabled ? 'rgt-disabled' : 'rgt-clickable'}
-                        disabled={selectAllIsDisabled}
-                        type="checkbox"
-                        onChange={onChange}
-                        checked={selectAllIsChecked}
-                    />
-            }
-        </div>
-    )
-}
 
 export default (props) => {
 
@@ -66,7 +10,7 @@ export default (props) => {
         index, 
         column,
         tableManager,
-        style = {}
+        style
     } = props;
 
     let {
@@ -128,13 +72,15 @@ export default (props) => {
             {...additionalProps}
         >
             {
-                (column.id !== 'virtual') ?
+                (column.id === 'virtual') ?
+                    null
+                    :
                     <React.Fragment>
                         <SortableItem 
                             className={`rgt-cell-header-inner${column.id === 'checkbox' ? ' rgt-cell-header-inner-checkbox-column' : ''}${!isPinnedRight ? ' rgt-cell-header-inner-not-pinned-right' : '' }`}
                             index={index} 
                             disabled={!enableColumnsReorder || isPinnedLeft || isPinnedRight}
-                            columnId={(column.id).toString()}
+                            columnId={column.id.toString()}
                             collection={isPinnedLeft || isPinnedRight ? 0 : 1}
                         >
                             {
@@ -143,28 +89,15 @@ export default (props) => {
                                     :
                                     null
                             }
+                            { column.headerCellRenderer({ tableManager, column }) }
                             {
-                                (column.id === 'checkbox') ? 
-                                    <SelectAll tableManager={tableManager} column={column} style={style} />
+                                (sort.colId !== column.id) || (sort.isAsc === null) ? 
+                                    null
                                     :
-                                    column.headerCellRenderer ? 
-                                        column.headerCellRenderer({label: (typeof column.label === 'string' ? column.label : column.field), column: column})
-                                        :
-                                        <span className='rgt-text-truncate' data-column-id={(column.id).toString()}>
-                                            {typeof column.label === 'string' ? column.label : column.field}
-                                        </span>
-                            }
-                            {
-                                (sort.colId === column.id) ? 
                                     sort.isAsc ? 
                                         <span className='rgt-sort-icon rgt-sort-icon-ascending'>{sortAscendingIcon}</span> 
                                         :
-                                        sort.isAsc === false ?
-                                            <span className='rgt-sort-icon rgt-sort-icon-descending'>{sortDescendingIcon}</span> 
-                                            : 
-                                            null
-                                    : 
-                                    null
+                                        <span className='rgt-sort-icon rgt-sort-icon-descending'>{sortDescendingIcon}</span> 
                             }
                         </SortableItem>
                         {
@@ -178,8 +111,6 @@ export default (props) => {
                                 : null
                         }
                     </React.Fragment>
-                :
-                null
             }
         </div>
     )

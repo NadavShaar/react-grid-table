@@ -8,6 +8,8 @@ export default (props, tableManager) => {
                 CellRenderer,
                 EditorCellRenderer,
                 SelectionCellRenderer,
+                HeaderCellRenderer,
+                HeaderSelectionCellRenderer,
             }
         }
     } = tableManager;
@@ -33,6 +35,7 @@ export default (props, tableManager) => {
                 sortable: false,
                 resizable: false,
                 cellRenderer: SelectionCellRenderer,
+                headerCellRenderer: HeaderSelectionCellRenderer,
                 ...cd,
                 pinned: isPinnedColumn,
                 visible: isVisibleColumn
@@ -60,6 +63,7 @@ export default (props, tableManager) => {
                 },
                 cellRenderer: CellRenderer,
                 editorCellRenderer: EditorCellRenderer,
+                headerCellRenderer: HeaderCellRenderer,
                 ...cd,
                 pinned: isPinnedColumn,
                 visible: isVisibleColumn

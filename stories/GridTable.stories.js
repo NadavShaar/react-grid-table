@@ -170,8 +170,6 @@ export const ClientSide = () => {
             // sort={boolean('Controlled Sort', false) ? object('Sort', sort) : undefined}
             // onSortChange={setSort}
             isVirtualScroll={boolean(' Use Virtual Scrolling', true)}
-            // searchComponent={boolean('Use Custom Search', false) ? undefined : Search}
-            // headerComponent={boolean('Use Custom Header', false) ? Header : undefined}
             isPaginated={boolean('Use Pagination', true)}
             // additionalProps={{ rowVirtualizer: { overscan: number('Overscan', 3) }}}
         />
@@ -237,8 +235,6 @@ export const ServerSide = () => {
             sort={sort}
             onSortChange={setSort}
             isVirtualScroll={boolean(' Use Virtual Scrolling', false)}
-            // searchComponent={boolean('Use Custom Search', false) ? undefined : Search}
-            // headerComponent={boolean('Use Custom Header', false) ? Header : undefined}
             isPaginated={boolean('Use Pagination', true)}
             onRowsRequest={onRowsRequest}
             onRowsReset={onRowsReset}

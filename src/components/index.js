@@ -6,6 +6,8 @@ import ColumnVisibility from './ColumnVisibility';
 import Footer from './Footer';
 import Header from './Header';
 import HeaderCell from './HeaderCell';
+import HeaderCellRenderer from './HeaderCellRenderer';
+import HeaderSelectionCellRenderer from './HeaderSelectionCellRenderer';
 import Loader from './Loader';
 import NoResults from './NoResults';
 import PopoverButton from './PopoverButton';
@@ -24,6 +26,8 @@ export {
     Footer, 
     Header,
     HeaderCell,
+    HeaderCellRenderer,
+    HeaderSelectionCellRenderer,
     Loader, 
     NoResults,
     PopoverButton,
