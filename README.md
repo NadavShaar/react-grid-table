@@ -146,6 +146,8 @@ const MyAwesomeTable = () => {
 export default MyAwesomeTable;
 ```
 
+
+
 ### Support this package
 
 [![paypal](https://image.flaticon.com/icons/png/128/2871/2871557.png)](https://www.paypal.com/donate?hosted_button_id=BBGCPPS5QSQE2)
