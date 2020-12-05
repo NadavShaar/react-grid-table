@@ -50,6 +50,7 @@ export default (props, tableManager) => {
             config: {
                 isPaginated,
                 isVirtualScroll,
+                batchSize
             },
             paginationApi: {
                 page,
@@ -77,7 +78,7 @@ export default (props, tableManager) => {
         if ((lastIndex <= to) && (from !== -1)) return;
 
         from = to;
-        to = from + pageSize - (isPaginated ? ((from) % pageSize) : 0);
+        to = from + batchSize - (from % batchSize);
         if (Number(rowsApi.totalRows)) to = Math.min(to, rowsApi.totalRows);
         requestRowsData.current = {
             from,

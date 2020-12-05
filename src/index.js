@@ -132,6 +132,7 @@ GridTable.propTypes = {
     editRowId: PropTypes.any,
     // table config
     rowIdField: PropTypes.string,
+    batchSize: PropTypes.number,
     isPaginated: PropTypes.bool,
     enableColumnsReorder: PropTypes.bool,
     pageSizes: PropTypes.arrayOf(PropTypes.number),

@@ -46,6 +46,7 @@ export default (props) => {
         showRowsInformation: props.showRowsInformation,
         showColumnVisibilityManager: props.showColumnVisibilityManager,
         pageSizes: props.pageSizes,
+        batchSize: props.batchSize || 100,
         isVirtualScroll: props.isVirtualScroll || (!props.isPaginated && props.onRowsRequest),
         tableHasSelection: !!props.columns.find(cd => cd.id === 'checkbox'),
         components: { ...components, ...props.components },
