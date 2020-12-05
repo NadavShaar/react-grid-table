@@ -25,6 +25,8 @@ export default (props, tableManager) => {
     })
 
     columnsReorderApi.onColumnReorderEnd = useCallback(sortData => {
+        setTimeout(() => columnsReorderApi.isColumnReordering = false, 0);
+        
         if (sortData.oldIndex === sortData.newIndex) return;
 
         let colDefNewIndex = columns.findIndex(oc => oc.id === visibleColumns[sortData.newIndex].id);
@@ -36,7 +38,6 @@ export default (props, tableManager) => {
         setColumns(columns);
 
         props.onColumnReorderEnd?.(sortData, tableManager);
-        setTimeout(() => columnsReorderApi.isColumnReordering = false, 0);
     })
 
     return columnsReorderApi;

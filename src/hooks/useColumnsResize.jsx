@@ -54,6 +54,8 @@ export default (props, tableManager) => {
     })
 
     columnsResizeApi.onResizeEnd = useCallback(({ e, target, column }) => {
+        setTimeout(() => columnsResizeApi.isColumnResizing = false, 0);
+        
         lastPos.current = null;
         let containerEl = tableRef.current;
         let gridTemplateColumns = containerEl.style.gridTemplateColumns;
@@ -67,7 +69,6 @@ export default (props, tableManager) => {
         })
         setColumns(columns);
         props.onColumnResizeEnd?.({ event: e, target, column }, tableManager);
-        setTimeout(() => columnsResizeApi.isColumnResizing = false, 0);
     })
 
     columnsResizeApi.useResizeRef = column => {
