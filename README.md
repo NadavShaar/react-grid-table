@@ -162,6 +162,8 @@ export default MyAwesomeTable;
 - [How-To: Row-Editing](#row-editing)
 - [How-To: Styling](#styling)
 
+[![paypal](https://image.flaticon.com/icons/png/128/2871/2871557.png)](https://www.paypal.com/donate?hosted_button_id=BBGCPPS5QSQE2)
+
 ## Main components
 **HEADER (optional | customizable):** search & column visibility management. 
 
@@ -737,8 +739,6 @@ Styling is done by css classes that can be easily overridden. the table's compon
 | Information | `rgt-footer-items-information` |
 | PageSize | `rgt-footer-items-per-page` |
 | (Utils) | `rgt-text-truncate` `rgt-clickable` `rgt-disabled` `rgt-disabled-button` `rgt-flex-child` |
-
-[![paypal](https://image.flaticon.com/icons/png/128/2871/2871557.png)](https://www.paypal.com/donate?hosted_button_id=BBGCPPS5QSQE2)
 
 ## License
 
