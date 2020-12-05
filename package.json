@@ -28,7 +28,9 @@
     "header",
     "footer",
     "cells",
-    "pagination"
+    "pagination",
+    "async",
+    "row-virtualizer"
   ],
   "main": "dist/index.js",
   "source": "src/index.js",
