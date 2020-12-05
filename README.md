@@ -743,3 +743,5 @@ Styling is done by css classes that can be easily overridden. the table's compon
 ## License
 
  © [NadavShaar](https://github.com/NadavShaar) 
+ 
+ [![paypal](https://image.flaticon.com/icons/png/128/2871/2871557.png)](https://www.paypal.com/donate?hosted_button_id=BBGCPPS5QSQE2)
