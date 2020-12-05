@@ -239,7 +239,6 @@ export const ServerSide = () => {
             onRowsRequest={onRowsRequest}
             onRowsReset={onRowsReset}
             totalRows={totalRows}
-            rowVirtualizerProps={number('Overscan', 3)}
             // getIsRowEditable={data => data.id % 2}
         />
     )
