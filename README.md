@@ -146,6 +146,10 @@ const MyAwesomeTable = () => {
 export default MyAwesomeTable;
 ```
 
+### Support this package
+
+[![paypal](https://image.flaticon.com/icons/png/128/2871/2871557.png)](https://www.paypal.com/donate?hosted_button_id=BBGCPPS5QSQE2)
+
 # Docs
 ### Table of contents
 - [Main components](#main-components)
@@ -161,8 +165,6 @@ export default MyAwesomeTable;
 - [The `tableManager` API](#tableManager)
 - [How-To: Row-Editing](#row-editing)
 - [How-To: Styling](#styling)
-
-[![paypal](https://image.flaticon.com/icons/png/128/2871/2871557.png)](https://www.paypal.com/donate?hosted_button_id=BBGCPPS5QSQE2)
 
 ## Main components
 **HEADER (optional | customizable):** search & column visibility management. 
