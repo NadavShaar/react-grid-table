@@ -117,6 +117,8 @@ GridTable.defaultProps = {
     showRowsInformation: true,
     showColumnVisibilityManager: true,
     enableColumnsReorder: true,
+    requestDebounceTimeout: 300,
+    batchSize: 100,
     getIsRowSelectable: row => true,
     getIsRowEditable: row => true
 };
@@ -153,6 +155,7 @@ GridTable.propTypes = {
     additionalProps: PropTypes.object,
     components: PropTypes.object,
     totalRows: PropTypes.number,
+    requestDebounceTimeout: PropTypes.number,
     // events
     onColumnsChange: PropTypes.func,
     onSearchTextChange: PropTypes.func,
@@ -175,3 +178,4 @@ GridTable.propTypes = {
 export default GridTable;
 
 export * from './components';
+export * from './hooks';

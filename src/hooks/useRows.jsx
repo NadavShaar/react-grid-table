@@ -1,4 +1,5 @@
 import { useMemo, useRef, useEffect, useCallback } from 'react';
+import { requestDebounce, uuid } from '../utils';
 
 const DEFAULT_ROWS_REQUEST_DATA = {
     from: -1,
@@ -7,6 +8,9 @@ const DEFAULT_ROWS_REQUEST_DATA = {
 
 export default (props, tableManager) => {
     let {
+        config: {
+            requestDebounceTimeout
+        },
         searchApi: {
             searchRows,
         },
@@ -16,7 +20,13 @@ export default (props, tableManager) => {
     } = tableManager;
 
     const rowsApi = useRef({}).current;
-    const requestRowsData = useRef(DEFAULT_ROWS_REQUEST_DATA);
+    const requestRowsData = useRef([]);
+    const onRowsRequest = useCallback((currentRequestRowsData) => {
+        requestRowsData.current.push(currentRequestRowsData);
+        rowsApi.requestId = currentRequestRowsData.id;
+        props.onRowsRequest(currentRequestRowsData, tableManager)
+    }, [])
+    const debouncedOnRowsRequest = useCallback(requestDebounce(onRowsRequest, requestDebounceTimeout), [])
 
     Object.defineProperty(rowsApi, "onRowClick", { enumerable: false, writable: true });
     
@@ -39,9 +49,19 @@ export default (props, tableManager) => {
     rowsApi.resetRows = useCallback(() => {
         if (!props.onRowsRequest) return;
 
-        requestRowsData.current = DEFAULT_ROWS_REQUEST_DATA;
+        requestRowsData.current = [];
         props.onRowsReset?.(tableManager);
     })
+
+    rowsApi.mergeRowsAt = useCallback((rows, newRows, at) => {
+        let holes = [];
+        holes.length = Math.max(at - rows.length, 0);
+        holes.fill(null);
+
+        rows = rows.concat(holes);
+        rows.splice(at, newRows.length, ...newRows);
+        return rows;
+    }, [])
 
     useEffect(() => {
         if (!props.onRowsRequest) return;
@@ -60,31 +80,40 @@ export default (props, tableManager) => {
                 virtualItems,
             },
         } = tableManager;
-        
-        let {
-            from,
-            to
-        } = requestRowsData.current
 
-        let lastIndex = 0;
-        if (isPaginated && !isVirtualScroll) {
-            lastIndex = page * pageSize;
+        let from = (page - 1) * pageSize;
+        let to = from;
+        if (isVirtualScroll) {
+            from += (virtualItems[0]?.index || 0);
+            to += (virtualItems[virtualItems.length - 1]?.index || 0);
         }
-        else {
-            lastIndex = virtualItems[virtualItems.length - 1]?.index + ((page - 1) * pageSize) || 0;
+        from -= (from % batchSize);
+        to += (batchSize - (to % batchSize));
+        if (requestRowsData.current.length) {
+            to = Math.min(to, rowsApi.totalRows);
         }
-        lastIndex = Math.min(lastIndex, rowsApi.totalRows);
 
-        if ((lastIndex <= to) && (from !== -1)) return;
+        requestRowsData.current.forEach(r => {
+            if ((r.from <= from) && (from <= r.to)) {
+                from = r.to;
+            };
+        })
 
-        from = to;
-        to = from + batchSize - (from % batchSize);
-        if (Number(rowsApi.totalRows)) to = Math.min(to, rowsApi.totalRows);
-        requestRowsData.current = {
-            from,
-            to
-        }
-        props.onRowsRequest(requestRowsData.current, tableManager)
+        requestRowsData.current.slice().reverse().find(r => {
+            if ((r.from <= to) && (to <= r.to)) {
+                to = r.from;
+            };
+            if ((from < r.from) && (r.to < to)) {
+                to = r.from;
+            };
+        })
+
+        to = Math.min(to, from + batchSize);
+
+        if (to <= from) return;
+
+        if (from === 0) onRowsRequest({ from, to, id: uuid() });
+        else debouncedOnRowsRequest({ from, to, id: uuid() });
     });
 
     return rowsApi;

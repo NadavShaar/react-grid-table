@@ -1,11 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
 import { withKnobs, boolean, number, array } from '@storybook/addon-knobs';
-
+import AbortController from "abort-controller"
 import GridTable from '../src';
-
-import Username from "./components/Username";
+import Fetch from 'fetch-simulator';
 import MOCK_DATA from "./MOCK_DATA.json";
+Fetch.addRoute('https://react-grid-table/api/users', {
+    get: {
+        response: MOCK_DATA,
+        wait: 500
+    }
+});
+Fetch.use();
+import Username from "./components/Username";
 import './gridTableStory.css';
+
+const controller = new AbortController();
 
 const EDIT_SVG = <svg height="16" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg"><g fill="#fff" stroke="#1856bf" transform="translate(2 2)"><path d="m8.24920737-.79402796c1.17157287 0 2.12132033.94974747 2.12132033 2.12132034v13.43502882l-2.12132033 3.5355339-2.08147546-3.495689-.03442539-13.47488064c-.00298547-1.16857977.94191541-2.11832105 2.11049518-2.12130651.00180188-.00000461.00360378-.00000691.00540567-.00000691z" transform="matrix(.70710678 .70710678 -.70710678 .70710678 8.605553 -3.271644)"/><path d="m13.5 4.5 1 1"/></g></svg>;
 const CANCEL_SVG = <svg height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#dc1e1e" transform="translate(5 5)"><path d="m.5 10.5 10-10"/><path d="m10.5 10.5-10-10z"/></g></svg>;
@@ -188,34 +197,52 @@ export const ServerSide = () => {
     let [sort, setSort] = useState({});
     let rowsRef = useRef(rowsData);
 
-    let currentRequestData;
     const onRowsRequest = (requestData, tableManager) => {
-        currentRequestData = requestData;
-        let {
-            sortApi: {
-                sortRows
-            },
-            searchApi: {
-                searchRows
-            },
-        } = tableManager;
         setLoading(true);
-        setTimeout(() => {
-            let allRows = [...MOCK_DATA];
+        fetch('https://react-grid-table/api/users', {
+            method: 'get',
+            signal: controller.signal,
+        })
+            .then(response => response.json())
+            .then(allRows => {
+                let {
+                    sortApi: {
+                        sortRows
+                    },
+                    searchApi: {
+                        searchRows
+                    },
+                } = tableManager;
 
-            allRows = searchRows(allRows);
-            allRows = sortRows(allRows);
+                allRows = searchRows(allRows);
+                allRows = sortRows(allRows);
 
-            rowsRef.current = rowsRef.current.concat(allRows.slice(requestData.from, requestData.to))
-            setRowsData(rowsRef.current);
-            setTotalRows(allRows.length);
-            if (currentRequestData === requestData) setLoading(false);
-        }, 500);
+                return {
+                    rows: allRows.slice(requestData.from, requestData.to),
+                    totalRows: allRows.length
+                };
+            })
+            .then(({ rows, totalRows }) => {
+                let {
+                    rowsApi: {
+                        mergeRowsAt,
+                        requestId
+                    },
+                } = tableManager;
+
+                rowsRef.current = mergeRowsAt(rowsRef.current, rows, requestData.from);
+
+                setRowsData(rowsRef.current);
+                setTotalRows(totalRows);
+                if (requestId === requestData.id) setLoading(false);
+            })
+            .catch(console.warn);
     }
     const onRowsReset = () => {
         rowsRef.current = [];
         setRowsData(rowsRef.current);
         setTotalRows();
+        controller.abort();
     }
 
     return (
@@ -239,7 +266,7 @@ export const ServerSide = () => {
             onRowsRequest={onRowsRequest}
             onRowsReset={onRowsReset}
             totalRows={totalRows}
-            // getIsRowEditable={data => data.id % 2}
+            requestDebounceTimeout={number('Request Timeout', 300)}
         />
     )
 }

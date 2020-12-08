@@ -1,4 +1,3 @@
-//TODO: make sure all callback get tableManager
 import { useEffect, useRef } from 'react';
 import * as components from '../components';
 import { additionalProps, icons, texts } from '../defaults';
@@ -46,7 +45,8 @@ export default (props) => {
         showRowsInformation: props.showRowsInformation,
         showColumnVisibilityManager: props.showColumnVisibilityManager,
         pageSizes: props.pageSizes,
-        batchSize: props.batchSize || 100,
+        requestDebounceTimeout: props.requestDebounceTimeout,
+        batchSize: props.batchSize,
         isVirtualScroll: props.isVirtualScroll || (!props.isPaginated && props.onRowsRequest),
         tableHasSelection: !!props.columns.find(cd => cd.id === 'checkbox'),
         components: { ...components, ...props.components },
