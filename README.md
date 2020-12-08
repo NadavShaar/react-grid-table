@@ -164,8 +164,8 @@ export default MyAwesomeTable;
 
 #### Support this package
 
+[![paypal](https://pa1.narvii.com/7140/d54385ee107656ffef79b6a705981e3c97291594r1-370-300_hq.gif)](https://www.paypal.com/donate?hosted_button_id=VAEHCLA692FMW)
 [![paypal](https://image.flaticon.com/icons/png/128/2871/2871557.png)](https://www.paypal.com/donate?hosted_button_id=VAEHCLA692FMW)
-
 ## Main components
 **HEADER (optional | customizable):** search & column visibility management. 
 
