@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useRef } from 'react';
 
 export default (props, tableManager) => {
     let {
@@ -10,13 +10,13 @@ export default (props, tableManager) => {
 
     const columnsVisibilityApi = useRef({}).current;
 
-    columnsVisibilityApi.toggleColumnVisibility = useCallback((colId) =>{
+    columnsVisibilityApi.toggleColumnVisibility = (colId) =>{
         columns = [...columns];
         let colIndex = columns.findIndex(cd => cd.id === colId);
 
         columns[colIndex].visible = !columns[colIndex].visible;
         setColumns(columns);
-    })
+    }
 
     return columnsVisibilityApi;
 }

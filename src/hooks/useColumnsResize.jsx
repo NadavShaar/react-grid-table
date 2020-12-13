@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useRef } from 'react';
 import { useResizeEvents } from './';
 
 export default (props, tableManager) => {
@@ -23,12 +23,12 @@ export default (props, tableManager) => {
     Object.defineProperty(columnsResizeApi, "onResizeEnd", { enumerable: false, writable: true });
     Object.defineProperty(columnsResizeApi, "useResizeRef", { enumerable: false, writable: true });
 
-    columnsResizeApi.onResizeStart = useCallback(({ e, target, column }) => {
+    columnsResizeApi.onResizeStart = ({ e, target, column }) => {
         columnsResizeApi.isColumnResizing = true;
         props.onColumnResizeStart?.({ event: e, target, column }, tableManager);
-    })
+    }
 
-    columnsResizeApi.onResize = useCallback(({ e, target, column }) => {
+    columnsResizeApi.onResize = ({ e, target, column }) => {
         let containerEl = tableRef.current;
         let gridTemplateColumns = containerEl.style.gridTemplateColumns;
         let currentColWidth = target.offsetParent.clientWidth;
@@ -51,9 +51,9 @@ export default (props, tableManager) => {
 
         lastPos.current = e.clientX;
         props.onColumnResize?.({ event: e, target, column }, tableManager);
-    })
+    }
 
-    columnsResizeApi.onResizeEnd = useCallback(({ e, target, column }) => {
+    columnsResizeApi.onResizeEnd = ({ e, target, column }) => {
         setTimeout(() => columnsResizeApi.isColumnResizing = false, 0);
         
         lastPos.current = null;
@@ -69,7 +69,7 @@ export default (props, tableManager) => {
         })
         setColumns(columns);
         props.onColumnResizeEnd?.({ event: e, target, column }, tableManager);
-    })
+    }
 
     columnsResizeApi.useResizeRef = column => {
         let resizeHandleRef = useRef(null);

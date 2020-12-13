@@ -8,6 +8,7 @@ import Header from './Header';
 import HeaderCell from './HeaderCell';
 import HeaderCellRenderer from './HeaderCellRenderer';
 import HeaderSelectionCellRenderer from './HeaderSelectionCellRenderer';
+import PlaceHolderCellRenderer from './PlaceHolderCellRenderer';
 import Loader from './Loader';
 import NoResults from './NoResults';
 import PopoverButton from './PopoverButton';
@@ -28,6 +29,7 @@ export {
     HeaderCell,
     HeaderCellRenderer,
     HeaderSelectionCellRenderer,
+    PlaceHolderCellRenderer,
     Loader, 
     NoResults,
     PopoverButton,

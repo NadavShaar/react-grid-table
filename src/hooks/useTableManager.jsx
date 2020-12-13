@@ -10,13 +10,14 @@ import {
     useRowSelection,
     useRowEdit,
     useRows,
+    useAsync,
     useColumnsReorder,
     useColumnsVisibility,
     useColumnsResize
 } from '../hooks/';
 
 export default (props) => {
-    let tableManager = useRef({
+    const tableManager = useRef({
         isMounted: false,
         isInitialized: false
     }).current;
@@ -32,7 +33,7 @@ export default (props) => {
         return () => tableManager.isMounted = false;
     }, [])
 
-    tableManager.isLoading = props.isLoading;
+    tableManager.mode = !props.onRowsRequest ? 'sync' : 'async';
     tableManager.config = {
         rowIdField: props.rowIdField,
         minColumnWidth: props.minColumnWidth,
@@ -47,7 +48,7 @@ export default (props) => {
         pageSizes: props.pageSizes,
         requestDebounceTimeout: props.requestDebounceTimeout,
         batchSize: props.batchSize,
-        isVirtualScroll: props.isVirtualScroll || (!props.isPaginated && props.onRowsRequest),
+        isVirtualScroll: props.isVirtualScroll || (!props.isPaginated && (tableManager.mode !== 'sync')),
         tableHasSelection: !!props.columns.find(cd => cd.id === 'checkbox'),
         components: { ...components, ...props.components },
         additionalProps: { ...additionalProps, ...props.additionalProps },
@@ -70,7 +71,9 @@ export default (props) => {
     tableManager.rowSelectionApi = useRowSelection(props, tableManager);
     tableManager.rowEditApi = useRowEdit(props, tableManager);
     tableManager.rowVirtualizer = useRowVirtualizer(props, tableManager);
-    
+    tableManager.asyncApi = useAsync(props, tableManager);
+    tableManager.isLoading = props.isLoading ?? tableManager.asyncApi.isLoading;
+
     // reset page number
     useEffect(() => {
         if (!tableManager.isInitialized) return;
@@ -83,8 +86,8 @@ export default (props) => {
     useEffect(() => {
         if (!tableManager.isInitialized) return;
 
-        if (props.onRowsRequest) {
-            tableManager.rowsApi.resetRows();
+        if (tableManager.mode !== 'sync') {
+            tableManager.asyncApi.resetRows();
             tableManager.rowSelectionApi.setSelectedRowsIds([]);
         }
     }, [tableManager.searchApi.searchText, tableManager.sortApi.sort])

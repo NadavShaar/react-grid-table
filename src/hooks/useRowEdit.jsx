@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default (props, tableManager) => {
     let {
@@ -12,19 +12,20 @@ export default (props, tableManager) => {
 
     const rowEditApi = useRef({}).current;
     let [editRow, setEditRow] = useState(null);
+    let [editRowId, setEditRowId] = useState(null);
 
-    rowEditApi.editRowId = props.editRowId;
+    rowEditApi.editRowId = props.editRowId ?? editRowId;
     rowEditApi.setEditRow = setEditRow;
     rowEditApi.editRow = editRow;
     rowEditApi.getIsRowEditable = props.getIsRowEditable;
 
-    rowEditApi.setEditRowId = useCallback(rowEditId => {
-        setEditRow(rowEditId && pageRows.find(item => item && (item[rowIdField] === rowEditId)) || null);
+    rowEditApi.setEditRowId = rowEditId => {
+        if (props.rowEditId === undefined || props.onEditRowIdChange === undefined) setEditRowId(rowEditId);
         props.onEditRowIdChange?.(rowEditId, tableManager);
-    })
+    }
 
     useEffect(() => {
-        setEditRow(pageRows.find(item => item && (item[rowIdField] === rowEditApi.editRowId)) || null);
+        setEditRow(rowEditApi.editRowId && pageRows.find(item => item && (item[rowIdField] === rowEditApi.editRowId)) || null);
     }, [rowEditApi.editRowId, pageRows, rowIdField])
 
     return rowEditApi;
