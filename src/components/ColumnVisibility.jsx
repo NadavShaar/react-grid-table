@@ -1,7 +1,7 @@
 import React from 'react';
 import { PopoverButton } from './';
 
-const ColumnVisibility = props => {
+export default props => {
 
     let {
         columns,
@@ -10,18 +10,20 @@ const ColumnVisibility = props => {
     } = props;
 
     let {
-        params: {
-            textConfig
-        },
-        icons: {
-            columnVisibility: columnVisibilityIcon
-        },
+        config: {
+            texts: {
+                columnVisibility: columnVisibilityText
+            },
+            icons: {
+                columnVisibility: columnVisibilityIcon
+            },
+        }
     } = tableManager;
 
     
     return (
         <PopoverButton
-            title={textConfig.columnVisibility}
+            title={columnVisibilityText}
             buttonChildren={columnVisibilityIcon}
             popoverChildren={
                 columns.filter(col => !col.pinned).map((cd, idx) => {
@@ -44,5 +46,3 @@ const ColumnVisibility = props => {
         />
     )
 }
-
-export default ColumnVisibility;

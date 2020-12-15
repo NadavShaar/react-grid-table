@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDetectClickOutside } from '../hooks/';
 
-const PopoverButton = props => {
+export default props => {
 
     const { ref, isComponentVisible, setIsComponentVisible } = useDetectClickOutside(false);
 
@@ -25,5 +25,3 @@ const PopoverButton = props => {
         </div>
     )
 }
-
-export default PopoverButton;

@@ -1,5 +1,11 @@
-const NoResults = props => {
-    return 'No Results :('
-}
+export default ({ tableManager }) => {
+    let {
+        config: {
+            texts: {
+                noResults
+            },
+        }
+    } = tableManager;
 
-export default NoResults;
+    return noResults
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Search = props => {
+export default props => {
 
     let {
         value,
@@ -9,19 +9,21 @@ const Search = props => {
     } = props;
 
     let {
-        params: {
-            textConfig
-        },
-        icons: {
-            search: searchIcon
-        },
+        config: {
+            texts: {
+                search: searchText
+            },
+            icons: {
+                search: searchIcon
+            },
+        }
     } = tableManager;
 
     return (
         <div className='rgt-search-container'>
             <label htmlFor="rgt-search" className='rgt-search-label'>
                 <span className='rgt-search-icon'>{searchIcon}</span>
-                {textConfig.search}
+                {searchText}
             </label>
             <input
                 name="rgt-search"
@@ -33,5 +35,3 @@ const Search = props => {
         </div>
     )
 }
-
-export default Search;

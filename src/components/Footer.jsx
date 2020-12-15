@@ -1,32 +1,34 @@
 import React from 'react';
 
-const Footer = (props) => {
+export default (props) => {
 
     let { 
         tableManager
     } = props;
 
     let {
-        params: {
+        config: {
+            isPaginated,
+            showRowsInformation,
+            pageSizes,
+            components: {
+                Information,
+                PageSize,
+                Pagination
+            }
+        },
+        rowsApi: {
+            totalRows,
+        },
+        rowSelectionApi: {
+            selectedRowsIds,
+        },
+        paginationApi: {
             page,
             pageSize,
-            pageSizes,
-            isPaginated,
-            showRowsInformation
-        },
-        rowsData: {
-            selectedRowsIds,
-            pageItems,
-            items,
-        },
-        components: {
-            informationComponent: Information,
-            pageSizeComponent: PageSize,
-            paginationComponent: Pagination
-        },
-        handlers: {
-            handlePagination,
-            handlePageSizeChange,
+            setPage,
+            setPageSize,
+            pageRows,
         },
     } = tableManager;
 
@@ -37,8 +39,9 @@ const Footer = (props) => {
                 {
                     showRowsInformation !== false ?
                         <Information 
-                            totalCount={ items.length } 
-                            pageCount={ pageItems.length } 
+                            totalCount={totalRows}
+                            pageSize={pageSize} 
+                            pageCount={ pageRows.length } 
                             selectedCount={ selectedRowsIds.length } 
                             tableManager={ tableManager } 
                         />
@@ -51,13 +54,13 @@ const Footer = (props) => {
                     <div className='rgt-footer-right-container'>
                         <PageSize 
                             value={ pageSize } 
-                            onChange={ handlePageSizeChange } 
+                            onChange={ setPageSize } 
                             options={ pageSizes } 
                             tableManager={ tableManager } 
                         />
                         <Pagination 
                             page={ page } 
-                            onChange={ handlePagination } 
+                            onChange={setPage } 
                             tableManager={ tableManager } 
                         />
                     </div>
@@ -67,5 +70,3 @@ const Footer = (props) => {
         </div>
     )
 }
-
-export default Footer;

@@ -1,69 +1,50 @@
 import React from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
-import { HeaderCell, Row } from './components/';
 import { useTableManager } from './hooks/';
 import PropTypes from 'prop-types';
 import './index.css';
 
-const SortableList = SortableContainer(({ style, className, children, forwardRef }) => <div ref={forwardRef} className={className} style={style}>{children}</div>);
+const SortableList = SortableContainer(({ forwardRef, className, style, children }) => <div ref={forwardRef} className={className} style={style}>{children}</div>);
  
 const GridTable = (props) => {
 
     const tableManager = useTableManager(props);
 
     const {
+        isLoading,
+        config: {
+            isVirtualScroll,
+            components: {
+                Header,
+                HeaderCell,
+                Row,
+                Footer,
+                Loader,
+                NoResults,
+                DragHandle
+            },
+        },
         refs: {
             rgtRef,
             tableRef
         },
-        handlers: {
-            setColumns,
+        columnsApi: {
+            visibleColumns,
+        },
+        columnsReorderApi: {
             onColumnReorderStart,
             onColumnReorderEnd
         },
-        components: {
-            headerComponent: Header,
-            footerComponent: Footer,
-            loaderComponent: Loader,
-            noResultsComponent: NoResults
+        rowVirtualizer: {
+            virtualItems
         },
-        columnsData: {
-            columns,
-            visibleColumns
+        paginationApi: {
+            pageRows
         },
-        params: {
-            isVirtualScrolling
-        },
-        rowsData: {
-            pageItems
-        },
-        additionalProps,
-        icons,
-        rowVirtualizer
+        rowsApi: {
+            totalRows
+        }
     } = tableManager;
-
-    function handleColumnReorderStart(sortData) {
-        sortData.helper.classList.add('rgt-column-sort-ghost');
-        onColumnReorderStart?.(sortData);
-    }
-
-    function handleColumnReorderEnd(sortData) {
-        if(sortData.oldIndex === sortData.newIndex) return;
-
-        let colDefNewIndex = columns.findIndex(oc => oc.id === visibleColumns[sortData.newIndex].id);
-        let colDefOldIndex = columns.findIndex(oc => oc.id === visibleColumns[sortData.oldIndex].id);
-
-        let columnsClone = [...columns];
-        columnsClone.splice(colDefNewIndex, 0, ...columnsClone.splice(colDefOldIndex, 1));
-        
-        setColumns(columnsClone);
-        onColumnReorderEnd?.(sortData);
-    }
-
-    let { 
-        isLoading,
-        dragHandleComponent,
-    } = props;
 
     let rest = Object.keys(props).reduce((rest, key) => {
         if (GridTable.propTypes[key] === undefined) rest = { ...rest, [key]: props[key] };
@@ -80,15 +61,15 @@ const GridTable = (props) => {
                 lockToContainerEdges
                 distance={10}
                 lockAxis="x"
-                useDragHandle={!!dragHandleComponent}
-                onSortStart={handleColumnReorderStart}
-                onSortEnd={handleColumnReorderEnd}
+                useDragHandle={!!DragHandle}
+                onSortStart={onColumnReorderStart}
+                onSortEnd={onColumnReorderEnd}
                 style={{
                     display: 'grid',
                     overflow: 'auto',
                     flex: 1,
                     gridTemplateColumns: (visibleColumns.map(g => g.width)).join(" "),
-                    gridTemplateRows: `repeat(${pageItems.length + 1 + (isVirtualScrolling ? 1 : 0)}, max-content)`,
+                    gridTemplateRows: `repeat(${pageRows.length + 1 + (isVirtualScroll ? 1 : 0)}, max-content)`,
                 }}
             >
                 {
@@ -97,15 +78,15 @@ const GridTable = (props) => {
                     ))
                 }
                 {
-                    !isLoading && pageItems.length && visibleColumns.length > 1 ?
-                        isVirtualScrolling ? 
+                    totalRows && visibleColumns.length > 1 ?
+                        isVirtualScroll ? 
                             [
                                 <Row key={'virtual-start'} index={'virtual-start'} tableManager={tableManager} />,
-                                ...rowVirtualizer.virtualItems.map(vr => <Row key={vr.index} index={vr.index} data={pageItems[vr.index]} measureRef={vr.measureRef} tableManager={tableManager} />),
+                                ...virtualItems.map(vr => <Row key={vr.index} index={vr.index} data={pageRows[vr.index]} measureRef={vr.measureRef} tableManager={tableManager} />),
                                 <Row key={'virtual-end'} index={'virtual-end'} tableManager={tableManager} />
                             ]
                             :
-                            pageItems.map((r, index) => <Row key={index} index={index} data={r} tableManager={tableManager} />)
+                            pageRows.map((r, index) => <Row key={index} index={index} data={r} tableManager={tableManager} />)
                         :
                         <div className='rgt-no-data-container'>
                             {
@@ -125,40 +106,38 @@ const GridTable = (props) => {
 
 GridTable.defaultProps = {
     columns: [],
-    rows: [],
     rowIdField: 'id',
     minColumnWidth: 70,
     pageSizes: [20, 50, 100],
-    isLoading: false,
-    showColumnVisibilityManager: true,
     isHeaderSticky: true,
     highlightSearch: true,
-    searchMinChars: 2,
+    minSearchChars: 2,
     isPaginated: true,
-    isVirtualScrolling: true,
+    isVirtualScroll: true,
     showSearch: true,
     showRowsInformation: true,
-    disableColumnsReorder: false,
+    showColumnVisibilityManager: true,
+    enableColumnsReorder: true,
+    requestDebounceTimeout: 300,
+    batchSize: 100,
     getIsRowSelectable: row => true,
-    getIsRowEditable: row => true,
+    getIsRowEditable: row => true
 };
 
 GridTable.propTypes = {
     // general
     columns: PropTypes.arrayOf(PropTypes.object).isRequired,
-    rows: PropTypes.arrayOf(PropTypes.object).isRequired,
-    rowIdField: PropTypes.string,
+    rows: PropTypes.arrayOf(PropTypes.object),
     selectedRowsIds: PropTypes.array,
     searchText: PropTypes.string,
     getIsRowSelectable: PropTypes.func,
     getIsRowEditable: PropTypes.func,
     editRowId: PropTypes.any,
-    cellProps: PropTypes.object,
-    headerCellProps: PropTypes.object,
-    rowVirtualizerProps: PropTypes.object,
     // table config
+    rowIdField: PropTypes.string,
+    batchSize: PropTypes.number,
     isPaginated: PropTypes.bool,
-    disableColumnsReorder: PropTypes.bool,
+    enableColumnsReorder: PropTypes.bool,
     pageSizes: PropTypes.arrayOf(PropTypes.number),
     pageSize: PropTypes.number,
     page: PropTypes.number,
@@ -167,43 +146,39 @@ GridTable.propTypes = {
     highlightSearch: PropTypes.bool,
     showSearch: PropTypes.bool,
     showRowsInformation: PropTypes.bool,
-    searchMinChars: PropTypes.number,
+    showColumnVisibilityManager: PropTypes.bool,
+    minSearchChars: PropTypes.number,
     isLoading: PropTypes.bool,
     isHeaderSticky: PropTypes.bool,
-    isVirtualScrolling: PropTypes.bool,
-    showColumnVisibilityManager: PropTypes.bool,
+    isVirtualScroll: PropTypes.bool,
     icons: PropTypes.object,
-    textConfig: PropTypes.object,
+    texts: PropTypes.object,
+    additionalProps: PropTypes.object,
+    components: PropTypes.object,
+    totalRows: PropTypes.number,
+    requestDebounceTimeout: PropTypes.number,
     // events
     onColumnsChange: PropTypes.func,
-    onSearchChange: PropTypes.func,
+    onSearchTextChange: PropTypes.func,
     onSelectedRowsChange: PropTypes.func,
     onSortChange: PropTypes.func,
     onRowClick: PropTypes.func,
-    onRowEditIdChange: PropTypes.func,
+    onEditRowIdChange: PropTypes.func,
     onPageChange: PropTypes.func,
     onPageSizeChange: PropTypes.func,
     onLoad: PropTypes.func,
-    onResize: PropTypes.func,
-    onResizeEnd: PropTypes.func,
+    onColumnResizeStart: PropTypes.func,
+    onColumnResize: PropTypes.func,
+    onColumnResizeEnd: PropTypes.func,
     onColumnReorderStart: PropTypes.func,
-    onColumnReorderEnd: PropTypes.func,
-    // custom components
-    headerComponent: PropTypes.func,
-    footerComponent: PropTypes.func,
-    loaderComponent: PropTypes.func,
-    noResultsComponent: PropTypes.func,
-    searchComponent: PropTypes.func,
-    columnVisibilityComponent: PropTypes.func,
-    informationComponent: PropTypes.func,
-    pageSizeComponent: PropTypes.func,
-    paginationComponent: PropTypes.func,
-    dragHandleComponent: PropTypes.func,
+    onColumnReorderEnd: PropTypes.func, 
+    onRowsRequest: PropTypes.func, 
+    onRowsReset: PropTypes.func,
+    onRowsChange: PropTypes.func,
+    onTotalRowsChange: PropTypes.func,
 };
 
 export default GridTable;
 
-export {
-    HeaderCell,
-    Row
-}
+export * from './components';
+export * from './hooks';

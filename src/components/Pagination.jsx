@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Pagination = props => {
+export default props => {
 
     let {
         page, 
@@ -9,10 +9,17 @@ const Pagination = props => {
     } = props;
 
     let {
-        params: {
-            textConfig,
+        config: {
+            texts: {
+                prev: prevText,
+                page: pageText,
+                next: nextText,
+                of: ofText
+            },  
+        },
+        paginationApi: {
             totalPages
-        }
+        },
     } = tableManager;
 
     let backButtonDisabled = page-1 < 1;
@@ -24,10 +31,10 @@ const Pagination = props => {
                 className={`rgt-footer-pagination-button${backButtonDisabled ? ' rgt-disabled-button' : ''}`}
                 disabled={page-1 < 1} 
                 onClick={e => onChange(page-1)}
-            >{textConfig.prev}</button>
+            >{prevText}</button>
 
             <div className='rgt-footer-pagination-container'>
-                <span>{textConfig.page} </span>
+                <span>{pageText} </span>
                 <input 
                     onClick={e => e.target.select()}
                     className='rgt-footer-page-input'
@@ -35,16 +42,14 @@ const Pagination = props => {
                     value={totalPages ? page : 0} 
                     onChange={e => onChange(e.target.value*1)}
                 />
-                <span>{textConfig.of} {totalPages}</span>
+                <span>{ofText} {totalPages}</span>
             </div>
 
             <button 
                 className={`rgt-footer-pagination-button${nextButtonDisabled ? ' rgt-disabled-button' : ''}`}
                 disabled={page+1 > totalPages} 
                 onClick={e => onChange(page+1)}
-            >{textConfig.next}</button>
+            >{nextText}</button>
         </React.Fragment>
     )
 }
-
-export default Pagination;

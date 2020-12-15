@@ -1,34 +1,38 @@
 import React from 'react';
 
-const Information = props => {
-
+export default props => {
     let { 
         totalCount, 
+        pageSize,
         pageCount, 
         selectedCount,
         tableManager
     } = props;
 
     let {
-        params: {
-            page,
-            tableHasSelection,
+        config: {
             isPaginated,
-            textConfig
+            tableHasSelection,
+            texts: {
+                totalRows: totalRowsText,
+                rows: rowsText,
+                selected: selectedText
+            },
+            icons: {
+                clearSelection: clearSelectionIcon
+            }
         },
-        handlers: {
-            updateSelectedItems
+        paginationApi: {
+            page,
         },
-        icons: {
-            clearSelection: clearSelectionIcon
-        }
+        rowSelectionApi: {
+            setSelectedRowsIds
+        },
     } = tableManager;
 
     return (
         <div className='rgt-footer-items-information-inner'>
-            { textConfig.totalRows } { totalCount } | { isPaginated ? `${textConfig.rows} ${pageCount * page - pageCount} - ${pageCount * page}` : ''} { tableHasSelection ? <React.Fragment>{`| ${selectedCount} ${textConfig.selected}`}{selectedCount ? <span className="rgt-footer-clear-selection-button rgt-clickable" onClick={e => updateSelectedItems([])}>{ clearSelectionIcon }</span> : null}</React.Fragment> : ''}
+            { totalRowsText} { totalCount} { isPaginated ? `| ${rowsText} ${pageSize * (page - 1)} - ${pageSize * (page - 1) + pageCount}` : ''} { tableHasSelection ? <React.Fragment>{`| ${selectedCount} ${selectedText}`}{selectedCount ? <span className="rgt-footer-clear-selection-button rgt-clickable" onClick={e => setSelectedRowsIds([])}>{ clearSelectionIcon }</span> : null}</React.Fragment> : ''}
         </div>
     )
 }
-
-export default Information;

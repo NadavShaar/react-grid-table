@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PageSize = props => {
+export default props => {
 
     let { 
         value,
@@ -10,14 +10,16 @@ const PageSize = props => {
     } = props;
 
     let {
-        params: {
-            textConfig
-        },
+        config: {
+            texts: {
+                rowsPerPage: rowsPerPageText
+            },
+        }
     } = tableManager;
 
     return (
         <React.Fragment>
-            <span>{textConfig.rowsPerPage} </span>
+            <span>{rowsPerPageText} </span>
             <select 
                 className='rgt-footer-items-per-page'
                 value={value} 
@@ -28,5 +30,3 @@ const PageSize = props => {
         </React.Fragment>
     )
 }
-
-export default PageSize;
