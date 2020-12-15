@@ -174,6 +174,8 @@ GridTable.propTypes = {
     onColumnReorderEnd: PropTypes.func, 
     onRowsRequest: PropTypes.func, 
     onRowsReset: PropTypes.func,
+    onRowsChange: PropTypes.func,
+    onTotalRowsChange: PropTypes.func,
 };
 
 export default GridTable;

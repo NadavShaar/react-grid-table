@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { withKnobs, boolean, number, array } from '@storybook/addon-knobs';
 import AbortController from "abort-controller"
-import GridTable from '../src';
+import GridTable from '../dist';
 import Fetch from 'fetch-simulator';
 import MOCK_DATA from "./MOCK_DATA.json";
 import Username from "./components/Username";
@@ -182,7 +182,7 @@ export const Synced = () => {
             // selectedRowsIds={boolean('Controlled Selection', false) ? array('Selection', selectedRowsIds) : undefined}
             // onSelectedRowsChange={setSelectedRowsIds}
             style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
-            onLoad={setTableManager}
+            // onLoad={setTableManager}
             // searchText={boolean('Controlled Search', false) ? text('Search Text', searchText) : undefined}
             // onSearchTextChange={setSearchText}
             showRowsInformation={boolean('Show Rows Information', true)}
