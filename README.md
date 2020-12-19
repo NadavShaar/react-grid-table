@@ -149,12 +149,9 @@ export default MyAwesomeTable;
 - [Props](#props)
 - [Table configuration props](#table-configuration-props)
 - [Event props](#event-props)
-- [Components props](#components-props)
 - [The `columns` prop](#columns)
 - [The `checkbox` column](#checkbox-column)
 - [The `rows` prop](#rows)
-- [The `headerComponent` prop](#headerComponent)
-- [The `footerComponent` prop](#footerComponent)
 - [The `tableManager` API](#tableManager)
 - [How-To: Row-Editing](#row-editing)
 - [How-To: Styling](#styling)
@@ -229,23 +226,6 @@ export default MyAwesomeTable;
 | onColumnResizeEnd | function | triggers when column resize ended | `({event, target, column}) => { }` |
 | onColumnReorderStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `sortData => { }` |
 | onColumnReorderEnd | function | triggers on column drop, and only if the column changed its position. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `sortData => { }` |
-
-### Components props
-
-All components are getting the `tableManager` object ([details](#tableManager)).
-
-| name | type | description | usage |
-|---|---|---|---|
-| headerComponent | function | used for rendering a custom header ([details](#headerComponent)) | `({tableManager}) =>  ( children )` |
-| footerComponent | function | used for rendering a custom footer ([details](#footerComponent)) | `({tableManager}) =>  ( children )` |
-| loaderComponent | function | used for rendering a custom loader | `({tableManager}) => ( children )` |
-| noResultsComponent | function | used for rendering a custom component when there is no data to display | `({tableManager}) => ( children )` |
-| searchComponent | function | used for rendering a custom search component ([details](#headerComponent)) | `({value, onChange, tableManager}) => ( children )` |
-| columnVisibilityComponent | function | used for rendering a custom columns visibility management component ([details](#headerComponent)) | `({columns, onChange, tableManager}) => ( children )` |
-| dragHandleComponent | function | used for rendering a drag handle for the column reorder | `() => ( children )` |
-| informationComponent | function | used for rendering a custom rows information component (located at the bottom left in the footer) | `({totalCount, pageCount, selectedCount, tableManager}) => ( children )` |
-| pageSizeComponent | function | used for rendering a custom page size control | `({value, onChange, options, tableManager}) => ( children )` |
-| paginationComponent | function | used for rendering a custom pagination component | `({page, onChange, tableManager}) => ( children )` |
 
 ## props - detailed
 
@@ -381,32 +361,40 @@ Its `getValue` function for displaying the first and last name as a full name, w
 
 The returned value will be used for searching, sorting etc...
 
-### headerComponent
-**Type:** function
+### Components prop
 
-The component that will be used as the header component, if you don't want a header at all, simply return `null`.
+All components are getting the `tableManager` object ([details](#tableManager)).
+This prop gives you the ability to override the internal components with your own custom components.
 
-By default the header renders a search and column visibility manager components, but you can render your own custom components.
+- Header
+- Search
+- ColumnVisibility
+- HeaderCell
+- HeaderSelectionCell
+- Cell
+- EditorCell
+- SelectionCell
+- PlaceHolderCellRenderer
+- Row
+- Loader
+- NoResults
+- Footer
+- Information
+- PageSize
+- Pagination 
 
-If you just want to replace the search or the column visibility management components, you can use the `searchComponent` or the `columnVisibilityComponent` props.
-
-**Arguments:** 
-| name | type | description |
-|---|---|---|
-| tableManger | object | the API object, it containes all data, functions and parameters used by the table (more [details](#tableManager)) |
-
-**Example:**
+**Example: Overriding the header component**
 
 <!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
 
 ```JSX
 const Header = ({tableManager}) => {
 
-    const { params, handlers, columnsData } = tableManager;
+    const { searchApi, columnsVisibilityApi, columnsApi } = tableManager;
 
-    const { searchText } = params;
-    const { setSearchText, toggleColumnVisibility } = handlers;
-    const { columns } = columnsData;
+    const { searchText, setSearchText } = searchApi;
+    const { toggleColumnVisibility } = columnsVisibilityApi;
+    const { columns } = columnsApi;
 
     return (
         <div style={{display: 'flex', flexDirection: 'column', padding: '10px 20px', background: '#fff', width: '100%'}}>
@@ -449,106 +437,10 @@ const MyAwesomeTable = props => {
     return (
         <GridTable
             ...
-            headerComponent={Header}
+            components={{ Header: YourCustomComponent }}
         />
     )
 }
-```
-
-### footerComponent
-**Type:** function
-
-The component that will be used as the footer component, if you don't want a footer at all, simply return `null`.
-
-By default the footer renders items information and pagination controls, but you can render your own custom components.
-
-If you just want to replace the rows information, rows per page or the pagination components, you can use the `informationComponent`, `pageSizeComponent` or the `paginationComponent` props respectively.
-
-**Arguments:** 
-| name | type | description |
-|---|---|---|
-| tableManger | object | the API object, it containes all data, functions and parameters used by the table (more [details](#tableManager)) |
-
-**Example:**
-
-<!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
-
-```JSX
-const Footer = ({tableManager}) => {
-
-    let {
-        params: { page, pageSize, pageSizes, totalPages },
-        rowsData: { items, pageRows, selectedRowsIds },
-        icons: { clearSelection: clearSelectionIcon },
-        handlers: { setSelectedRowsIds, setPageSize, handlePagination },
-    } = tableManager;
-
-    return (
-        <div style={{display: 'flex', justifyContent: 'space-between', padding: '12px 20px', background: '#fff'}}>
-            <div style={{display: 'flex'}}>
-                {`Total Rows: ${items.length} 
-                | Rows: ${pageRows.length * page - pageRows.length} - ${pageRows.length * page} 
-                | ${selectedRowsIds.length} Selected`}
-                { 
-                    selectedRowsIds.length ? 
-                        <button 
-                            style={{marginLeft: 10, padding: 0}} 
-                            onClick={e => setSelectedRowsIds([])}
-                        >
-                            {clearSelectionIcon}
-                        </button> 
-                        : 
-                        null 
-                }
-            </div>
-            <div style={{display: 'flex'}}>
-                <div style={{width: 200, marginRight: 50}}>
-                    <span>Items per page: </span>
-                    <select 
-                        value={pageSize} 
-                        onChange={e => {setPageSize(e.target.value)}}
-                    >
-                        { pageSizes.map((op, idx) => <option key={idx} value={op}>{op}</option>) }
-                    </select>
-                </div>
-                <div style={{display: 'flex', justifyContent: 'space-between', width: 280}}>
-                    <button 
-                        disabled={page-1 < 1} 
-                        onClick={e => handlePagination(page-1)}
-                    >Back</button>
-
-                    <div>
-                        <span>Page: </span>
-                        <input 
-                            style={{width: 50, marginRight: 5}}
-                            onClick={e => e.target.select()}
-                            type='number' 
-                            value={totalPages ? page : 0} 
-                            onChange={e => handlePagination(e.target.value*1)}
-                        />
-                        <span>of {totalPages}</span>
-                    </div>
-
-                    <button 
-                        disabled={page+1 > totalPages} 
-                        onClick={e => handlePagination(page+1)}
-                    >Next</button>
-                </div>
-            </div>
-        </div>
-    )
-}
-
-const MyAwesomeTable = props => {
-    ...
-    return (
-        <GridTable
-            ...
-            footerComponent={Footer}
-        />
-    )
-}
-```
 
 # tableManager
 
