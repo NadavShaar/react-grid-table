@@ -2,7 +2,18 @@
   "name": "@nadavshaar/react-grid-table",
   "version": "1.0.0",
   "description": "A modular table, based on a CSS grid layout, optimized for customization.",
-  "author": "NadavShaar",
+  "author": {
+    "name": "Nadav Shaar",
+    "email": "nadavshaar@gmail.com",
+    "url": "https://github.com/nadavshaar"
+  },
+  "contributors": [
+    {
+      "name": "Ilay Ofir",
+      "email": "ilayofir@gmail.com",
+      "url": "https://github.com/ilayofir"
+    }
+  ],
   "license": "",
   "repository": "NadavShaar/react-grid-table",
   "homepage": "https://nadavshaar.github.io/react-grid-table/",
@@ -74,5 +85,6 @@
   "dependencies": {
     "react-sortable-hoc": "^1.11.0",
     "react-virtual": "^2.3.0"
-  }
+  },
+  "funding": "https://www.paypal.com/donate/?hosted_button_id=VAEHCLA692FMW"
 }
