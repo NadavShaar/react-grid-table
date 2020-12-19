@@ -170,43 +170,42 @@ export default MyAwesomeTable;
 **FOOTER (optional | customizable):** rows information, rows per page & pagination. 
 
 
-## props
+## Props
 
 | name | type | description | default value |
 |---|---|---|---|
 | columns* | array of objects | columns configuration (<u>[details](#columns)</u>) | [ ] |
 | rows* | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
-| rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be unique | 'id' |
 | selectedRowsIds | array of ids | the ids of all selected rows (<u>[details](#checkbox-column)</u>) | [ ] |
 | searchText | string | text for search | "" |
 | getIsRowSelectable | function | a callback function that returns whether row selection for the current row should be disabled or not | `row => true` |
 | getIsRowEditable | function | a callback function that returns whether row editing for the current row should be disabled or not | `row => true` |
 | editRowId | any | the id of the row that should switch to inline editing mode, (more <u>[details](#Row-Editing)</u> about row editing) | null |
-| cellProps | object | global props for all data cells | { } |
-| headerCellProps | object | global props for all header cells | { } |
-| rowVirtualizerProps | object | props for the row virtualizer when `isVirtualScroll` is true, as documeneted in [react-virtual](https://github.com/tannerlinsley/react-virtual) | { } |
+| page | number | current page number | 1 |
+| pageSize | number | the selected page size | 20 |
+| sort | object | sort config. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }`, to unsort simply pass a `colId` and `isAsc` as `null` | { } |
+| isLoading | boolean | whether to display the loader | false |
 
-### Table configuration props
+### Configuration props
 
 | name | type | description | default value |
 |---|---|---|---|
-| isVirtualScroll | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
-| isPaginated | boolean | determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
-| page | number | current page number | 1 |
-| pageSizes | array of numbers | page size options | [20, 50, 100] |
-| pageSize | number | the selected page size | 20 |
-| sort | object | sort config. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }`, to unsort simply pass a `colId` and `isAsc` as `null` | { } |
+| rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be unique | 'id' |
 | minColumnWidth | number | minimum width for all columns (doesn't apply to 'checkbox' column)| 70 |
+| minSearchChars | number | the minimum characters in order to apply search and highlighting | 2 |
+| isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
+| isPaginated | boolean | determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
+| enableColumnsReorder | boolean | whether to allow column drag & drop for repositioning | true |
 | highlightSearch | boolean | whether to highlight the search term | true |
 | showSearch | boolean | whether to show the search component in the header | true |
 | showRowsInformation | boolean | whether to show the rows information component (located at the left side of the footer) | true |
-| minSearchChars | number | the minimum characters in order to apply search and highlighting | 2 |
-| isLoading | boolean | whether to render a loader | false |
-| enableColumnsReorder | boolean | whether to allow column drag & drop for repositioning | true |
-| isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
 | showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
+| pageSizes | array of numbers | page size options | [20, 50, 100] |
+| isVirtualScroll | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
 | icons | object of nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
 | texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
+| components | object | This prop gives you the ability to override the internal components with your own custom components [details](#components) | { } |
+| additionalProps | object | This prop gives you the ability to pass props to the table's components (see full list of [components](#components)) | `additionalProps={{ cell: {} ... }}` |
 
 ### Event props
 
@@ -224,8 +223,20 @@ export default MyAwesomeTable;
 | onColumnResizeStart | function | triggers when column resize starts | `({event, target, column}) => { }` |
 | onColumnResize | function | triggers when column resize occur | `({event, target, column}) => { }` |
 | onColumnResizeEnd | function | triggers when column resize ended | `({event, target, column}) => { }` |
-| onColumnReorderStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `sortData => { }` |
-| onColumnReorderEnd | function | triggers on column drop, and only if the column changed its position. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `sortData => { }` |
+| onColumnReorderStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `(sortData, tableManager) => { }` |
+| onColumnReorderEnd | function | triggers on column drop, and only if the column changed its position. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `(sortData, tableManager) => { }` |
+
+### Async props
+
+| name | type | description | usage |
+|---|---|---|---|
+| onRowsChange | function | triggers when the rows have changed | --- |
+| onRowsRequest | function | triggers when new rows should be fetched | --- |
+| onRowsReset | function | triggers when the accumulated rows needs to be reset (when searching or sorting) | --- |
+| onTotalRowsChange | function | triggers when the total number of rows have changed | --- |
+| batchSize | number | defines the amount of rows that will be requested by `onRowsRequest` prop | 100 |
+| requestDebounceTimeout | number | defines the amount of debouning time for triggering the `onRowsRequest` prop | 300 |
+| totalRows | number | the total number of rows | --- |
 
 ## props - detailed
 
