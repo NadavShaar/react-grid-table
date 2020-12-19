@@ -365,6 +365,7 @@ The returned value will be used for searching, sorting etc...
 **Type:** object.
 
 All components are getting the `tableManager` object ([details](#tableManager)).
+
 This prop gives you the ability to override the internal components with your own custom components.
 
 **Example**
@@ -449,6 +450,7 @@ const MyAwesomeTable = props => {
         />
     )
 }
+```
 
 # tableManager
 
