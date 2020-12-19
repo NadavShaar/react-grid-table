@@ -384,7 +384,6 @@ components={{ Loader: CustomLoader }}
 - EditorCell
 - SelectionCell
 - PlaceHolderCellRenderer
-- Row
 - Loader
 - NoResults
 - Footer
