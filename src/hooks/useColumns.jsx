@@ -5,12 +5,12 @@ export default (props, tableManager) => {
         config: {
             minColumnWidth,
             components: {
-                CellRenderer,
-                EditorCellRenderer,
-                SelectionCellRenderer,
-                HeaderCellRenderer,
-                HeaderSelectionCellRenderer,
-                PlaceHolderCellRenderer
+                Cell,
+                EditorCell,
+                SelectionCell,
+                HeaderCell,
+                HeaderSelectionCell,
+                PlaceHolderCell
             }
         }
     } = tableManager;
@@ -35,9 +35,9 @@ export default (props, tableManager) => {
                 editable: false,
                 sortable: false,
                 resizable: false,
-                cellRenderer: SelectionCellRenderer,
-                headerCellRenderer: HeaderSelectionCellRenderer,
-                placeHolderRenderer: SelectionCellRenderer,
+                cellRenderer: SelectionCell,
+                headerCellRenderer: HeaderSelectionCell,
+                placeHolderRenderer: SelectionCell,
                 ...cd,
                 pinned: isPinnedColumn,
                 visible: isVisibleColumn
@@ -63,10 +63,10 @@ export default (props, tableManager) => {
                     else if (aa < bb) return isAscending ? -1 : 1;
                     return 0;
                 },
-                cellRenderer: CellRenderer,
-                editorCellRenderer: EditorCellRenderer,
-                headerCellRenderer: HeaderCellRenderer,
-                placeHolderRenderer: PlaceHolderCellRenderer,
+                cellRenderer: Cell,
+                editorCellRenderer: EditorCell,
+                headerCellRenderer: HeaderCell,
+                placeHolderRenderer: PlaceHolderCell,
                 ...cd,
                 pinned: isPinnedColumn,
                 visible: isVisibleColumn

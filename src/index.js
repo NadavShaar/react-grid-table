@@ -1,5 +1,6 @@
 import React from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
+import { Row, BaseHeaderCell } from './components/';
 import { useTableManager } from './hooks/';
 import PropTypes from 'prop-types';
 import './index.css';
@@ -16,8 +17,6 @@ const GridTable = (props) => {
             isVirtualScroll,
             components: {
                 Header,
-                HeaderCell,
-                Row,
                 Footer,
                 Loader,
                 NoResults,
@@ -74,7 +73,7 @@ const GridTable = (props) => {
             >
                 {
                     visibleColumns.map((cd, idx) => (
-                        <HeaderCell key={idx} index={idx} column={cd} tableManager={tableManager}/>
+                        <BaseHeaderCell key={idx} index={idx} column={cd} tableManager={tableManager}/>
                     ))
                 }
                 {

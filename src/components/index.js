@@ -1,14 +1,14 @@
+import BaseCell from './BaseCell';
+import BaseHeaderCell from './BaseHeaderCell';
 import Cell from './Cell';
-import CellRenderer from './CellRenderer';
-import EditorCellRenderer from './EditorCellRenderer';
-import SelectionCellRenderer from './SelectionCellRenderer';
+import EditorCell from './EditorCell';
+import SelectionCell from './SelectionCell';
 import ColumnVisibility from './ColumnVisibility';
 import Footer from './Footer';
 import Header from './Header';
 import HeaderCell from './HeaderCell';
-import HeaderCellRenderer from './HeaderCellRenderer';
-import HeaderSelectionCellRenderer from './HeaderSelectionCellRenderer';
-import PlaceHolderCellRenderer from './PlaceHolderCellRenderer';
+import HeaderSelectionCell from './HeaderSelectionCell';
+import PlaceHolderCell from './PlaceHolderCell';
 import Loader from './Loader';
 import NoResults from './NoResults';
 import PopoverButton from './PopoverButton';
@@ -19,17 +19,17 @@ import PageSize from './PageSize';
 import Pagination from './Pagination';
 
 export {
+    BaseCell,
+    BaseHeaderCell,
     Cell,
-    CellRenderer,
-    EditorCellRenderer,
-    SelectionCellRenderer,
+    EditorCell,
+    SelectionCell,
     ColumnVisibility,
     Footer, 
     Header,
     HeaderCell,
-    HeaderCellRenderer,
-    HeaderSelectionCellRenderer,
-    PlaceHolderCellRenderer,
+    HeaderSelectionCell,
+    PlaceHolderCell,
     Loader, 
     NoResults,
     PopoverButton,

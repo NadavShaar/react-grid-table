@@ -1,5 +1,5 @@
 import React from 'react';
-import { Cell } from './';
+import { BaseCell } from './';
 
 export default props => {
 
@@ -53,7 +53,7 @@ export default props => {
 
     return visibleColumns.map((cd, colIndex) => {
         return (
-            <Cell 
+            <BaseCell 
                 key={rowIndex+colIndex}
                 rowId={rowId}
                 data={rowId && (editRow?.[rowIdField] === rowId) ? editRow : data} 
