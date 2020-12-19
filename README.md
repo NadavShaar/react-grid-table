@@ -6,6 +6,7 @@
 
 **Supported features:**
 
+- Async support
 - Sort by column
 - Column resize
 - Column reorder
@@ -44,14 +45,10 @@ Import both the component from `@nadavshaar/react-grid-table` and its styles fro
 
 ```JSX
 import React from "react";
-
-// importing the table component
 import GridTable from '@nadavshaar/react-grid-table';
-// importing the table's styles - required
-import '@nadavshaar/react-grid-table/dist/index.css';
 
 // custom cell component
-const Username = ({ tableManager, value, data, column, rowIndex, searchText }) => {
+const Username = ({ tableManager, value, field, data, column, colIndex, rowIndex }) => {
     return (
         <div className='rgt-cell-inner' style={{display: 'flex', alignItems: 'center'}}>
             <img src={data.avatar} alt="user avatar" />
