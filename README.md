@@ -362,9 +362,18 @@ Its `getValue` function for displaying the first and last name as a full name, w
 The returned value will be used for searching, sorting etc...
 
 ### Components
+**Type:** object.
 
 All components are getting the `tableManager` object ([details](#tableManager)).
 This prop gives you the ability to override the internal components with your own custom components.
+
+**Example**
+Overriding the Loader component:
+```JSX
+components={{ Loader: CustomLoader }}
+```
+
+**Overridable components**
 
 - Header
 - Search
