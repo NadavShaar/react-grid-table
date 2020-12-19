@@ -23,7 +23,7 @@ export default props => {
 
     let selectAllRef = useRef(null);
 
-    let selectableItemsIds = pageRows.filter(getIsRowSelectable).map(item => item[rowIdField]);
+    let selectableItemsIds = pageRows.filter(r => r).filter(getIsRowSelectable).map(item => item[rowIdField]);
     let selectAllIsDisabled = !selectableItemsIds.length;
     let selectAllIsChecked = selectableItemsIds.length && selectableItemsIds.every(si => selectedRowsIds.find(id => si === id));
     let isSelectAllIndeterminate = !!(selectedRowsIds.length && !selectAllIsChecked && selectableItemsIds.some(si => selectedRowsIds.find(id => si === id)));

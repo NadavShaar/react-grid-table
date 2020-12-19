@@ -89,16 +89,19 @@ export default props => {
             ref={forwardRef}
         >
             {
-                !data || column.id === 'virtual' ?
+                column.id === 'virtual' ?
                     null
                     :
                     column.id === 'checkbox' ?
                         column.cellRenderer({ ...cellProps, onChange: e => toggleRowSelection(rowId), disabled: disableSelection })
                         :
-                        column.editable && isEdit ?
-                            column.editorCellRenderer({ ...cellProps, onChange: setEditRow })
+                        !data ?
+                            column.placeHolderRenderer(cellProps)
                             :
-                            column.cellRenderer(cellProps)
+                            column.editable && isEdit ?
+                                column.editorCellRenderer({ ...cellProps, onChange: setEditRow })
+                                :
+                                column.cellRenderer(cellProps)
             }
         </div>
     )

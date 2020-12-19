@@ -1,11 +1,25 @@
 import React, { useState, useEffect, useRef } from "react";
 import { withKnobs, boolean, number, array } from '@storybook/addon-knobs';
-
-import GridTable from '../src';
-
-import Username from "./components/Username";
+import AbortController from "abort-controller"
+import GridTable from '../dist';
+import Fetch from 'fetch-simulator';
 import MOCK_DATA from "./MOCK_DATA.json";
+import Username from "./components/Username";
 import './gridTableStory.css';
+
+try {
+    Fetch.addRoute('https://react-grid-table/api/users', {
+        get: {
+            response: MOCK_DATA,
+            wait: 500
+        }
+    });
+} catch (error) {
+    
+}
+Fetch.use();
+
+const controller = new AbortController();
 
 const EDIT_SVG = <svg height="16" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg"><g fill="#fff" stroke="#1856bf" transform="translate(2 2)"><path d="m8.24920737-.79402796c1.17157287 0 2.12132033.94974747 2.12132033 2.12132034v13.43502882l-2.12132033 3.5355339-2.08147546-3.495689-.03442539-13.47488064c-.00298547-1.16857977.94191541-2.11832105 2.11049518-2.12130651.00180188-.00000461.00360378-.00000691.00540567-.00000691z" transform="matrix(.70710678 .70710678 -.70710678 .70710678 8.605553 -3.271644)"/><path d="m13.5 4.5 1 1"/></g></svg>;
 const CANCEL_SVG = <svg height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#dc1e1e" transform="translate(5 5)"><path d="m.5 10.5 10-10"/><path d="m10.5 10.5-10-10z"/></g></svg>;
@@ -101,7 +115,7 @@ const baseColumns = [
                 </button>
             </div>
         ),
-        editorCellRenderer: ({ onRowsChange, tableManager, value, field, onChange, data, column, rowIndex }) => (
+        editorCellRenderer: ({ onRowEditSave, tableManager, value, field, onChange, data, column, rowIndex }) => (
             <div style={styles.buttonsCellEditorContainer}>
                 <button
                     title="Cancel"
@@ -114,11 +128,7 @@ const baseColumns = [
                     title="Save"
                     style={styles.saveButton}
                     onClick={e => {
-                        let rowsClone = [...tableManager.rowsApi.allRows];
-                        let updatedRowIndex = rowsClone.findIndex(r => r.id === data.id);
-                        rowsClone[updatedRowIndex] = data;
-
-                        onRowsChange(rowsClone);
+                        onRowEditSave(data);
                         tableManager.rowEditApi.setEditRowId(null);
                     }}
                 >
@@ -134,16 +144,25 @@ export default {
     component: GridTable,
     decorators: [withKnobs]
 };
-export const ClientSide = () => {
+export const Synced = () => {
     
-    const [editRowId, setEditRowId] = useState(null);
+    // const [editRowId, setEditRowId] = useState(null);
     const [rowsData, setRowsData] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const [tableManager, setTableManager] = useState(null);
     let [searchText, setSearchText] = useState('');
     let [selectedRowsIds, setSelectedRowsIds] = useState([]);
     let [sort, setSort] = useState({ colId: 4, isAsc: true });
-    let [columns, setColumns] = useState(baseColumns.map(c => c.id === 9 ? { ...c, editorCellRenderer: props => c.editorCellRenderer({ ...props, onRowsChange: setRowsData})} : c));
+    let [columns, setColumns] = useState(baseColumns.map(c => c.id === 9 ? {
+        ...c, editorCellRenderer: props => c.editorCellRenderer({
+            ...props, onRowEditSave: editedRow => {
+                let rowsClone = [...rowsData];
+                let updatedRowIndex = rowsClone.findIndex(r => r.id === editedRow.id);
+                rowsClone[updatedRowIndex] = editedRow;
+                setRowsData(rowsClone);
+            }
+        })
+    } : c));
 
     useEffect(() => {
         setLoading(true);
@@ -158,12 +177,12 @@ export const ClientSide = () => {
             columns={columns}
             rows={rowsData}
             isLoading={isLoading}
-            editRowId={editRowId}
-            onEditRowIdChange={setEditRowId}
+            // editRowId={editRowId}
+            // onEditRowIdChange={setEditRowId}
             // selectedRowsIds={boolean('Controlled Selection', false) ? array('Selection', selectedRowsIds) : undefined}
             // onSelectedRowsChange={setSelectedRowsIds}
             style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
-            onLoad={setTableManager}
+            // onLoad={setTableManager}
             // searchText={boolean('Controlled Search', false) ? text('Search Text', searchText) : undefined}
             // onSearchTextChange={setSearchText}
             showRowsInformation={boolean('Show Rows Information', true)}
@@ -175,71 +194,205 @@ export const ClientSide = () => {
         />
     )
 }
-export const ServerSide = () => {
 
-    const [editRowId, setEditRowId] = useState(null);
+export const Asynced = () => {
+
+    let [columns, setColumns] = useState(baseColumns.map(c => c.id === 9 ? {
+        ...c, editorCellRenderer: props => c.editorCellRenderer({
+            ...props, onRowEditSave: editedRow => {
+                console.log('Saved Successfuly?');
+            }
+        })
+    } : c));
+
+    const onRowsRequest = (requestData, tableManager) => {
+        return fetch('https://react-grid-table/api/users', {
+            method: 'get',
+            signal: controller.signal,
+        })
+            .then(response => response.json())
+            .then(allRows => {
+                let {
+                    sortApi: {
+                        sortRows
+                    },
+                    searchApi: {
+                        searchRows
+                    },
+                } = tableManager;
+
+                allRows = searchRows(allRows);
+                allRows = sortRows(allRows);
+
+                return {
+                    rows: allRows.slice(requestData.from, requestData.to),
+                    totalRows: allRows.length
+                };
+            })
+            .catch(console.warn);
+    }
+
+    return (
+        <GridTable
+            columns={columns}
+            style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
+            showRowsInformation={boolean('Show Rows Information', true)}
+            isVirtualScroll={boolean(' Use Virtual Scrolling', false)}
+            isPaginated={boolean('Use Pagination', false)}
+            onRowsRequest={onRowsRequest}
+            requestDebounceTimeout={number('Request Timeout', 300)}
+        />
+    )
+}
+
+export const AsyncedControlled = () => {
+
+    let [rows, setRows] = useState();
+    let [totalRows, setTotalRows] = useState();
+    let [columns, setColumns] = useState(baseColumns.map(c => c.id === 9 ? {
+        ...c, editorCellRenderer: props => c.editorCellRenderer({
+            ...props, onRowEditSave: editedRow => {
+                console.log('Saved Successfuly?');
+            }
+        })
+    } : c));
+
+    const onRowsRequest = (requestData, tableManager) => {
+        return fetch('https://react-grid-table/api/users', {
+            method: 'get',
+            signal: controller.signal,
+        })
+            .then(response => response.json())
+            .then(allRows => {
+                let {
+                    sortApi: {
+                        sortRows
+                    },
+                    searchApi: {
+                        searchRows
+                    },
+                } = tableManager;
+
+                allRows = searchRows(allRows);
+                allRows = sortRows(allRows);
+
+                return {
+                    rows: allRows.slice(requestData.from, requestData.to),
+                    totalRows: allRows.length
+                };
+            })
+            .catch(console.warn);
+    }
+
+    return (
+        <GridTable
+            columns={columns}
+            rows={rows}
+            onRowsChange={setRows}
+            totalRows={totalRows}
+            onTotalRowsChange={setTotalRows}
+            style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
+            showRowsInformation={boolean('Show Rows Information', true)}
+            isVirtualScroll={boolean(' Use Virtual Scrolling', false)}
+            isPaginated={boolean('Use Pagination', false)}
+            onRowsRequest={onRowsRequest}
+            requestDebounceTimeout={number('Request Timeout', 300)}
+        />
+    )
+}
+
+export const AsyncedManaged = () => {
+
+    // const [editRowId, setEditRowId] = useState(null);
     const [rowsData, setRowsData] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const [tableManager, setTableManager] = useState(null);
-    let [searchText, setSearchText] = useState('sdf');
+    let ssss = useState('sdf');
     let [selectedRowsIds, setSelectedRowsIds] = useState([]);
     let [totalRows, setTotalRows] = useState();
-    let [columns, setColumns] = useState(baseColumns.map(c => c.id === 9 ? { ...c, editorCellRenderer: props => c.editorCellRenderer({ ...props, onRowsChange: setRowsData }) } : c));
+    let [columns, setColumns] = useState(baseColumns.map(c => c.id === 9 ? {
+        ...c, editorCellRenderer: props => c.editorCellRenderer({
+            ...props, onRowEditSave: editedRow => {
+                let rowsClone = [...rowsData];
+                let updatedRowIndex = rowsClone.findIndex(r => r.id === editedRow.id);
+                rowsClone[updatedRowIndex] = editedRow;
+                setRowsData(rowsClone);
+            }
+        })
+    } : c));
     let [sort, setSort] = useState({});
     let rowsRef = useRef(rowsData);
 
-    let currentRequestData;
     const onRowsRequest = (requestData, tableManager) => {
-        currentRequestData = requestData;
-        let {
-            sortApi: {
-                sortRows
-            },
-            searchApi: {
-                searchRows
-            },
-        } = tableManager;
-        setLoading(true);
-        setTimeout(() => {
-            let allRows = [...MOCK_DATA];
+        // setLoading(true);
+        fetch('https://react-grid-table/api/users', {
+            method: 'get',
+            signal: controller.signal,
+        })
+            .then(response => response.json())
+            .then(allRows => {
+                let {
+                    sortApi: {
+                        sortRows
+                    },
+                    searchApi: {
+                        searchRows
+                    },
+                } = tableManager;
 
-            allRows = searchRows(allRows);
-            allRows = sortRows(allRows);
+                allRows = searchRows(allRows);
+                allRows = sortRows(allRows);
 
-            rowsRef.current = rowsRef.current.concat(allRows.slice(requestData.from, requestData.to))
-            setRowsData(rowsRef.current);
-            setTotalRows(allRows.length);
-            if (currentRequestData === requestData) setLoading(false);
-        }, 500);
+                return {
+                    rows: allRows.slice(requestData.from, requestData.to),
+                    totalRows: allRows.length
+                };
+            })
+            .then(({ rows, totalRows }) => {
+                let {
+                    asyncApi: {
+                        mergeRowsAt,
+                        lastRowsRequestId
+                    },
+                } = tableManager;
+
+                rowsRef.current = mergeRowsAt(rowsRef.current, rows, requestData.from);
+
+                setRowsData(rowsRef.current);
+                setTotalRows(totalRows);
+                // if (lastRowsRequestId === requestData.id) setLoading(false);
+            })
+            .catch(console.warn);
     }
     const onRowsReset = () => {
         rowsRef.current = [];
         setRowsData(rowsRef.current);
         setTotalRows();
+        controller.abort();
     }
 
     return (
         <GridTable
             columns={columns}
             rows={rowsData}
-            isLoading={isLoading}
-            editRowId={editRowId}
-            onEditRowIdChange={setEditRowId}
+            // isLoading={isLoading}
+            // editRowId={editRowId}
+            // onEditRowIdChange={setEditRowId}
             // selectedRowsIds={boolean('Controlled Selection', false) ? selectedRowsIds : undefined}
             // onSelectedRowsChange={setSelectedRowsIds}
             style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
-            onLoad={setTableManager}
+            // onLoad={setTableManager}
             // searchText={boolean('Controlled Search', false) ? searchText : undefined}
             // onSearchTextChange={setSearchText}
             showRowsInformation={boolean('Show Rows Information', true)}
             sort={sort}
             onSortChange={setSort}
             isVirtualScroll={boolean(' Use Virtual Scrolling', false)}
-            isPaginated={boolean('Use Pagination', true)}
+            isPaginated={boolean('Use Pagination', false)}
             onRowsRequest={onRowsRequest}
             onRowsReset={onRowsReset}
             totalRows={totalRows}
-            // getIsRowEditable={data => data.id % 2}
+            requestDebounceTimeout={number('Request Timeout', 300)}
         />
     )
 }

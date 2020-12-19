@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useRef } from 'react';
+import { useState, useMemo, useRef } from 'react';
 
 export default (props, tableManager) => {
     let {
@@ -10,6 +10,7 @@ export default (props, tableManager) => {
                 SelectionCellRenderer,
                 HeaderCellRenderer,
                 HeaderSelectionCellRenderer,
+                PlaceHolderCellRenderer
             }
         }
     } = tableManager;
@@ -36,6 +37,7 @@ export default (props, tableManager) => {
                 resizable: false,
                 cellRenderer: SelectionCellRenderer,
                 headerCellRenderer: HeaderSelectionCellRenderer,
+                placeHolderRenderer: SelectionCellRenderer,
                 ...cd,
                 pinned: isPinnedColumn,
                 visible: isVisibleColumn
@@ -64,6 +66,7 @@ export default (props, tableManager) => {
                 cellRenderer: CellRenderer,
                 editorCellRenderer: EditorCellRenderer,
                 headerCellRenderer: HeaderCellRenderer,
+                placeHolderRenderer: PlaceHolderCellRenderer,
                 ...cd,
                 pinned: isPinnedColumn,
                 visible: isVisibleColumn
@@ -80,10 +83,10 @@ export default (props, tableManager) => {
         return visibleColumns;
     }, [columnsApi.columns])
 
-    columnsApi.setColumns = useCallback(cols => {
+    columnsApi.setColumns = cols => {
         if (!props.onColumnsChange) setColumns(cols);
         else props.onColumnsChange(cols, tableManager);
-    })
+    }
 
     return columnsApi;
 }

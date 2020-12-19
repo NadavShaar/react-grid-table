@@ -41,6 +41,9 @@ const GridTable = (props) => {
         paginationApi: {
             pageRows
         },
+        rowsApi: {
+            totalRows
+        }
     } = tableManager;
 
     let rest = Object.keys(props).reduce((rest, key) => {
@@ -75,7 +78,7 @@ const GridTable = (props) => {
                     ))
                 }
                 {
-                    pageRows.length && visibleColumns.length > 1 ?
+                    totalRows && visibleColumns.length > 1 ?
                         isVirtualScroll ? 
                             [
                                 <Row key={'virtual-start'} index={'virtual-start'} tableManager={tableManager} />,
@@ -103,11 +106,9 @@ const GridTable = (props) => {
 
 GridTable.defaultProps = {
     columns: [],
-    rows: [],
     rowIdField: 'id',
     minColumnWidth: 70,
     pageSizes: [20, 50, 100],
-    isLoading: false,
     isHeaderSticky: true,
     highlightSearch: true,
     minSearchChars: 2,
@@ -117,6 +118,8 @@ GridTable.defaultProps = {
     showRowsInformation: true,
     showColumnVisibilityManager: true,
     enableColumnsReorder: true,
+    requestDebounceTimeout: 300,
+    batchSize: 100,
     getIsRowSelectable: row => true,
     getIsRowEditable: row => true
 };
@@ -124,7 +127,7 @@ GridTable.defaultProps = {
 GridTable.propTypes = {
     // general
     columns: PropTypes.arrayOf(PropTypes.object).isRequired,
-    rows: PropTypes.arrayOf(PropTypes.object).isRequired,
+    rows: PropTypes.arrayOf(PropTypes.object),
     selectedRowsIds: PropTypes.array,
     searchText: PropTypes.string,
     getIsRowSelectable: PropTypes.func,
@@ -153,6 +156,7 @@ GridTable.propTypes = {
     additionalProps: PropTypes.object,
     components: PropTypes.object,
     totalRows: PropTypes.number,
+    requestDebounceTimeout: PropTypes.number,
     // events
     onColumnsChange: PropTypes.func,
     onSearchTextChange: PropTypes.func,
@@ -170,8 +174,11 @@ GridTable.propTypes = {
     onColumnReorderEnd: PropTypes.func, 
     onRowsRequest: PropTypes.func, 
     onRowsReset: PropTypes.func,
+    onRowsChange: PropTypes.func,
+    onTotalRowsChange: PropTypes.func,
 };
 
 export default GridTable;
 
 export * from './components';
+export * from './hooks';

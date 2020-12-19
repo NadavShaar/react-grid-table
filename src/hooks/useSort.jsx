@@ -17,7 +17,7 @@ export default (props, tableManager) => {
 
     sortApi.sort = props.sort ?? sort;
 
-    sortApi.setSort = useCallback(({colId, isAsc}) => {
+    sortApi.setSort = ({colId, isAsc}) => {
         let {
             columnsReorderApi: {
                 isColumnReordering
@@ -32,7 +32,7 @@ export default (props, tableManager) => {
 
         if (props.sort === undefined || props.onSortChange === undefined) setSort({ colId, isAsc });
         props.onSortChange?.({ colId, isAsc }, tableManager);
-    })
+    }
 
     sortApi.sortRows = useCallback(rows => {
         var cols = columns.reduce((conf, coldef) => {
@@ -54,13 +54,13 @@ export default (props, tableManager) => {
         return rows;
     }, [sortApi.sort, columns])
 
-    sortApi.toggleSort = useCallback(colId => {
+    sortApi.toggleSort = colId => {
         let isAsc = true;
         if (sortApi.sort.colId === colId) isAsc = sortApi.sort.isAsc ? false : sortApi.sort.isAsc === false ? null : true;
         if (isAsc === null) colId = null;
 
         sortApi.setSort({ colId, isAsc })
-    })
+    }
 
     return sortApi;
 }

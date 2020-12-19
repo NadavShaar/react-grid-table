@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useRef } from 'react';
+import { useState, useRef } from 'react';
 
 export default (props, tableManager) => {
     const rowSelectionApi = useRef({}).current;
@@ -7,12 +7,12 @@ export default (props, tableManager) => {
     rowSelectionApi.selectedRowsIds = props.selectedRowsIds ?? selectedRowsIds;
     rowSelectionApi.getIsRowSelectable = props.getIsRowSelectable;
     
-    rowSelectionApi.setSelectedRowsIds = useCallback(newSelectedItems => {
+    rowSelectionApi.setSelectedRowsIds = newSelectedItems => {
         if (props.selectedRowsIds === undefined || props.onSelectedRowsChange === undefined) setSelectedRowsIds(newSelectedItems);
         props.onSelectedRowsChange?.(newSelectedItems, tableManager);
-    })
+    }
 
-    rowSelectionApi.toggleRowSelection = useCallback(rowId => {
+    rowSelectionApi.toggleRowSelection = rowId => {
         selectedRowsIds = [...rowSelectionApi.selectedRowsIds];
 
         let itemIndex = selectedRowsIds.findIndex(s => s === rowId);
@@ -21,7 +21,7 @@ export default (props, tableManager) => {
         else selectedRowsIds.push(rowId);
 
         rowSelectionApi.setSelectedRowsIds(selectedRowsIds);
-    })
+    }
 
     return rowSelectionApi;
 }

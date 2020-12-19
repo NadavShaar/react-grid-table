@@ -145,6 +145,7 @@ const MyAwesomeTable = () => {
 
 export default MyAwesomeTable;
 ```
+
 # Docs
 ### Table of contents
 - [Main components](#main-components)
@@ -160,6 +161,10 @@ export default MyAwesomeTable;
 - [The `tableManager` API](#tableManager)
 - [How-To: Row-Editing](#row-editing)
 - [How-To: Styling](#styling)
+
+#### Support this package
+
+[![paypal](https://image.flaticon.com/icons/png/128/2871/2871557.png)](https://www.paypal.com/donate?hosted_button_id=VAEHCLA692FMW)
 
 ## Main components
 **HEADER (optional | customizable):** search & column visibility management. 
@@ -739,4 +744,4 @@ Styling is done by css classes that can be easily overridden. the table's compon
 
 ## License
 
- © [NadavShaar](https://github.com/NadavShaar) 
+ © [NadavShaar](https://github.com/NadavShaar)
