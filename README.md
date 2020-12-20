@@ -207,7 +207,7 @@ export default MyAwesomeTable;
 | icons | object of nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
 | texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
 | components | object | This prop gives you the ability to override the internal components with your own custom components [details](#components) | { } |
-| additionalProps | object | This prop gives you the ability to pass props to the table's components (see full list of [components](#components)) | `additionalProps={{ cell: {} ... }}` |
+| additionalProps | object | This prop gives you the ability to pass props to the table's components (see full list of [additionalProps](#additionalProps)) | `additionalProps={{ header: { ... } ... }}` |
 
 ### Event props
 
@@ -374,7 +374,7 @@ Its `getValue` function for displaying the first and last name as a full name, w
 
 The returned value will be used for searching, sorting etc...
 
-### Components
+### components
 **Type:** object.
 
 All components are getting the `tableManager` object ([details](#tableManager)).
@@ -397,7 +397,7 @@ components={{ Loader: CustomLoader }}
 - Cell
 - EditorCell
 - SelectionCell
-- PlaceHolderCellRenderer
+- PlaceHolderCell
 - Loader
 - NoResults
 - Footer
@@ -464,6 +464,35 @@ const MyAwesomeTable = props => {
     )
 }
 ```
+
+### additionalProps
+**Type:** object.
+
+This prop gives you the ability to pass props to internal components.
+
+**Example**
+Passing props to the cell component:
+```JSX
+additionalProps={{ cell: { ... }, ... }}
+```
+**List of components you can pass props to:**
+
+- header
+- search
+- columnVisibility
+- headerCell
+- headerSelectionCell
+- cell
+- editorCell
+- selectionCell
+- placeHolderCell
+- loader
+- noResults
+- footer
+- information
+- pageSize
+- pagination
+- rowVirtualizer
 
 # tableManager
 
