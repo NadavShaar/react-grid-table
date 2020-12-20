@@ -207,7 +207,7 @@ export default MyAwesomeTable;
 | icons | object of nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
 | texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
 | components | object | This prop gives you the ability to override the internal components with your own custom components [details](#components) | { } |
-| additionalProps | object | This prop gives you the ability to pass props to the table's components (see full list of [components](#components)) | `additionalProps={{ cell: {} ... }}` |
+| additionalProps | object | This prop gives you the ability to pass props to the table's components (see full list of [additionalProps](#additionalProps)) | `additionalProps={{ header: { ... } ... }}` |
 
 ### Event props
 
@@ -252,7 +252,7 @@ Each column (except for '[checkbox](#checkbox-column)' column) has support for t
 | name | type | description | default value |
 |---|---|---|---|
 | id* | any | a unique identifier for the column (can be changed to a different field using the `rowIdField` prop), or you can set it to 'checkbox' which will generate a rows selction column (more [details](#checkbox-column) about checkbox column)  | --- |
-| field | string | the name of the field as in the row data, not necessary when the column is not using data from `rows` | --- |
+| field | string | the name of the field as in the row data | --- |
 | label | string | the label to display in the header cell | the `field` property |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns | false |
 | visible | boolean | whether to display the column | true |
@@ -268,9 +268,10 @@ Each column (except for '[checkbox](#checkbox-column)' column) has support for t
 | resizable | boolean | whether to allow resizing for the column | true |
 | search | function | the search function for the column | `({value, searchText}) => value.toString().toLowerCase().includes(searchText.toLowerCase())` |
 | sort | function | the sort function for the column | `({a, b, isAscending}) => { let aa = typeof a === 'string' ? a.toLowerCase() : a; let bb = typeof b === 'string' ? b.toLowerCase() : b; if(aa > bb) return isAscending ? 1 : -1; else if(aa < bb) return isAscending ? -1 : 1; return 0; }` |
-| cellRenderer | function | used for custom rendering the cell component `({ tableManager, value, data, column, rowIndex, searchText }) => ( children )` | --- |
-| headerCellRenderer | function | used for custom rendering the header cell component `({label, column}) => ( children )` | --- |
-| editorCellRenderer | function | used for custom rendering the cell component in edit mode `({ tableManager, value, field, onChange, data, column, rowIndex }) => ( children )` | --- |
+| cellRenderer | function | used for custom rendering the cell component `({ tableManager, value, data, column, colIndex, rowIndex }) => ( children )` | --- |
+| headerCellRenderer | function | used for custom rendering the header cell component `({ tableManager, column }) => ( children )` | --- |
+| editorCellRenderer | function | used for custom rendering the cell component in edit mode `({ tableManager, value, data, column, colIndex, rowIndex, onChange }) => ( children )` | --- |
+| placeHolderRenderer | function | used for custom rendering the cell's placeholder component that is displayed when loading new rows `({ tableManager, value, data, column, colIndex, rowIndex }) => ( children )` | --- |
 
 **Example:**
 ```javascript
@@ -294,9 +295,10 @@ Each column (except for '[checkbox](#checkbox-column)' column) has support for t
   resizable: true,
   search: ({value, searchText}) => { },
   sort: ({a, b, isAscending}) => { },
-  cellRenderer: ({ tableManager, value, data, column, rowIndex, searchText }) => ( children ),
-  headerCellRenderer: ({label, column}) => ( children ),
-  editorCellRenderer: ({ tableManager, value, field, onChange, data, column, rowIndex }) => ( children )
+  cellRenderer: ({ tableManager, value, data, column, colIndex, rowIndex }) => ( children ),
+  headerCellRenderer: ({ tableManager, column }) => ( children ),
+  editorCellRenderer: ({ tableManager, value, data, column, colIndex, rowIndex, onChange }) => ( children ),
+  placeHolderRenderer: ({ tableManager, value, data, column, colIndex, rowIndex }) => ( children )
 }
 ```
 
@@ -315,8 +317,8 @@ Checkbox column has support for the following properties:
 | minWidth | number | the minimum width of the column | 0 |
 | maxWidth | number, null | the maximum width of the column | null |
 | resizable | boolean | whether to allow resizing for the column | false |
-| cellRenderer | function | used for custom rendering the checkbox cell | `({isSelected, callback, disabled, rowIndex}) => ( <input type="checkbox" onChange={ callback } checked={ isSelected } disabled={ disabled } /> )` |
-| headerCellRenderer | function | used for custom rendering the checkbox header cell | `({isSelected, isIndeterminate, callback, disabled}) => ( <input type="checkbox" onChange={ callback } checked={ isSelected } disabled={ disabled } /> )` |
+| cellRenderer | function | used for custom rendering the checkbox cell | `({ tableManager, value, data, column, colIndex, rowIndex, onChange, disabled}) => ( <input type="checkbox" onChange={ onChange } checked={ value } disabled={ disabled } /> )` |
+| headerCellRenderer | function | used for custom rendering the checkbox header cell | `({ tableManager, column }) => ( <input type="checkbox" onChange={ callback } checked={ isSelected } disabled={ disabled } /> )` |
 
 **Example:**
 ```javascript
@@ -374,7 +376,7 @@ Its `getValue` function for displaying the first and last name as a full name, w
 
 The returned value will be used for searching, sorting etc...
 
-### Components
+### components
 **Type:** object.
 
 All components are getting the `tableManager` object ([details](#tableManager)).
@@ -397,7 +399,7 @@ components={{ Loader: CustomLoader }}
 - Cell
 - EditorCell
 - SelectionCell
-- PlaceHolderCellRenderer
+- PlaceHolderCell
 - Loader
 - NoResults
 - Footer
@@ -464,6 +466,33 @@ const MyAwesomeTable = props => {
     )
 }
 ```
+
+### additionalProps
+**Type:** object.
+
+This prop gives you the ability to pass props to internal components.
+
+**Example**
+Passing props to the cell component:
+```JSX
+additionalProps={{ cell: { ... }, ... }}
+```
+**List of components you can pass props to:**
+
+- header
+- search
+- columnVisibility
+- headerCell
+- headerSelectionCell
+- cell
+- editorCell
+- selectionCell
+- placeHolderCell
+- footer
+- information
+- pageSize
+- pagination
+- rowVirtualizer
 
 # tableManager
 
@@ -610,13 +639,13 @@ let columns = [
         pinned: true,
         sortable: false,
         resizable: false,
-        cellRenderer: ({ tableManager, value, data, column, rowIndex, searchText }) => (
+        cellRenderer: ({ tableManager, value, data, column, colIndex, rowIndex }) => (
             <button 
                 style={{marginLeft: 20}} 
                 onClick={e => tableManager.handlers.setEditRowId(data.id)}
             >&#x270E;</button>
         ),
-        editorCellRenderer: ({ tableManager, value, field, onChange, data, column, rowIndex }) => (
+        editorCellRenderer: ({ tableManager, value, data, column, colIndex, rowIndex, onChange }) => (
             <div style={{display: 'inline-flex'}}>
                 <button 
                     style={{marginLeft: 20}} 
