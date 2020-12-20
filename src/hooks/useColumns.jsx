@@ -31,14 +31,13 @@ export default (props, tableManager) => {
                 width: 'max-content',
                 minWidth: 0,
                 maxWidth: null,
-                searchable: false,
-                editable: false,
-                sortable: false,
                 resizable: false,
                 cellRenderer: SelectionCell,
                 headerCellRenderer: HeaderSelectionCell,
-                placeHolderRenderer: SelectionCell,
                 ...cd,
+                searchable: false,
+                editable: false,
+                sortable: false,
                 pinned: isPinnedColumn,
                 visible: isVisibleColumn
             };

@@ -28,12 +28,9 @@ export default props => {
             title={columnVisibilityText}
             buttonChildren={columnVisibilityIcon}
             popoverChildren={
-                columns.filter(col => !col.pinned).map((cd, idx) => {
-                    let label = cd.label || cd.field || cd.id;
-
-                    return (
+                columns.filter(col => !col.pinned).map((cd, idx) => (
                         <div key={idx} className='rgt-clickable rgt-columns-manager-popover-row'>
-                            <label htmlFor={`checkbox-${idx}`} title={label} onClick={e => onChange(cd.id)} className='rgt-clickable rgt-flex-child rgt-text-truncate'>{label}</label>
+                            <label htmlFor={`checkbox-${idx}`} title={cd.label} onClick={e => onChange(cd.id)} className='rgt-clickable rgt-flex-child rgt-text-truncate'>{cd.label}</label>
                             <input
                                 id={`checkbox-${idx}`}
                                 className='rgt-clickable'
@@ -43,7 +40,7 @@ export default props => {
                             />
                         </div>
                     )
-                })
+                )
             }
             {...additionalProps}
         />

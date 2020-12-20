@@ -74,7 +74,7 @@ export default props => {
         };
     }
 
-    let cellProps = { tableManager, value, field: column.field, data, column, colIndex, rowIndex, isEdit };
+    let cellProps = { tableManager, value, data, column, colIndex, rowIndex };
     if (additionalProps.className) classNames += ' ' + additionalProps.className;
 
     return (

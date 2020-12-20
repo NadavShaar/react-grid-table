@@ -19,7 +19,7 @@ export default props => {
 
     return (
         <span {...additionalProps} className={classNames.trim()} data-column-id={column.id.toString()}>
-            {typeof column.label === 'string' ? column.label : column.field}
+            {column.label}
         </span>
     )
 }

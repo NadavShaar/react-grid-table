@@ -3,7 +3,7 @@ import React from 'react';
 export default props => {
     let {
         value,
-        field,
+        column,
         data,
         colIndex,
         onChange,
@@ -34,7 +34,7 @@ export default props => {
                     className='rgt-cell-editor-input'
                     type="text"
                     value={value}
-                    onChange={e => onChange({ ...data, [field]: e.target.value})}
+                    onChange={e => onChange({ ...data, [column.field]: e.target.value})}
                 />
             </div>
         </div>
