@@ -149,6 +149,7 @@ export default MyAwesomeTable;
 - [Props](#props)
 - [Table configuration props](#table-configuration-props)
 - [Event props](#event-props)
+- [Async props](#async-props)
 - [The `columns` prop](#columns)
 - [The `checkbox` column](#checkbox-column)
 - [The `rows` prop](#rows)
