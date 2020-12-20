@@ -1,5 +1,5 @@
 import React from 'react';
-import { getHighlightedText } from '../utils/';
+import { getHighlightedText } from '../utils';
 
 export default props => {
 
@@ -22,7 +22,7 @@ export default props => {
             highlightSearch,
             tableHasSelection,
             additionalProps: {
-                cell: additionalProps
+                cellContainer: additionalProps = {}
             }
         },
         rowsApi: {
@@ -75,16 +75,17 @@ export default props => {
     }
 
     let cellProps = { tableManager, value, field: column.field, data, column, colIndex, rowIndex, isEdit };
+    if (additionalProps.className) classNames += ' ' + additionalProps.className;
 
     return (
         <div
-            className={classNames.trim()}
-            onMouseEnter={e => document.querySelectorAll(`.rgt-row-${rowIndex}`).forEach(c => c.classList.add('rgt-row-hover'))}
-            onMouseLeave={e => document.querySelectorAll(`.rgt-row-${rowIndex}`).forEach(c => c.classList.remove('rgt-row-hover'))}
             data-row-id={rowId.toString()}
             data-row-index={rowIndex.toString()}
             data-column-id={column.id.toString()}
             {...additionalProps}
+            onMouseEnter={e => { document.querySelectorAll(`.rgt-row-${rowIndex}`).forEach(c => c.classList.add('rgt-row-hover')); additionalProps.onMouseEnter?.(e);}}
+            onMouseLeave={e => { document.querySelectorAll(`.rgt-row-${rowIndex}`).forEach(c => c.classList.remove('rgt-row-hover')); additionalProps.onMouseLeave?.(e);}}
+            className={classNames.trim()}
             style={style}
             ref={forwardRef}
         >

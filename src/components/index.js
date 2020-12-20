@@ -1,5 +1,5 @@
-import BaseCell from './BaseCell';
-import BaseHeaderCell from './BaseHeaderCell';
+import CellContainer from './CellContainer';
+import HeaderCellContainer from './HeaderCellContainer';
 import Cell from './Cell';
 import EditorCell from './EditorCell';
 import SelectionCell from './SelectionCell';
@@ -19,8 +19,8 @@ import PageSize from './PageSize';
 import Pagination from './Pagination';
 
 export {
-    BaseCell,
-    BaseHeaderCell,
+    CellContainer,
+    HeaderCellContainer,
     Cell,
     EditorCell,
     SelectionCell,

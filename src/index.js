@@ -1,6 +1,7 @@
+// TODO: write async section in documentation
 import React from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
-import { Row, BaseHeaderCell } from './components/';
+import { Row, HeaderCellContainer } from './components/';
 import { useTableManager } from './hooks/';
 import PropTypes from 'prop-types';
 import './index.css';
@@ -50,8 +51,11 @@ const GridTable = (props) => {
         return rest;
     }, {})
 
+    let classNames = 'rgt-wrapper';
+    if (props.className) classNames += ' ' + props.className;
+
     return (
-        <div ref={rgtRef} className='rgt-wrapper' {...rest} >
+        <div {...rest} ref={rgtRef} className={classNames.trim()}>
             <Header tableManager={tableManager} />
             <SortableList
                 forwardRef={tableRef}
@@ -73,7 +77,7 @@ const GridTable = (props) => {
             >
                 {
                     visibleColumns.map((cd, idx) => (
-                        <BaseHeaderCell key={idx} index={idx} column={cd} tableManager={tableManager}/>
+                        <HeaderCellContainer key={idx} index={idx} column={cd} tableManager={tableManager}/>
                     ))
                 }
                 {
@@ -87,7 +91,7 @@ const GridTable = (props) => {
                             :
                             pageRows.map((r, index) => <Row key={index} index={index} data={r} tableManager={tableManager} />)
                         :
-                        <div className='rgt-no-data-container'>
+                        <div className='rgt-container-overlay'>
                             {
                                 isLoading
                                     ?

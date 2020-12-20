@@ -8,11 +8,16 @@ export default props => {
     let {
         title,
         buttonChildren, 
-        popoverChildren
+        popoverChildren,
+        className,
+        ...rest
     } = props;
-    
+
+    let classNames = 'rgt-columns-manager-wrapper';
+    if (className) classNames += ' ' + className;
+
     return (
-        <div ref={ref} className='rgt-columns-manager-wrapper'>
+        <div {...rest} ref={ref} className={classNames.trim()}>
             <button className={`rgt-columns-manager-button${isComponentVisible ? ' rgt-columns-manager-button-active' : ''}`} onClick={e => setIsComponentVisible(!isComponentVisible)}>
                 { buttonChildren }
             </button>

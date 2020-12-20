@@ -13,6 +13,9 @@ export default (props) => {
                 ColumnVisibility,
                 Search,
             },
+            additionalProps: {
+                header: additionalProps = {}
+            },
         },
         columnsApi: {
             columns,
@@ -27,8 +30,11 @@ export default (props) => {
         },
     } = tableManager;
 
+    let classNames = 'rgt-header-container';
+    if (additionalProps.className) classNames += ' ' + additionalProps.className;
+
     return (
-        <div className='rgt-header-container'>
+        <div {...additionalProps} className={classNames.trim()}>
             {
                 showSearch !== false ?
                     <Search value={searchText} onChange={setSearchText} tableManager={tableManager}/>

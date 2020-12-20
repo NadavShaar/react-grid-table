@@ -303,12 +303,7 @@ export const AsyncedControlled = () => {
 
 export const AsyncedManaged = () => {
 
-    // const [editRowId, setEditRowId] = useState(null);
     const [rowsData, setRowsData] = useState([]);
-    const [isLoading, setLoading] = useState(false);
-    const [tableManager, setTableManager] = useState(null);
-    let ssss = useState('sdf');
-    let [selectedRowsIds, setSelectedRowsIds] = useState([]);
     let [totalRows, setTotalRows] = useState();
     let [columns, setColumns] = useState(baseColumns.map(c => c.id === 9 ? {
         ...c, editorCellRenderer: props => c.editorCellRenderer({
@@ -324,7 +319,6 @@ export const AsyncedManaged = () => {
     let rowsRef = useRef(rowsData);
 
     const onRowsRequest = (requestData, tableManager) => {
-        // setLoading(true);
         fetch('https://react-grid-table/api/users', {
             method: 'get',
             signal: controller.signal,
@@ -351,8 +345,7 @@ export const AsyncedManaged = () => {
             .then(({ rows, totalRows }) => {
                 let {
                     asyncApi: {
-                        mergeRowsAt,
-                        lastRowsRequestId
+                        mergeRowsAt
                     },
                 } = tableManager;
 
@@ -360,7 +353,6 @@ export const AsyncedManaged = () => {
 
                 setRowsData(rowsRef.current);
                 setTotalRows(totalRows);
-                // if (lastRowsRequestId === requestData.id) setLoading(false);
             })
             .catch(console.warn);
     }
@@ -393,6 +385,57 @@ export const AsyncedManaged = () => {
             onRowsReset={onRowsReset}
             totalRows={totalRows}
             requestDebounceTimeout={number('Request Timeout', 300)}
+        />
+    )
+}
+
+export const ControlledProps = () => {
+
+
+    const [editRowId, setEditRowId] = useState(null);
+    const [rowsData, setRowsData] = useState([]);
+    const [isLoading, setLoading] = useState(false);
+    const [tableManager, setTableManager] = useState(null);
+    let [searchText, setSearchText] = useState('');
+    let [selectedRowsIds, setSelectedRowsIds] = useState([]);
+    let [sort, setSort] = useState({ colId: 4, isAsc: true });
+    let [columns, setColumns] = useState(baseColumns.map(c => c.id === 9 ? {
+        ...c, editorCellRenderer: props => c.editorCellRenderer({
+            ...props, onRowEditSave: editedRow => {
+                let rowsClone = [...rowsData];
+                let updatedRowIndex = rowsClone.findIndex(r => r.id === editedRow.id);
+                rowsClone[updatedRowIndex] = editedRow;
+                setRowsData(rowsClone);
+            }
+        })
+    } : c));
+
+    useEffect(() => {
+        setLoading(true);
+        setTimeout(() => {
+            setRowsData(MOCK_DATA)
+            setLoading(false);
+        }, 1500);
+    }, [])
+
+    return (
+        <GridTable
+            columns={columns}
+            rows={rowsData}
+            isLoading={isLoading}
+            editRowId={editRowId}
+            onEditRowIdChange={setEditRowId}
+            selectedRowsIds={boolean('Controlled Selection', false) ? selectedRowsIds : undefined}
+            onSelectedRowsChange={setSelectedRowsIds}
+            style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
+            onLoad={setTableManager}
+            searchText={boolean('Controlled Search', false) ? searchText : undefined}
+            onSearchTextChange={setSearchText}
+            showRowsInformation={boolean('Show Rows Information', true)}
+            sort={sort}
+            onSortChange={setSort}
+            isVirtualScroll={boolean(' Use Virtual Scrolling', false)}
+            isPaginated={boolean('Use Pagination', false)}
         />
     )
 }

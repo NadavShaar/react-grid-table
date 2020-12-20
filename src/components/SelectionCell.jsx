@@ -5,11 +5,24 @@ export default props => {
         value,
         disabled,
         onChange,
+        tableManager
     } = props;
+
+    let {
+        config: {
+            additionalProps: {
+                selectionCell: additionalProps = {}
+            },
+        }
+    } = tableManager;
+
+    let classNames = disabled ? 'rgt-disabled' : 'rgt-clickable';
+    if (additionalProps.className) classNames += ' ' + additionalProps.className;
 
     return (
         <input
-            className={disabled ? 'rgt-disabled' : 'rgt-clickable'}
+            {...additionalProps}
+            className={classNames.trim()}
             type="checkbox"
             onChange={onChange}
             onClick={e => e.stopPropagation()}

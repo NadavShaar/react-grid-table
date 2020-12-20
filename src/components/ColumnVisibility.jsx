@@ -11,6 +11,9 @@ export default props => {
 
     let {
         config: {
+            additionalProps: {
+                columnVisibility: additionalProps = {}
+            },
             texts: {
                 columnVisibility: columnVisibilityText
             },
@@ -20,7 +23,6 @@ export default props => {
         }
     } = tableManager;
 
-    
     return (
         <PopoverButton
             title={columnVisibilityText}
@@ -43,6 +45,7 @@ export default props => {
                     )
                 })
             }
+            {...additionalProps}
         />
     )
 }

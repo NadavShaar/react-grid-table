@@ -8,6 +8,11 @@ export default props => {
         colIndex,
         onChange,
         tableManager: {
+            config: {
+                additionalProps: {
+                    editorCell: additionalProps = {}
+                },
+            },
             columnsApi: {
                 visibleColumns
             },
@@ -17,8 +22,11 @@ export default props => {
         }
     } = props;
 
+    let classNames = 'rgt-cell-inner rgt-cell-editor';
+    if (additionalProps.className) classNames += ' ' + additionalProps.className;
+
     return (
-        <div className='rgt-cell-inner rgt-cell-editor'>
+        <div {...additionalProps} className={classNames.trim()}>
             <div className='rgt-cell-editor-inner'>
                 <input
                     tabIndex={0}

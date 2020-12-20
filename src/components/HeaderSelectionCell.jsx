@@ -3,13 +3,15 @@ import React, { useRef, useEffect } from 'react';
 export default props => {
     let {
         column,
-        style,
         tableManager
     } = props;
 
     let {
         config: {
-            rowIdField
+            rowIdField,
+            additionalProps: {
+                headerSelectionCell: additionalProps = {}
+            },
         },
         rowSelectionApi: {
             getIsRowSelectable,
@@ -43,16 +45,18 @@ export default props => {
         setSelectedRowsIds(selectedIds);
     }
 
+    let classNames = selectAllIsDisabled ? 'rgt-disabled' : 'rgt-clickable';
+    if (additionalProps.className) classNames += ' ' + additionalProps.className;
+
     return (
-        <div className="rgt-cell-header-select-all" style={style}>
-            <input
-                ref={selectAllRef}
-                className={selectAllIsDisabled ? 'rgt-disabled' : 'rgt-clickable'}
-                disabled={selectAllIsDisabled}
-                type="checkbox"
-                onChange={onChange}
-                checked={selectAllIsChecked}
-            />
-        </div>
+        <input
+            {...additionalProps}
+            className={classNames.trim()}
+            type="checkbox"
+            ref={selectAllRef}
+            onChange={onChange}
+            checked={selectAllIsChecked}
+            disabled={selectAllIsDisabled}
+        />
     )
 }

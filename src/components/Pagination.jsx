@@ -15,7 +15,10 @@ export default props => {
                 page: pageText,
                 next: nextText,
                 of: ofText
-            },  
+            },
+            additionalProps: {
+                pagination: additionalProps = {}
+            },
         },
         paginationApi: {
             totalPages
@@ -25,15 +28,18 @@ export default props => {
     let backButtonDisabled = page-1 < 1;
     let nextButtonDisabled = page+1 > totalPages;
 
+    let classNames = 'rgt-footer-pagination';
+    if (additionalProps.className) classNames += ' ' + additionalProps.className;
+
     return (
-        <React.Fragment>
+        <div {...additionalProps} className={classNames.trim()}>
             <button 
                 className={`rgt-footer-pagination-button${backButtonDisabled ? ' rgt-disabled-button' : ''}`}
                 disabled={page-1 < 1} 
                 onClick={e => onChange(page-1)}
             >{prevText}</button>
 
-            <div className='rgt-footer-pagination-container'>
+            <div className='rgt-footer-pagination-input-container'>
                 <span>{pageText} </span>
                 <input 
                     onClick={e => e.target.select()}
@@ -50,6 +56,6 @@ export default props => {
                 disabled={page+1 > totalPages} 
                 onClick={e => onChange(page+1)}
             >{nextText}</button>
-        </React.Fragment>
+        </div>
     )
 }

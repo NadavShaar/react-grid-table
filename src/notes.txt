@@ -1,3 +1,0 @@
-to enable the tables rows management do not pass the rows prop and return a promise from onRowsRequest
-
-to enable the tables rows controlled management return a promise from onRowsRequest and add the onRowsChange prop

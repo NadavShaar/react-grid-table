@@ -20,7 +20,10 @@ export default props => {
             },
             icons: {
                 clearSelection: clearSelectionIcon
-            }
+            },
+            additionalProps: {
+                information: additionalProps = {}
+            },
         },
         paginationApi: {
             page,
@@ -30,8 +33,11 @@ export default props => {
         },
     } = tableManager;
 
+    let classNames = 'rgt-footer-items-information-inner';
+    if (additionalProps.className) classNames += ' ' + additionalProps.className;
+
     return (
-        <div className='rgt-footer-items-information-inner'>
+        <div {...additionalProps} className={classNames.trim()}>
             { totalRowsText} { totalCount} { isPaginated ? `| ${rowsText} ${pageSize * (page - 1)} - ${pageSize * (page - 1) + pageCount}` : ''} { tableHasSelection ? <React.Fragment>{`| ${selectedCount} ${selectedText}`}{selectedCount ? <span className="rgt-footer-clear-selection-button rgt-clickable" onClick={e => setSelectedRowsIds([])}>{ clearSelectionIcon }</span> : null}</React.Fragment> : ''}
         </div>
     )

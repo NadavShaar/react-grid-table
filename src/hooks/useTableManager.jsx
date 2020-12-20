@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import * as components from '../components';
-import { additionalProps, icons, texts } from '../defaults';
+import { icons, texts } from '../defaults';
 import {
     useRowVirtualizer,
     useColumns,
@@ -51,7 +51,7 @@ export default (props) => {
         isVirtualScroll: props.isVirtualScroll || (!props.isPaginated && (tableManager.mode !== 'sync')),
         tableHasSelection: !!props.columns.find(cd => cd.id === 'checkbox'),
         components: { ...components, ...props.components },
-        additionalProps: { ...additionalProps, ...props.additionalProps },
+        additionalProps: props.additionalProps || {},
         icons: { ...icons, ...props.icons },
         texts: { ...texts, ...props.texts },
     }

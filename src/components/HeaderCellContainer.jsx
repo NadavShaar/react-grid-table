@@ -20,7 +20,7 @@ export default (props) => {
                 DragHandle
             },
             additionalProps: {
-                headerCell: additionalProps
+                headerCellContainer: additionalProps = {}
             },
             icons: {
                 sortAscending: sortAscendingIcon,
@@ -46,7 +46,8 @@ export default (props) => {
 
     let isPinnedRight = column.pinned && index === visibleColumns.length - 1;
     let isPinnedLeft = column.pinned && index === 0;
-    let classes = column.id === 'virtual' ? `rgt-cell-header rgt-cell-header-virtual-col${isHeaderSticky ? ' rgt-cell-header-sticky' : ''}`.trim() : `rgt-cell-header rgt-cell-header-${column.id === 'checkbox' ? 'checkbox' : column.field}${(column.sortable !== false && column.id !== 'checkbox' && column.id !== 'virtual') ? ' rgt-clickable' : ''}${column.sortable !== false && column.id !== 'checkbox' ? ' rgt-cell-header-sortable' : ' rgt-cell-header-not-sortable'}${isHeaderSticky ? ' rgt-cell-header-sticky' : ''}${column.resizable !== false ? ' rgt-cell-header-resizable' : ' rgt-cell-header-not-resizable'}${column.searchable !== false && column.id !== 'checkbox' ? ' rgt-cell-header-searchable' : ' rgt-cell-header-not-searchable'}${isPinnedLeft ? ' rgt-cell-header-pinned rgt-cell-header-pinned-left' : ''}${isPinnedRight ? ' rgt-cell-header-pinned rgt-cell-header-pinned-right' : ''} ${column.className}`.trim() 
+    let classNames = column.id === 'virtual' ? `rgt-cell-header rgt-cell-header-virtual-col${isHeaderSticky ? ' rgt-cell-header-sticky' : ''}`.trim() : `rgt-cell-header rgt-cell-header-${column.id === 'checkbox' ? 'checkbox' : column.field}${(column.sortable !== false && column.id !== 'checkbox' && column.id !== 'virtual') ? ' rgt-clickable' : ''}${column.sortable !== false && column.id !== 'checkbox' ? ' rgt-cell-header-sortable' : ' rgt-cell-header-not-sortable'}${isHeaderSticky ? ' rgt-cell-header-sticky' : ''}${column.resizable !== false ? ' rgt-cell-header-resizable' : ' rgt-cell-header-not-resizable'}${column.searchable !== false && column.id !== 'checkbox' ? ' rgt-cell-header-searchable' : ' rgt-cell-header-not-searchable'}${isPinnedLeft ? ' rgt-cell-header-pinned rgt-cell-header-pinned-left' : ''}${isPinnedRight ? ' rgt-cell-header-pinned rgt-cell-header-pinned-right' : ''} ${column.className}`.trim() 
+    if (additionalProps.className) classNames += ' ' + additionalProps.className;
 
     additionalProps = {
         ...additionalProps,
@@ -61,15 +62,15 @@ export default (props) => {
         let onClick = additionalProps.onClick;
         additionalProps.onClick = e => {
             toggleSort(column.id);
-            onClick?.(e)
+            onClick?.(e);
         }
     }
 
     return (
         <div 
             data-column-id={(column.id).toString()}
-            className={classes}
             {...additionalProps}
+            className={classNames.trim()}
         >
             {
                 (column.id === 'virtual') ?
@@ -77,7 +78,7 @@ export default (props) => {
                     :
                     <React.Fragment>
                         <SortableItem 
-                            className={`rgt-cell-header-inner${column.id === 'checkbox' ? ' rgt-cell-header-inner-checkbox-column' : ''}${!isPinnedRight ? ' rgt-cell-header-inner-not-pinned-right' : '' }`}
+                            className={`rgt-cell-header-inner${column.id === 'checkbox' ? ' rgt-cell-header-inner-checkbox' : ''}${!isPinnedRight ? ' rgt-cell-header-inner-not-pinned-right' : '' }`}
                             index={index} 
                             disabled={!enableColumnsReorder || isPinnedLeft || isPinnedRight}
                             columnId={column.id.toString()}

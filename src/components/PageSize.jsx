@@ -14,19 +14,25 @@ export default props => {
             texts: {
                 rowsPerPage: rowsPerPageText
             },
+            additionalProps: {
+                pageSize: additionalProps = {}
+            },
         }
     } = tableManager;
 
+    let classNames = 'rgt-footer-page-size';
+    if (additionalProps.className) classNames += ' ' + additionalProps.className;
+
     return (
-        <React.Fragment>
+        <div {...additionalProps} className={classNames.trim()}>
             <span>{rowsPerPageText} </span>
             <select 
-                className='rgt-footer-items-per-page'
+                className='rgt-footer-page-size-select'
                 value={value} 
                 onChange={e => { onChange(e.target.value);}}
             >
                 { options.map((op, idx) => <option key={idx} value={op}>{op}</option>) }
             </select>
-        </React.Fragment>
+        </div>
     )
 }

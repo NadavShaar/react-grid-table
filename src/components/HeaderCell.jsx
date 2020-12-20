@@ -2,11 +2,23 @@ import React from 'react';
 
 export default props => {
     let {
-        column
+        column,
+        tableManager
     } = props;
 
+    let {
+        config: {
+            additionalProps: {
+                headerCell: additionalProps = {}
+            },
+        }
+    } = tableManager;
+
+    let classNames = 'rgt-text-truncate';
+    if (additionalProps.className) classNames += ' ' + additionalProps.className;
+
     return (
-        <span className='rgt-text-truncate' data-column-id={column.id.toString()}>
+        <span {...additionalProps} className={classNames.trim()} data-column-id={column.id.toString()}>
             {typeof column.label === 'string' ? column.label : column.field}
         </span>
     )

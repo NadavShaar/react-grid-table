@@ -15,7 +15,10 @@ export default (props) => {
                 Information,
                 PageSize,
                 Pagination
-            }
+            },
+            additionalProps: {
+                footer: additionalProps = {}
+            },
         },
         rowsApi: {
             totalRows,
@@ -32,9 +35,11 @@ export default (props) => {
         },
     } = tableManager;
 
+    let classNames = 'rgt-footer';
+    if (additionalProps.className) classNames += ' ' + additionalProps.className;
 
     return (
-        <div className="rgt-footer">
+        <div {...additionalProps} className={classNames.trim()}>
             <div className='rgt-footer-items-information'>
                 {
                     showRowsInformation !== false ?
