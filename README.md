@@ -147,13 +147,14 @@ export default MyAwesomeTable;
 ### Table of contents
 - [Main components](#main-components)
 - [Props](#props)
-- [Table configuration props](#table-configuration-props)
+- [Table configuration props](#configuration-props)
 - [Event props](#event-props)
 - [Async props](#async-props)
 - [The `columns` prop](#columns)
 - [The `checkbox` column](#checkbox-column)
 - [The `rows` prop](#rows)
 - [The `tableManager` API](#tableManager)
+- [How-To: Async](#sync/async)
 - [How-To: Row-Editing](#row-editing)
 - [How-To: Styling](#styling)
 
@@ -559,9 +560,36 @@ all [components](#components-props) that are not part of the table itself.
 
 ### icons
 
-the `icons` configuration as documented under [Table configuration props](#table-configuration-props).
+the `icons` configuration as documented under [Table configuration props](#configuration-props).
 
 # How to...
+
+### Sync/Async
+`react-grid-table` supports 4 different data managing flows:
+1. **Sync:** all the data is supplied to the table via the `rows` prop. Use it if you have all the data localy.  
+Required props:
+    - **rows:** Should contain all the data.
+2. **Async:** all the data is supplied to the table via the `onRowsRequest` prop. Use it if you need to fetch your data asynchrony. Required props:
+    - **onRowsRequest:** Should return a promise that resolves to {rows: *data*, totalRows: *data length*}.
+3. **Async Controlled:** all the data is supplied to the table via the `onRowsRequest` prop, but is controlled by a parent component via `rows`, `onRowsChange`, `totalRows` & `onTotalRowsChange` props. Use it if you need to fetch your data asynchrony, but still use it in other places in the app.  
+Required props:
+    - **onRowsRequest:** Should return a promise that resolves to {rows: *data*, totalRows: *data length*}.
+    - **rows:** Should contain the current data.
+    - **onRowsChange:** Should be used to set the current data.
+    - **totalRows:** Should contain the current data length.
+    - **onTotalRowsChange:** Should be used to set the current data length.
+4. **Async Managed:** all the data is supplied to the table via the `rows` prop, which should be updated using the `onRowsRequest` prop. Use it if you need to fetch your data asynchrony, but not use the table to manage the data.  
+    **Note**: `react-grid-table` will not necessarily ask for concurrent data, which means that "holes" in the data are possible. These "holes" needs to be filled with null/undefined items in order to ensure proper functionally. To achieve this, you can use:
+    ```JSX
+    let mergedRows = tableManager.asyncApi.mergeRowsAt(rows, fetchedRows, at)
+    ``` 
+    Required props:
+    - **onRowsRequest:** Should update the rows props according to the request.
+    - **rows:** Should contain the current data.
+    - **totalRows:** Should contain the current data length.
+    - **onRowsReset:** Should be used to reset the current data.Will be called when sort or searchText change.
+
+
 
 ### Row-Editing
 Row editing can be done by rendering the edit button using the `cellRenderer` property in the column configuration, then when clicked, it will control the `editRowId` prop, then the table will render the editing components for columns that are defined as `editable` (true by default), and as was defined in the `editorCellRenderer` which by default will render a text input.
