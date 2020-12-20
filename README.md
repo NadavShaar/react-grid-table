@@ -486,8 +486,6 @@ additionalProps={{ cell: { ... }, ... }}
 - editorCell
 - selectionCell
 - placeHolderCell
-- loader
-- noResults
 - footer
 - information
 - pageSize
