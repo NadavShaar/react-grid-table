@@ -1,4 +1,4 @@
-// TODO: write async section in documentation
+// TODO: enable rendering headerCellRenderer for checkbox column without rewriting the logic (be able to change only the input)
 import React from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
 import { Row, HeaderCellContainer } from './components/';
