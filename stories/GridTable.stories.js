@@ -300,7 +300,6 @@ export const AsyncedManaged = () => {
             }
         })
     } : c));
-    let [sort, setSort] = useState({});
     let rowsRef = useRef(rowsData);
 
     const onRowsRequest = async (requestData, tableManager) => {
@@ -351,18 +350,8 @@ export const AsyncedManaged = () => {
         <GridTable
             columns={columns}
             rows={rowsData}
-            // isLoading={isLoading}
-            // editRowId={editRowId}
-            // onEditRowIdChange={setEditRowId}
-            // selectedRowsIds={boolean('Controlled Selection', false) ? selectedRowsIds : undefined}
-            // onSelectedRowsChange={setSelectedRowsIds}
             style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
-            // onLoad={setTableManager}
-            // searchText={boolean('Controlled Search', false) ? searchText : undefined}
-            // onSearchTextChange={setSearchText}
             showRowsInformation={boolean('Show Rows Information', true)}
-            sort={sort}
-            onSortChange={setSort}
             isVirtualScroll={boolean(' Use Virtual Scrolling', false)}
             isPaginated={boolean('Use Pagination', false)}
             onRowsRequest={onRowsRequest}
