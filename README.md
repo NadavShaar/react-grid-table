@@ -608,6 +608,8 @@ Just pass all the data using the `rows` prop.
 |---|---|---|---|
 | rows* | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
 
+**Example:**
+
 ```JSX
 export const SyncedTable = () => {
 
