@@ -604,21 +604,25 @@ Just pass all the data using the `rows` prop.
 
 **Required props**:
 
-- **rows:** Should contain all the data.
-    ```JSX
-    export const SyncedTable = () => {
-    
-        const rows = getRows();
-        const columns = getColumns();
+| name | type | description | default value |
+|---|---|---|---|
+| rows* | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
 
-        return (
-            <GridTable
-                columns={columns}
-                rows={rows}
-            />
-        )
-    }
-    ``` 
+```JSX
+export const SyncedTable = () => {
+
+    const rows = getRows();
+    const columns = getColumns();
+
+    return (
+        <GridTable
+            columns={columns}
+            rows={rows}
+        />
+    )
+}
+``` 
+
 2. **Async Uncontrolled:** Use this flow if you need to fetch your data asynchrony, and want `react-grid-table` to manage it internally.  
     All the data is supplied to the table via the `onRowsRequest` prop.  
     Required props:
