@@ -618,12 +618,14 @@ Required props:
     Required props:
     - **onRowsRequest:** Should return a promise that resolves to {rows: *data*, totalRows: *data length*}.
     ```JSX
+    const controller = new AbortController();
+
     export const AsyncUncontrolledTable = () => {
         
         const columns = getColumns();
 
-        const onRowsRequest = (requestData, tableManager) => {
-            return fetch(`app/api/rows`, {
+        const onRowsRequest = async (requestData, tableManager) => {
+            const response = await fetch(`app/api/rows`, {
                 method: 'post',
                 body: {
                     from: requestData.from,
@@ -631,21 +633,20 @@ Required props:
                     searchText: tableManager.searchApi.searchText,
                     sort: tableManager.sortApi.sort,
                 },
-            })
-                .then(response => response.json())
-                .then(response => {
-                    return {
-                        rows: response.items,
-                        totalRows: response.totalItems
-                    };
-                })
-                .catch(console.warn);
+                signal: controller.signal,
+            }).then(response => response.json()).catch(console.warn);
+            
+            return {
+                rows: response.items,
+                totalRows: response.totalItems
+            };
         }
 
         return (
             <GridTable
                 columns={columns}
                 onRowsRequest={onRowsRequest}
+                onRowsReset={controller.abort}
             />
         )
     }
@@ -659,14 +660,16 @@ Required props:
     - **totalRows:** Should contain the current data length.
     - **onTotalRowsChange:** Should be used to set the current data length.
      ```JSX
+    const controller = new AbortController();
+
     export const AsyncControlledTable = () => {
         
         const columns = getColumns();
         let [rows, setRows] = useState();
         let [totalRows, setTotalRows] = useState();
 
-        const onRowsRequest = (requestData, tableManager) => {
-            return fetch(`app/api/rows`, {
+        const onRowsRequest = async (requestData, tableManager) => {
+            const response = await fetch(`app/api/rows`, {
                 method: 'post',
                 body: {
                     from: requestData.from,
@@ -674,15 +677,13 @@ Required props:
                     searchText: tableManager.searchApi.searchText,
                     sort: tableManager.sortApi.sort,
                 },
-            })
-                .then(response => response.json())
-                .then(response => {
-                    return {
-                        rows: response.items,
-                        totalRows: response.totalItems
-                    };
-                })
-                .catch(console.warn);
+                signal: controller.signal,
+            }).then(response => response.json()).catch(console.warn);
+            
+            return {
+                rows: response.items,
+                totalRows: response.totalItems
+            };
         }
 
         return (
@@ -693,6 +694,7 @@ Required props:
                 onRowsChange={setRows}
                 totalRows={totalRows}
                 onTotalRowsChange={setTotalRows}
+                onRowsReset={controller.abort}
             />
         )
     }
