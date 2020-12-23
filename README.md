@@ -147,7 +147,7 @@ export default MyAwesomeTable;
 ### Table of contents
 - [Main components](#main-components)
 - [Props](#props)
-- [Table configuration props](#configuration-props)
+- [Configuration props](#configuration-props)
 - [Event props](#event-props)
 - [Async props](#async-props)
 - [The `columns` prop](#columns)
@@ -204,6 +204,7 @@ export default MyAwesomeTable;
 | showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
 | pageSizes | array of numbers | page size options | [20, 50, 100] |
 | isVirtualScroll | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
+| selectAllMode | string | controls the type of "All Selection". available options are 'page' - to select/unselect only the *current* page's rows, or 'available' to select/unselect all *available* rows | 'page' |
 | icons | object of nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
 | texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
 | components | object | This prop gives you the ability to override the internal components with your own custom components [details](#components) | { } |
@@ -635,6 +636,8 @@ Required props:
                 },
                 signal: controller.signal,
             }).then(response => response.json()).catch(console.warn);
+
+            if(!response?.items) return;
             
             return {
                 rows: response.items,
@@ -679,6 +682,8 @@ Required props:
                 },
                 signal: controller.signal,
             }).then(response => response.json()).catch(console.warn);
+
+            if(!response?.items) return;
             
             return {
                 rows: response.items,
@@ -730,6 +735,8 @@ Required props:
                 },
                 signal: controller.signal,
             }).then(response => response.json()).catch(console.warn);
+
+            if(!response?.items) return;
 
             rowsRef.current = tableManager.asyncApi.mergeRowsAt(rowsRef.current, response.items, requestData.from);
 
