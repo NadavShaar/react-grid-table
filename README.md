@@ -596,10 +596,15 @@ the `icons` configuration as documented under [Table configuration props](#confi
 
 ### Sync/Async
 `react-grid-table` supports 4 different data managing flows:
-1. **Sync:** Use this flow if you have all the data locally.  
+
+#### Sync: 
+
+Use this flow if you have all the data locally.  
 Just pass all the data using the `rows` prop.  
-Required props:
-    - **rows:** Should contain all the data.
+
+**Required props**:
+
+- **rows:** Should contain all the data.
     ```JSX
     export const SyncedTable = () => {
     
