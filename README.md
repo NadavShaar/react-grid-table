@@ -154,7 +154,7 @@ export default MyAwesomeTable;
 - [The `checkbox` column](#checkbox-column)
 - [The `rows` prop](#rows)
 - [The `tableManager` API](#tableManager)
-- [How-To: Async](#sync/async)
+- [How-To: Async](#sync-async)
 - [How-To: Row-Editing](#row-editing)
 - [How-To: Styling](#styling)
 
