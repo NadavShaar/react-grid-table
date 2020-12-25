@@ -8,44 +8,16 @@ export default props => {
 
     let {
         config: {
-            rowIdField,
             additionalProps: {
                 headerSelectionCell: additionalProps = {}
             },
         },
         rowSelectionApi: {
-            getIsRowSelectable,
-            setSelectedRowsIds,
-            selectedRowsIds,
-        },
-        paginationApi: {
-            pageRows,
+            selectAll: selectionProps
         },
     } = tableManager;
 
-    let selectAllRef = useRef(null);
-
-    let selectableItemsIds = pageRows.filter(r => r).filter(getIsRowSelectable).map(item => item[rowIdField]);
-    let selectAllIsDisabled = !selectableItemsIds.length;
-    let selectAllIsChecked = selectableItemsIds.length && selectableItemsIds.every(si => selectedRowsIds.find(id => si === id));
-    let isSelectAllIndeterminate = !!(selectedRowsIds.length && !selectAllIsChecked && selectableItemsIds.some(si => selectedRowsIds.find(id => si === id)));
-
-    useEffect(() => {
-        if (!selectAllRef.current) return;
-
-        selectAllRef.current.indeterminate = isSelectAllIndeterminate;
-    }, [isSelectAllIndeterminate])
-
-    const onChange = () => {
-        let selectedIds = [...selectedRowsIds];
-
-        if (selectAllIsChecked || isSelectAllIndeterminate) selectedIds = selectedIds.filter(si => !selectableItemsIds.find(itemId => si === itemId));
-        else selectableItemsIds.forEach(s => selectedIds.push(s));
-
-        setSelectedRowsIds(selectedIds);
-    }
-
-    let classNames = selectAllIsDisabled ? 'rgt-disabled' : 'rgt-clickable';
+    let classNames = selectionProps.disabled ? 'rgt-disabled' : 'rgt-clickable';
     if (additionalProps.className) classNames += ' ' + additionalProps.className;
 
     return (
@@ -53,10 +25,10 @@ export default props => {
             {...additionalProps}
             className={classNames.trim()}
             type="checkbox"
-            ref={selectAllRef}
-            onChange={onChange}
-            checked={selectAllIsChecked}
-            disabled={selectAllIsDisabled}
+            ref={selectionProps.ref}
+            onChange={selectionProps.onChange}
+            checked={selectionProps.checked}
+            disabled={selectionProps.disabled}
         />
     )
 }

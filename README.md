@@ -147,14 +147,14 @@ export default MyAwesomeTable;
 ### Table of contents
 - [Main components](#main-components)
 - [Props](#props)
-- [Table configuration props](#configuration-props)
+- [Configuration props](#configuration-props)
 - [Event props](#event-props)
 - [Async props](#async-props)
 - [The `columns` prop](#columns)
 - [The `checkbox` column](#checkbox-column)
 - [The `rows` prop](#rows)
 - [The `tableManager` API](#tableManager)
-- [How-To: Async](#sync/async)
+- [How-To: Sync/Async](#syncasync)
 - [How-To: Row-Editing](#row-editing)
 - [How-To: Styling](#styling)
 
@@ -204,6 +204,7 @@ export default MyAwesomeTable;
 | showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
 | pageSizes | array of numbers | page size options | [20, 50, 100] |
 | isVirtualScroll | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
+| selectAllMode | string | controls the type of "All Selection". available options are 'page' - to select/unselect only the *current* page's rows, or 'available' to select/unselect all *available* rows | 'page' |
 | icons | object of nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
 | texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
 | components | object | This prop gives you the ability to override the internal components with your own custom components [details](#components) | { } |
@@ -595,19 +596,127 @@ the `icons` configuration as documented under [Table configuration props](#confi
 
 ### Sync/Async
 `react-grid-table` supports 4 different data managing flows:
-1. **Sync:** all the data is supplied to the table via the `rows` prop. Use it if you have all the data localy.  
-Required props:
-    - **rows:** Should contain all the data.
-2. **Async:** all the data is supplied to the table via the `onRowsRequest` prop. Use it if you need to fetch your data asynchrony. Required props:
+
+#### Sync: 
+
+Use this flow if you have all the data locally.  
+Just pass all the data using the `rows` prop.  
+
+**Required props**:
+
+| name | type | description | default value |
+|---|---|---|---|
+| rows* | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
+
+**Example:**
+
+```JSX
+export const SyncedTable = () => {
+
+    const rows = getRows();
+    const columns = getColumns();
+
+    return (
+        <GridTable
+            columns={columns}
+            rows={rows}
+        />
+    )
+}
+``` 
+
+2. **Async Uncontrolled:** Use this flow if you need to fetch your data asynchrony, and want `react-grid-table` to manage it internally.  
+    All the data is supplied to the table via the `onRowsRequest` prop.  
+    Required props:
     - **onRowsRequest:** Should return a promise that resolves to {rows: *data*, totalRows: *data length*}.
-3. **Async Controlled:** all the data is supplied to the table via the `onRowsRequest` prop, but is controlled by a parent component via `rows`, `onRowsChange`, `totalRows` & `onTotalRowsChange` props. Use it if you need to fetch your data asynchrony, but still use it in other places in the app.  
-Required props:
+    ```JSX
+    const controller = new AbortController();
+
+    export const AsyncUncontrolledTable = () => {
+        
+        const columns = getColumns();
+
+        const onRowsRequest = async (requestData, tableManager) => {
+            const response = await fetch(`app/api/rows`, {
+                method: 'post',
+                body: {
+                    from: requestData.from,
+                    to: requestData.to,
+                    searchText: tableManager.searchApi.searchText,
+                    sort: tableManager.sortApi.sort,
+                },
+                signal: controller.signal,
+            }).then(response => response.json()).catch(console.warn);
+
+            if(!response?.items) return;
+            
+            return {
+                rows: response.items,
+                totalRows: response.totalItems
+            };
+        }
+
+        return (
+            <GridTable
+                columns={columns}
+                onRowsRequest={onRowsRequest}
+                onRowsReset={controller.abort}
+            />
+        )
+    }
+    ``` 
+3. **Async Controlled:** Use this flow if you need to fetch your data asynchrony, and want `react-grid-table` to manage it internally, but still be able to use it in other places in the app.  
+    All the data is supplied to the table via the `onRowsRequest` prop, but is controlled by a parent component via `rows`, `onRowsChange`, `totalRows` & `onTotalRowsChange` props.   
+    Required props:
     - **onRowsRequest:** Should return a promise that resolves to {rows: *data*, totalRows: *data length*}.
     - **rows:** Should contain the current data.
     - **onRowsChange:** Should be used to set the current data.
     - **totalRows:** Should contain the current data length.
     - **onTotalRowsChange:** Should be used to set the current data length.
-4. **Async Managed:** all the data is supplied to the table via the `rows` prop, which should be updated using the `onRowsRequest` prop. Use it if you need to fetch your data asynchrony, but not use the table to manage the data.  
+     ```JSX
+    const controller = new AbortController();
+
+    export const AsyncControlledTable = () => {
+        
+        const columns = getColumns();
+        let [rows, setRows] = useState();
+        let [totalRows, setTotalRows] = useState();
+
+        const onRowsRequest = async (requestData, tableManager) => {
+            const response = await fetch(`app/api/rows`, {
+                method: 'post',
+                body: {
+                    from: requestData.from,
+                    to: requestData.to,
+                    searchText: tableManager.searchApi.searchText,
+                    sort: tableManager.sortApi.sort,
+                },
+                signal: controller.signal,
+            }).then(response => response.json()).catch(console.warn);
+
+            if(!response?.items) return;
+            
+            return {
+                rows: response.items,
+                totalRows: response.totalItems
+            };
+        }
+
+        return (
+            <GridTable
+                columns={columns}
+                onRowsRequest={onRowsRequest}
+                rows={rows}
+                onRowsChange={setRows}
+                totalRows={totalRows}
+                onTotalRowsChange={setTotalRows}
+                onRowsReset={controller.abort}
+            />
+        )
+    }
+    ``` 
+4. **Async Managed:** Use it if you need to fetch your data asynchrony, and manage it yourself (Useful when there are other places that should be able to fetch the same data).  
+    All the data is supplied to the table via the `rows` prop, which should be updated using the `onRowsRequest` prop.   
     **Note**: `react-grid-table` will not necessarily ask for concurrent data, which means that "holes" in the data are possible. These "holes" needs to be filled with null/undefined items in order to ensure proper functionally. To achieve this, you can use:
     ```JSX
     let mergedRows = tableManager.asyncApi.mergeRowsAt(rows, fetchedRows, at)
@@ -617,6 +726,52 @@ Required props:
     - **rows:** Should contain the current data.
     - **totalRows:** Should contain the current data length.
     - **onRowsReset:** Should be used to reset the current data.Will be called when sort or searchText change.
+    ```JSX
+    const controller = new AbortController();
+
+    export const AsyncManagedTable = () => {
+        
+        const columns = getColumns();
+        let rowsRef = useRef([]);
+        let [totalRows, setTotalRows] = useState();
+
+        const onRowsRequest = async (requestData, tableManager) => {
+            const response = await fetch(`app/api/rows`, {
+                method: 'post',
+                body: {
+                    from: requestData.from,
+                    to: requestData.to,
+                    searchText: tableManager.searchApi.searchText,
+                    sort: tableManager.sortApi.sort,
+                },
+                signal: controller.signal,
+            }).then(response => response.json()).catch(console.warn);
+
+            if(!response?.items) return;
+
+            rowsRef.current = tableManager.asyncApi.mergeRowsAt(rowsRef.current, response.items, requestData.from);
+
+            setTotalRows(response.totalItems);
+        }
+
+        const onRowsReset = () => {
+            rowsRef.current = [];
+            setTotalRows();
+            controller.abort();
+        }
+
+        return (
+            <GridTable
+                columns={columns}
+                rows={rowsRef.current}
+                onRowsRequest={onRowsRequest}
+                onRowsReset={onRowsReset}
+                totalRows={totalRows}
+                requestDebounceTimeout={500}
+            />
+        )
+    }
+    ``` 
 
 
 

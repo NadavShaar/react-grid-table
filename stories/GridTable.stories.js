@@ -146,13 +146,8 @@ export default {
 };
 export const Synced = () => {
     
-    // const [editRowId, setEditRowId] = useState(null);
     const [rowsData, setRowsData] = useState([]);
     const [isLoading, setLoading] = useState(false);
-    const [tableManager, setTableManager] = useState(null);
-    let [searchText, setSearchText] = useState('');
-    let [selectedRowsIds, setSelectedRowsIds] = useState([]);
-    let [sort, setSort] = useState({ colId: 4, isAsc: true });
     let [columns, setColumns] = useState(baseColumns.map(c => c.id === 9 ? {
         ...c, editorCellRenderer: props => c.editorCellRenderer({
             ...props, onRowEditSave: editedRow => {
@@ -177,20 +172,10 @@ export const Synced = () => {
             columns={columns}
             rows={rowsData}
             isLoading={isLoading}
-            // editRowId={editRowId}
-            // onEditRowIdChange={setEditRowId}
-            // selectedRowsIds={boolean('Controlled Selection', false) ? array('Selection', selectedRowsIds) : undefined}
-            // onSelectedRowsChange={setSelectedRowsIds}
             style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
-            // onLoad={setTableManager}
-            // searchText={boolean('Controlled Search', false) ? text('Search Text', searchText) : undefined}
-            // onSearchTextChange={setSearchText}
             showRowsInformation={boolean('Show Rows Information', true)}
-            // sort={boolean('Controlled Sort', false) ? object('Sort', sort) : undefined}
-            // onSortChange={setSort}
             isVirtualScroll={boolean(' Use Virtual Scrolling', true)}
             isPaginated={boolean('Use Pagination', true)}
-            // additionalProps={{ rowVirtualizer: { overscan: number('Overscan', 3) }}}
         />
     )
 }
@@ -318,8 +303,8 @@ export const AsyncedManaged = () => {
     let [sort, setSort] = useState({});
     let rowsRef = useRef(rowsData);
 
-    const onRowsRequest = (requestData, tableManager) => {
-        fetch('https://react-grid-table/api/users', {
+    const onRowsRequest = async (requestData, tableManager) => {
+        let response = await fetch('https://react-grid-table/api/users', {
             method: 'get',
             signal: controller.signal,
         })
@@ -342,19 +327,18 @@ export const AsyncedManaged = () => {
                     totalRows: allRows.length
                 };
             })
-            .then(({ rows, totalRows }) => {
-                let {
-                    asyncApi: {
-                        mergeRowsAt
-                    },
-                } = tableManager;
-
-                rowsRef.current = mergeRowsAt(rowsRef.current, rows, requestData.from);
-
-                setRowsData(rowsRef.current);
-                setTotalRows(totalRows);
-            })
             .catch(console.warn);
+        
+        let {
+            asyncApi: {
+                mergeRowsAt
+            },
+        } = tableManager;
+
+        rowsRef.current = mergeRowsAt(rowsRef.current, response.rows, requestData.from);
+
+        setRowsData(rowsRef.current);
+        setTotalRows(response.totalRows);
     }
     const onRowsReset = () => {
         rowsRef.current = [];

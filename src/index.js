@@ -1,4 +1,3 @@
-// TODO: write async section in documentation
 import React from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
 import { Row, HeaderCellContainer } from './components/';
@@ -124,7 +123,8 @@ GridTable.defaultProps = {
     requestDebounceTimeout: 300,
     batchSize: 100,
     getIsRowSelectable: row => true,
-    getIsRowEditable: row => true
+    getIsRowEditable: row => true,
+    selectAllMode: 'page' // ['page', 'available']
 };
 
 GridTable.propTypes = {
@@ -160,6 +160,7 @@ GridTable.propTypes = {
     components: PropTypes.object,
     totalRows: PropTypes.number,
     requestDebounceTimeout: PropTypes.number,
+    selectAllMode: PropTypes.string,
     // events
     onColumnsChange: PropTypes.func,
     onSearchTextChange: PropTypes.func,
