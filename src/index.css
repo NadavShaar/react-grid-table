@@ -30,7 +30,7 @@
 
 .rgt-disabled-button {
   background: var(--rgt-color2) !important;
-  cursor: not-allowed !important;    
+  cursor: not-allowed !important;
 }
 
 .rgt-flex-child {
@@ -53,6 +53,7 @@
   position: relative;
   width: 100%;
   height: 100%;
+  min-height: 400px;
 }
 
 .rgt-container {
@@ -80,9 +81,9 @@
 .rgt-cell-header {
   display: flex;
   -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   width: 100%;
   z-index: 1;
   min-height: 48px;
@@ -108,12 +109,47 @@
 
 .rgt-cell-header-inner-not-pinned-right {
   border-right: var(--rgt-border);
-  margin-right: 1px; 
+  margin-right: 1px;
 }
 
 .rgt-cell-header-inner-checkbox {
   padding: 0px;
   justify-content: center;
+}
+
+.rgt-placeholder-cell {
+  position: relative;
+  border-radius: 4px;
+  height: 20px;
+  width: 100%;
+  display: inline-block;
+  margin: 0 20px;
+  overflow: hidden;
+  background-color: #dddbdd;
+}
+
+.rgt-placeholder-cell::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 .rgt-resize-handle {
@@ -199,7 +235,7 @@
   margin: 0px 10px 0 20px;
 }
 
-.rgt-footer-pagination-button { 
+.rgt-footer-pagination-button {
   background: var(--rgt-button-color);
   color: var(--rgt-color1);
   margin-left: 10px;
@@ -225,14 +261,14 @@
 }
 
 .rgt-sort-icon {
-  font-size: 16px; 
+  font-size: 16px;
   margin-left: 5px;
   display: inline-flex;
 }
 
 .rgt-container-overlay {
   position: absolute;
-  top: 0;
+  top: 48px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -282,17 +318,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background .2s ease;
+  transition: background 0.2s ease;
 }
 
-.rgt-columns-manager-button:hover, .rgt-columns-manager-button-active {
+.rgt-columns-manager-button:hover,
+.rgt-columns-manager-button-active {
   background: var(--rgt-color5);
 }
 
 .rgt-columns-manager-popover {
   display: inline-flex;
   flex-direction: column;
-  transition: transform .1s ease-out;
+  transition: transform 0.1s ease-out;
   transform-origin: top right;
   transform: scale(0);
   padding: 10px 0px;
@@ -380,7 +417,7 @@
   width: 100%;
   line-height: 30px;
   margin-right: 10px;
-  flex: 1; 
+  flex: 1;
   border: none;
   outline: none;
   font-size: 16px;

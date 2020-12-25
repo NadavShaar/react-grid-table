@@ -86,10 +86,8 @@ export default (props) => {
     useEffect(() => {
         if (!tableManager.isInitialized) return;
 
-        if (tableManager.mode !== 'sync') {
-            tableManager.asyncApi.resetRows();
-            tableManager.rowSelectionApi.setSelectedRowsIds([]);
-        }
+        tableManager.rowSelectionApi.setSelectedRowsIds([]);
+        if (tableManager.mode !== 'sync') tableManager.asyncApi.resetRows();
     }, [tableManager.searchApi.searchText, tableManager.sortApi.sort])
 
     // reset edit row
