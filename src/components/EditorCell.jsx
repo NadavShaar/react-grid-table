@@ -1,36 +1,20 @@
 import React from 'react';
 
-export default props => {
-    let {
-        value,
-        column,
-        data,
-        colIndex,
-        onChange,
-        tableManager: {
-            config: {
-                additionalProps: {
-                    editorCell: additionalProps = {}
-                },
-            },
-            columnsApi: {
-                visibleColumns
-            },
-            rowEditApi: {
-                setEditRow,
-            },
-        }
-    } = props;
+const EditorCell = ({ value, column, data, colIndex, onChange, tableManager }) => {
+    const {
+        config: { additionalProps: { editorCell: additionalProps = {} }, },
+        columnsApi: { visibleColumns },
+    } = tableManager;
 
-    let classNames = 'rgt-cell-inner rgt-cell-editor';
-    if (additionalProps.className) classNames += ' ' + additionalProps.className;
+    const classNames = 'rgt-cell-inner rgt-cell-editor ' + (additionalProps.className || '').trim();
+    const firstEditableCell = visibleColumns.findIndex(c => c.id !== 'checkbox' && c.editable !== false) === colIndex;
 
     return (
-        <div {...additionalProps} className={classNames.trim()}>
+        <div {...additionalProps} className={classNames}>
             <div className='rgt-cell-editor-inner'>
                 <input
                     tabIndex={0}
-                    autoFocus={visibleColumns.findIndex(c => c.id !== 'checkbox' && c.editable !== false) === colIndex}
+                    autoFocus={firstEditableCell}
                     className='rgt-cell-editor-input'
                     type="text"
                     value={value}
@@ -39,4 +23,6 @@ export default props => {
             </div>
         </div>
     )
-}
+};
+
+export default EditorCell;

@@ -1,14 +1,11 @@
 import React from 'react';
 
-export default props => {
-
-    let {
-        page, 
-        onChange,
-        tableManager
-    } = props;
-
-    let {
+const Pagination = ({
+    page, 
+    onChange,
+    tableManager
+}) => {
+    const {
         config: {
             texts: {
                 prev: prevText,
@@ -16,20 +13,15 @@ export default props => {
                 next: nextText,
                 of: ofText
             },
-            additionalProps: {
-                pagination: additionalProps = {}
-            },
+            additionalProps: { pagination: additionalProps = {} },
         },
-        paginationApi: {
-            totalPages
-        },
+        paginationApi: { totalPages },
     } = tableManager;
 
     let backButtonDisabled = page-1 < 1;
     let nextButtonDisabled = page+1 > totalPages;
 
-    let classNames = 'rgt-footer-pagination';
-    if (additionalProps.className) classNames += ' ' + additionalProps.className;
+    let classNames = 'rgt-footer-pagination ' + (additionalProps.className || '').trim();
 
     return (
         <div {...additionalProps} className={classNames.trim()}>
@@ -58,4 +50,6 @@ export default props => {
             >{nextText}</button>
         </div>
     )
-}
+};
+
+export default Pagination;

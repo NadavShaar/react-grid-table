@@ -1,21 +1,13 @@
 import React from 'react';
 
-export default props => {
-
-    let {
-        tableManager
-    } = props;
-
-    let {
-        config: {
-            additionalProps: {
-                placeHolderCell: additionalProps = {}
-            },
-        },
+const PlaceHolderCell = ({ tableManager }) => {
+    const {
+        config: { additionalProps: { placeHolderCell: additionalProps = {} } },
     } = tableManager;
 
-    let classNames = 'rgt-placeholder-cell';
-    if (additionalProps.className) classNames += ' ' + additionalProps.className;
+    let classNames = 'rgt-placeholder-cell ' + (additionalProps.className || '').trim();
     
     return <span {...additionalProps} className={classNames.trim()}></span>
-}
+};
+
+export default PlaceHolderCell;

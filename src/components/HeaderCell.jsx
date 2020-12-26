@@ -1,25 +1,18 @@
 import React from 'react';
 
-export default props => {
-    let {
-        column,
-        tableManager
-    } = props;
+const HeaderCell = ({ column, tableManager }) => {
+    const { config: { additionalProps: { headerCell: additionalProps = {} } } } = tableManager;
 
-    let {
-        config: {
-            additionalProps: {
-                headerCell: additionalProps = {}
-            },
-        }
-    } = tableManager;
-
-    let classNames = 'rgt-text-truncate';
-    if (additionalProps.className) classNames += ' ' + additionalProps.className;
+    let classNames = 'rgt-text-truncate ' + (additionalProps.className || '').trim();
 
     return (
-        <span {...additionalProps} className={classNames.trim()} data-column-id={column.id.toString()}>
-            {column.label}
+        <span 
+            {...additionalProps} 
+            className={classNames} 
+            data-column-id={column.id.toString()}
+        >{column.label}
         </span>
     )
-}
+};
+
+export default HeaderCell;
