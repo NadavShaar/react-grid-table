@@ -10,12 +10,12 @@ const SelectionCell = ({
         config: { additionalProps: { selectionCell: additionalProps = {} } }
     } = tableManager;
 
-    let classNames =`${disabled ? 'rgt-disabled' : 'rgt-clickable'} ${additionalProps.className || ''}`.trim();
+    let classNames = (`${disabled ? 'rgt-disabled' : 'rgt-clickable'} ${additionalProps.className || ''}`).trim();
 
     return (
         <input
             {...additionalProps}
-            className={classNames.trim()}
+            className={classNames}
             type="checkbox"
             onChange={onChange}
             onClick={e => e.stopPropagation()}

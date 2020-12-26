@@ -3,7 +3,7 @@ import React from 'react';
 const HeaderCell = ({ column, tableManager }) => {
     const { config: { additionalProps: { headerCell: additionalProps = {} } } } = tableManager;
 
-    let classNames = 'rgt-text-truncate ' + (additionalProps.className || '').trim();
+    let classNames = ('rgt-text-truncate ' + (additionalProps.className || '')).trim();
 
     return (
         <span 

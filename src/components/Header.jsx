@@ -12,7 +12,7 @@ const Header = ({ tableManager }) => {
         searchApi: { showSearch, setSearchText, searchText },
     } = tableManager;
 
-    const classNames = 'rgt-header-container ' + (additionalProps.className || '').trim();
+    const classNames = ('rgt-header-container ' + (additionalProps.className || '')).trim();
 
     return (
         <div {...additionalProps} className={classNames}>

@@ -11,10 +11,10 @@ const PopoverButton =  ({
 
     const { ref, isComponentVisible, setIsComponentVisible } = useDetectClickOutside(false);
 
-    let classNames = 'rgt-columns-manager-wrapper ' + (className || '').trim();
+    let classNames = ('rgt-columns-manager-wrapper ' + (className || '')).trim();
 
     return (
-        <div {...rest} ref={ref} className={classNames.trim()}>
+        <div {...rest} ref={ref} className={classNames}>
             <button 
                 className={`rgt-columns-manager-button${isComponentVisible ? ' rgt-columns-manager-button-active' : ''}`} 
                 onClick={e => setIsComponentVisible(!isComponentVisible)}

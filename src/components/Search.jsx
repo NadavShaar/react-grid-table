@@ -9,10 +9,10 @@ const Search = ({ value, onChange, tableManager }) => {
         }
     } = tableManager;
 
-    let classNames = 'rgt-search-container ' + (additionalProps.className || '').trim();
+    let classNames = ('rgt-search-container ' + (additionalProps.className || '')).trim();
 
     return (
-        <div {...additionalProps} className={classNames.trim()}>
+        <div {...additionalProps} className={classNames}>
             <label htmlFor="rgt-search" className='rgt-search-label'>
                 <span className='rgt-search-icon'>{searchIcon}</span>
                 {searchText}

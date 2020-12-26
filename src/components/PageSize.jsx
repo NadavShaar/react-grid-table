@@ -13,10 +13,10 @@ const PageSize = ({
         }
     } = tableManager;
 
-    let classNames = 'rgt-footer-page-size ' + (additionalProps.className || '').trim();
+    let classNames = ('rgt-footer-page-size ' + (additionalProps.className || '')).trim();
 
     return (
-        <div {...additionalProps} className={classNames.trim()}>
+        <div {...additionalProps} className={classNames}>
             <span>{rowsPerPageText} </span>
             <select 
                 className='rgt-footer-page-size-select'

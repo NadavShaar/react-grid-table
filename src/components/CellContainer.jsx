@@ -39,7 +39,7 @@ const CellContainer = ({
             default: classNames = `rgt-cell rgt-cell-${column.field} rgt-row-${rowIndex} rgt-row-${rowIndex % 2 === 0 ? 'even' : 'odd'}${!tableHasSelection ? '' : disableSelection ? ' rgt-row-not-selectable' : ' rgt-row-selectable'}${column.pinned && colIndex === 0 ? ' rgt-cell-pinned rgt-cell-pinned-left' : ''}${column.pinned && colIndex === visibleColumns.length - 1 ? ' rgt-cell-pinned rgt-cell-pinned-right' : ''}${isSelected ? ' rgt-row-selected' : ''}  ${column.className}`;
         }
 
-        return classNames.trim() + ' ' + (additionalProps.className || '').trim();
+        return (classNames.trim() + ' ' + (additionalProps.className || '')).trim();
     }
 
     const getValue = () => {
