@@ -21,6 +21,7 @@ const HeaderCellContainer = ({ index, column, style, tableManager }) => {
         columnsApi: { visibleColumns },
         config: { enableColumnsReorder },
         columnsResizeApi: { useResizeRef },
+        rowSelectionApi: { selectAll: selectionProps },
     } = tableManager;
     
     let resizeHandleRef = useResizeRef(column);
@@ -64,6 +65,8 @@ const HeaderCellContainer = ({ index, column, style, tableManager }) => {
     let innerCellClassNames = `rgt-cell-header-inner${column.id === 'checkbox' ? ' rgt-cell-header-inner-checkbox' : ''}${!isPinnedRight ? ' rgt-cell-header-inner-not-pinned-right' : '' }`;
     additionalProps = getAdditionalProps();
 
+    let headerCellProps = { tableManager, column };
+
     return (
         <div 
             data-column-id={(column.id).toString()}
@@ -88,7 +91,12 @@ const HeaderCellContainer = ({ index, column, style, tableManager }) => {
                                     :
                                     null
                             }
-                            { column.headerCellRenderer({ tableManager, column }) }
+                            {
+                                column.id === 'checkbox' ?
+                                    column.headerCellRenderer({ ...headerCellProps, ...selectionProps })
+                                    : 
+                                    column.headerCellRenderer(headerCellProps)
+                            }
                             {
                                 (sort.colId !== column.id) || (sort.isAsc === null) ? 
                                     null
