@@ -1,28 +1,21 @@
 import React from 'react';
 
-export default props => {
-    let {
-        value,
-        disabled,
-        onChange,
-        tableManager
-    } = props;
-
-    let {
-        config: {
-            additionalProps: {
-                selectionCell: additionalProps = {}
-            },
-        }
+const SelectionCell = ({
+    value,
+    disabled,
+    onChange,
+    tableManager
+}) => {
+    const {
+        config: { additionalProps: { selectionCell: additionalProps = {} } }
     } = tableManager;
 
-    let classNames = disabled ? 'rgt-disabled' : 'rgt-clickable';
-    if (additionalProps.className) classNames += ' ' + additionalProps.className;
+    let classNames = (`${disabled ? 'rgt-disabled' : 'rgt-clickable'} ${additionalProps.className || ''}`).trim();
 
     return (
         <input
             {...additionalProps}
-            className={classNames.trim()}
+            className={classNames}
             type="checkbox"
             onChange={onChange}
             onClick={e => e.stopPropagation()}
@@ -30,4 +23,6 @@ export default props => {
             disabled={disabled}
         />
     )
-}
+};
+
+export default SelectionCell;

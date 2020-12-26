@@ -72,11 +72,11 @@ const baseColumns = [
         id: 6,
         field: 'gender',
         label: 'Gender',
-        editorCellRenderer: ({ tableManager, value, field, onChange, data, column, rowIndex }) => (
+        editorCellRenderer: ({ tableManager, value, onChange, data, column, rowIndex }) => (
             <select
                 style={styles.select}
                 value={value}
-                onChange={e => onChange({ ...data, [field]: e.target.value })}
+                onChange={e => onChange({ ...data, [column.field]: e.target.value })}
             >
                 <option>Male</option>
                 <option>Female</option>
@@ -151,7 +151,7 @@ export const Synced = () => {
     let [columns, setColumns] = useState(baseColumns.map(c => c.id === 9 ? {
         ...c, editorCellRenderer: props => c.editorCellRenderer({
             ...props, onRowEditSave: editedRow => {
-                let rowsClone = [...rowsData];
+                let rowsClone = [...props.tableManager.rowsApi.rows];
                 let updatedRowIndex = rowsClone.findIndex(r => r.id === editedRow.id);
                 rowsClone[updatedRowIndex] = editedRow;
                 setRowsData(rowsClone);
@@ -176,6 +176,8 @@ export const Synced = () => {
             showRowsInformation={boolean('Show Rows Information', true)}
             isVirtualScroll={boolean(' Use Virtual Scrolling', true)}
             isPaginated={boolean('Use Pagination', true)}
+            additionalProps={{ headerSelectionCell: { className: 'nadav' } }}
+            onRowClick={e => console.log('clicked')}
         />
     )
 }

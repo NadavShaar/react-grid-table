@@ -1,34 +1,23 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 
-export default props => {
-    let {
-        column,
-        tableManager
-    } = props;
-
-    let {
-        config: {
-            additionalProps: {
-                headerSelectionCell: additionalProps = {}
-            },
-        },
-        rowSelectionApi: {
-            selectAll: selectionProps
-        },
+const HeaderSelectionCell = ({ column, ref, onChange, checked, disabled, tableManager }) => {
+    const {
+        config: { additionalProps: { headerSelectionCell: additionalProps = {} } },
     } = tableManager;
 
-    let classNames = selectionProps.disabled ? 'rgt-disabled' : 'rgt-clickable';
-    if (additionalProps.className) classNames += ' ' + additionalProps.className;
+    let classNames = (disabled ? 'rgt-disabled' : 'rgt-clickable' + ' ' + additionalProps.className || '').trim();
 
     return (
         <input
             {...additionalProps}
-            className={classNames.trim()}
+            className={classNames}
             type="checkbox"
-            ref={selectionProps.ref}
-            onChange={selectionProps.onChange}
-            checked={selectionProps.checked}
-            disabled={selectionProps.disabled}
+            ref={ref}
+            onChange={onChange}
+            checked={checked}
+            disabled={disabled}
         />
     )
-}
+};
+
+export default HeaderSelectionCell;

@@ -1,30 +1,22 @@
 import React from 'react';
 
-export default props => {
-
-    let { 
-        value,
-        onChange,
-        options,
-        tableManager
-    } = props;
-
-    let {
+const PageSize = ({
+    value,
+    onChange,
+    options,
+    tableManager
+}) => {
+    const {
         config: {
-            texts: {
-                rowsPerPage: rowsPerPageText
-            },
-            additionalProps: {
-                pageSize: additionalProps = {}
-            },
+            texts: { rowsPerPage: rowsPerPageText },
+            additionalProps: { pageSize: additionalProps = {} },
         }
     } = tableManager;
 
-    let classNames = 'rgt-footer-page-size';
-    if (additionalProps.className) classNames += ' ' + additionalProps.className;
+    let classNames = ('rgt-footer-page-size ' + (additionalProps.className || '')).trim();
 
     return (
-        <div {...additionalProps} className={classNames.trim()}>
+        <div {...additionalProps} className={classNames}>
             <span>{rowsPerPageText} </span>
             <select 
                 className='rgt-footer-page-size-select'
@@ -35,4 +27,6 @@ export default props => {
             </select>
         </div>
     )
-}
+};
+
+export default PageSize;
