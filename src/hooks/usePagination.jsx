@@ -21,9 +21,9 @@ export default (props, tableManager) => {
     paginationApi.totalPages = Math.ceil(totalRows / paginationApi.pageSize);
     paginationApi.pageRows = rows;
 
-    if (isPaginated && mode !== 'sync' ) {
+    if (isPaginated) {
         paginationApi.pageRows = rows.slice((paginationApi.pageSize * paginationApi.page - paginationApi.pageSize), (paginationApi.pageSize * paginationApi.page));
-        if (paginationApi.pageRows.length < paginationApi.pageSize) {
+        if ((mode !== 'sync') && (paginationApi.pageRows.length < paginationApi.pageSize)) {
             let totalMissingRows = paginationApi.pageSize - paginationApi.pageRows.length;
             if (paginationApi.page === Math.max(paginationApi.totalPages, 1)) totalMissingRows = totalRows % paginationApi.pageSize - paginationApi.pageRows.length;
             for (let i = 0; i < totalMissingRows; i++) {
