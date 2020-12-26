@@ -1,76 +1,74 @@
 import React from 'react';
 import { SortableElement, SortableHandle } from 'react-sortable-hoc';
 
-const SortableItem = SortableElement(({children, index, columnId, className}) => <div className={className} data-column-id={columnId} key={index}>{children}</div>);
-const SortableDragHandle = SortableHandle(({children, index}) => <React.Fragment>{children}</React.Fragment>);
+const SortableItem = SortableElement(({children, index, columnId, className}) => (
+    <div className={className} data-column-id={columnId} key={index}>{children}</div>
+));
 
-export default (props) => {
+const SortableDragHandle = SortableHandle(({children, index}) => (
+    <React.Fragment>{children}</React.Fragment>
+));
 
-    let {
-        index, 
-        column,
-        tableManager,
-        style
-    } = props;
-
+const HeaderCellContainer = ({ index, column, style, tableManager }) => {
     let {
         config: {
             isHeaderSticky,
-            components: {
-                DragHandle
-            },
-            additionalProps: {
-                headerCellContainer: additionalProps = {}
-            },
-            icons: {
-                sortAscending: sortAscendingIcon,
-                sortDescending: sortDescendingIcon,
-            },
+            components: { DragHandle },
+            additionalProps: { headerCellContainer: additionalProps = {} },
+            icons: { sortAscending: sortAscendingIcon, sortDescending: sortDescendingIcon },
         },
-        sortApi: {
-            sort,
-            toggleSort,
-        },
-        columnsApi: {
-            visibleColumns,
-        },
-        config: {
-            enableColumnsReorder,
-        },
-        columnsResizeApi: {
-            useResizeRef
-        },
+        sortApi: { sort, toggleSort },
+        columnsApi: { visibleColumns },
+        config: { enableColumnsReorder },
+        columnsResizeApi: { useResizeRef },
     } = tableManager;
     
     let resizeHandleRef = useResizeRef(column);
 
+    const getClassNames = () => {
+        let classNames;
+
+        switch (column.id) {
+            case 'virtual': classNames = `rgt-cell-header rgt-cell-header-virtual-col${isHeaderSticky ? ' rgt-cell-header-sticky' : ''}`.trim();
+                break;
+            default: classNames = `rgt-cell-header rgt-cell-header-${column.id === 'checkbox' ? 'checkbox' : column.field}${(column.sortable !== false && column.id !== 'checkbox' && column.id !== 'virtual') ? ' rgt-clickable' : ''}${column.sortable !== false && column.id !== 'checkbox' ? ' rgt-cell-header-sortable' : ' rgt-cell-header-not-sortable'}${isHeaderSticky ? ' rgt-cell-header-sticky' : ''}${column.resizable !== false ? ' rgt-cell-header-resizable' : ' rgt-cell-header-not-resizable'}${column.searchable !== false && column.id !== 'checkbox' ? ' rgt-cell-header-searchable' : ' rgt-cell-header-not-searchable'}${isPinnedLeft ? ' rgt-cell-header-pinned rgt-cell-header-pinned-left' : ''}${isPinnedRight ? ' rgt-cell-header-pinned rgt-cell-header-pinned-right' : ''} ${column.className}`.trim();
+        }
+
+        return classNames.trim() + ' ' + (additionalProps.className || '').trim();
+    }
+
+    const getAdditionalProps = () => {
+        let mergedProps = {
+            ...additionalProps,
+            style: {
+                ...style,
+                ...additionalProps.style,
+                minWidth: column.minWidth,
+                maxWidth: column.maxWidth
+            }
+        }
+        if (column.sortable) {
+            let onClick = additionalProps.onClick;
+            mergedProps.onClick = e => {
+                toggleSort(column.id);
+                onClick?.(e);
+            }
+        }
+
+        return mergedProps;
+    }
+
     let isPinnedRight = column.pinned && index === visibleColumns.length - 1;
     let isPinnedLeft = column.pinned && index === 0;
-    let classNames = column.id === 'virtual' ? `rgt-cell-header rgt-cell-header-virtual-col${isHeaderSticky ? ' rgt-cell-header-sticky' : ''}`.trim() : `rgt-cell-header rgt-cell-header-${column.id === 'checkbox' ? 'checkbox' : column.field}${(column.sortable !== false && column.id !== 'checkbox' && column.id !== 'virtual') ? ' rgt-clickable' : ''}${column.sortable !== false && column.id !== 'checkbox' ? ' rgt-cell-header-sortable' : ' rgt-cell-header-not-sortable'}${isHeaderSticky ? ' rgt-cell-header-sticky' : ''}${column.resizable !== false ? ' rgt-cell-header-resizable' : ' rgt-cell-header-not-resizable'}${column.searchable !== false && column.id !== 'checkbox' ? ' rgt-cell-header-searchable' : ' rgt-cell-header-not-searchable'}${isPinnedLeft ? ' rgt-cell-header-pinned rgt-cell-header-pinned-left' : ''}${isPinnedRight ? ' rgt-cell-header-pinned rgt-cell-header-pinned-right' : ''} ${column.className}`.trim() 
-    if (additionalProps.className) classNames += ' ' + additionalProps.className;
-
-    additionalProps = {
-        ...additionalProps,
-        style: {
-            ...style,
-            ...additionalProps.style,
-            minWidth: column.minWidth,
-            maxWidth: column.maxWidth
-        }
-    }
-    if (column.sortable) {
-        let onClick = additionalProps.onClick;
-        additionalProps.onClick = e => {
-            toggleSort(column.id);
-            onClick?.(e);
-        }
-    }
+    let classNames = getClassNames(); 
+    let innerCellClassNames = `rgt-cell-header-inner${column.id === 'checkbox' ? ' rgt-cell-header-inner-checkbox' : ''}${!isPinnedRight ? ' rgt-cell-header-inner-not-pinned-right' : '' }`;
+    additionalProps = getAdditionalProps();
 
     return (
         <div 
             data-column-id={(column.id).toString()}
             {...additionalProps}
-            className={classNames.trim()}
+            className={classNames}
         >
             {
                 (column.id === 'virtual') ?
@@ -78,7 +76,7 @@ export default (props) => {
                     :
                     <React.Fragment>
                         <SortableItem 
-                            className={`rgt-cell-header-inner${column.id === 'checkbox' ? ' rgt-cell-header-inner-checkbox' : ''}${!isPinnedRight ? ' rgt-cell-header-inner-not-pinned-right' : '' }`}
+                            className={innerCellClassNames}
                             index={index} 
                             disabled={!enableColumnsReorder || isPinnedLeft || isPinnedRight}
                             columnId={column.id.toString()}
@@ -116,3 +114,5 @@ export default (props) => {
         </div>
     )
 }
+
+export default HeaderCellContainer;

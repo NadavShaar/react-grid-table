@@ -1,12 +1,7 @@
 import React from 'react';
 
-export default (props) => {
-
-    let { 
-        tableManager
-    } = props;
-
-    let {
+const Footer = ({ tableManager }) => {
+    const {
         config: {
             isPaginated,
             showRowsInformation,
@@ -20,12 +15,8 @@ export default (props) => {
                 footer: additionalProps = {}
             },
         },
-        rowsApi: {
-            totalRows,
-        },
-        rowSelectionApi: {
-            selectedRowsIds,
-        },
+        rowsApi: { totalRows },
+        rowSelectionApi: { selectedRowsIds },
         paginationApi: {
             page,
             pageSize,
@@ -35,8 +26,7 @@ export default (props) => {
         },
     } = tableManager;
 
-    let classNames = 'rgt-footer';
-    if (additionalProps.className) classNames += ' ' + additionalProps.className;
+    const classNames = 'rgt-footer ' + (additionalProps.className || '').trim();
 
     return (
         <div {...additionalProps} className={classNames.trim()}>
@@ -74,4 +64,6 @@ export default (props) => {
             }
         </div>
     )
-}
+};
+
+export default Footer;

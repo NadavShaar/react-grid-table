@@ -1,40 +1,21 @@
 import React from 'react';
 
-export default (props) => {
-
-    let {
-        tableManager
-    } = props;
-
-    let { 
+const Header = ({ tableManager }) => {
+    const { 
         config: {
             showColumnVisibilityManager,
-            components: {
-                ColumnVisibility,
-                Search,
-            },
-            additionalProps: {
-                header: additionalProps = {}
-            },
+            components: { ColumnVisibility, Search },
+            additionalProps: { header: additionalProps = {} },
         },
-        columnsApi: {
-            columns,
-        },
-        columnsVisibilityApi: {
-            toggleColumnVisibility,
-        },
-        searchApi: {
-            showSearch,
-            setSearchText,
-            searchText,
-        },
+        columnsApi: { columns },
+        columnsVisibilityApi: { toggleColumnVisibility },
+        searchApi: { showSearch, setSearchText, searchText },
     } = tableManager;
 
-    let classNames = 'rgt-header-container';
-    if (additionalProps.className) classNames += ' ' + additionalProps.className;
+    const classNames = 'rgt-header-container ' + (additionalProps.className || '').trim();
 
     return (
-        <div {...additionalProps} className={classNames.trim()}>
+        <div {...additionalProps} className={classNames}>
             {
                 showSearch !== false ?
                     <Search value={searchText} onChange={setSearchText} tableManager={tableManager}/>
@@ -49,4 +30,6 @@ export default (props) => {
             }
         </div>
     )
-}
+};
+
+export default Header;

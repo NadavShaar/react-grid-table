@@ -1,24 +1,12 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 
-export default props => {
-    let {
-        column,
-        tableManager
-    } = props;
-
-    let {
-        config: {
-            additionalProps: {
-                headerSelectionCell: additionalProps = {}
-            },
-        },
-        rowSelectionApi: {
-            selectAll: selectionProps
-        },
+const HeaderSelectionCell = ({ columns, tableManager }) => {
+    const {
+        config: { additionalProps: { headerSelectionCell: additionalProps = {} } },
+        rowSelectionApi: { selectAll: selectionProps },
     } = tableManager;
 
-    let classNames = selectionProps.disabled ? 'rgt-disabled' : 'rgt-clickable';
-    if (additionalProps.className) classNames += ' ' + additionalProps.className;
+    let classNames = selectionProps.disabled ? 'rgt-disabled' : 'rgt-clickable' + ' ' + (additionalProps.className || '').trim();
 
     return (
         <input
@@ -31,4 +19,6 @@ export default props => {
             disabled={selectionProps.disabled}
         />
     )
-}
+};
+
+export default HeaderSelectionCell;

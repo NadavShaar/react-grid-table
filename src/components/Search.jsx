@@ -1,29 +1,15 @@
 import React from 'react';
 
-export default props => {
-
-    let {
-        value,
-        onChange,
-        tableManager,
-    } = props;
-
-    let {
+const Search = ({ value, onChange, tableManager }) => {
+    const {
         config: {
-            texts: {
-                search: searchText
-            },
-            icons: {
-                search: searchIcon
-            },
-            additionalProps: {
-                search: additionalProps = {}
-            },
+            texts: { search: searchText },
+            icons: { search: searchIcon },
+            additionalProps: { search: additionalProps = {} },
         }
     } = tableManager;
 
-    let classNames = 'rgt-search-container';
-    if (additionalProps.className) classNames += ' ' + additionalProps.className;
+    let classNames = 'rgt-search-container ' + (additionalProps.className || '').trim();
 
     return (
         <div {...additionalProps} className={classNames.trim()}>
@@ -40,4 +26,6 @@ export default props => {
             />
         </div>
     )
-}
+};
+
+export default Search;
