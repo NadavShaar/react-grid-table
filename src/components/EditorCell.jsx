@@ -6,7 +6,7 @@ const EditorCell = ({ value, column, data, colIndex, onChange, tableManager }) =
         columnsApi: { visibleColumns },
     } = tableManager;
 
-    const classNames = 'rgt-cell-inner rgt-cell-editor ' + (additionalProps.className || '').trim();
+    const classNames = ('rgt-cell-inner rgt-cell-editor ' + (additionalProps.className || '')).trim();
     const firstEditableCell = visibleColumns.findIndex(c => c.id !== 'checkbox' && c.editable !== false) === colIndex;
 
     return (

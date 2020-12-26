@@ -5,9 +5,9 @@ const PlaceHolderCell = ({ tableManager }) => {
         config: { additionalProps: { placeHolderCell: additionalProps = {} } },
     } = tableManager;
 
-    let classNames = 'rgt-placeholder-cell ' + (additionalProps.className || '').trim();
+    let classNames = ('rgt-placeholder-cell ' + (additionalProps.className || '')).trim();
     
-    return <span {...additionalProps} className={classNames.trim()}></span>
+    return <span {...additionalProps} className={classNames}></span>
 };
 
 export default PlaceHolderCell;

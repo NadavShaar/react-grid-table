@@ -21,10 +21,10 @@ const Pagination = ({
     let backButtonDisabled = page-1 < 1;
     let nextButtonDisabled = page+1 > totalPages;
 
-    let classNames = 'rgt-footer-pagination ' + (additionalProps.className || '').trim();
+    let classNames = ('rgt-footer-pagination ' + (additionalProps.className || '')).trim();
 
     return (
-        <div {...additionalProps} className={classNames.trim()}>
+        <div {...additionalProps} className={classNames}>
             <button 
                 className={`rgt-footer-pagination-button${backButtonDisabled ? ' rgt-disabled-button' : ''}`}
                 disabled={page-1 < 1} 

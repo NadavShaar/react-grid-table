@@ -26,10 +26,10 @@ const Footer = ({ tableManager }) => {
         },
     } = tableManager;
 
-    const classNames = 'rgt-footer ' + (additionalProps.className || '').trim();
+    const classNames = ('rgt-footer ' + (additionalProps.className || '')).trim();
 
     return (
-        <div {...additionalProps} className={classNames.trim()}>
+        <div {...additionalProps} className={classNames}>
             <div className='rgt-footer-items-information'>
                 {
                     showRowsInformation !== false ?
