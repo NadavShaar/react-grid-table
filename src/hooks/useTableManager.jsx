@@ -69,7 +69,7 @@ const useTableManager = (props) => {
     tableManager.rowEditApi = useRowEdit(props, tableManager);
     tableManager.rowVirtualizer = useRowVirtualizer(props, tableManager);
     tableManager.asyncApi = useAsync(props, tableManager);
-    tableManager.isLoading = props.isLoading ?? tableManager.asyncApi.isLoading;
+    tableManager.isLoading = props.isLoading ?? (tableManager.mode !== 'sync' && tableManager.asyncApi.isLoading);
 
     // reset page number
     useEffect(() => {
