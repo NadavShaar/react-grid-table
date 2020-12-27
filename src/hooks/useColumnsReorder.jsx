@@ -1,17 +1,7 @@
 import { useRef } from 'react';
 
-export default (props, tableManager) => {
-    let {
-        columnsApi: {
-            columns,
-            visibleColumns,
-            setColumns
-        }
-    } = tableManager;
-
-    const columnsReorderApi = useRef({
-        isColumnReordering: false
-    }).current;
+const useColumnsReorder = (props, tableManager) => {
+    const columnsReorderApi = useRef({ isColumnReordering: false }).current;
 
     Object.defineProperty(columnsReorderApi, "onColumnReorderStart", { enumerable: false, writable: true })
     Object.defineProperty(columnsReorderApi, "onColumnReorderEnd", { enumerable: false, writable: true })
@@ -25,20 +15,26 @@ export default (props, tableManager) => {
     }
 
     columnsReorderApi.onColumnReorderEnd = sortData => {
+        const {
+            columnsApi: { columns, visibleColumns, setColumns }
+        } = tableManager;
+
         setTimeout(() => columnsReorderApi.isColumnReordering = false, 0);
         
         if (sortData.oldIndex === sortData.newIndex) return;
 
-        let colDefNewIndex = columns.findIndex(oc => oc.id === visibleColumns[sortData.newIndex].id);
-        let colDefOldIndex = columns.findIndex(oc => oc.id === visibleColumns[sortData.oldIndex].id);
+        const colDefNewIndex = columns.findIndex(oc => oc.id === visibleColumns[sortData.newIndex].id);
+        const colDefOldIndex = columns.findIndex(oc => oc.id === visibleColumns[sortData.oldIndex].id);
 
-        columns = [...columns];
-        columns.splice(colDefNewIndex, 0, ...columns.splice(colDefOldIndex, 1));
+        const newColumns = [...columns];
+        newColumns.splice(colDefNewIndex, 0, ...newColumns.splice(colDefOldIndex, 1));
 
-        setColumns(columns);
+        setColumns(newColumns);
 
         props.onColumnReorderEnd?.(sortData, tableManager);
     }
 
     return columnsReorderApi;
 }
+
+export default useColumnsReorder;

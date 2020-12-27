@@ -1,22 +1,19 @@
 import { useRef } from 'react';
 
-export default (props, tableManager) => {
-    let {
-        columnsApi: {
-            columns,
-            setColumns
-        }
-    } = tableManager;
+const useColumnsVisibility = (props, tableManager) => {
+    const { columnsApi: { columns, setColumns } } = tableManager;
 
     const columnsVisibilityApi = useRef({}).current;
 
-    columnsVisibilityApi.toggleColumnVisibility = (colId) =>{
-        columns = [...columns];
-        let colIndex = columns.findIndex(cd => cd.id === colId);
+    columnsVisibilityApi.toggleColumnVisibility = colId => {
+        const newColumns = [...columns];
+        const colIndex = newColumns.findIndex(cd => cd.id === colId);
 
-        columns[colIndex].visible = !columns[colIndex].visible;
-        setColumns(columns);
+        newColumns[colIndex].visible = !newColumns[colIndex].visible;
+        setColumns(newColumns);
     }
 
     return columnsVisibilityApi;
 }
+
+export default useColumnsVisibility;

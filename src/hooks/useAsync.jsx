@@ -3,22 +3,11 @@ import { uuid } from '../utils';
 import { useRequestDebounce } from '.';
 
 function getRowsRequest(tableManager, rowsRequests) {
-    let {
-        config: {
-            isPaginated,
-            isVirtualScroll,
-            batchSize
-        },
-        rowsApi: {
-            totalRows
-        },
-        paginationApi: {
-            page,
-            pageSize,
-        },
-        rowVirtualizer: {
-            virtualItems,
-        },
+    const {
+        config: { isPaginated, isVirtualScroll, batchSize },
+        rowsApi: { totalRows },
+        paginationApi: { page, pageSize },
+        rowVirtualizer: { virtualItems },
     } = tableManager;
 
     // get starting indexes (100, 100)
@@ -68,15 +57,11 @@ function getRowsRequest(tableManager, rowsRequests) {
     };
 }
 
-export default (props, tableManager) => {
-    let {
+const useAsync = (props, tableManager) => {
+    const {
         mode,
-        config: {
-            requestDebounceTimeout
-        },
-        rowsApi: {
-            rows
-        }
+        config: { requestDebounceTimeout },
+        rowsApi: { rows }
     } = tableManager;
 
     const asyncApi = useRef({}).current;
@@ -87,18 +72,17 @@ export default (props, tableManager) => {
     const onRowsRequest = async rowsRequest => {
         setRowsRequests([...rowsRequests, rowsRequest]);
         asyncApi.lastRowsRequestId = rowsRequest.id;
+
         const result = await props.onRowsRequest(rowsRequest, tableManager);
-        let {
-            rowsApi: {
-                rows,
-                setRows,
-                setTotalRows
-            }
+
+        const {
+            rowsApi: { rows, setRows, setTotalRows }
         } = tableManager;
+
         if (result?.rows) {
-            rows = asyncApi.mergeRowsAt(rows, result.rows, rowsRequest.from);
-            setRows(rows);
-        }
+            const newRows = asyncApi.mergeRowsAt(rows, result.rows, rowsRequest.from);
+            setRows(newRows);
+        };
         if (result?.totalRows) setTotalRows(result.totalRows);
     };
 
@@ -107,23 +91,18 @@ export default (props, tableManager) => {
     asyncApi.resetRows = () => {
         if (mode === 'sync') return;
 
-        let {
-            rowsApi: {
-                setRows,
-                setTotalRows
-            }
-        } = tableManager;
+        const { rowsApi: { setRows, setTotalRows } } = tableManager;
 
         setRowsRequests([]);
-        if (props.onRowsReset === undefined) {
+        if (props.onRowsReset) props.onRowsReset(tableManager);
+        else {
             setRows([]);
             setTotalRows(null);
         }
-        props.onRowsReset?.(tableManager);
     }
 
     asyncApi.mergeRowsAt = (rows, newRows, at) => {
-        let holes = [];
+        const holes = [];
         holes.length = Math.max(at - rows.length, 0);
         holes.fill(null);
 
@@ -135,14 +114,16 @@ export default (props, tableManager) => {
     useEffect(() => {
         if (mode === 'sync') return;
 
-        let rowsRequest = getRowsRequest(tableManager, rowsRequests);
+        const rowsRequest = getRowsRequest(tableManager, rowsRequests);
 
         if (rowsRequest.to <= rowsRequest.from) return;
 
-        let isFirstRequest = !rowsRequests.length;
+        const isFirstRequest = !rowsRequests.length;
         if (isFirstRequest) onRowsRequest(rowsRequest);
         else debouncedOnRowsRequest(rowsRequest);
     });
 
     return asyncApi;
 }
+
+export default useAsync;

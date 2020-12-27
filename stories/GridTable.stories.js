@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { withKnobs, boolean, number, array } from '@storybook/addon-knobs';
 import AbortController from "abort-controller"
-import GridTable from '../dist';
+import GridTable from '../src';
 import Fetch from 'fetch-simulator';
 import MOCK_DATA from "./MOCK_DATA.json";
 import Username from "./components/Username";

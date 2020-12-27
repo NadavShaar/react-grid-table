@@ -1,18 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 
-export default (props, tableManager) => {
-    let {
-        config: {
-            rowIdField
-        },
-        paginationApi: {
-            pageRows,
-        }
-    } = tableManager;
+const useRowEdit = (props, tableManager) => {
+    const { config: { rowIdField }, paginationApi: { pageRows } } = tableManager;
 
     const rowEditApi = useRef({}).current;
-    let [editRow, setEditRow] = useState(null);
-    let [editRowId, setEditRowId] = useState(null);
+    const [editRow, setEditRow] = useState(null);
+    const [editRowId, setEditRowId] = useState(null);
 
     rowEditApi.editRowId = props.editRowId ?? editRowId;
     rowEditApi.setEditRow = setEditRow;
@@ -25,8 +18,10 @@ export default (props, tableManager) => {
     }
 
     useEffect(() => {
-        setEditRow(rowEditApi.editRowId && pageRows.find(item => item && (item[rowIdField] === rowEditApi.editRowId)) || null);
+        rowEditApi.setEditRow(rowEditApi.editRowId && pageRows.find(item => item && (item[rowIdField] === rowEditApi.editRowId)) || null);
     }, [rowEditApi.editRowId, pageRows, rowIdField])
 
     return rowEditApi;
 }
+
+export default useRowEdit;

@@ -1,21 +1,22 @@
 import { useState, useEffect, useRef } from 'react';
 
-export default (initialIsVisible) => {
+const useDetectClickOutside = (initialIsVisible) => {
     const [isComponentVisible, setIsComponentVisible] = useState(initialIsVisible);
     const ref = useRef(null);
     
     useEffect(() => {
-        document.addEventListener('click', handleClickOutside, true);
-        return () => {
-            document.removeEventListener('click', handleClickOutside, true);
+        const handleClickOutside = (event) => {
+            if (ref.current && !ref.current.contains(event.target)) {
+                setIsComponentVisible(false);
+            }
         };
-    });
 
-    const handleClickOutside = (event) => {
-        if (ref.current && !ref.current.contains(event.target)) {
-            setIsComponentVisible(false);
-        }
-    };
+        document.addEventListener('click', handleClickOutside, true);
+
+        return () => document.removeEventListener('click', handleClickOutside, true);
+    }, []);
 
     return { ref, isComponentVisible, setIsComponentVisible };
 }
+
+export default useDetectClickOutside;

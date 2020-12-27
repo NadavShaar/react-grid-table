@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export default (resizeHandleRef, column, onResizeStart, onResize, onResizeEnd) => {
+const useResizeEvents = (resizeHandleRef, column, onResizeStart, onResize, onResizeEnd) => {
 
     useEffect(() => {
         if(resizeHandleRef.current) resizeHandleRef.current.addEventListener('mousedown', onMouseDown);
@@ -12,20 +12,22 @@ export default (resizeHandleRef, column, onResizeStart, onResize, onResizeEnd) =
         }
     }, [resizeHandleRef.current, column, onResizeStart, onResize, onResizeEnd])
 
-    const onMouseDown = (e) => {
-        e.stopPropagation();
-        onResizeStart({ e, target: resizeHandleRef.current, column });
+    const onMouseDown = event => {
+        event.stopPropagation();
+        onResizeStart({ event, target: resizeHandleRef.current, column });
         window.addEventListener('mousemove', onMouseMove);
         window.addEventListener('mouseup', onMouseUp);
     }
 
-    const onMouseMove = (e) => {
-        onResize({e, target: resizeHandleRef.current, column});
+    const onMouseMove = event => {
+        onResize({event, target: resizeHandleRef.current, column});
     }
     
-    const onMouseUp = (e) => {
-        onResizeEnd({ e, target: resizeHandleRef.current, column });
+    const onMouseUp = event => {
+        onResizeEnd({ event, target: resizeHandleRef.current, column });
         window.removeEventListener('mousemove', onMouseMove);
         window.removeEventListener('mouseup', onMouseUp);
     }
 }
+
+export default useResizeEvents;

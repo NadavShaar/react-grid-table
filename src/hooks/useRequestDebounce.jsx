@@ -1,28 +1,22 @@
 import { useRef } from 'react';
 
-export default (func, wait) => {
-    const params = useRef({
-        timeout: null,
-        wait,
-        lastData: {}
-    }).current;
+const useRequestDebounce = (callback, wait) => {
+    const params = useRef({ timeout: null, lastData: {} }).current;
 
     params.wait = wait;
 
     return function () {
-        var context = this, args = arguments;
+        if ((arguments[0].from === params.lastData.from) && (arguments[0].to === params.lastData.to)) return;
 
-        if ((args[0].from === params.lastData.from) && (args[0].to === params.lastData.to)) return;
-
-        params.lastData = args[0];
-
-        var later = function () {
-            params.timeout = null;
-            func.apply(context, args);
-            params.lastData = {};
-        };
+        params.lastData = arguments[0];
         
         clearTimeout(params.timeout);
-        params.timeout = setTimeout(later, params.wait);
+        params.timeout = setTimeout(() => {
+            params.timeout = null;
+            callback(...arguments);
+            params.lastData = {};
+        }, params.wait);
     };
 };
+
+export default useRequestDebounce;

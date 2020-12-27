@@ -1,3 +1,7 @@
+// refactor hooks
+// move SortableList style to css file?
+// adding an "index" property to columns would simplify code
+// useResizeEvents - why does onMouseDown needs e.stopPropagation();
 import React from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
 import { Row, HeaderCellContainer } from './components/';
@@ -7,7 +11,7 @@ import './index.css';
 
 const SortableList = SortableContainer(({ forwardRef, className, style, children }) => <div ref={forwardRef} className={className} style={style}>{children}</div>);
  
-const GridTable = (props) => {
+const GridTable = props => {
 
     const tableManager = useTableManager(props);
 
@@ -15,46 +19,25 @@ const GridTable = (props) => {
         isLoading,
         config: {
             isVirtualScroll,
-            components: {
-                Header,
-                Footer,
-                Loader,
-                NoResults,
-                DragHandle
-            },
+            components: { Header, Footer, Loader, NoResults, DragHandle },
         },
-        refs: {
-            rgtRef,
-            tableRef
-        },
-        columnsApi: {
-            visibleColumns,
-        },
-        columnsReorderApi: {
-            onColumnReorderStart,
-            onColumnReorderEnd
-        },
-        rowVirtualizer: {
-            virtualItems
-        },
-        paginationApi: {
-            pageRows
-        },
-        rowsApi: {
-            totalRows
-        }
+        refs: { rgtRef, tableRef },
+        columnsApi: { visibleColumns },
+        columnsReorderApi: { onColumnReorderStart, onColumnReorderEnd },
+        rowVirtualizer: { virtualItems },
+        paginationApi: { pageRows },
+        rowsApi: { totalRows }
     } = tableManager;
 
-    let rest = Object.keys(props).reduce((rest, key) => {
+    const rest = Object.keys(props).reduce((rest, key) => {
         if (GridTable.propTypes[key] === undefined) rest = { ...rest, [key]: props[key] };
         return rest;
     }, {})
 
-    let classNames = 'rgt-wrapper';
-    if (props.className) classNames += ' ' + props.className;
+    const classNames = ('rgt-wrapper ' + (props.className || '')).trim();
 
     return (
-        <div {...rest} ref={rgtRef} className={classNames.trim()}>
+        <div {...rest} ref={rgtRef} className={classNames}>
             <Header tableManager={tableManager} />
             <SortableList
                 forwardRef={tableRef}
@@ -136,6 +119,7 @@ GridTable.propTypes = {
     getIsRowSelectable: PropTypes.func,
     getIsRowEditable: PropTypes.func,
     editRowId: PropTypes.any,
+    className: PropTypes.string,
     // table config
     rowIdField: PropTypes.string,
     batchSize: PropTypes.number,

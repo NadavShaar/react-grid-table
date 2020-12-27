@@ -1,17 +1,10 @@
 import { useState, useMemo, useRef } from 'react';
 
-export default (props, tableManager) => {
-    let {
+const useColumns = (props, tableManager) => {
+    const {
         config: {
             minColumnWidth,
-            components: {
-                Cell,
-                EditorCell,
-                SelectionCell,
-                HeaderCell,
-                HeaderSelectionCell,
-                PlaceHolderCell
-            }
+            components: { Cell, EditorCell, SelectionCell, HeaderCell, HeaderSelectionCell, PlaceHolderCell }
         }
     } = tableManager;
 
@@ -20,65 +13,63 @@ export default (props, tableManager) => {
 
     columns = props.onColumnsChange ? props.columns : columns;
 
-    columnsApi.columns = useMemo(() => {
-        return columns.map((cd, idx) => {
+    columnsApi.columns = useMemo(() => columns.map((column, idx) => {
+        const isPinnedColumn = idx === 0 && column.pinned || idx === columns.length - 1 && column.pinned;
+        const isVisibleColumn = column.visible !== false;
 
-            let isPinnedColumn = idx === 0 && cd.pinned || idx === columns.length - 1 && cd.pinned;
-            let isVisibleColumn = cd.visible !== false;
+        if (column.id === 'checkbox') return {
+            className: '',
+            width: 'max-content',
+            minWidth: 0,
+            maxWidth: null,
+            resizable: false,
+            cellRenderer: SelectionCell,
+            headerCellRenderer: HeaderSelectionCell,
+            ...column,
+            searchable: false,
+            editable: false,
+            sortable: false,
+            pinned: isPinnedColumn,
+            visible: isVisibleColumn
+        };
 
-            if (cd.id === 'checkbox') return {
-                className: '',
-                width: 'max-content',
-                minWidth: 0,
-                maxWidth: null,
-                resizable: false,
-                cellRenderer: SelectionCell,
-                headerCellRenderer: HeaderSelectionCell,
-                ...cd,
-                searchable: false,
-                editable: false,
-                sortable: false,
-                pinned: isPinnedColumn,
-                visible: isVisibleColumn
-            };
-
-            return {
-                label: cd.field,
-                className: '',
-                width: '200px',
-                minWidth: cd.minWidth || minColumnWidth,
-                maxWidth: null,
-                getValue: ({ value, column }) => value,
-                setValue: ({ value, data, setRow, column }) => { setRow({ ...data, [column.field]: value }) },
-                searchable: true,
-                editable: true,
-                sortable: true,
-                resizable: true,
-                search: ({ value, searchText }) => value.toString().toLowerCase().includes(searchText.toLowerCase()),
-                sort: ({ a, b, isAscending }) => {
-                    let aa = typeof a === 'string' ? a.toLowerCase() : a;
-                    let bb = typeof b === 'string' ? b.toLowerCase() : b;
-                    if (aa > bb) return isAscending ? 1 : -1;
-                    else if (aa < bb) return isAscending ? -1 : 1;
-                    return 0;
-                },
-                cellRenderer: Cell,
-                editorCellRenderer: EditorCell,
-                headerCellRenderer: HeaderCell,
-                placeHolderRenderer: PlaceHolderCell,
-                ...cd,
-                pinned: isPinnedColumn,
-                visible: isVisibleColumn
-            }
-        })
-    }, [columns, minColumnWidth]); 
+        return {
+            label: column.field,
+            className: '',
+            width: '200px',
+            minWidth: column.minWidth || minColumnWidth,
+            maxWidth: null,
+            getValue: ({ value, column }) => value,
+            setValue: ({ value, data, setRow, column }) => { setRow({ ...data, [column.field]: value }) },
+            searchable: true,
+            editable: true,
+            sortable: true,
+            resizable: true,
+            search: ({ value, searchText }) => value.toString().toLowerCase().includes(searchText.toLowerCase()),
+            sort: ({ a, b, isAscending }) => {
+                const aa = typeof a === 'string' ? a.toLowerCase() : a;
+                const bb = typeof b === 'string' ? b.toLowerCase() : b;
+                if (aa > bb) return isAscending ? 1 : -1;
+                else if (aa < bb) return isAscending ? -1 : 1;
+                return 0;
+            },
+            cellRenderer: Cell,
+            editorCellRenderer: EditorCell,
+            headerCellRenderer: HeaderCell,
+            placeHolderRenderer: PlaceHolderCell,
+            ...column,
+            pinned: isPinnedColumn,
+            visible: isVisibleColumn
+        }
+    }), [columns, minColumnWidth]); 
 
     columnsApi.visibleColumns = useMemo(() => {
-        let visibleColumns = columnsApi.columns.filter(cd => cd.visible !== false);
+        const visibleColumns = columnsApi.columns.filter(column => column.visible);
 
-        let virtualColIndex = visibleColumns.length;
-        if (visibleColumns[visibleColumns.length - 1]?.pinned) virtualColIndex--;
+        const virtualColIndex = (visibleColumns[visibleColumns.length - 1]?.pinned) ? (visibleColumns.length - 1) : visibleColumns.length;
+
         visibleColumns.splice(virtualColIndex, 0, { id: 'virtual', visible: true, width: "auto" });
+        
         return visibleColumns;
     }, [columnsApi.columns])
 
@@ -89,3 +80,5 @@ export default (props, tableManager) => {
 
     return columnsApi;
 }
+
+export default useColumns;
