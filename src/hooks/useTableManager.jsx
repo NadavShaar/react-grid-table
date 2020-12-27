@@ -16,11 +16,8 @@ import {
     useColumnsResize
 } from '../hooks/';
 
-export default (props) => {
-    const tableManager = useRef({
-        isMounted: false,
-        isInitialized: false
-    }).current;
+const useTableManager = (props) => {
+    const tableManager = useRef({ isMounted: false, isInitialized: false }).current;
 
     Object.defineProperty(tableManager, "columnsReorderApi", { enumerable: false, writable: true });
     Object.defineProperty(tableManager, "columnsResizeApi", { enumerable: false, writable: true });
@@ -102,3 +99,5 @@ export default (props) => {
 
     return tableManager
 }
+
+export default useTableManager;

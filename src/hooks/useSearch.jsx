@@ -1,17 +1,10 @@
 import { useState, useCallback, useRef } from 'react';
 
-export default (props, tableManager) => {
-    let {
-        config: {
-            minSearchChars
-        },
-        columnsApi: {
-            columns
-        }
-    } = tableManager;
+const useSearch = (props, tableManager) => {
+    const { config: { minSearchChars }, columnsApi: { columns } } = tableManager;
 
     const searchApi = useRef({}).current;
-    let [searchText, setSearchText] = useState("");
+    const [searchText, setSearchText] = useState("");
 
     searchApi.searchText = props.searchText ?? searchText;
 
@@ -33,10 +26,11 @@ export default (props, tableManager) => {
             cols[coldef.field] = coldef;
             return cols;
         }, {})
+
         if (searchApi.searchText.length >= minSearchChars) {
             rows = rows.filter(item => Object.keys(item).some(key => {
                 if (cols[key] && cols[key].searchable) {
-                    let value = cols[key].getValue({ value: item[key], column: cols[key] });
+                    const value = cols[key].getValue({ value: item[key], column: cols[key] });
                     return cols[key].search({ value: value.toString(), searchText: searchApi.searchText });
                 }
                 return false;
@@ -48,3 +42,5 @@ export default (props, tableManager) => {
 
     return searchApi;
 }
+
+export default useSearch;

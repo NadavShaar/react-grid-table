@@ -1,13 +1,13 @@
 import React from 'react';
 
-export default (text, searchTerm) => {
+const getHighlightedText = (text, searchTerm) => {
     if (text === searchTerm) return <span className='rgt-search-highlight'>{text}</span>;
 
-    let re = new RegExp(searchTerm, "gi");
-    let restArr = text.split(re, text.length);
+    const re = new RegExp(searchTerm, "gi");
+    const restArr = text.split(re, text.length);
     let restItemsLength = 0;
 
-    let highlightedSearch = restArr.map((a, idx) => {
+    const highlightedSearch = restArr.map((a, idx) => {
         restItemsLength += a.length;
         let el = null;
 
@@ -39,3 +39,5 @@ export default (text, searchTerm) => {
 
     return <span>{highlightedSearch}</span>;
 };
+
+export default getHighlightedText;

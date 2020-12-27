@@ -1,20 +1,10 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 
-export default (props, tableManager) => {
-    let {
-        config: {
-            rowIdField,
-        },
-        rowsApi: {
-            rows,
-        },
-        paginationApi: {
-            pageRows,
-        },
-    } = tableManager;
+const useRowSelection = (props, tableManager) => {
+    const { config: { rowIdField }, rowsApi: { rows }, paginationApi: { pageRows } } = tableManager;
 
     const rowSelectionApi = useRef({}).current;
-    let [selectedRowsIds, setSelectedRowsIds] = useState([]);
+    const [selectedRowsIds, setSelectedRowsIds] = useState([]);
 
     rowSelectionApi.selectedRowsIds = props.selectedRowsIds ?? selectedRowsIds;
     rowSelectionApi.getIsRowSelectable = props.getIsRowSelectable;
@@ -25,17 +15,17 @@ export default (props, tableManager) => {
     }
 
     rowSelectionApi.toggleRowSelection = rowId => {
-        selectedRowsIds = [...rowSelectionApi.selectedRowsIds];
+        const newSelectedRowsIds = [...rowSelectionApi.selectedRowsIds];
 
-        let itemIndex = selectedRowsIds.findIndex(s => s === rowId);
+        const itemIndex = newSelectedRowsIds.findIndex(s => s === rowId);
 
-        if (itemIndex !== -1) selectedRowsIds.splice(itemIndex, 1);
-        else selectedRowsIds.push(rowId);
+        if (itemIndex !== -1) newSelectedRowsIds.splice(itemIndex, 1);
+        else newSelectedRowsIds.push(rowId);
 
-        rowSelectionApi.setSelectedRowsIds(selectedRowsIds);
+        rowSelectionApi.setSelectedRowsIds(newSelectedRowsIds);
     }
 
-    let selectAllRef = useRef(null);
+    const selectAllRef = useRef(null);
 
     rowSelectionApi.selectAll = useMemo(() => {
         const mode = props.selectAllMode;
@@ -52,12 +42,12 @@ export default (props, tableManager) => {
             disabled,
             indeterminate,
             onChange: () => {
-                let selectedIds = [...selectedRowsIds];
+                let newSelectedRowsIds = [...selectedRowsIds];
 
-                if (checked || indeterminate) selectedIds = selectedIds.filter(si => !selectableItemsIds.find(itemId => si === itemId));
-                else selectableItemsIds.forEach(s => selectedIds.push(s));
+                if (checked || indeterminate) newSelectedRowsIds = newSelectedRowsIds.filter(si => !selectableItemsIds.find(itemId => si === itemId));
+                else selectableItemsIds.forEach(s => newSelectedRowsIds.push(s));
 
-                rowSelectionApi.setSelectedRowsIds(selectedIds);
+                rowSelectionApi.setSelectedRowsIds(newSelectedRowsIds);
             }
         }
     }, [props.selectAllMode, pageRows, rows, rowSelectionApi.getIsRowSelectable, rowIdField, selectedRowsIds]);
@@ -66,7 +56,9 @@ export default (props, tableManager) => {
         if (!selectAllRef.current) return;
 
         selectAllRef.current.indeterminate = rowSelectionApi.selectAll.indeterminate;
-    })
+    }, [selectAllRef.current, rowSelectionApi.selectAll.indeterminate])
 
     return rowSelectionApi;
 }
+
+export default useRowSelection;

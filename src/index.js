@@ -119,7 +119,6 @@ GridTable.propTypes = {
     getIsRowSelectable: PropTypes.func,
     getIsRowEditable: PropTypes.func,
     editRowId: PropTypes.any,
-    className: PropTypes.string,
     // table config
     rowIdField: PropTypes.string,
     batchSize: PropTypes.number,
