@@ -41,6 +41,7 @@
     "start": "react-scripts start",
     "watch": "webpack -w",
     "build": "webpack",
+    "build-demo": "webpack --config demo.config.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 --no-dll -s ./.storybook/assets",
