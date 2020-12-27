@@ -44,9 +44,7 @@
     "build-demo": "webpack --config demo.config.js -w",
     "start:dev": "webpack serve --config demo.config.js",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 6006 --no-dll -s ./.storybook/assets",
-    "build-storybook": "build-storybook --no-dll -s ./.storybook/assets"
+    "eject": "react-scripts eject"
   },
   "peerDependencies": {
     "react": "^17.0.1",
@@ -57,10 +55,6 @@
     "@babel/plugin-transform-runtime": "^7.12.10",
     "@babel/preset-env": "^7.12.1",
     "@babel/preset-react": "^7.12.5",
-    "@storybook/addon-essentials": "^6.0.28",
-    "@storybook/addon-knobs": "^6.0.28",
-    "@storybook/addon-links": "^6.0.28",
-    "@storybook/react": "^6.0.28",
     "abort-controller": "^3.0.0",
     "babel-loader": "^8.2.1",
     "clean-webpack-plugin": "^3.0.0",
