@@ -1,5 +1,6 @@
 import React from "react";
-import GridTable from '../../dist';
+import ReactDOM from "react-dom";
+import GridTable from '../../src';
 
 // custom cell component
 const Username = ({ tableManager, value, field, data, column, colIndex, rowIndex }) => {
@@ -95,3 +96,5 @@ const MyAwesomeTable = () => {
 };
 
 export default MyAwesomeTable;
+
+ReactDOM.render(<MyAwesomeTable/>, document.getElementById('root'));

@@ -1,12 +1,19 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+// const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     entry: {
-        index: "./demo/src/index.js",
+        bundle: "./demo/src/index.js",
     },
     output: {
-        path: __dirname + '/demo/dist',
+        path: __dirname + '/demo/dist/build',
         filename: '[name].js'
+    },
+    devServer: {
+        publicPath: path.join(__dirname, '/demo/dist'),
+        contentBase: path.join(__dirname, '/demo/dist'),
+        port: 9000,
+        writeToDisk: true
     },
     module: {
         rules: [
@@ -16,7 +23,7 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                         presets: ['@babel/preset-env', '@babel/preset-react'],
-                        plugins: ['@babel/plugin-proposal-object-rest-spread']
+                        plugins: ['@babel/plugin-proposal-object-rest-spread', "@babel/plugin-transform-runtime"]
                     }
                 },
                 exclude: /node_modules/
@@ -28,14 +35,16 @@ module.exports = {
         ]
     },
     plugins: [
-        new CleanWebpackPlugin()
+        new CleanWebpackPlugin(),
+        // new HtmlWebpackPlugin({
+        //     template: __dirname + '/demo/src/index.html',
+        //     filename: 'index.html',
+        //     inject: 'body',
+        // })
     ],
     resolve: {
         extensions: [".js", ".jsx"]
     },
     externals: {
-        'react': 'react',
-        'react-dom': 'react-dom',
-        'prop-types': 'prop-types'
     }
 }
