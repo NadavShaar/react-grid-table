@@ -5,6 +5,7 @@ module.exports = {
     entry: {
         bundle: "./demo/src/index.js",
     },
+    devtool: 'source-map',
     output: {
         path: __dirname + '/demo/dist/build',
         filename: '[name].js'
