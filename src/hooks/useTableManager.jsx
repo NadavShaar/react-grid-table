@@ -85,12 +85,12 @@ const useTableManager = (props) => {
 
         tableManager.rowSelectionApi.setSelectedRowsIds([]);
         if (tableManager.mode !== 'sync') tableManager.asyncApi.resetRows();
-    }, [tableManager.searchApi.searchText, tableManager.sortApi.sort])
+    }, [tableManager.searchApi.searchText, tableManager.sortApi.sort.colId, tableManager.sortApi.sort.isAsc])
 
     // reset edit row
     useEffect(() => {
         if (tableManager.rowEditApi.editRow) tableManager.rowEditApi.setEditRowId(null);
-    }, [tableManager.searchApi.searchText, tableManager.sortApi.sort, tableManager.paginationApi.page])
+    }, [tableManager.searchApi.searchText, tableManager.sortApi.sort.colId, tableManager.sortApi.sort.isAsc, tableManager.paginationApi.page])
 
     // initialization completion
     useEffect(() => {

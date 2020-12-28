@@ -1,140 +1,36 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import ReactDOM from "react-dom";
 import GridTable from '../../src';
+import { IsControlled } from './components';
+import getColumns from './getColumns';
 import MOCK_DATA from "./MOCK_DATA.json";
 // import './index.css';
 
-const EDIT_SVG = <svg height="16" viewBox="0 0 20 20" width="16" xmlns="http://www.w3.org/2000/svg"><g fill="#fff" stroke="#1856bf" transform="translate(2 2)"><path d="m8.24920737-.79402796c1.17157287 0 2.12132033.94974747 2.12132033 2.12132034v13.43502882l-2.12132033 3.5355339-2.08147546-3.495689-.03442539-13.47488064c-.00298547-1.16857977.94191541-2.11832105 2.11049518-2.12130651.00180188-.00000461.00360378-.00000691.00540567-.00000691z" transform="matrix(.70710678 .70710678 -.70710678 .70710678 8.605553 -3.271644)"/><path d="m13.5 4.5 1 1"/></g></svg>;
-const CANCEL_SVG = <svg height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#dc1e1e" transform="translate(5 5)"><path d="m.5 10.5 10-10"/><path d="m10.5 10.5-10-10z"/></g></svg>;
-const SAVE_SVG = <svg height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="m.5 5.5 3 3 8.028-8" fill="none" stroke="#4caf50" transform="translate(5 6)"/></svg>;
-
-const styles = {
-	select: {margin: '0 20px'},
-	buttonsCellContainer: {padding: '0 20px', width: '100%', height: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center'},
-	editButton: {background: '#f3f3f3', outline: 'none', cursor: 'pointer', padding: 4, display: 'inline-flex', border: 'none', borderRadius: '50%', boxShadow: '1px 1px 2px 0px rgb(0 0 0 / .3)'},
-	buttonsCellEditorContainer: {height: '100%', width: '100%', display: 'inline-flex', padding: '0 20px', justifyContent: 'flex-end', alignItems: 'center'},
-	cancelButton: {background: '#f3f3f3', outline: 'none', cursor: 'pointer', marginRight: 10, padding: 2, display: 'inline-flex', border: 'none', borderRadius: '50%', boxShadow: '1px 1px 2px 0px rgb(0 0 0 / .3)'},
-	saveButton: {background: '#f3f3f3', outline: 'none', cursor: 'pointer', padding: 2, display: 'inline-flex', border: 'none', borderRadius: '50%', boxShadow: '1px 1px 2px 0px rgb(0 0 0 / .3)'}
-}
 
 const MyAwesomeTable = () => {
+    const [unControlledProps, setUnControlledProps] = useState([]);
     const [editRowId, setEditRowId] = useState(null);
     const [rowsData, setRowsData] = useState([]);
     const [isLoading, setLoading] = useState(false);
     const [tableManager, setTableManager] = useState(null);
     let [searchText, setSearchText] = useState('');
     let [selectedRowsIds, setSelectedRowsIds] = useState([]);
-    let [sort, setSort] = useState({ colId: 4, isAsc: true });
+    let [sort, setSort] = useState({ colId: null, isAsc: null });
+    let [page, setPage] = useState(1);
+    let [pageSize, setPageSize] = useState(20);
+    let [pageSizes, setPageSizes] = useState([20, 50, 100]);
+    let [enableColumnsReorder, setEnableColumnsReorder] = useState(true);
+    let [highlightSearch, setHighlightSearch] = useState(true);
+    let [showSearch, setShowSearch] = useState(true);
+    let [showRowsInformation, setShowRowsInformation] = useState(true);
+    let [showColumnVisibilityManager, setShowColumnVisibilityManager] = useState(true);
+    let [isHeaderSticky, setIsHeaderSticky] = useState(true);
+    let [isVirtualScroll, setIsVirtualScroll] = useState(true);
+    let [isPaginated, setIsPaginated] = useState(true);
+    let [minSearchChars, setMinSearchChars] = useState(2);
+    let [minColumnWidth, setMinColumnWidth] = useState(70);
 
-    let columnsConfig = [
-        {
-            id: 'checkbox',
-            pinned: true,
-            width: '54px',
-            label: 'Select'
-        },
-        {
-            id: 'id',
-            field: 'id',
-            label: 'id',
-        },
-        // {
-        //     id: 2,
-        //     field: 'username',
-        //     label: 'Username',
-        //     cellRenderer: Username,
-        //     editorCellRenderer: props => <Username {...props} isEdit />
-        // },
-        {
-            id: 3,
-            field: 'first_name',
-            label: 'First Name'
-        },
-        {
-            id: 4,
-            field: 'last_name',
-            label: 'Last Name'
-        },
-        {
-            id: 5,
-            field: 'email',
-            label: 'Email'
-        },
-        {
-            id: 6,
-            field: 'gender',
-            label: 'Gender',
-            editorCellRenderer: ({ tableManager, value, onChange, data, column, rowIndex }) => (
-                <select
-                    style={styles.select}
-                    value={value}
-                    onChange={e => onChange({ ...data, [column.field]: e.target.value })}
-                >
-                    <option>Male</option>
-                    <option>Female</option>
-                </select>
-            )
-        },
-        {
-            id: 7,
-            field: 'ip_address',
-            label: 'IP Address'
-        },
-        {
-            id: 8,
-            field: 'last_visited',
-            label: 'Last Visited',
-            sort: ({ a, b, isAscending }) => {
-                let aa = a.split('/').reverse().join(),
-                    bb = b.split('/').reverse().join();
-                return aa < bb ? isAscending ? -1 : 1 : (aa > bb ? isAscending ? 1 : -1 : 0);
-            }
-        },
-        {
-            id: 9,
-            width: 'max-content',
-            pinned: true,
-            sortable: false,
-            resizable: true,
-            cellRenderer: ({ tableManager, value, data, column, rowIndex, searchText }) => (
-                <div style={styles.buttonsCellContainer}>
-                    <button
-                        title="Edit"
-                        style={styles.editButton}
-                        onClick={e => tableManager.rowEditApi.setEditRowId(data.id)}
-                    >
-                        {EDIT_SVG}
-                    </button>
-                </div>
-            ),
-            editorCellRenderer: ({ onRowEditSave, tableManager, value, field, onChange, data, column, rowIndex }) => (
-                <div style={styles.buttonsCellEditorContainer}>
-                    <button
-                        title="Cancel"
-                        style={styles.cancelButton}
-                        onClick={e => tableManager.rowEditApi.setEditRowId(null)}
-                    >
-                        {CANCEL_SVG}
-                    </button>
-                    <button
-                        title="Save"
-                        style={styles.saveButton}
-                        onClick={e => {
-                            let rowsClone = [...rowsData];
-                            let updatedRowIndex = rowsClone.findIndex(r => r.id === data.id);
-                            rowsClone[updatedRowIndex] = data;
-                            setRowsData(rowsClone);
-                            tableManager.rowEditApi.setEditRowId(null);
-                        }}
-                    >
-                        {SAVE_SVG}
-                    </button>
-                </div>
-            )
-        }
-    ];
-
-    let [columns, setColumns] = useState(columnsConfig);
+    let [columns, setColumns] = useState(getColumns({ setRowsData }));
 
     useEffect(() => {
         setLoading(true);
@@ -145,24 +41,94 @@ const MyAwesomeTable = () => {
     }, [])
 
     return (
-        <GridTable
-            columns={columns}
-            rows={rowsData}
-            isLoading={isLoading}
-            editRowId={editRowId}
-            onEditRowIdChange={setEditRowId}
-            selectedRowsIds={selectedRowsIds}
-            onSelectedRowsChange={setSelectedRowsIds}
-            style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
-            onLoad={setTableManager}
-            searchText={searchText}
-            onSearchTextChange={setSearchText}
-            showRowsInformation={true}
-            sort={sort}
-            onSortChange={setSort}
-            isVirtualScroll={true}
-            isPaginated={true}
-        />
+        <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', maxWidth: 300 }}>
+                <IsControlled propName='page' unControlledProps={unControlledProps} setUnControlledProps={setUnControlledProps}>
+                    <input type='number' value={page} min='1' onChange={e => setPage(~~e.target.value)} />
+                </IsControlled>
+                <IsControlled propName='pageSize' unControlledProps={unControlledProps} setUnControlledProps={setUnControlledProps}>
+                    <input type='number' value={pageSize} min='1' onChange={e => setPageSize(~~e.target.value)} />
+                </IsControlled>
+                <IsControlled propName='searchText' unControlledProps={unControlledProps} setUnControlledProps={setUnControlledProps}>
+                    <input value={searchText} onChange={e => setSearchText(e.target.value)} />
+                </IsControlled>
+                <IsControlled propName='editRowId' unControlledProps={unControlledProps} setUnControlledProps={setUnControlledProps}>
+                    <input type='number' value={editRowId} min='0' onChange={e => setEditRowId(~~e.target.value)} />
+                </IsControlled>
+                <IsControlled propName='sort' unControlledProps={unControlledProps} setUnControlledProps={setUnControlledProps}>
+                    <input value={sort.colId} onChange={e => setSort({ ...sort, colId: e.target.value})} />
+                    <select name='isAsc' value={sort.isAsc === null ? 'null' : sort.isAsc} onChange={e => setSort({ ...sort, isAsc: e.target.value === 'true' || (e.target.value === 'false' ? false : null) })}>
+                        <option value={'true'}>Ascending</option>
+                        <option value={'false'}>Descending</option>
+                        <option value={'null'}>None</option>
+                    </select>
+                </IsControlled>
+                <IsControlled propName='pageSizes' unControlledProps={unControlledProps} setUnControlledProps={setUnControlledProps}>
+                    {/* <input type='checkbox' checked={showRowsInformation} onChange={e => setShowRowsInformation(!showRowsInformation)} /> */}
+                </IsControlled>
+                <IsControlled propName='enableColumnsReorder' unControlledProps={unControlledProps} setUnControlledProps={setUnControlledProps}>
+                    <input type='checkbox' checked={enableColumnsReorder} onChange={e => setEnableColumnsReorder(!enableColumnsReorder)} />
+                </IsControlled>
+                <IsControlled propName='highlightSearch' unControlledProps={unControlledProps} setUnControlledProps={setUnControlledProps}>
+                    <input type='checkbox' checked={highlightSearch} onChange={e => setHighlightSearch(!highlightSearch)} />
+                </IsControlled>
+                <IsControlled propName='showSearch' unControlledProps={unControlledProps} setUnControlledProps={setUnControlledProps}>
+                    <input type='checkbox' checked={showSearch} onChange={e => setShowSearch(!showSearch)} />
+                </IsControlled>
+                <IsControlled propName='showColumnVisibilityManager' unControlledProps={unControlledProps} setUnControlledProps={setUnControlledProps}>
+                    <input type='checkbox' checked={showColumnVisibilityManager} onChange={e => setShowColumnVisibilityManager(!showColumnVisibilityManager)} />
+                </IsControlled>
+                <IsControlled propName='showRowsInformation' unControlledProps={unControlledProps} setUnControlledProps={setUnControlledProps}>
+                    <input type='checkbox' checked={showRowsInformation} onChange={e => setShowRowsInformation(!showRowsInformation)} />
+                </IsControlled>
+                <IsControlled propName='isHeaderSticky' unControlledProps={unControlledProps} setUnControlledProps={setUnControlledProps}>
+                    <input type='checkbox' checked={isHeaderSticky} onChange={e => setIsHeaderSticky(!isHeaderSticky)} />
+                </IsControlled>
+                <IsControlled propName='isVirtualScroll' unControlledProps={unControlledProps} setUnControlledProps={setUnControlledProps}>
+                    <input type='checkbox' checked={isVirtualScroll} onChange={e => setIsVirtualScroll(!isVirtualScroll)} />
+                </IsControlled>
+                <IsControlled propName='isPaginated' unControlledProps={unControlledProps} setUnControlledProps={setUnControlledProps}>
+                    <input type='checkbox' checked={isPaginated} onChange={e => setIsPaginated(!isPaginated)} />
+                </IsControlled>
+                <IsControlled propName='minSearchChars' unControlledProps={unControlledProps} setUnControlledProps={setUnControlledProps}>
+                    <input type='number' value={minSearchChars} min='0' onChange={e => setMinSearchChars(~~e.target.value)} />
+                </IsControlled>
+                <IsControlled propName='minColumnWidth' unControlledProps={unControlledProps} setUnControlledProps={setUnControlledProps}>
+                    <input type='number' value={minColumnWidth} min='0' onChange={e => setMinColumnWidth(~~e.target.value)} />
+                </IsControlled>
+            </div>
+            <GridTable
+                columns={columns}
+                onColumnsChange={!unControlledProps.includes('editRowId') ? setColumns : undefined}
+                rows={rowsData}
+                isLoading={isLoading}
+                editRowId={!unControlledProps.includes('editRowId') ? editRowId : undefined}
+                onEditRowIdChange={setEditRowId}
+                selectedRowsIds={!unControlledProps.includes('editRowId') ? selectedRowsIds : undefined}
+                onSelectedRowsChange={setSelectedRowsIds}
+                style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
+                onLoad={setTableManager}
+                searchText={!unControlledProps.includes('searchText') ? searchText : undefined}
+                onSearchTextChange={setSearchText}
+                sort={!unControlledProps.includes('sort') ? sort : undefined}
+                onSortChange={setSort}
+                page={!unControlledProps.includes('page') ? page : undefined}
+                onPageChange={setPage}
+                pageSize={!unControlledProps.includes('pageSize') ? pageSize : undefined}
+                onPageSizeChange={setPageSize}
+                pageSizes={!unControlledProps.includes('pageSizes') ? pageSizes : undefined}
+                enableColumnsReorder={!unControlledProps.includes('enableColumnsReorder') ? enableColumnsReorder : undefined}
+                highlightSearch={!unControlledProps.includes('highlightSearch') ? highlightSearch : undefined}
+                showSearch={!unControlledProps.includes('showSearch') ? showSearch : undefined}
+                showRowsInformation={!unControlledProps.includes('showRowsInformation') ? showRowsInformation : undefined}
+                showColumnVisibilityManager={!unControlledProps.includes('showColumnVisibilityManager') ? showColumnVisibilityManager : undefined}
+                isHeaderSticky={!unControlledProps.includes('isHeaderSticky') ? isHeaderSticky : undefined}
+                isVirtualScroll={!unControlledProps.includes('isVirtualScroll') ? isVirtualScroll : undefined}
+                isPaginated={!unControlledProps.includes('isPaginated') ? isPaginated : undefined}
+                minSearchChars={!unControlledProps.includes('minSearchChars') ? minSearchChars : undefined}
+                minColumnWidth={!unControlledProps.includes('minColumnWidth') ? minColumnWidth : undefined}
+            />
+        </div>
     )
 }
 
