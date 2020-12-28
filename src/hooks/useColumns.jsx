@@ -61,7 +61,7 @@ const useColumns = (props, tableManager) => {
             pinned: isPinnedColumn,
             visible: isVisibleColumn
         }
-    }), [columns, minColumnWidth]); 
+    }), [columns, minColumnWidth, SelectionCell, HeaderSelectionCell, Cell, EditorCell, HeaderCell, PlaceHolderCell]); 
 
     columnsApi.visibleColumns = useMemo(() => {
         const visibleColumns = columnsApi.columns.filter(column => column.visible);
