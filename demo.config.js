@@ -1,10 +1,10 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     entry: {
         bundle: "./demo/src/index.js",
     },
+    mode: 'development',
     devtool: 'source-map',
     output: {
         path: __dirname + '/demo/dist/build',
@@ -36,12 +36,7 @@ module.exports = {
         ]
     },
     plugins: [
-        new CleanWebpackPlugin(),
-        // new HtmlWebpackPlugin({
-        //     template: __dirname + '/demo/src/index.html',
-        //     filename: 'index.html',
-        //     inject: 'body',
-        // })
+        new CleanWebpackPlugin()
     ],
     resolve: {
         extensions: [".js", ".jsx"]
