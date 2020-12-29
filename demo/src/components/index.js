@@ -1,5 +1,7 @@
-import IsControlled from './IsControlled';
+import ControllerWrappper from './ControllerWrappper';
+import ControllersDrawer from './ControllersDrawer';
 
 export {
-    IsControlled
+    ControllerWrappper,
+    ControllersDrawer
 }
