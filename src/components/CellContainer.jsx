@@ -11,12 +11,12 @@ const CellContainer = ({
     disableSelection,
     isSelected,
     tableManager,
-    style = {},
     forwardRef,
 }) => {
 
     let {
         config: {
+            minColumnWidth,
             highlightSearch,
             tableHasSelection,
             additionalProps: { cellContainer: additionalProps = {} }
@@ -55,13 +55,6 @@ const CellContainer = ({
         return value;
     }
 
-    const getStyle = () => {
-        switch (column.id) {   
-            case 'checkbox': return { ...style, ...additionalProps.style, minWidth: column.minWidth, maxWidth: column.maxWidth };
-            default: return { ...style, ...additionalProps.style, minWidth: column.minWidth, maxWidth: column.maxWidth };
-        }
-    }
-
     const onMouseEnter = useCallback(
         e => {
             document.querySelectorAll(`.rgt-row-${rowIndex}`).forEach(c => c.classList.add('rgt-row-hover')); 
@@ -87,7 +80,6 @@ const CellContainer = ({
 
     let classNames = getClassNames();
     let value = getValue();
-    style = getStyle();
 
     let cellProps = { tableManager, value, data, column, colIndex, rowIndex };
 
@@ -100,7 +92,6 @@ const CellContainer = ({
             onMouseEnter={ onMouseEnter }
             onMouseLeave={ onMouseLeave }
             className={ classNames }
-            style={ style }
             ref={ forwardRef }
         >
             {

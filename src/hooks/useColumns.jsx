@@ -3,7 +3,6 @@ import { useState, useMemo, useRef } from 'react';
 const useColumns = (props, tableManager) => {
     const {
         config: {
-            minColumnWidth,
             components: { Cell, EditorCell, SelectionCell, HeaderCell, HeaderSelectionCell, PlaceHolderCell }
         }
     } = tableManager;
@@ -37,7 +36,7 @@ const useColumns = (props, tableManager) => {
             label: column.field,
             className: '',
             width: '200px',
-            minWidth: column.minWidth || minColumnWidth,
+            minWidth: null,
             maxWidth: null,
             getValue: ({ value, column }) => value,
             setValue: ({ value, data, setRow, column }) => { setRow({ ...data, [column.field]: value }) },
@@ -61,7 +60,7 @@ const useColumns = (props, tableManager) => {
             pinned: isPinnedColumn,
             visible: isVisibleColumn
         }
-    }), [columns, minColumnWidth, SelectionCell, HeaderSelectionCell, Cell, EditorCell, HeaderCell, PlaceHolderCell]); 
+    }), [columns, SelectionCell, HeaderSelectionCell, Cell, EditorCell, HeaderCell, PlaceHolderCell]); 
 
     columnsApi.visibleColumns = useMemo(() => {
         const visibleColumns = columnsApi.columns.filter(column => column.visible);

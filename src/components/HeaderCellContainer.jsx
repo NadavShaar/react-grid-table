@@ -9,9 +9,10 @@ const SortableDragHandle = SortableHandle(({children, index}) => (
     <React.Fragment>{children}</React.Fragment>
 ));
 
-const HeaderCellContainer = ({ index, column, style, tableManager }) => {
+const HeaderCellContainer = ({ index, column, tableManager }) => {
     let {
         config: {
+            minColumnWidth,
             isHeaderSticky,
             components: { DragHandle },
             additionalProps: { headerCellContainer: additionalProps = {} },
@@ -40,13 +41,7 @@ const HeaderCellContainer = ({ index, column, style, tableManager }) => {
 
     const getAdditionalProps = () => {
         let mergedProps = {
-            ...additionalProps,
-            style: {
-                ...style,
-                ...additionalProps.style,
-                minWidth: column.minWidth,
-                maxWidth: column.maxWidth
-            }
+            ...additionalProps
         }
         if (column.sortable) {
             let onClick = additionalProps.onClick;

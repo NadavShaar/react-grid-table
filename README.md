@@ -259,8 +259,8 @@ Each column (except for '[checkbox](#checkbox-column)' column) has support for t
 | visible | boolean | whether to display the column | true |
 | className | string | a custom class selector for all column cells | "" |
 | width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "200px" |
-| minWidth | number | the minimum width of the column | `minColumnWidth` prop |
-| maxWidth | number, null | the maximum width of the column | null |
+| minWidth | number | the minimum width of the column when resizing | `minColumnWidth` prop |
+| maxWidth | number, null | the maximum width of the column when resizing | null |
 | getValue | function | used for getting the cell value (usefull when the cell value is not a string - [details](#rows)) | `({value, column}) => value` |
 | setValue | function | used for updating the cell value (usefull when the cell value is not a string - [details](#Row-Editing)) | `({ value, data, setRow, column }) => { setRow({ ...data, [column.field]: value}) }` |
 | searchable | boolean | whether to apply search filtering on the column | true |
@@ -315,8 +315,8 @@ Checkbox column has support for the following properties:
 | visible | boolean | whether to display the column | true |
 | className | string | a custom class for all column cells | "" |
 | width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "max-content" |
-| minWidth | number | the minimum width of the column | 0 |
-| maxWidth | number, null | the maximum width of the column | null |
+| minWidth | number | the minimum width of the column when resizing | 0 |
+| maxWidth | number, null | the maximum width of the column when resizing | null |
 | resizable | boolean | whether to allow resizing for the column | false |
 | cellRenderer | function | used for custom rendering the checkbox cell | `({ tableManager, value, data, column, colIndex, rowIndex, onChange, disabled}) => ( <input type="checkbox" onChange={ onChange } checked={ value } disabled={ disabled } /> )` |
 | headerCellRenderer | function | used for custom rendering the checkbox header cell | `({ tableManager, column }) => ( <input type="checkbox" onChange={ callback } checked={ isSelected } disabled={ disabled } /> )` |
