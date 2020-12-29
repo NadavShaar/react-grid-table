@@ -98,7 +98,7 @@ const HeaderCellContainer = ({ index, column, style, tableManager }) => {
                                     column.headerCellRenderer(headerCellProps)
                             }
                             {
-                                (sort.colId !== column.id) || (sort.isAsc === null) ? 
+                                sort.colId !== column.id ? 
                                     null
                                     :
                                     sort.isAsc ? 

@@ -14,7 +14,7 @@ const MyAwesomeTable = () => {
     const [tableManager, setTableManager] = useState(null);
     let [searchText, setSearchText] = useState('');
     let [selectedRowsIds, setSelectedRowsIds] = useState([]);
-    let [sort, setSort] = useState({ colId: null, isAsc: null });
+    let [sort, setSort] = useState({ colId: null, isAsc: true });
     let [page, setPage] = useState(1);
     let [pageSize, setPageSize] = useState(20);
     let [pageSizes, setPageSizes] = useState([20, 50, 100]);
@@ -31,6 +31,7 @@ const MyAwesomeTable = () => {
     let [columns, setColumns] = useState(getColumns({ setRowsData }));
 
     const controllers = {
+        columns: [columns, setColumns],
         editRowId: [editRowId, setEditRowId],
         searchText: [searchText, setSearchText],
         selectedRowsIds: [selectedRowsIds, setSelectedRowsIds],

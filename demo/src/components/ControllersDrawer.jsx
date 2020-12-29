@@ -17,11 +17,17 @@ const ControllersDrawer = ({ controllers }) => {
                 <input type='number' value={controllers.editRowId[0]} min='0' onChange={e => controllers.editRowId[1](~~e.target.value)} />
             </ControllerWrappper>
             <ControllerWrappper label='Sort'>
-                <input value={controllers.sort[0].colId} onChange={e => controllers.sort[1]({ ...controllers.sort[0], colId: e.target.value })} />
-                <select name='isAsc' value={controllers.sort[0].isAsc === null ? 'null' : controllers.sort[0].isAsc} onChange={e => controllers.sort[1]({ ...controllers.sort[0], isAsc: e.target.value === 'true' || (e.target.value === 'false' ? false : null) })}>
+                <select value={controllers.sort[0].colId} onChange={e => controllers.sort[1]({ ...controllers.sort[0], colId: e.target.value, isAsc: e.target.value === 'null' ? false : true })}>
+                    <option value={'null'}>None</option>
+                    {controllers.columns[0].filter(c => (c.sortable !== false) && (c.id !== 'checkbox')).map(c => {
+                        return (
+                            <option key={c.id} value={c.id}>{c.label}</option>
+                        )
+                    })}
+                </select>
+                <select value={!!controllers.sort[0].isAsc} onChange={e => controllers.sort[1]({ ...controllers.sort[0], isAsc: e.target.value === 'true'})}>
                     <option value={'true'}>Ascending</option>
                     <option value={'false'}>Descending</option>
-                    <option value={'null'}>None</option>
                 </select>
             </ControllerWrappper>
             <ControllerWrappper label='Page Sizes'>

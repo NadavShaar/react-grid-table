@@ -34,22 +34,22 @@ const getColumns = ({ setRowsData }) => {
         //     editorCellRenderer: props => <Username {...props} isEdit />
         // },
         {
-            id: 3,
+            id: '3',
             field: 'first_name',
             label: 'First Name'
         },
         {
-            id: 4,
+            id: '4',
             field: 'last_name',
             label: 'Last Name'
         },
         {
-            id: 5,
+            id: '5',
             field: 'email',
             label: 'Email'
         },
         {
-            id: 6,
+            id: '6',
             field: 'gender',
             label: 'Gender',
             editorCellRenderer: ({ tableManager, value, onChange, data, column, rowIndex }) => (
@@ -64,12 +64,12 @@ const getColumns = ({ setRowsData }) => {
             )
         },
         {
-            id: 7,
+            id: '7',
             field: 'ip_address',
             label: 'IP Address'
         },
         {
-            id: 8,
+            id: '8',
             field: 'last_visited',
             label: 'Last Visited',
             sort: ({ a, b, isAscending }) => {
@@ -79,7 +79,7 @@ const getColumns = ({ setRowsData }) => {
             }
         },
         {
-            id: 9,
+            id: '9',
             width: 'max-content',
             pinned: true,
             sortable: false,

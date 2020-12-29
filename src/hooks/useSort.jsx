@@ -4,10 +4,10 @@ const useSort = (props, tableManager) => {
     const { columnsApi: { columns } } = tableManager;
 
     const sortApi = useRef({}).current;
-    const [sort, setSort] = useState({ colId: null, isAsc: null });
+    const [sort, setSort] = useState({ colId: null, isAsc: true });
 
     sortApi.sort = props.sort ?? sort;
-    if (!columns.some(c => c.id === sortApi.sort.colId)) sortApi.sort = { colId: null, isAsc: null };
+    if (!columns.some(c => c.id === sortApi.sort.colId)) sortApi.sort = { colId: null, isAsc: true };
 
     sortApi.setSort = ({colId, isAsc}) => {
         const { columnsReorderApi: { isColumnReordering }, columnsResizeApi: { isColumnResizing } } = tableManager;
@@ -41,8 +41,13 @@ const useSort = (props, tableManager) => {
 
     sortApi.toggleSort = colId => {
         let isAsc = true;
-        if (sortApi.sort.colId === colId) isAsc = sortApi.sort.isAsc ? false : sortApi.sort.isAsc === false ? null : true;
-        if (isAsc === null) colId = null;
+        if (sortApi.sort.colId === colId) {
+            if (sortApi.sort.isAsc) isAsc = false;
+            else {
+                colId = null;
+                isAsc = true;
+            }
+        }
 
         sortApi.setSort({ colId, isAsc })
     }
