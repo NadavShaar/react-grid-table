@@ -846,6 +846,7 @@ export const AsyncControlledTable = () => {
 Use it if you need to fetch your data asynchrony, and manage it yourself (Useful when there are other places that should be able to fetch the same data).  
 All the data is supplied to the table via the `rows` prop, which should be updated using the `onRowsRequest` prop.   
 **Note**: `react-grid-table` will not necessarily ask for concurrent data, which means that "holes" in the data are possible. These "holes" needs to be filled with null/undefined items in order to ensure proper functionally. 
+
 To achieve this, you can use:
 
 ```JSX
