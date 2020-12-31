@@ -770,8 +770,8 @@ export const AsyncManagedTable = () => {
             body: {
                 from: requestData.from,
                 to: requestData.to,
-                searchText: tableManager.searchApi.searchText,
-                sort: tableManager.sortApi.sort,
+                searchText: requestData.searchText,
+                sort: requestData.sort,
             },
             signal: controller.signal,
         }).then(response => response.json()).catch(console.warn);
