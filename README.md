@@ -732,7 +732,7 @@ export const SyncedTable = () => {
 }
 ``` 
 
-#### Async Uncontrolled: 
+#### Async (Uncontrolled): 
 
 Use this flow if you need to fetch your data asynchrony, and want `react-grid-table` to manage it internally.  
 All the data is supplied to the table via the `onRowsRequest` prop.  
@@ -782,7 +782,7 @@ export const AsyncUncontrolledTable = () => {
 }
 ``` 
 
-#### Async Controlled: 
+#### Async (Controlled): 
 
 Use this flow if you need to fetch your data asynchrony, and want `react-grid-table` to manage it internally, but still be able to use it in other places in the app.  
 All the data is supplied to the table via the `onRowsRequest` prop, but is controlled by a parent component via `rows`, `onRowsChange`, `totalRows` & `onTotalRowsChange` props.   
@@ -841,11 +841,12 @@ export const AsyncControlledTable = () => {
     )
 }
 ``` 
-#### Async Managed: 
+#### Async (Managed): 
 
 Use it if you need to fetch your data asynchrony, and manage it yourself (Useful when there are other places that should be able to fetch the same data).  
 All the data is supplied to the table via the `rows` prop, which should be updated using the `onRowsRequest` prop.   
-**Note**: `react-grid-table` will not necessarily ask for concurrent data, which means that "holes" in the data are possible. These "holes" needs to be filled with null/undefined items in order to ensure proper functionally. To achieve this, you can use:
+**Note**: `react-grid-table` will not necessarily ask for concurrent data, which means that "holes" in the data are possible. These "holes" needs to be filled with null/undefined items in order to ensure proper functionally. 
+To achieve this, you can use:
 
 ```JSX
 let mergedRows = tableManager.asyncApi.mergeRowsAt(rows, fetchedRows, at)
