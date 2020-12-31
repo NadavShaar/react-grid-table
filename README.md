@@ -626,6 +626,7 @@ The API has the following properties:
 ### rowEditApi
 ### rowVirtualizer
 ### asyncApi
+
 | name | type | description | usage |
 |---|---|---|---|
 | setPageSize | function | handles the page size change | `setPageSize(pageSize)` |
@@ -644,7 +645,7 @@ The API has the following properties:
 
 
 ### components
-all [components](#components-props) that are not part of the table itself.
+all [components](#components) that are not part of the table itself.
 
 ### rowsData
 
