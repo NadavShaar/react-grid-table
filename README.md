@@ -499,16 +499,55 @@ additionalProps={{ cell: { ... }, ... }}
 
 This is the API object used by the internal components, you can use it to do anything that the API provides, outside of the component.
 
-The API is devided into the following categories:
+The API has the following properties:
 
+- **isMounted:** Is the table mounted.
+- **isInitialized:** Is the table initialized. Will be set to true once all effects are finished.
+- **mode:** 'sync' or 'async', derived from the supplied props.
+- **isLoading:** Is the table currently loading data.
+- **config:** All the params that defines the table's behavior & UI.
 - **refs:** ref objects for selected elements.
-- **handlers:** all functionality handlers
-- **components:** all [components](#components-props) that are not part of the table itself
-- **rowsData:** all rows related data
-- **columnsData:** all columns related data
-- **params:** table configuration properties
-- **additionalProps:** additional props
-- **icons:** icons configuration
+- **columnsApi:** API of the columns.
+- **columnsVisibilityApi:** API of the columns visibility.
+- **searchApi:** API of the search.
+- **sortApi:** API of the sort.
+- **rowsApi:** API of the rows
+- **paginationApi:** API of the pagination.
+- **rowSelectionApi:** API of the rows selection.
+- **rowEditApi:** API of the row editing.
+- **rowVirtualizer:** API of the rows virtualizer.
+- **asyncApi:** API of the async functionality.
+
+### config
+
+| name | type | description | default value |
+|---|---|---|---|
+| rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be unique | 'id' |
+| minColumnWidth | number | the minimum width of a column | 70 |
+| minSearchChars | number | the minimum characters in order to apply search and highlighting | 2 |
+| isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
+| isPaginated | boolean | 	determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
+| enableColumnsReorder | boolean | whether to allow column drag & drop for repositioning | true |
+| highlightSearch | boolean | whether to highlight the search term | true |
+| showSearch | boolean | whether to show the search component in the header | true |
+| showRowsInformation | boolean | whether to show the rows information component (located at the left side of the footer) | true |
+| showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
+| pageSizes | array of numbers | page size options | [20, 50, 100] |
+| requestDebounceTimeout | number | defines the amount of debouning time for triggering the `onRowsRequest` prop | 300 |
+| batchSize | number | defines the amount of rows that will be requested by `onRowsRequest` prop | 100 |
+| isVirtualScroll | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
+| tableHasSelection | boolean | wether table has a checkbox column to conrol rows selection | --- |
+| components | object | the components that are in use by the table (default components merged with props.components [details](#components)) | {...allDefaultComponents} |
+| additionalProps | object | the components props that are in use by the table (see full list of [additionalProps](#additionalProps)) | {} |
+| icons | object | the icons that are in use by the table (default icons merged with props.icons [details](#configuration-props)) | {...allDefaultIcons} |
+| texts | object | the texts that are in use by the table (default texts merged with props.texts [details](#configuration-props) | {...allDefaultTexts} |
+
+| sort | object | sort config. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }`, to unsort simply pass a `colId` and `isAsc` as `null` | { } |
+| page | number | the current page number | 0 |
+| searchText | string | text for search | "" |
+| totalPages | number | the total number of pages | 0 |
+| pageSize | number | the selected page size | 20 |
+| texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
 
 ### refs
 
@@ -517,11 +556,77 @@ The API is devided into the following categories:
 | rgtRef | object | the `ref` object of the wrapper element |
 | tableRef | object | the `ref` object of the table container element |
 
-### handlers
+### columnsApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| setColumns | function | sets a columns configuration | setColumns(columns) |
+| columns | array | current columns | --- |
+| visibleColumns | array | current visible columns | --- |
+| setColumns | function | sets the columns | setColumns(columns) |
+
+### columnsVisibilityApi
+
+| name | type | description | usage |
+|---|---|---|---|
+| toggleColumnVisibility | function | toggles a column's visibility | toggleColumnVisibility(column.id) |
+
+### searchApi
+
+| name | type | description | usage |
+|---|---|---|---|
+| searchText | string | current searchText value | --- |
+| setSearchText | function | sets the searchText | setSearchText('hello') |
+| searchRows | function | filters rows based on the current searchText and all column.search configurations | searchRows(rows) |
+| valuePassesSearch | function | determains if a value paases the search of a certain column | valuePassesSearch('hello', column) |
+
+### sortApi
+
+| name | type | description | usage |
+|---|---|---|---|
+| sort | object | current sort value | --- |
+| setSort | function | sets the sort | setSort({colId: 5, isAsc: false}) |
+| sortRows | function | sorts rows based on the current sort and all column.sort configurations | sortRows(rows) |
+| toggleSort | function | toggles a column's sort state from ascending , to descending, to none | toggleSort(column.id) |
+
+### rowsApi
+
+| name | type | description | usage |
+|---|---|---|---|
+| rows | array | current rows | --- |
+| setRows | function | sets the rows | setRows(rows) |
+| totalRows | number | total number of rows | --- |
+| setTotalRows | function | sets the total rows number | setTotalRows(1000) |
+
+### paginationApi
+
+| name | type | description | usage |
+|---|---|---|---|
+| page | number | current page | --- |
+| setPage | function | sets the page | setPage(3) |
+| pageSize | number | current page size | --- |
+| setPageSize | function | sets the page size | setPageSize(20) |
+| pageRows | array | rows in the current page | --- |
+| totalPages | number | total number of pages | --- |
+
+### rowSelectionApi
+
+| name | type | description | usage |
+|---|---|---|---|
+| selectedRowsIds | number | selected rows ids | --- |
+| setSelectedRowsIds | function | sets the selected rows ids | setSelectedRowsIds([1,3,5]) |
+| toggleRowSelection | function | toggles if a row is selected | toggleRowSelection(row.id) |
+| getIsRowSelectable | function | determains if a row is selectable | --- |
+| selectAll | number | properties that can be used to control the select all button | --- |
+| selectAll.mode | string | determains the select all type | --- |
+| selectAll.checked | boolean | should the select all button be checked | --- |
+| selectAll.disabled | boolean | should the select all button be disabled | --- |
+| selectAll.indeterminate | boolean | should the select all button be indeterminate | --- |
+| selectAll.onChange | function | toggles the select all. will filter/push all avilable rows from/to selectedRowsIds | --- |
+| selectAll.ref | ref | a ref that can be added to the select all button to enable auto setting of indeterminate state | --- |
+
+### rowEditApi
+### rowVirtualizer
+### asyncApi
 | setPageSize | function | handles the page size change | `setPageSize(pageSize)` |
 | setEditRow | function | updates the row in edit mode, used as the onChange callback for the `editorCellRenderer` propery in the column, and should be used when `editRowId` is set to the id of the edited row | `setEditRow(editRow)` |
 | setSelectedRowsIds | function | updates the rows selection, contains array of rows ids | `setSelectedRowsIds([])` |
