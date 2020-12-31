@@ -625,155 +625,182 @@ export const SyncedTable = () => {
 }
 ``` 
 
-2. **Async Uncontrolled:** Use this flow if you need to fetch your data asynchrony, and want `react-grid-table` to manage it internally.  
-    All the data is supplied to the table via the `onRowsRequest` prop.  
-    Required props:
-    - **onRowsRequest:** Should return a promise that resolves to {rows: *data*, totalRows: *data length*}.
-    ```JSX
-    const controller = new AbortController();
+#### Async Uncontrolled: 
 
-    export const AsyncUncontrolledTable = () => {
+Use this flow if you need to fetch your data asynchrony, and want `react-grid-table` to manage it internally.  
+All the data is supplied to the table via the `onRowsRequest` prop.  
+
+**Required props**:
+
+| name | type | description | default value |
+|---|---|---|---|
+| onRowsRequest* | async function | Should return a promise that resolves to {rows, totalRows} | undefined |
+
+**Example:**
+
+```JSX
+const controller = new AbortController();
+
+export const AsyncUncontrolledTable = () => {
+    
+    const columns = getColumns();
+
+    const onRowsRequest = async (requestData, tableManager) => {
+        const response = await fetch(`app/api/rows`, {
+            method: 'post',
+            body: {
+                from: requestData.from,
+                to: requestData.to,
+                searchText: tableManager.searchApi.searchText,
+                sort: tableManager.sortApi.sort,
+            },
+            signal: controller.signal,
+        }).then(response => response.json()).catch(console.warn);
+
+        if(!response?.items) return;
         
-        const columns = getColumns();
-
-        const onRowsRequest = async (requestData, tableManager) => {
-            const response = await fetch(`app/api/rows`, {
-                method: 'post',
-                body: {
-                    from: requestData.from,
-                    to: requestData.to,
-                    searchText: tableManager.searchApi.searchText,
-                    sort: tableManager.sortApi.sort,
-                },
-                signal: controller.signal,
-            }).then(response => response.json()).catch(console.warn);
-
-            if(!response?.items) return;
-            
-            return {
-                rows: response.items,
-                totalRows: response.totalItems
-            };
-        }
-
-        return (
-            <GridTable
-                columns={columns}
-                onRowsRequest={onRowsRequest}
-                onRowsReset={controller.abort}
-            />
-        )
+        return {
+            rows: response.items,
+            totalRows: response.totalItems
+        };
     }
-    ``` 
-3. **Async Controlled:** Use this flow if you need to fetch your data asynchrony, and want `react-grid-table` to manage it internally, but still be able to use it in other places in the app.  
-    All the data is supplied to the table via the `onRowsRequest` prop, but is controlled by a parent component via `rows`, `onRowsChange`, `totalRows` & `onTotalRowsChange` props.   
-    Required props:
-    - **onRowsRequest:** Should return a promise that resolves to {rows: *data*, totalRows: *data length*}.
-    - **rows:** Should contain the current data.
-    - **onRowsChange:** Should be used to set the current data.
-    - **totalRows:** Should contain the current data length.
-    - **onTotalRowsChange:** Should be used to set the current data length.
-     ```JSX
-    const controller = new AbortController();
 
-    export const AsyncControlledTable = () => {
+    return (
+        <GridTable
+            columns={columns}
+            onRowsRequest={onRowsRequest}
+            onRowsReset={controller.abort}
+        />
+    )
+}
+``` 
+
+#### Async Controlled: 
+
+Use this flow if you need to fetch your data asynchrony, and want `react-grid-table` to manage it internally, but still be able to use it in other places in the app.  
+All the data is supplied to the table via the `onRowsRequest` prop, but is controlled by a parent component via `rows`, `onRowsChange`, `totalRows` & `onTotalRowsChange` props.   
+
+**Required props**:
+
+| name | type | description | default value |
+|---|---|---|---|
+| onRowsRequest* | async function | Should return a promise that resolves to {rows, totalRows} | undefined |
+| rows* | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
+| onRowsChange* | function | Should be used to set the current data | undefined |
+| totalRows* | number | Should contain the current data length | undefined |
+| onTotalRowsChange* | function | Should be used to set the current data length | undefined |
+
+**Example:**
+
+```JSX
+const controller = new AbortController();
+
+export const AsyncControlledTable = () => {
+    
+    const columns = getColumns();
+    let [rows, setRows] = useState();
+    let [totalRows, setTotalRows] = useState();
+
+    const onRowsRequest = async (requestData, tableManager) => {
+        const response = await fetch(`app/api/rows`, {
+            method: 'post',
+            body: {
+                from: requestData.from,
+                to: requestData.to,
+                searchText: tableManager.searchApi.searchText,
+                sort: tableManager.sortApi.sort,
+            },
+            signal: controller.signal,
+        }).then(response => response.json()).catch(console.warn);
+
+        if(!response?.items) return;
         
-        const columns = getColumns();
-        let [rows, setRows] = useState();
-        let [totalRows, setTotalRows] = useState();
-
-        const onRowsRequest = async (requestData, tableManager) => {
-            const response = await fetch(`app/api/rows`, {
-                method: 'post',
-                body: {
-                    from: requestData.from,
-                    to: requestData.to,
-                    searchText: tableManager.searchApi.searchText,
-                    sort: tableManager.sortApi.sort,
-                },
-                signal: controller.signal,
-            }).then(response => response.json()).catch(console.warn);
-
-            if(!response?.items) return;
-            
-            return {
-                rows: response.items,
-                totalRows: response.totalItems
-            };
-        }
-
-        return (
-            <GridTable
-                columns={columns}
-                onRowsRequest={onRowsRequest}
-                rows={rows}
-                onRowsChange={setRows}
-                totalRows={totalRows}
-                onTotalRowsChange={setTotalRows}
-                onRowsReset={controller.abort}
-            />
-        )
+        return {
+            rows: response.items,
+            totalRows: response.totalItems
+        };
     }
-    ``` 
-4. **Async Managed:** Use it if you need to fetch your data asynchrony, and manage it yourself (Useful when there are other places that should be able to fetch the same data).  
-    All the data is supplied to the table via the `rows` prop, which should be updated using the `onRowsRequest` prop.   
-    **Note**: `react-grid-table` will not necessarily ask for concurrent data, which means that "holes" in the data are possible. These "holes" needs to be filled with null/undefined items in order to ensure proper functionally. To achieve this, you can use:
-    ```JSX
-    let mergedRows = tableManager.asyncApi.mergeRowsAt(rows, fetchedRows, at)
-    ``` 
-    Required props:
-    - **onRowsRequest:** Should update the rows props according to the request.
-    - **rows:** Should contain the current data.
-    - **totalRows:** Should contain the current data length.
-    - **onRowsReset:** Should be used to reset the current data.Will be called when sort or searchText change.
-    ```JSX
-    const controller = new AbortController();
 
-    export const AsyncManagedTable = () => {
-        
-        const columns = getColumns();
-        let rowsRef = useRef([]);
-        let [totalRows, setTotalRows] = useState();
+    return (
+        <GridTable
+            columns={columns}
+            onRowsRequest={onRowsRequest}
+            rows={rows}
+            onRowsChange={setRows}
+            totalRows={totalRows}
+            onTotalRowsChange={setTotalRows}
+            onRowsReset={controller.abort}
+        />
+    )
+}
+``` 
+#### Async Managed: 
 
-        const onRowsRequest = async (requestData, tableManager) => {
-            const response = await fetch(`app/api/rows`, {
-                method: 'post',
-                body: {
-                    from: requestData.from,
-                    to: requestData.to,
-                    searchText: tableManager.searchApi.searchText,
-                    sort: tableManager.sortApi.sort,
-                },
-                signal: controller.signal,
-            }).then(response => response.json()).catch(console.warn);
+Use it if you need to fetch your data asynchrony, and manage it yourself (Useful when there are other places that should be able to fetch the same data).  
+All the data is supplied to the table via the `rows` prop, which should be updated using the `onRowsRequest` prop.   
+**Note**: `react-grid-table` will not necessarily ask for concurrent data, which means that "holes" in the data are possible. These "holes" needs to be filled with null/undefined items in order to ensure proper functionally. To achieve this, you can use:
 
-            if(!response?.items) return;
+```JSX
+let mergedRows = tableManager.asyncApi.mergeRowsAt(rows, fetchedRows, at)
+``` 
 
-            rowsRef.current = tableManager.asyncApi.mergeRowsAt(rowsRef.current, response.items, requestData.from);
+**Required props**:
 
-            setTotalRows(response.totalItems);
-        }
+| name | type | description | default value |
+|---|---|---|---|
+| onRowsRequest* | async function | Should update the rows props according to the request | undefined |
+| rows* | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
+| totalRows* | number | Should contain the current data length | undefined |
+| onRowsReset* | function | Should be used to reset the current data. Will be called when sort or searchText change | undefined |
 
-        const onRowsReset = () => {
-            rowsRef.current = [];
-            setTotalRows();
-            controller.abort();
-        }
+**Example:**
 
-        return (
-            <GridTable
-                columns={columns}
-                rows={rowsRef.current}
-                onRowsRequest={onRowsRequest}
-                onRowsReset={onRowsReset}
-                totalRows={totalRows}
-                requestDebounceTimeout={500}
-            />
-        )
+```JSX
+const controller = new AbortController();
+
+export const AsyncManagedTable = () => {
+    
+    const columns = getColumns();
+    let rowsRef = useRef([]);
+    let [totalRows, setTotalRows] = useState();
+
+    const onRowsRequest = async (requestData, tableManager) => {
+        const response = await fetch(`app/api/rows`, {
+            method: 'post',
+            body: {
+                from: requestData.from,
+                to: requestData.to,
+                searchText: tableManager.searchApi.searchText,
+                sort: tableManager.sortApi.sort,
+            },
+            signal: controller.signal,
+        }).then(response => response.json()).catch(console.warn);
+
+        if(!response?.items) return;
+
+        rowsRef.current = tableManager.asyncApi.mergeRowsAt(rowsRef.current, response.items, requestData.from);
+
+        setTotalRows(response.totalItems);
     }
-    ``` 
 
+    const onRowsReset = () => {
+        rowsRef.current = [];
+        setTotalRows();
+        controller.abort();
+    }
 
+    return (
+        <GridTable
+            columns={columns}
+            rows={rowsRef.current}
+            onRowsRequest={onRowsRequest}
+            onRowsReset={onRowsReset}
+            totalRows={totalRows}
+            requestDebounceTimeout={500}
+        />
+    )
+}
+``` 
 
 ### Row-Editing
 Row editing can be done by rendering the edit button using the `cellRenderer` property in the column configuration, then when clicked, it will control the `editRowId` prop, then the table will render the editing components for columns that are defined as `editable` (true by default), and as was defined in the `editorCellRenderer` which by default will render a text input.
