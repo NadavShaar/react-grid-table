@@ -626,6 +626,8 @@ The API has the following properties:
 ### rowEditApi
 ### rowVirtualizer
 ### asyncApi
+| name | type | description | usage |
+|---|---|---|---|
 | setPageSize | function | handles the page size change | `setPageSize(pageSize)` |
 | setEditRow | function | updates the row in edit mode, used as the onChange callback for the `editorCellRenderer` propery in the column, and should be used when `editRowId` is set to the id of the edited row | `setEditRow(editRow)` |
 | setSelectedRowsIds | function | updates the rows selection, contains array of rows ids | `setSelectedRowsIds([])` |
