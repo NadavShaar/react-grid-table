@@ -6,6 +6,8 @@ function getRowsRequest(tableManager, rowsRequests) {
     const {
         config: { isPaginated, isVirtualScroll, batchSize },
         rowsApi: { totalRows },
+        searchApi: { searchText },
+        soetApi: { sort },
         paginationApi: { page, pageSize },
         rowVirtualizer: { virtualItems },
     } = tableManager;
@@ -53,6 +55,8 @@ function getRowsRequest(tableManager, rowsRequests) {
     return {
         from,
         to,
+        searchText,
+        sort,
         id: uuid()
     };
 }
