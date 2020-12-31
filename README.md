@@ -541,7 +541,6 @@ The API has the following properties:
 | additionalProps | object | the components props that are in use by the table (see full list of [additionalProps](#additionalProps)) | {} |
 | icons | object | the icons that are in use by the table (default icons merged with props.icons [details](#configuration-props)) | {...allDefaultIcons} |
 | texts | object | the texts that are in use by the table (default texts merged with props.texts [details](#configuration-props) | {...allDefaultTexts} |
-
 | sort | object | sort config. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }`, to unsort simply pass a `colId` and `isAsc` as `null` | { } |
 | page | number | the current page number | 0 |
 | searchText | string | text for search | "" |
