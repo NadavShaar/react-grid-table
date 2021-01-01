@@ -37,7 +37,7 @@ const useColumnsResize = (props, tableManager) => {
         if (column.maxWidth && (column.maxWidth < newColWidth)) newColWidth = column.maxWidth;
 
         const colIndex = columns.findIndex(cd => cd.id === column.id);
-        const gtcArr = gridTemplateColumns.split(" ");
+        const gtcArr = gridTemplateColumns.split(/(?<!,) /);
         gtcArr[colIndex] = `${newColWidth}px`;
 
         containerEl.style.gridTemplateColumns = gtcArr.join(" ");
