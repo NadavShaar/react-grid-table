@@ -7,7 +7,7 @@ const useSort = (props, tableManager) => {
     const [sort, setSort] = useState({ colId: null, isAsc: true });
 
     sortApi.sort = props.sort ?? sort;
-    if (!columns.some(c => c.id === sortApi.sort.colId)) sortApi.sort = { colId: null, isAsc: true };
+    if (!columns.some(c => (c.id === sortApi.sort.colId) && c.sortable)) sortApi.sort = { colId: null, isAsc: true };
 
     sortApi.setSort = ({colId, isAsc}) => {
         const { columnsReorderApi: { isColumnReordering }, columnsResizeApi: { isColumnResizing } } = tableManager;

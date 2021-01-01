@@ -18,6 +18,7 @@ const getColumns = ({ setRowsData }) => {
     return [
         {
             id: 'checkbox',
+            visible: true,
             pinned: true,
             width: '54px',
         },
@@ -25,28 +26,53 @@ const getColumns = ({ setRowsData }) => {
             id: '2',
             field: 'username',
             label: 'Username',
+            visible: true,
+            searchable: true,
+            editable: true,
+            sortable: true,
+            resizable: true,
             cellRenderer: UsernameCell,
             editorCellRenderer: props => <UsernameCell {...props} isEdit />
         },
         {
             id: '3',
             field: 'first_name',
-            label: 'First Name'
+            label: 'First Name',
+            visible: true,
+            searchable: true,
+            editable: true,
+            sortable: true,
+            resizable: true,
         },
         {
             id: '4',
             field: 'last_name',
-            label: 'Last Name'
+            label: 'Last Name',
+            visible: true,
+            searchable: true,
+            editable: true,
+            sortable: true,
+            resizable: true,
         },
         {
             id: '5',
             field: 'email',
-            label: 'Email'
+            label: 'Email',
+            visible: true,
+            searchable: true,
+            editable: true,
+            sortable: true,
+            resizable: true,
         },
         {
             id: '6',
             field: 'gender',
             label: 'Gender',
+            visible: true,
+            searchable: true,
+            editable: true,
+            sortable: true,
+            resizable: true,
             editorCellRenderer: ({ tableManager, value, onChange, data, column, rowIndex }) => (
                 <select
                     style={styles.select}
@@ -61,12 +87,22 @@ const getColumns = ({ setRowsData }) => {
         {
             id: '7',
             field: 'ip_address',
-            label: 'IP Address'
+            label: 'IP Address',
+            visible: true,
+            searchable: true,
+            editable: true,
+            sortable: true,
+            resizable: true,
         },
         {
             id: '8',
             field: 'last_visited',
             label: 'Last Visited',
+            visible: true,
+            searchable: true,
+            editable: true,
+            sortable: true,
+            resizable: true,
             sort: ({ a, b, isAscending }) => {
                 let aa = a.split('/').reverse().join(),
                     bb = b.split('/').reverse().join();
@@ -76,6 +112,7 @@ const getColumns = ({ setRowsData }) => {
         {
             id: 'buttons',
             width: 'max-content',
+            visible: true,
             pinned: true,
             sortable: false,
             resizable: true,

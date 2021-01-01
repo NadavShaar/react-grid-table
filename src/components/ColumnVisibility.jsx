@@ -16,7 +16,7 @@ const ColumnVisibility = ({ columns, onChange, tableManager }) => {
             title={columnVisibilityText}
             buttonChildren={columnVisibilityIcon}
             popoverChildren={
-                columns.filter(col => !col.pinned).map((cd, idx) => (
+                columns.filter(col => col.label).map((cd, idx) => (
                     <div key={idx} className='rgt-clickable rgt-columns-manager-popover-row'>
                         <label 
                             htmlFor={`checkbox-${idx}`} 
