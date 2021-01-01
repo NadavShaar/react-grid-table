@@ -3,5 +3,5 @@ import ControllersDrawer from './ControllersDrawer';
 
 export {
     ControllerWrappper,
-    ControllersDrawer
+    ControllersDrawer,
 }

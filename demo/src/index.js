@@ -4,7 +4,7 @@ import GridTable from '../../src';
 import { ControllersDrawer } from './components';
 import getColumns from './getColumns';
 import MOCK_DATA from "./MOCK_DATA.json";
-// import './index.css';
+import './index.css';
 
 
 const MyAwesomeTable = () => {
@@ -14,7 +14,7 @@ const MyAwesomeTable = () => {
     const [tableManager, setTableManager] = useState(null);
     let [searchText, setSearchText] = useState('');
     let [selectedRowsIds, setSelectedRowsIds] = useState([]);
-    let [sort, setSort] = useState({ colId: null, isAsc: true });
+    let [sort, setSort] = useState({ colId: '', isAsc: true });
     let [page, setPage] = useState(1);
     let [pageSize, setPageSize] = useState(20);
     let [pageSizes, setPageSizes] = useState([20, 50, 100]);
@@ -60,39 +60,41 @@ const MyAwesomeTable = () => {
     }, [])
 
     return (
-        <div style={{ display: 'flex' }}>
+        <div className="demo">
+            <div className="tableWrapper">
+                <GridTable
+                    columns={columns}
+                    onColumnsChange={setColumns}
+                    rows={rowsData}
+                    isLoading={isLoading}
+                    editRowId={editRowId}
+                    onEditRowIdChange={setEditRowId}
+                    selectedRowsIds={selectedRowsIds}
+                    onSelectedRowsChange={setSelectedRowsIds}
+                    style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
+                    onLoad={setTableManager}
+                    searchText={searchText}
+                    onSearchTextChange={setSearchText}
+                    sort={sort}
+                    onSortChange={setSort}
+                    page={page}
+                    onPageChange={setPage}
+                    pageSize={pageSize}
+                    onPageSizeChange={setPageSize}
+                    pageSizes={pageSizes}
+                    enableColumnsReorder={enableColumnsReorder}
+                    highlightSearch={highlightSearch}
+                    showSearch={showSearch}
+                    showRowsInformation={showRowsInformation}
+                    showColumnVisibilityManager={showColumnVisibilityManager}
+                    isHeaderSticky={isHeaderSticky}
+                    isVirtualScroll={isVirtualScroll}
+                    isPaginated={isPaginated}
+                    minSearchChars={minSearchChars}
+                    minColumnWidth={minColumnWidth}
+                />
+            </div>
             <ControllersDrawer controllers={controllers}/>
-            <GridTable
-                columns={columns}
-                onColumnsChange={setColumns}
-                rows={rowsData}
-                isLoading={isLoading}
-                editRowId={editRowId}
-                onEditRowIdChange={setEditRowId}
-                selectedRowsIds={selectedRowsIds}
-                onSelectedRowsChange={setSelectedRowsIds}
-                style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
-                onLoad={setTableManager}
-                searchText={searchText}
-                onSearchTextChange={setSearchText}
-                sort={sort}
-                onSortChange={setSort}
-                page={page}
-                onPageChange={setPage}
-                pageSize={pageSize}
-                onPageSizeChange={setPageSize}
-                pageSizes={pageSizes}
-                enableColumnsReorder={enableColumnsReorder}
-                highlightSearch={highlightSearch}
-                showSearch={showSearch}
-                showRowsInformation={showRowsInformation}
-                showColumnVisibilityManager={showColumnVisibilityManager}
-                isHeaderSticky={isHeaderSticky}
-                isVirtualScroll={isVirtualScroll}
-                isPaginated={isPaginated}
-                minSearchChars={minSearchChars}
-                minColumnWidth={minColumnWidth}
-            />
         </div>
     )
 }
