@@ -624,80 +624,26 @@ The API has the following properties:
 | selectAll.ref | ref | a ref that can be added to the select all button to enable auto setting of indeterminate state | --- |
 
 ### rowEditApi
+
+| name | type | description | usage |
+|---|---|---|---|
+| editRow | object | current edit row data | --- |
+| editRowId | any | current edit row id | --- |
+| getIsRowEditable | function | determains wheather a row can be edited | getIsRowEditable(row) |
+| setEditRow | function | sets the edit row | setEditRow(row) |
+| setEditRowId | function | sets the edit row id, you can pass null to switch back from edit mode | setEditRowId(row.id) |
+
 ### rowVirtualizer
+
+See full documentation at https://github.com/tannerlinsley/react-virtual
+
 ### asyncApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| setPageSize | function | handles the page size change | `setPageSize(pageSize)` |
-| setEditRow | function | updates the row in edit mode, used as the onChange callback for the `editorCellRenderer` propery in the column, and should be used when `editRowId` is set to the id of the edited row | `setEditRow(editRow)` |
-| setSelectedRowsIds | function | updates the rows selection, contains array of rows ids | `setSelectedRowsIds([])` |
-| toggleRowSelection | function | toggles the row selection by row id | `toggleRowSelection(rowId)` |
-| handlePagination | function | navigate to a page | `handlePagination(pageNumber)` |
-| toggleColumnVisibility | function | toggles column visibility by column id | `toggleColumnVisibility(colId)` |
-| setSearchText | function | updates the search | `setSearchText(searchText)` |
-| setEditRowId | function | will set a row to switch to edit mode by its id, you can pass null to switch back from edit mode | `setEditRowId(rowEditId)` |
-| getHighlightedText | function | gets text and a search term and returns html with highlighted search term | `getHighlightedText(text, searchTerm)` |
-| onRowClick | function | triggers when a row is clicked | `({rowIndex, data, column, event}) => { }` |
-| getIsRowEditable | function | a callback function that returns whether row editing for the current row should be disabled or not | `row => true` |
-| getIsRowSelectable | function | a callback function that returns whether row selection for the current row should be disabled or not | `row => true` |
-| handleSort | function | accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }`, to unsort simply pass a `colId` and `isAsc` as `null | `handleSort(colId, isAsc)` |
-
-
-### components
-all [components](#components) that are not part of the table itself.
-
-### rowsData
-
-| name | type | description | default value |
-|---|---|---|---|
-| items | array of objects | the `rows` data |
-| pageRows | array of objects | all rows data in the current page | [ ] |
-| editRow | object | the row that is currently in editing mode | null |
-| selectedRowsIds | array | array containing the selected rows ids | [ ] |
-| rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be unique | 'id' |
-
-### columnsData
-
-| name | type | description |
-|---|---|---|
-| columns | array of objects | the `columns` configuration |
-| visibleColumns | array of objects | all columns that has `visible` true |
-
-### params
-
-| name | type | description | default value |
-|---|---|---|---|
-| sort | object | sort config. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }`, to unsort simply pass a `colId` and `isAsc` as `null` | { } |
-| page | number | the current page number | 0 |
-| searchText | string | text for search | "" |
-| highlightSearch | boolean | whether to highlight the search term | true |
-| minSearchChars | number | the minimum characters in order to apply search and highlighting | 2 |
-| totalPages | number | the total number of pages | 0 |
-| pageSize | number | the selected page size | 20 |
-| pageSizes | array of numbers | page size options | [20, 50, 100] |
-| tableHasSelection | boolean | wether table has a checkbox column to conrol rows selection | --- |
-| showSearch | boolean | whether to show the search component in the header | true |
-| showRowsInformation | boolean | whether to show the rows information component (located at the left side of the footer) | true |
-| showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
-| isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
-| isPaginated | boolean | 	determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
-| isVirtualScroll | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
-| enableColumnsReorder | boolean | whether to allow column drag & drop for repositioning | true |
-| texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
-
-
-### additionalProps
-
-| name | type | description | default value |
-|---|---|---|---|
-| cell | object | props passed to all data cells using `cellProps` | { } |
-| headerCell | object | props passed to all header cells using `headerCellProps` | { } |
-| rowVirtualizer | object | props passed to the row virtualizer using `rowVirtualizerProps` | { } |
-
-### icons
-
-the `icons` configuration as documented under [Table configuration props](#configuration-props).
+| isLoading | boolean | indicated wheather the table currently expects new items | --- |
+| mergeRowsAt | function | merges arrays at a certain index while filling "holes" with nulls | `mergeRowsAt(rows, moreRows, atIndex)` |
+| resetRows | function | resets the table's rows, causing the table to request completely new rows | `resetRows()` |
 
 # How to...
 
@@ -758,8 +704,8 @@ export const AsyncUncontrolledTable = () => {
             body: {
                 from: requestData.from,
                 to: requestData.to,
-                searchText: tableManager.searchApi.searchText,
-                sort: tableManager.sortApi.sort,
+                searchText: requestData.searchText,
+                sort: requestData.sort,
             },
             signal: controller.signal,
         }).then(response => response.json()).catch(console.warn);
@@ -814,8 +760,8 @@ export const AsyncControlledTable = () => {
             body: {
                 from: requestData.from,
                 to: requestData.to,
-                searchText: tableManager.searchApi.searchText,
-                sort: tableManager.sortApi.sort,
+                searchText: requestData.searchText,
+                sort: requestData.sort,
             },
             signal: controller.signal,
         }).then(response => response.json()).catch(console.warn);

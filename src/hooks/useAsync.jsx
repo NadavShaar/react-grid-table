@@ -7,7 +7,7 @@ function getRowsRequest(tableManager, rowsRequests) {
         config: { isPaginated, isVirtualScroll, batchSize },
         rowsApi: { totalRows },
         searchApi: { searchText },
-        soetApi: { sort },
+        sortApi: { sort },
         paginationApi: { page, pageSize },
         rowVirtualizer: { virtualItems },
     } = tableManager;
