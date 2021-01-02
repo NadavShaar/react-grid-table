@@ -69,16 +69,18 @@ const useAsync = (props, tableManager) => {
     } = tableManager;
 
     const asyncApi = useRef({}).current;
-    const [rowsRequests, setRowsRequests] = useState([]);
+    const rowsRequests = useRef([]);
 
-    asyncApi.isLoading = !rowsRequests.length || !rowsRequests.every(r => rows[r.from]);
+    asyncApi.isLoading = !rowsRequests.current.length || !rowsRequests.current.every(r => rows[r.from]);
 
     const onRowsRequest = async rowsRequest => {
-        setRowsRequests([...rowsRequests, rowsRequest]);
+        rowsRequests.current = [...rowsRequests.current, rowsRequest];
         asyncApi.lastRowsRequestId = rowsRequest.id;
 
         const result = await props.onRowsRequest(rowsRequest, tableManager);
 
+        if (!rowsRequests.current.find(rr => rr.id === rowsRequest.id)) return;
+        
         const {
             rowsApi: { rows, setRows, setTotalRows }
         } = tableManager;
@@ -97,7 +99,7 @@ const useAsync = (props, tableManager) => {
 
         const { rowsApi: { setRows, setTotalRows } } = tableManager;
 
-        setRowsRequests([]);
+        rowsRequests.current = [];
         if (props.onRowsReset) props.onRowsReset(tableManager);
         else {
             setRows([]);
@@ -118,11 +120,11 @@ const useAsync = (props, tableManager) => {
     useEffect(() => {
         if (mode === 'sync') return;
 
-        const rowsRequest = getRowsRequest(tableManager, rowsRequests);
+        const rowsRequest = getRowsRequest(tableManager, rowsRequests.current);
 
         if (rowsRequest.to <= rowsRequest.from) return;
 
-        const isFirstRequest = !rowsRequests.length;
+        const isFirstRequest = !rowsRequests.current.length;
         if (isFirstRequest) onRowsRequest(rowsRequest);
         else debouncedOnRowsRequest(rowsRequest);
     });

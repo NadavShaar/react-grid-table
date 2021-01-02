@@ -692,8 +692,6 @@ All the data is supplied to the table via the `onRowsRequest` prop.
 **Example:**
 
 ```JSX
-const controller = new AbortController();
-
 export const AsyncUncontrolledTable = () => {
     
     const columns = getColumns();
@@ -707,7 +705,6 @@ export const AsyncUncontrolledTable = () => {
                 searchText: requestData.searchText,
                 sort: requestData.sort,
             },
-            signal: controller.signal,
         }).then(response => response.json()).catch(console.warn);
 
         if(!response?.items) return;
@@ -722,7 +719,6 @@ export const AsyncUncontrolledTable = () => {
         <GridTable
             columns={columns}
             onRowsRequest={onRowsRequest}
-            onRowsReset={controller.abort}
         />
     )
 }
@@ -746,8 +742,6 @@ All the data is supplied to the table via the `onRowsRequest` prop, but is contr
 **Example:**
 
 ```JSX
-const controller = new AbortController();
-
 export const AsyncControlledTable = () => {
     
     const columns = getColumns();
@@ -763,7 +757,6 @@ export const AsyncControlledTable = () => {
                 searchText: requestData.searchText,
                 sort: requestData.sort,
             },
-            signal: controller.signal,
         }).then(response => response.json()).catch(console.warn);
 
         if(!response?.items) return;
@@ -782,7 +775,6 @@ export const AsyncControlledTable = () => {
             onRowsChange={setRows}
             totalRows={totalRows}
             onTotalRowsChange={setTotalRows}
-            onRowsReset={controller.abort}
         />
     )
 }
