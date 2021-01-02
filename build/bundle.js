@@ -902,6 +902,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+var styles = {
+  column: {
+    display: 'flex',
+    flexDirection: 'column',
+    paddingBottom: 5,
+    borderBottom: '1px solid #eee'
+  },
+  label: {
+    fontWeight: 'bold',
+    padding: '10px 0',
+    color: '#125082',
+    fontSize: 16
+  }
+};
 
 var ColumnsControllers = function ColumnsControllers(_ref) {
   var controllers = _ref.controllers;
@@ -948,19 +962,9 @@ var ColumnsControllers = function ColumnsControllers(_ref) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, columns.map(function (column, idx) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
       key: column.id,
-      style: {
-        display: 'flex',
-        flexDirection: 'column',
-        paddingBottom: 5,
-        borderBottom: '1px solid #eee'
-      }
+      style: styles.colmn
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("span", {
-      style: {
-        fontWeight: 'bold',
-        padding: '10px 0',
-        color: '#125082',
-        fontSize: 16
-      }
+      style: styles.label
     }, column.label || column.id), column.id !== 'checkbox' && column.id !== 'buttons' ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_ControllerWrappper__WEBPACK_IMPORTED_MODULE_2__.default, {
       label: "Label"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("input", {
@@ -1038,28 +1042,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
+var styles = {
+  wrapper: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: '7px 0',
+    alignItems: 'center'
+  },
+  label: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
+  },
+  children: {
+    display: 'flex',
+    flexDirection: 'column'
+  }
+};
 
 var ControllerWrappper = function ControllerWrappper(_ref) {
   var label = _ref.label,
       children = _ref.children;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    style: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      padding: '7px 0',
-      alignItems: 'center'
-    }
+    style: styles.wrapper
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
-    style: {
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis'
-    }
+    style: styles.label
   }, label, ": "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    style: {
-      display: 'flex',
-      flexDirection: 'column'
-    }
+    style: styles.children
   }, children));
 };
 
@@ -1111,6 +1120,14 @@ var styles = {
     background: '#fff',
     transition: 'transform 400ms cubic-bezier(0, 0, 0.2, 1) 0ms'
   },
+  title: {
+    padding: '15px 20px',
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  tabs: {
+    width: '100%'
+  },
   tab: {
     width: '50%',
     border: 'none',
@@ -1141,6 +1158,11 @@ var styles = {
   drawerToggleIcon: {
     fontSize: '40px',
     margin: '-10px 3px 0 0'
+  },
+  controllers: {
+    overflow: 'auto',
+    flex: 1,
+    padding: 20
   }
 };
 
@@ -1174,15 +1196,9 @@ var ControllersDrawer = function ControllersDrawer(_ref) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement("span", {
     style: styles.drawerToggleIcon
   }, isOpen ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement(react__WEBPACK_IMPORTED_MODULE_2__.Fragment, null, "\u2039") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement(react__WEBPACK_IMPORTED_MODULE_2__.Fragment, null, "\u203A"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement("span", {
-    style: {
-      padding: '15px 20px',
-      fontSize: 18,
-      fontWeight: 'bold'
-    }
+    style: styles.title
   }, "SETTINGS"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement("div", {
-    style: {
-      width: '100%'
-    }
+    style: styles.tabs
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement("button", {
     onClick: function onClick() {
       return setTab('table');
@@ -1194,11 +1210,7 @@ var ControllersDrawer = function ControllersDrawer(_ref) {
     },
     style: columnsTabStyles
   }, "Columns")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement("div", {
-    style: {
-      overflow: 'auto',
-      flex: 1,
-      padding: 20
-    }
+    style: styles.controllers
   }, tab === 'table' ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement(_TableControllers__WEBPACK_IMPORTED_MODULE_3__.default, {
     controllers: controllers
   }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement(_ColumnsControllers__WEBPACK_IMPORTED_MODULE_4__.default, {
@@ -1404,6 +1416,39 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 
+var styles = {
+  root: {
+    position: 'relative',
+    padding: '0 20px',
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center'
+  },
+  img: {
+    minWidth: 32
+  },
+  input: {
+    position: 'absolute',
+    height: 28,
+    width: 'calc(100% - 82px)',
+    top: 10,
+    right: 20,
+    bottom: 0,
+    border: 'none',
+    borderBottom: '1px solid #eee',
+    outline: 'none',
+    fontSize: 16,
+    padding: 0,
+    fontFamily: 'inherit'
+  },
+  text: {
+    marginLeft: 10,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
+  }
+};
 
 var UsernameCell = function UsernameCell(_ref) {
   var tableManager = _ref.tableManager,
@@ -1415,54 +1460,25 @@ var UsernameCell = function UsernameCell(_ref) {
       rowIndex = _ref.rowIndex,
       searchText = _ref.searchText;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
-    style: {
-      position: 'relative',
-      padding: '0 20px',
-      display: 'flex',
-      width: '100%',
-      height: '100%',
-      alignItems: 'center'
-    }
+    style: styles.root
   }, isEdit ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("img", {
-    style: {
-      minWidth: 32
-    },
+    style: styles.img,
     src: data.avatar,
     alt: "avatar"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("input", {
     autoFocus: true,
-    style: {
-      position: 'absolute',
-      height: 28,
-      width: 'calc(100% - 82px)',
-      top: 10,
-      right: 20,
-      bottom: 0,
-      border: 'none',
-      borderBottom: '1px solid #eee',
-      outline: 'none',
-      fontSize: 16,
-      padding: 0,
-      fontFamily: 'inherit'
-    },
+    style: styles.input,
     type: "text",
     value: value,
     onChange: function onChange(e) {
       return _onChange(_objectSpread(_objectSpread({}, data), {}, _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()({}, column.field, e.target.value)));
     }
   })) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("img", {
-    style: {
-      minWidth: 32
-    },
+    style: styles.img,
     src: data.avatar,
     alt: "avatar"
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("span", {
-    style: {
-      marginLeft: 10,
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis'
-    }
+    style: styles.text
   }, value)));
 };
 
@@ -1717,7 +1733,7 @@ var getColumns = function getColumns(_ref) {
     visible: true,
     pinned: true,
     sortable: false,
-    resizable: true,
+    resizable: false,
     cellRenderer: function cellRenderer(_ref4) {
       var tableManager = _ref4.tableManager,
           value = _ref4.value,
@@ -1988,7 +2004,28 @@ var MyAwesomeTable = function MyAwesomeTable() {
     minSearchChars: minSearchChars,
     minColumnWidth: minColumnWidth
   })));
-};
+}; // const MyAwesomeTable = () => {
+//     let [columns, setColumns] = useState(getColumns({  }));
+//     const onRowsRequest = async (requestData, tableManager) => {
+//         await new Promise((res, rej) => setTimeout(res, 5000));
+//         const { searchApi: { searchRows }, sortApi: { sortRows } } = tableManager;
+//         let newRows = searchRows(MOCK_DATA);
+//         newRows = sortRows(newRows);
+//         return {
+//             rows: newRows.slice(requestData.from, requestData.to),
+//             totalRows: newRows.length
+//         };
+//     }
+//     return (
+//         <div className="demo">
+//             <GridTable
+//                 columns={columns}
+//                 onRowsRequest={onRowsRequest}
+//             />
+//         </div>
+//     )
+// }
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (MyAwesomeTable);
 react_dom__WEBPACK_IMPORTED_MODULE_2__.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(MyAwesomeTable, null), document.getElementById('root'));
@@ -3382,12 +3419,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js");
 /* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/slicedToArray.js");
-/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils */ "./src/utils/index.js");
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! . */ "./src/hooks/index.js");
-
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils */ "./src/utils/index.js");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! . */ "./src/hooks/index.js");
 
 
 
@@ -3402,7 +3436,7 @@ function getRowsRequest(tableManager, rowsRequests) {
       batchSize = _tableManager$config.batchSize,
       totalRows = tableManager.rowsApi.totalRows,
       searchText = tableManager.searchApi.searchText,
-      sort = tableManager.soetApi.sort,
+      sort = tableManager.sortApi.sort,
       _tableManager$paginat = tableManager.paginationApi,
       page = _tableManager$paginat.page,
       pageSize = _tableManager$paginat.pageSize,
@@ -3456,7 +3490,7 @@ function getRowsRequest(tableManager, rowsRequests) {
     to: to,
     searchText: searchText,
     sort: sort,
-    id: (0,_utils__WEBPACK_IMPORTED_MODULE_5__.uuid)()
+    id: (0,_utils__WEBPACK_IMPORTED_MODULE_4__.uuid)()
   };
 }
 
@@ -3464,14 +3498,9 @@ var useAsync = function useAsync(props, tableManager) {
   var mode = tableManager.mode,
       requestDebounceTimeout = tableManager.config.requestDebounceTimeout,
       rows = tableManager.rowsApi.rows;
-  var asyncApi = (0,react__WEBPACK_IMPORTED_MODULE_4__.useRef)({}).current;
-
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_4__.useState)([]),
-      _useState2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_3___default()(_useState, 2),
-      rowsRequests = _useState2[0],
-      setRowsRequests = _useState2[1];
-
-  asyncApi.isLoading = !rowsRequests.length || !rowsRequests.every(function (r) {
+  var asyncApi = (0,react__WEBPACK_IMPORTED_MODULE_3__.useRef)({}).current;
+  var rowsRequests = (0,react__WEBPACK_IMPORTED_MODULE_3__.useRef)([]);
+  asyncApi.isLoading = !rowsRequests.current.length || !rowsRequests.current.every(function (r) {
     return rows[r.from];
   });
 
@@ -3483,13 +3512,24 @@ var useAsync = function useAsync(props, tableManager) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              setRowsRequests([].concat(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default()(rowsRequests), [rowsRequest]));
+              rowsRequests.current = [].concat(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default()(rowsRequests.current), [rowsRequest]);
               asyncApi.lastRowsRequestId = rowsRequest.id;
               _context.next = 4;
               return props.onRowsRequest(rowsRequest, tableManager);
 
             case 4:
               result = _context.sent;
+
+              if (rowsRequests.current.find(function (rr) {
+                return rr.id === rowsRequest.id;
+              })) {
+                _context.next = 7;
+                break;
+              }
+
+              return _context.abrupt("return");
+
+            case 7:
               _tableManager$rowsApi = tableManager.rowsApi, rows = _tableManager$rowsApi.rows, setRows = _tableManager$rowsApi.setRows, setTotalRows = _tableManager$rowsApi.setTotalRows;
 
               if (result !== null && result !== void 0 && result.rows) {
@@ -3500,7 +3540,7 @@ var useAsync = function useAsync(props, tableManager) {
               ;
               if (result !== null && result !== void 0 && result.totalRows) setTotalRows(result.totalRows);
 
-            case 9:
+            case 11:
             case "end":
               return _context.stop();
           }
@@ -3513,14 +3553,14 @@ var useAsync = function useAsync(props, tableManager) {
     };
   }();
 
-  var debouncedOnRowsRequest = (0,___WEBPACK_IMPORTED_MODULE_6__.useRequestDebounce)(onRowsRequest, requestDebounceTimeout);
+  var debouncedOnRowsRequest = (0,___WEBPACK_IMPORTED_MODULE_5__.useRequestDebounce)(onRowsRequest, requestDebounceTimeout);
 
   asyncApi.resetRows = function () {
     if (mode === 'sync') return;
     var _tableManager$rowsApi2 = tableManager.rowsApi,
         setRows = _tableManager$rowsApi2.setRows,
         setTotalRows = _tableManager$rowsApi2.setTotalRows;
-    setRowsRequests([]);
+    rowsRequests.current = [];
     if (props.onRowsReset) props.onRowsReset(tableManager);else {
       setRows([]);
       setTotalRows(null);
@@ -3540,11 +3580,11 @@ var useAsync = function useAsync(props, tableManager) {
     return rows;
   };
 
-  (0,react__WEBPACK_IMPORTED_MODULE_4__.useEffect)(function () {
+  (0,react__WEBPACK_IMPORTED_MODULE_3__.useEffect)(function () {
     if (mode === 'sync') return;
-    var rowsRequest = getRowsRequest(tableManager, rowsRequests);
+    var rowsRequest = getRowsRequest(tableManager, rowsRequests.current);
     if (rowsRequest.to <= rowsRequest.from) return;
-    var isFirstRequest = !rowsRequests.length;
+    var isFirstRequest = !rowsRequests.current.length;
     if (isFirstRequest) onRowsRequest(rowsRequest);else debouncedOnRowsRequest(rowsRequest);
   });
   return asyncApi;
@@ -4393,7 +4433,7 @@ var useRows = function useRows(props, tableManager) {
       rows = _useState2[0],
       setRows = _useState2[1];
 
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(0),
       _useState4 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_useState3, 2),
       totalRows = _useState4[0],
       setTotalRows = _useState4[1];
