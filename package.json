@@ -42,6 +42,7 @@
     "watch": "webpack -w",
     "build": "webpack",
     "build-demo": "webpack --config demo.config.js -w",
+    "deploy-demo": "gh-pages -d demo/dist",
     "start:dev": "webpack serve --config demo.config.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -58,6 +59,7 @@
     "babel-loader": "^8.2.1",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^5.0.1",
+    "gh-pages": "^3.1.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-is": "^17.0.1",
