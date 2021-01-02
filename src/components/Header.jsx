@@ -6,10 +6,11 @@ const Header = ({ tableManager }) => {
             showColumnVisibilityManager,
             components: { ColumnVisibility, Search },
             additionalProps: { header: additionalProps = {} },
+            showSearch,
         },
         columnsApi: { columns },
         columnsVisibilityApi: { toggleColumnVisibility },
-        searchApi: { showSearch, setSearchText, searchText },
+        searchApi: { setSearchText, searchText },
     } = tableManager;
 
     const classNames = ('rgt-header-container ' + (additionalProps.className || '')).trim();

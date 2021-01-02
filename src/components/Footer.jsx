@@ -30,20 +30,20 @@ const Footer = ({ tableManager }) => {
 
     return (
         <div {...additionalProps} className={classNames}>
-            <div className='rgt-footer-items-information'>
                 {
                     showRowsInformation !== false ?
-                        <Information 
-                            totalCount={totalRows}
-                            pageSize={pageSize} 
-                            pageCount={ pageRows.length } 
-                            selectedCount={ selectedRowsIds.length } 
-                            tableManager={ tableManager } 
-                        />
+                        <div className='rgt-footer-items-information'>
+                            <Information 
+                                totalCount={totalRows}
+                                pageSize={pageSize} 
+                                pageCount={ pageRows.length } 
+                                selectedCount={ selectedRowsIds.length } 
+                                tableManager={ tableManager } 
+                            />
+                        </div>
                         :
-                        null
+                        <span></span>
                 }
-            </div>
             {
                 isPaginated ?
                     <div className='rgt-footer-right-container'>

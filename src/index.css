@@ -179,7 +179,6 @@
   border-top: var(--rgt-border);
   overflow-x: auto;
   overflow-y: hidden;
-  min-height: 49px;
 }
 
 .rgt-footer-items-information {
@@ -293,7 +292,6 @@
 }
 
 .rgt-header-container {
-  padding: 10px 10px 10px 20px;
   display: flex;
   width: 100%;
   background: var(--rgt-background-color);
@@ -310,6 +308,7 @@
   position: relative;
   z-index: 3;
   display: inline-flex;
+  padding: 10px;
 }
 
 .rgt-columns-manager-button {
@@ -400,6 +399,7 @@
   z-index: 1;
   flex: 1;
   display: inline-flex;
+  padding: 10px 10px 10px 20px;
 }
 
 .rgt-search-label {
