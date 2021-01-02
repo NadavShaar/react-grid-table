@@ -1098,7 +1098,7 @@ var styles = {
   wrapper: {
     display: 'flex',
     flexDirection: 'column',
-    maxWidth: 320,
+    maxWidth: 300,
     width: '100%',
     fontSize: 14,
     boxShadow: '0px 8px 10px -5px rgba(0,0,0,0.2), 0px 16px 24px 2px rgba(0,0,0,0.14), 0px 6px 30px 5px rgba(0,0,0,0.12)',
@@ -1154,7 +1154,7 @@ var ControllersDrawer = function ControllersDrawer(_ref) {
       setTab = _useState2[1];
 
   var drawerStyles = _objectSpread(_objectSpread({}, styles.wrapper), {}, {
-    transform: isOpen ? 'translate3d(0, 0, 0)' : 'translate3d(-320px, 0, 0)'
+    transform: isOpen ? 'translate3d(0, 0, 0)' : 'translate3d(-300px, 0, 0)'
   });
 
   var tableTabStyles = _objectSpread(_objectSpread({}, styles.tab), tab === 'table' ? styles.activeTab : {});
