@@ -115,7 +115,7 @@ const getColumns = ({ setRowsData }) => {
             visible: true,
             pinned: true,
             sortable: false,
-            resizable: true,
+            resizable: false,
             cellRenderer: ({ tableManager, value, data, column, rowIndex, searchText }) => (
                 <div style={styles.buttonsCellContainer}>
                     <button
