@@ -44,3 +44,18 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  background: #eef2f5;
+  outline: none;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  width: 120px;
+}

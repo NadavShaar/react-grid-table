@@ -61,6 +61,7 @@ const MyAwesomeTable = () => {
 
     return (
         <div className="demo">
+            <ControllersDrawer controllers={controllers}/>
             <div className="tableWrapper">
                 <GridTable
                     columns={columns}
@@ -71,7 +72,7 @@ const MyAwesomeTable = () => {
                     onEditRowIdChange={setEditRowId}
                     selectedRowsIds={selectedRowsIds}
                     onSelectedRowsChange={setSelectedRowsIds}
-                    style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px' }}
+                    style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px', border: 'none' }}
                     onLoad={setTableManager}
                     searchText={searchText}
                     onSearchTextChange={setSearchText}
@@ -94,7 +95,6 @@ const MyAwesomeTable = () => {
                     minColumnWidth={minColumnWidth}
                 />
             </div>
-            <ControllersDrawer controllers={controllers}/>
         </div>
     )
 }

@@ -11,7 +11,7 @@ const TableControllers = ({ controllers }) => {
                 <input type='number' value={controllers.pageSize[0]} min='1' onChange={e => controllers.pageSize[1](~~e.target.value)} />
             </ControllerWrappper>
             <ControllerWrappper label='Search Text'>
-                <input value={controllers.searchText[0]} onChange={e => controllers.searchText[1](e.target.value)} />
+                <input type='text' value={controllers.searchText[0]} onChange={e => controllers.searchText[1](e.target.value)} />
             </ControllerWrappper>
             <ControllerWrappper label='Sort By'>
                 <select value={controllers.sort[0].colId} onChange={e => controllers.sort[1]({ ...controllers.sort[0], colId: e.target.value, isAsc: e.target.value === 'null' ? false : true })}>
