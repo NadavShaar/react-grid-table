@@ -45,13 +45,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-input[type="checkbox"] {
+.settingsDrawer input[type="checkbox"] {
   cursor: pointer;
 }
 
-input[type="text"],
-input[type="number"],
-select {
+.settingsDrawer input[type="text"],
+.settingsDrawer input[type="number"],
+.settingsDrawer select {
   background: #eef2f5;
   outline: none;
   border: none;

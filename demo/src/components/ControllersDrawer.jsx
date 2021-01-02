@@ -34,7 +34,7 @@ const ControllersDrawer = ({ controllers }) => {
     const columnsTabStyles= {...styles.tab, ...(tab === 'columns' ? styles.activeTab : {})};
 
     return (
-        <div style={styles.wrapper}>
+        <div style={styles.wrapper} className="settingsDrawer">
             <span style={{padding: '15px 20px', fontSize: 18, fontWeight: 'bold'}}>SETTINGS</span>
             <div style={{width: '100%'}}>
                 <button onClick={() => setTab('table')} style={tableTabStyles}>Table</button>
