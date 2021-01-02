@@ -44,8 +44,8 @@ const ColumnsControllers = ({ controllers }) => {
         <React.Fragment>
             {
                 columns.map((column, idx) => (
-                        <div key={column.id} style={{display: 'flex', flexDirection: 'column', padding: '5px 0', borderBottom: '1px solid #eee'}}>
-                            <span style={{fontWeight: 'bold', paddingBottom: 10, color: '#125082', fontSize: 16}}>{column.label || column.id}</span>
+                        <div key={column.id} style={{display: 'flex', flexDirection: 'column', paddingBottom: 5, borderBottom: '1px solid #eee'}}>
+                            <span style={{fontWeight: 'bold', padding: '10px 0', color: '#125082', fontSize: 16}}>{column.label || column.id}</span>
                             {
                                 (column.id !== 'checkbox' && column.id !== 'buttons') ?
                                     <ControllerWrappper label='Label'>
