@@ -1913,7 +1913,7 @@ var MyAwesomeTable = function MyAwesomeTable() {
       columns = _useState42[0],
       setColumns = _useState42[1];
 
-  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(true),
+  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false),
       _useState44 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_useState43, 2),
       isSettingsOpen = _useState44[0],
       setIsSettingsOpen = _useState44[1];
