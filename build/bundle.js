@@ -1098,11 +1098,17 @@ var styles = {
   wrapper: {
     display: 'flex',
     flexDirection: 'column',
-    maxWidth: 350,
+    maxWidth: 320,
     width: '100%',
     fontSize: 14,
     boxShadow: '0px 8px 10px -5px rgba(0,0,0,0.2), 0px 16px 24px 2px rgba(0,0,0,0.14), 0px 6px 30px 5px rgba(0,0,0,0.12)',
-    zIndex: 1
+    zIndex: 10,
+    position: 'fixed',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    background: '#fff',
+    transition: 'transform 400ms cubic-bezier(0, 0, 0.2, 1) 0ms'
   },
   tab: {
     width: '50%',
@@ -1117,25 +1123,56 @@ var styles = {
   activeTab: {
     background: '#0075ff',
     color: '#fff'
+  },
+  drawerToggleButton: {
+    cursor: 'pointer',
+    position: 'absolute',
+    width: '40px',
+    height: '40px',
+    right: '-40px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: '#fff',
+    top: '14px',
+    boxShadow: '5px 3px 6px 0px rgba(0,0,0,0.2)'
+  },
+  drawerToggleIcon: {
+    fontSize: '40px',
+    margin: '-10px 3px 0 0'
   }
 };
 
 var ControllersDrawer = function ControllersDrawer(_ref) {
-  var controllers = _ref.controllers;
+  var isOpen = _ref.isOpen,
+      onToggle = _ref.onToggle,
+      controllers = _ref.controllers;
 
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)('table'),
       _useState2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_1___default()(_useState, 2),
       tab = _useState2[0],
       setTab = _useState2[1];
 
+  var drawerStyles = _objectSpread(_objectSpread({}, styles.wrapper), {}, {
+    transform: isOpen ? 'translate3d(0, 0, 0)' : 'translate3d(-320px, 0, 0)'
+  });
+
   var tableTabStyles = _objectSpread(_objectSpread({}, styles.tab), tab === 'table' ? styles.activeTab : {});
 
   var columnsTabStyles = _objectSpread(_objectSpread({}, styles.tab), tab === 'columns' ? styles.activeTab : {});
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement("div", {
-    style: styles.wrapper,
+    style: drawerStyles,
     className: "settingsDrawer"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement("div", {
+    style: styles.drawerToggleButton,
+    onClick: function onClick() {
+      return onToggle(!isOpen);
+    },
+    className: "settingsDrawerButton"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement("span", {
+    style: styles.drawerToggleIcon
+  }, isOpen ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement(react__WEBPACK_IMPORTED_MODULE_2__.Fragment, null, "\u2039") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement(react__WEBPACK_IMPORTED_MODULE_2__.Fragment, null, "\u203A"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement("span", {
     style: {
       padding: '15px 20px',
       fontSize: 18,
@@ -1876,6 +1913,11 @@ var MyAwesomeTable = function MyAwesomeTable() {
       columns = _useState42[0],
       setColumns = _useState42[1];
 
+  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(true),
+      _useState44 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_useState43, 2),
+      isSettingsOpen = _useState44[0],
+      setIsSettingsOpen = _useState44[1];
+
   var controllers = {
     columns: [columns, setColumns],
     editRowId: [editRowId, setEditRowId],
@@ -1906,6 +1948,8 @@ var MyAwesomeTable = function MyAwesomeTable() {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
     className: "demo"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_components__WEBPACK_IMPORTED_MODULE_4__.ControllersDrawer, {
+    isOpen: isSettingsOpen,
+    onToggle: setIsSettingsOpen,
     controllers: controllers
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
     className: "tableWrapper"
@@ -5088,7 +5132,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "* {\r\n  box-sizing: border-box;\r\n}\r\n\r\nhtml {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\nbody {\r\n  margin: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  overflow: hidden;\r\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\r\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\r\n    sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n#root {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n.demo {\r\n  display: flex;\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n.tableWrapper {\r\n  height: 100%;\r\n  padding: 50px;\r\n  overflow: auto;\r\n  flex: 1;\r\n  margin: 0;\r\n  background-color: #861657;\r\n  background-image: linear-gradient(326deg, #861657, #ffa69e 74%);\r\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\r\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\r\n    sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n.settingsDrawer input[type=\"checkbox\"] {\r\n  cursor: pointer;\r\n}\r\n\r\n.settingsDrawer input[type=\"text\"],\r\n.settingsDrawer input[type=\"number\"],\r\n.settingsDrawer select {\r\n  background: #eef2f5;\r\n  outline: none;\r\n  border: none;\r\n  padding: 5px 10px;\r\n  border-radius: 4px;\r\n  width: 120px;\r\n}\r\n", "",{"version":3,"sources":["webpack://./demo/src/index.css"],"names":[],"mappings":"AAAA;EACE,sBAAsB;AACxB;;AAEA;EACE,WAAW;EACX,YAAY;AACd;;AAEA;EACE,SAAS;EACT,WAAW;EACX,YAAY;EACZ,gBAAgB;EAChB;;cAEY;EACZ,mCAAmC;EACnC,kCAAkC;AACpC;;AAEA;EACE,WAAW;EACX,YAAY;AACd;;AAEA;EACE,aAAa;EACb,WAAW;EACX,YAAY;AACd;;AAEA;EACE,YAAY;EACZ,aAAa;EACb,cAAc;EACd,OAAO;EACP,SAAS;EACT,yBAAyB;EACzB,+DAA+D;EAC/D;;cAEY;EACZ,mCAAmC;EACnC,kCAAkC;AACpC;;AAEA;EACE,eAAe;AACjB;;AAEA;;;EAGE,mBAAmB;EACnB,aAAa;EACb,YAAY;EACZ,iBAAiB;EACjB,kBAAkB;EAClB,YAAY;AACd","sourcesContent":["* {\r\n  box-sizing: border-box;\r\n}\r\n\r\nhtml {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\nbody {\r\n  margin: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  overflow: hidden;\r\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\r\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\r\n    sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n#root {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n.demo {\r\n  display: flex;\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n.tableWrapper {\r\n  height: 100%;\r\n  padding: 50px;\r\n  overflow: auto;\r\n  flex: 1;\r\n  margin: 0;\r\n  background-color: #861657;\r\n  background-image: linear-gradient(326deg, #861657, #ffa69e 74%);\r\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\r\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\r\n    sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n.settingsDrawer input[type=\"checkbox\"] {\r\n  cursor: pointer;\r\n}\r\n\r\n.settingsDrawer input[type=\"text\"],\r\n.settingsDrawer input[type=\"number\"],\r\n.settingsDrawer select {\r\n  background: #eef2f5;\r\n  outline: none;\r\n  border: none;\r\n  padding: 5px 10px;\r\n  border-radius: 4px;\r\n  width: 120px;\r\n}\r\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "* {\r\n  box-sizing: border-box;\r\n}\r\n\r\nhtml {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\nbody {\r\n  margin: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  overflow: hidden;\r\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\r\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\r\n    sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n#root {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n.demo {\r\n  display: flex;\r\n  width: 100%;\r\n  height: 100%;\r\n  overflow: hidden;\r\n}\r\n\r\n.tableWrapper {\r\n  height: 100%;\r\n  padding: 20px;\r\n  overflow: auto;\r\n  flex: 1;\r\n  margin: 0;\r\n  background-color: #861657;\r\n  background-image: linear-gradient(326deg, #861657, #ffa69e 74%);\r\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\r\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\r\n    sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n.settingsDrawer input[type=\"checkbox\"] {\r\n  cursor: pointer;\r\n}\r\n\r\n.settingsDrawer input[type=\"text\"],\r\n.settingsDrawer input[type=\"number\"],\r\n.settingsDrawer select {\r\n  background: #eef2f5;\r\n  outline: none;\r\n  border: none;\r\n  padding: 5px 10px;\r\n  border-radius: 4px;\r\n  width: 120px;\r\n}\r\n\r\n@media (min-width: 1025px) {\r\n  .tableWrapper {\r\n    padding: 40px;\r\n  }\r\n  .settingsDrawer {\r\n    position: unset !important;\r\n    transform: translate3d(0px, 0px, 0px) !important;\r\n  }\r\n  .settingsDrawerButton {\r\n    display: none !important;\r\n  }\r\n}\r\n", "",{"version":3,"sources":["webpack://./demo/src/index.css"],"names":[],"mappings":"AAAA;EACE,sBAAsB;AACxB;;AAEA;EACE,WAAW;EACX,YAAY;AACd;;AAEA;EACE,SAAS;EACT,WAAW;EACX,YAAY;EACZ,gBAAgB;EAChB;;cAEY;EACZ,mCAAmC;EACnC,kCAAkC;AACpC;;AAEA;EACE,WAAW;EACX,YAAY;AACd;;AAEA;EACE,aAAa;EACb,WAAW;EACX,YAAY;EACZ,gBAAgB;AAClB;;AAEA;EACE,YAAY;EACZ,aAAa;EACb,cAAc;EACd,OAAO;EACP,SAAS;EACT,yBAAyB;EACzB,+DAA+D;EAC/D;;cAEY;EACZ,mCAAmC;EACnC,kCAAkC;AACpC;;AAEA;EACE,eAAe;AACjB;;AAEA;;;EAGE,mBAAmB;EACnB,aAAa;EACb,YAAY;EACZ,iBAAiB;EACjB,kBAAkB;EAClB,YAAY;AACd;;AAEA;EACE;IACE,aAAa;EACf;EACA;IACE,0BAA0B;IAC1B,gDAAgD;EAClD;EACA;IACE,wBAAwB;EAC1B;AACF","sourcesContent":["* {\r\n  box-sizing: border-box;\r\n}\r\n\r\nhtml {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\nbody {\r\n  margin: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  overflow: hidden;\r\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\r\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\r\n    sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n#root {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n.demo {\r\n  display: flex;\r\n  width: 100%;\r\n  height: 100%;\r\n  overflow: hidden;\r\n}\r\n\r\n.tableWrapper {\r\n  height: 100%;\r\n  padding: 20px;\r\n  overflow: auto;\r\n  flex: 1;\r\n  margin: 0;\r\n  background-color: #861657;\r\n  background-image: linear-gradient(326deg, #861657, #ffa69e 74%);\r\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\r\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\r\n    sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n.settingsDrawer input[type=\"checkbox\"] {\r\n  cursor: pointer;\r\n}\r\n\r\n.settingsDrawer input[type=\"text\"],\r\n.settingsDrawer input[type=\"number\"],\r\n.settingsDrawer select {\r\n  background: #eef2f5;\r\n  outline: none;\r\n  border: none;\r\n  padding: 5px 10px;\r\n  border-radius: 4px;\r\n  width: 120px;\r\n}\r\n\r\n@media (min-width: 1025px) {\r\n  .tableWrapper {\r\n    padding: 40px;\r\n  }\r\n  .settingsDrawer {\r\n    position: unset !important;\r\n    transform: translate3d(0px, 0px, 0px) !important;\r\n  }\r\n  .settingsDrawerButton {\r\n    display: none !important;\r\n  }\r\n}\r\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
