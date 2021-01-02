@@ -32,15 +32,13 @@ const Footer = ({ tableManager }) => {
         <div {...additionalProps} className={classNames}>
                 {
                     showRowsInformation !== false ?
-                        <div className='rgt-footer-items-information'>
-                            <Information 
-                                totalCount={totalRows}
-                                pageSize={pageSize} 
-                                pageCount={ pageRows.length } 
-                                selectedCount={ selectedRowsIds.length } 
-                                tableManager={ tableManager } 
-                            />
-                        </div>
+                        <Information 
+                            totalCount={totalRows}
+                            pageSize={pageSize} 
+                            pageCount={ pageRows.length } 
+                            selectedCount={ selectedRowsIds.length } 
+                            tableManager={ tableManager } 
+                        />
                         :
                         <span></span>
                 }

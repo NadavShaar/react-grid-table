@@ -23,7 +23,7 @@ const Information = ({
         rowSelectionApi: { setSelectedRowsIds },
     } = tableManager;
 
-    let classNames = ('rgt-footer-items-information-inner ' + (additionalProps.className || '')).trim();
+    let classNames = ('rgt-footer-items-information ' + (additionalProps.className || '')).trim();
 
     return (
         <div {...additionalProps} className={classNames}>
