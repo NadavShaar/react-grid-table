@@ -951,13 +951,13 @@ var ColumnsControllers = function ColumnsControllers(_ref) {
       style: {
         display: 'flex',
         flexDirection: 'column',
-        padding: '5px 0',
+        paddingBottom: 5,
         borderBottom: '1px solid #eee'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("span", {
       style: {
         fontWeight: 'bold',
-        paddingBottom: 10,
+        padding: '10px 0',
         color: '#125082',
         fontSize: 16
       }
@@ -1046,7 +1046,8 @@ var ControllerWrappper = function ControllerWrappper(_ref) {
     style: {
       display: 'flex',
       justifyContent: 'space-between',
-      padding: '7px 0'
+      padding: '7px 0',
+      alignItems: 'center'
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
     style: {
