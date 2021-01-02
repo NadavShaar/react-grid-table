@@ -29,6 +29,7 @@ const MyAwesomeTable = () => {
     let [minSearchChars, setMinSearchChars] = useState(2);
     let [minColumnWidth, setMinColumnWidth] = useState(70);
     let [columns, setColumns] = useState(getColumns({ setRowsData }));
+    let [isSettingsOpen, setIsSettingsOpen] = useState(true);
 
     const controllers = {
         columns: [columns, setColumns],
@@ -61,7 +62,11 @@ const MyAwesomeTable = () => {
 
     return (
         <div className="demo">
-            <ControllersDrawer controllers={controllers}/>
+            <ControllersDrawer 
+                isOpen={isSettingsOpen} 
+                onToggle={setIsSettingsOpen} 
+                controllers={controllers}
+            />
             <div className="tableWrapper">
                 <GridTable
                     columns={columns}
