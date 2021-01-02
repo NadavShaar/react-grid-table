@@ -18,6 +18,14 @@ const styles = {
         background: '#fff',
         transition: 'transform 400ms cubic-bezier(0, 0, 0.2, 1) 0ms'
     },
+    title: { 
+        padding: '15px 20px', 
+        fontSize: 18, 
+        fontWeight: 'bold' 
+    },
+    tabs: {
+        width: '100%'
+    },
     tab: {
         width: '50%',
         border: 'none',
@@ -49,6 +57,11 @@ const styles = {
         fontSize: '40px',
         margin: '-10px 3px 0 0'
     },
+    controllers: {
+        overflow: 'auto', 
+        flex: 1, 
+        padding: 20
+    }
 };
 
 const ControllersDrawer = ({ isOpen, onToggle, controllers }) => {
@@ -62,12 +75,12 @@ const ControllersDrawer = ({ isOpen, onToggle, controllers }) => {
             <div style={styles.drawerToggleButton} onClick={() => onToggle(!isOpen)} className="settingsDrawerButton">
                 <span style={styles.drawerToggleIcon}>{isOpen ? <>&lsaquo;</> : <>&rsaquo;</>}</span>
             </div>
-            <span style={{padding: '15px 20px', fontSize: 18, fontWeight: 'bold'}}>SETTINGS</span>
-            <div style={{width: '100%'}}>
+            <span style={styles.title}>SETTINGS</span>
+            <div style={styles.tabs}>
                 <button onClick={() => setTab('table')} style={tableTabStyles}>Table</button>
                 <button onClick={() => setTab('columns')} style={columnsTabStyles}>Columns</button>
             </div>
-            <div style={{overflow: 'auto', flex: 1, padding: 20}}>
+            <div style={styles.controllers}>
                 {
                     tab === 'table' ?
                         <TableControllers controllers={controllers} />

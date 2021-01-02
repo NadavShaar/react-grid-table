@@ -1,17 +1,48 @@
 
 import React from 'react';
 
+const styles = {
+    root: {
+        position: 'relative',
+        padding: '0 20px',
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        alignItems: 'center'
+    },
+    img: { minWidth: 32 },
+    input: {
+        position: 'absolute',
+        height: 28,
+        width: 'calc(100% - 82px)',
+        top: 10,
+        right: 20,
+        bottom: 0,
+        border: 'none',
+        borderBottom: '1px solid #eee',
+        outline: 'none',
+        fontSize: 16,
+        padding: 0,
+        fontFamily: 'inherit'
+    },
+    text: {
+        marginLeft: 10,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis'
+    }
+}
 const UsernameCell = ({tableManager, value, onChange, isEdit, data, column, rowIndex, searchText}) => {
 
     return (
-        <div style={{position: 'relative', padding: '0 20px', display: 'flex', width: '100%', height: '100%', alignItems: 'center'}}>
+        <div style={styles.root}>
             {
                 isEdit ?
                     <React.Fragment>
-                        <img style={{minWidth: 32}} src={data.avatar} alt="avatar" />    
+                        <img style={styles.img} src={data.avatar} alt="avatar" />    
                         <input
                             autoFocus 
-                            style={{position: 'absolute', height: 28, width: 'calc(100% - 82px)', top: 10, right: 20, bottom: 0, border: 'none', borderBottom: '1px solid #eee', outline: 'none', fontSize: 16, padding: 0, fontFamily: 'inherit'}} 
+                            style={styles.input} 
                             type="text" 
                             value={value} 
                             onChange={e => onChange({...data, [column.field]: e.target.value})}
@@ -19,8 +50,8 @@ const UsernameCell = ({tableManager, value, onChange, isEdit, data, column, rowI
                     </React.Fragment>
                     :
                     <React.Fragment>
-                        <img style={{minWidth: 32}} src={data.avatar} alt="avatar" />
-                        <span style={{marginLeft: 10, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{value}</span>
+                        <img style={styles.img} src={data.avatar} alt="avatar" />
+                        <span style={styles.text}>{value}</span>
                     </React.Fragment>
             }
         </div>
