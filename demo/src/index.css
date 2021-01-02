@@ -38,6 +38,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.demo ::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+}
+
+.demo ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #f5f5f5;
+}
+
+.demo ::-webkit-scrollbar-thumb {
+  background-color: #ddd;
+  border: 2px solid #d8d8d8;
+}
+
 .tableWrapper {
   height: 100%;
   padding: 20px;
