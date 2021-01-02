@@ -29,7 +29,7 @@ const MyAwesomeTable = () => {
     let [minSearchChars, setMinSearchChars] = useState(2);
     let [minColumnWidth, setMinColumnWidth] = useState(70);
     let [columns, setColumns] = useState(getColumns({ setRowsData }));
-    let [isSettingsOpen, setIsSettingsOpen] = useState(true);
+    let [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
     const controllers = {
         columns: [columns, setColumns],
