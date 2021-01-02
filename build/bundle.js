@@ -951,7 +951,8 @@ var ColumnsControllers = function ColumnsControllers(_ref) {
       style: {
         display: 'flex',
         flexDirection: 'column',
-        padding: '5px 0'
+        padding: '5px 0',
+        borderBottom: '1px solid #eee'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("span", {
       style: {
