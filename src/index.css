@@ -46,8 +46,8 @@
 }
 
 .rgt-wrapper ::-webkit-scrollbar {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   background-color: #f5f5f5;
 }
 
