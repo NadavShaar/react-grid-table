@@ -997,7 +997,7 @@ Styling is done by css classes that can be easily overridden. the table's compon
 | Cell | `rgt-cell` `rgt-cell-[column.field]` `rgt-row-[rowNumber]` `rgt-row-odd / rgt-row-even` `rgt-row-hover` `rgt-row-selectable / rgt-row-not-selectable` `rgt-cell-inner` `rgt-cell-checkbox` `rgt-cell-virtual` `rgt-cell-pinned` `rgt-cell-pinned-left / rgt-cell-pinned-right` `rgt-cell-editor` `rgt-cell-editor-inner` `rgt-cell-editor-input` `rgt-row-selected` `rgt-placeholder-cell` |
 | Footer | `rgt-footer` `rgt-footer-right-container` |
 | Pagination | `rgt-footer-pagination` `rgt-footer-pagination-button` `rgt-footer-pagination-input-container` `rgt-footer-page-input` |
-| Information | `rgt-footer-items-information` |
+| Information | `rgt-footer-items-information` `rgt-footer-clear-selection-button` |
 | PageSize | `rgt-footer-page-size` `rgt-footer-page-size-select` |
 | (Utils) | `rgt-text-truncate` `rgt-clickable` `rgt-disabled` `rgt-disabled-button` `rgt-flex-child` |
 
