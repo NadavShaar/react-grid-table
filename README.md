@@ -537,16 +537,10 @@ The API has the following properties:
 | batchSize | number | defines the amount of rows that will be requested by `onRowsRequest` prop | 100 |
 | isVirtualScroll | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
 | tableHasSelection | boolean | wether table has a checkbox column to conrol rows selection | --- |
-| components | object | the components that are in use by the table (default components merged with props.components [details](#components)) | {...allDefaultComponents} |
-| additionalProps | object | the components props that are in use by the table (see full list of [additionalProps](#additionalProps)) | {} |
-| icons | object | the icons that are in use by the table (default icons merged with props.icons [details](#configuration-props)) | {...allDefaultIcons} |
-| texts | object | the texts that are in use by the table (default texts merged with props.texts [details](#configuration-props) | {...allDefaultTexts} |
-| sort | object | sort config. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }`, to unsort simply pass a `colId` and `isAsc` as `null` | { } |
-| page | number | the current page number | 0 |
-| searchText | string | text for search | "" |
-| totalPages | number | the total number of pages | 0 |
-| pageSize | number | the selected page size | 20 |
-| texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
+| components | object | the components that are in use by the table (see full list of [components](#components)) | {Header, Search, ColumnVisibility, HeaderCell, HeaderSelectionCell, Cell, EditorCell, SelectionCell, PlaceHolderCell, Loader, NoResults, Footer, Information, PageSize, Pagination} |
+| additionalProps | object | additional props that are passsed to internal components (see full list of [additionalProps](#additionalProps)) | {} |
+| icons | object | the icons that are in use by the table | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
+| texts | object | the texts that are in use by the table | { search, totalRows, rows, selected, rowsPerPage, page, of, prev, next, columnVisibility } |
 
 ### refs
 
