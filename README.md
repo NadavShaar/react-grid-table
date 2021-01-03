@@ -319,7 +319,7 @@ Checkbox column has support for the following properties:
 | maxWidth | number, null | the maximum width of the column when resizing | null |
 | resizable | boolean | whether to allow resizing for the column | false |
 | cellRenderer | function | used for custom rendering the checkbox cell | `({ tableManager, value, data, column, colIndex, rowIndex, onChange, disabled}) => ( <input type="checkbox" onChange={ onChange } checked={ value } disabled={ disabled } /> )` |
-| headerCellRenderer | function | used for custom rendering the checkbox header cell | `({ tableManager, column }) => ( <input type="checkbox" onChange={ callback } checked={ isSelected } disabled={ disabled } /> )` |
+| headerCellRenderer | function | used for custom rendering the checkbox header cell | `({ tableManager, column, mode, ref, checked, disabled, indeterminate, onChange }) => ( <input type="checkbox" onChange={ onChange } checked={ checked } disabled={ disabled } /> )` |
 
 **Example:**
 ```javascript
@@ -334,8 +334,8 @@ Checkbox column has support for the following properties:
   maxWidth: null,
   resizable: false,
   visible: true,
-  cellRenderer: ({isSelected, callback, disabled, rowIndex}) => ( children )
-  headerCellRenderer: ({isSelected, isIndeterminate, callback, disabled}) => ( children )
+  cellRenderer: ({tableManager, value, data, column, colIndex, rowIndex, onChange, disabled}) => ( children )
+  headerCellRenderer: ({tableManager, column, mode, ref, checked, disabled, indeterminate, onChange}) => ( children )
 }
 ```
 
