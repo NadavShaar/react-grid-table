@@ -233,10 +233,10 @@ export default MyAwesomeTable;
 
 | name | type | description | usage/default value |
 |---|---|---|---|
-| onRowsRequest | function | triggers when new rows should be fetched | see [example](#async-(uncontrolled)) |
-| onRowsChange | function | triggers when the rows have changed | see [example](#async-(controlled)) |
-| onTotalRowsChange | function | triggers when the total number of rows have changed | see [example](#async-(controlled)) |
-| onRowsReset | function | triggers when the accumulated rows needs to be reset (when searching or sorting) | see [example](#async-(managed)) |
+| onRowsRequest | function | triggers when new rows should be fetched | see [example](#async-uncontrolled) |
+| onRowsChange | function | triggers when the rows have changed | see [example](#async-controlled) |
+| onTotalRowsChange | function | triggers when the total number of rows have changed | see [example](#async-controlled) |
+| onRowsReset | function | triggers when the accumulated rows needs to be reset (when searching or sorting) | see [example](#async-managed) |
 | batchSize | number | defines the amount of rows that will be requested by `onRowsRequest` prop | 100 |
 | requestDebounceTimeout | number | defines the amount of debouncing time for triggering the `onRowsRequest` prop | 300 |
 | totalRows | number | the total number of rows | --- |
