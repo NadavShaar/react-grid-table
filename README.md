@@ -185,7 +185,7 @@ export default MyAwesomeTable;
 | editRowId | any | the id of the row that should switch to inline editing mode, (more <u>[details](#Row-Editing)</u> about row editing) | null |
 | page | number | current page number | 1 |
 | pageSize | number | the selected page size | 20 |
-| sort | object | sort config. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }`, to unsort simply pass a `colId` and `isAsc` as `null` | { } |
+| sort | object | sort config. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }`, to unsort simply pass `colId` as `null` | { } |
 | isLoading | boolean | whether to display the loader | false |
 
 ### Configuration props
@@ -553,8 +553,8 @@ The API has the following properties:
 
 | name | type | description | usage |
 |---|---|---|---|
-| columns | array | current columns | --- |
-| visibleColumns | array | current visible columns | --- |
+| columns | array | the columns | --- |
+| visibleColumns | array | the visible columns | --- |
 | setColumns | function | sets the columns | setColumns(columns) |
 
 ### columnsVisibilityApi
@@ -567,25 +567,25 @@ The API has the following properties:
 
 | name | type | description | usage |
 |---|---|---|---|
-| searchText | string | current searchText value | --- |
-| setSearchText | function | sets the searchText | setSearchText('hello') |
-| searchRows | function | filters rows based on the current searchText and all column.search configurations | searchRows(rows) |
-| valuePassesSearch | function | determains if a value paases the search of a certain column | valuePassesSearch('hello', column) |
+| searchText | string | the search text | --- |
+| setSearchText | function | sets the search text | setSearchText('hello') |
+| searchRows | function | filters rows based on the current search text and the search methods of the columns | searchRows(rows) |
+| valuePassesSearch | function | determains if a value passes the search for a certain column | valuePassesSearch('hello', column) |
 
 ### sortApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| sort | object | current sort value | --- |
-| setSort | function | sets the sort | setSort({colId: 5, isAsc: false}) |
-| sortRows | function | sorts rows based on the current sort and all column.sort configurations | sortRows(rows) |
-| toggleSort | function | toggles a column's sort state from ascending , to descending, to none | toggleSort(column.id) |
+| sort | object | the sort object holds `colId` for the id of the column that should be sorted, and `isAsc` that defines the sort direction | --- |
+| setSort | function | sets the sort object | setSort({colId: 5, isAsc: false}) |
+| sortRows | function | sorts rows based on the sort method of the column and the selected direction | sortRows(rows) |
+| toggleSort | function | toggles a column's sort steps from ascending, to descending and to none | toggleSort(column.id) |
 
 ### rowsApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| rows | array | current rows | --- |
+| rows | array | the rows | --- |
 | setRows | function | sets the rows | setRows(rows) |
 | totalRows | number | total number of rows | --- |
 | setTotalRows | function | sets the total rows number | setTotalRows(1000) |
