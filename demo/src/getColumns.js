@@ -73,7 +73,7 @@ const getColumns = ({ setRowsData }) => {
             editable: true,
             sortable: true,
             resizable: true,
-            editorCellRenderer: ({ tableManager, value, onChange, data, column, rowIndex }) => (
+            editorCellRenderer: ({ tableManager, value, data, column, colIndex, rowIndex, onChange }) => (
                 <select
                     style={styles.select}
                     value={value}
@@ -116,7 +116,7 @@ const getColumns = ({ setRowsData }) => {
             pinned: true,
             sortable: false,
             resizable: false,
-            cellRenderer: ({ tableManager, value, data, column, rowIndex, searchText }) => (
+            cellRenderer: ({ tableManager, value, data, column, colIndex, rowIndex }) => (
                 <div style={styles.buttonsCellContainer}>
                     <button
                         title="Edit"
@@ -127,7 +127,7 @@ const getColumns = ({ setRowsData }) => {
                     </button>
                 </div>
             ),
-            editorCellRenderer: ({ onRowEditSave, tableManager, value, field, onChange, data, column, rowIndex }) => (
+            editorCellRenderer: ({ tableManager, value, data, column, colIndex, rowIndex, onChange }) => (
                 <div style={styles.buttonsCellEditorContainer}>
                     <button
                         title="Cancel"

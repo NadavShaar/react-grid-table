@@ -177,7 +177,7 @@ export default MyAwesomeTable;
 | name | type | description | default value |
 |---|---|---|---|
 | columns* | array of objects | columns configuration (<u>[details](#columns)</u>) | [ ] |
-| rows* | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
+| rows | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
 | selectedRowsIds | array of ids | the ids of all selected rows (<u>[details](#checkbox-column)</u>) | [ ] |
 | searchText | string | text for search | "" |
 | getIsRowSelectable | function | a callback function that returns whether row selection for the current row should be disabled or not | `row => true` |
@@ -207,8 +207,8 @@ export default MyAwesomeTable;
 | selectAllMode | string | controls the type of "All Selection". available options are 'page' - to select/unselect only the *current* page's rows, or 'available' to select/unselect all *available* rows | 'page' |
 | icons | object of nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
 | texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
-| components | object | This prop gives you the ability to override the internal components with your own custom components [details](#components) | { } |
-| additionalProps | object | This prop gives you the ability to pass props to the table's components (see full list of [additionalProps](#additionalProps)) | `additionalProps={{ header: { ... } }}` |
+| components | object | This prop gives you the ability to override the internal components with your own custom components (see full list of supported [components](#components)) | { } |
+| additionalProps | object | This prop gives you the ability to pass props to the table's components/modules (see full list of supported [additionalProps](#additionalProps)) | `additionalProps={{ header: { ... } }}` |
 
 ### Event props
 
@@ -231,14 +231,14 @@ export default MyAwesomeTable;
 
 ### Async props
 
-| name | type | description | usage |
+| name | type | description | usage/default value |
 |---|---|---|---|
-| onRowsChange | function | triggers when the rows have changed | --- |
-| onRowsRequest | function | triggers when new rows should be fetched | --- |
-| onRowsReset | function | triggers when the accumulated rows needs to be reset (when searching or sorting) | --- |
-| onTotalRowsChange | function | triggers when the total number of rows have changed | --- |
+| onRowsRequest | function | triggers when new rows should be fetched | see [example](#async-(uncontrolled)) |
+| onRowsChange | function | triggers when the rows have changed | see [example](#async-(controlled)) |
+| onTotalRowsChange | function | triggers when the total number of rows have changed | see [example](#async-(controlled)) |
+| onRowsReset | function | triggers when the accumulated rows needs to be reset (when searching or sorting) | see [example](#async-(managed)) |
 | batchSize | number | defines the amount of rows that will be requested by `onRowsRequest` prop | 100 |
-| requestDebounceTimeout | number | defines the amount of debouning time for triggering the `onRowsRequest` prop | 300 |
+| requestDebounceTimeout | number | defines the amount of debouncing time for triggering the `onRowsRequest` prop | 300 |
 | totalRows | number | the total number of rows | --- |
 
 ## props - detailed
@@ -252,7 +252,7 @@ Each column (except for '[checkbox](#checkbox-column)' column) has support for t
 
 | name | type | description | default value |
 |---|---|---|---|
-| id* | any | a unique identifier for the column (can be changed to a different field using the `rowIdField` prop), or you can set it to 'checkbox' which will generate a rows selction column (more [details](#checkbox-column) about checkbox column)  | --- |
+| id* | any | a unique identifier for the column, setting it to 'checkbox' will generate a rows selction column (more [details](#checkbox-column) about checkbox column)  | --- |
 | field | string | the name of the field as in the row data | --- |
 | label | string | the label to display in the header cell | the `field` property |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns | false |
@@ -380,9 +380,9 @@ The returned value will be used for searching, sorting etc...
 ### components
 **Type:** object.
 
-All components are getting the `tableManager` object ([details](#tableManager)).
-
 This prop gives you the ability to override the internal components with your own custom components.
+
+All components are getting the `tableManager` object ([details](#tableManager)).
 
 **Example**
 Overriding the Loader component:
@@ -471,14 +471,14 @@ const MyAwesomeTable = props => {
 ### additionalProps
 **Type:** object.
 
-This prop gives you the ability to pass props to internal components.
+This prop gives you the ability to pass props to internal components/modules.
 
 **Example**
 Passing props to the cell component:
 ```JSX
 additionalProps={{ cell: { ... }, ... }}
 ```
-**List of components you can pass props to:**
+**List of components/modules you can pass props to:**
 
 - header
 - search
@@ -659,7 +659,7 @@ Just pass all the data using the `rows` prop.
 
 | name | type | description | default value |
 |---|---|---|---|
-| rows* | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
+| rows* | array of objects | rows data (<u>[details](#rows)</u>) | undefined |
 
 **Example:**
 
@@ -734,7 +734,7 @@ All the data is supplied to the table via the `onRowsRequest` prop, but is contr
 | name | type | description | default value |
 |---|---|---|---|
 | onRowsRequest* | async function | Should return a promise that resolves to {rows, totalRows} | undefined |
-| rows* | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
+| rows* | array of objects | rows data (<u>[details](#rows)</u>) | undefined |
 | onRowsChange* | function | Should be used to set the current data | undefined |
 | totalRows* | number | Should contain the current data length | undefined |
 | onTotalRowsChange* | function | Should be used to set the current data length | undefined |
@@ -796,7 +796,7 @@ let mergedRows = tableManager.asyncApi.mergeRowsAt(rows, fetchedRows, at)
 | name | type | description | default value |
 |---|---|---|---|
 | onRowsRequest* | async function | Should update the rows props according to the request | undefined |
-| rows* | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
+| rows* | array of objects | rows data (<u>[details](#rows)</u>) | undefined |
 | totalRows* | number | Should contain the current data length | undefined |
 | onRowsReset* | function | Should be used to reset the current data. Will be called when sort or searchText change | undefined |
 
@@ -871,24 +871,24 @@ let columns = [
         cellRenderer: ({ tableManager, value, data, column, colIndex, rowIndex }) => (
             <button 
                 style={{marginLeft: 20}} 
-                onClick={e => tableManager.handlers.setEditRowId(data.id)}
+                onClick={e => tableManager.rowEditApi.setEditRowId(data.id)}
             >&#x270E;</button>
         ),
         editorCellRenderer: ({ tableManager, value, data, column, colIndex, rowIndex, onChange }) => (
             <div style={{display: 'inline-flex'}}>
                 <button 
                     style={{marginLeft: 20}} 
-                    onClick={e => tableManager.handlers.setEditRowId(null)}
+                    onClick={e => tableManager.rowEditApi.setEditRowId(null)}
                 >&#x2716;</button>
                 <button 
                     style={{marginLeft: 10, marginRight: 20}} 
                     onClick={e => {
-                        let rowsClone = [...tableManager.rowsData.items];
+                        let rowsClone = [...rowsData];
                         let updatedRowIndex = rowsClone.findIndex(r => r.id === data.id);
                         rowsClone[updatedRowIndex] = data;
 
                         setRowsData(rowsClone);
-                        tableManager.handlers.setEditRowId(null);
+                        tableManager.rowEditApi.setEditRowId(null);
                     }
                 }>&#x2714;</button>
             </div>
