@@ -650,9 +650,9 @@ Just pass all the data using the `rows` prop.
 
 **Required props**:
 
-| name | type | description | default value |
-|---|---|---|---|
-| rows* | array of objects | rows data (<u>[details](#rows)</u>) | undefined |
+| name | type | description |
+|---|---|---|
+| rows* | array of objects | rows data (<u>[details](#rows)</u>) |
 
 **Example:**
 
@@ -678,9 +678,9 @@ All the data is supplied to the table via the `onRowsRequest` prop.
 
 **Required props**:
 
-| name | type | description | default value |
-|---|---|---|---|
-| onRowsRequest* | async function | Should return a promise that resolves to {rows, totalRows} | undefined |
+| name | type | description |
+|---|---|---|
+| onRowsRequest* | async function | Should return a promise that resolves to {rows, totalRows} |
 
 **Example:**
 
@@ -724,13 +724,13 @@ All the data is supplied to the table via the `onRowsRequest` prop, but is contr
 
 **Required props**:
 
-| name | type | description | default value |
-|---|---|---|---|
-| onRowsRequest* | async function | Should return a promise that resolves to {rows, totalRows} | undefined |
-| rows* | array of objects | rows data (<u>[details](#rows)</u>) | undefined |
-| onRowsChange* | function | Should be used to set the current data | undefined |
-| totalRows* | number | Should contain the current data length | undefined |
-| onTotalRowsChange* | function | Should be used to set the current data length | undefined |
+| name | type | description |
+|---|---|---|
+| onRowsRequest* | async function | Should return a promise that resolves to {rows, totalRows} |
+| rows* | array of objects | rows data (<u>[details](#rows)</u>) |
+| onRowsChange* | function | Should be used to set the current data |
+| totalRows* | number | Should contain the current data length |
+| onTotalRowsChange* | function | Should be used to set the current data length |
 
 **Example:**
 
@@ -786,12 +786,12 @@ let mergedRows = tableManager.asyncApi.mergeRowsAt(rows, fetchedRows, at)
 
 **Required props**:
 
-| name | type | description | default value |
-|---|---|---|---|
-| onRowsRequest* | async function | Should update the rows props according to the request | undefined |
-| rows* | array of objects | rows data (<u>[details](#rows)</u>) | undefined |
-| totalRows* | number | Should contain the current data length | undefined |
-| onRowsReset* | function | Should be used to reset the current data. Will be called when sort or searchText change | undefined |
+| name | type | description |
+|---|---|---|
+| onRowsRequest* | async function | Should update the rows props according to the request |
+| rows* | array of objects | rows data (<u>[details](#rows)</u>) |
+| totalRows* | number | Should contain the current data length |
+| onRowsReset* | function | Should be used to reset the current data. Will be called when sort or searchText change |
 
 **Example:**
 
