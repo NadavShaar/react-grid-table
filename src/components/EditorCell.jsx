@@ -1,6 +1,6 @@
 import React from 'react';
 
-const EditorCell = ({ value, column, data, colIndex, onChange, tableManager }) => {
+const EditorCell = ({ tableManager, value, data, column, colIndex, rowIndex, onChange }) => {
     const {
         config: { additionalProps: { editorCell: additionalProps = {} }, },
         columnsApi: { visibleColumns },

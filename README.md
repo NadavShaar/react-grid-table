@@ -37,7 +37,7 @@ npm install --save @nadavshaar/react-grid-table
 ## Usage
 By default, the table is fully featured even with just a basic configuration of rows and columns.
 
-Import both the component from `@nadavshaar/react-grid-table` and its styles from `@nadavshaar/react-grid-table/dist/index.css`.
+Just import the component from `@nadavshaar/react-grid-table`.
 
 **Example:**
 
@@ -177,7 +177,7 @@ export default MyAwesomeTable;
 | name | type | description | default value |
 |---|---|---|---|
 | columns* | array of objects | columns configuration (<u>[details](#columns)</u>) | [ ] |
-| rows* | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
+| rows | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
 | selectedRowsIds | array of ids | the ids of all selected rows (<u>[details](#checkbox-column)</u>) | [ ] |
 | searchText | string | text for search | "" |
 | getIsRowSelectable | function | a callback function that returns whether row selection for the current row should be disabled or not | `row => true` |
@@ -185,7 +185,7 @@ export default MyAwesomeTable;
 | editRowId | any | the id of the row that should switch to inline editing mode, (more <u>[details](#Row-Editing)</u> about row editing) | null |
 | page | number | current page number | 1 |
 | pageSize | number | the selected page size | 20 |
-| sort | object | sort config. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }`, to unsort simply pass a `colId` and `isAsc` as `null` | { } |
+| sort | object | sort config. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }`, to unsort simply pass `colId` as `null` | { } |
 | isLoading | boolean | whether to display the loader | false |
 
 ### Configuration props
@@ -207,8 +207,8 @@ export default MyAwesomeTable;
 | selectAllMode | string | controls the type of "All Selection". available options are 'page' - to select/unselect only the *current* page's rows, or 'available' to select/unselect all *available* rows | 'page' |
 | icons | object of nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
 | texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
-| components | object | This prop gives you the ability to override the internal components with your own custom components [details](#components) | { } |
-| additionalProps | object | This prop gives you the ability to pass props to the table's components (see full list of [additionalProps](#additionalProps)) | `additionalProps={{ header: { ... } }}` |
+| components | object | This prop gives you the ability to override the internal components with your own custom components (see full list of supported [components](#components)) | { } |
+| additionalProps | object | This prop gives you the ability to pass props to the table's components/modules (see full list of supported [additionalProps](#additionalProps)) | `additionalProps={{ header: { ... } }}` |
 
 ### Event props
 
@@ -231,14 +231,14 @@ export default MyAwesomeTable;
 
 ### Async props
 
-| name | type | description | usage |
+| name | type | description | usage/default value |
 |---|---|---|---|
-| onRowsChange | function | triggers when the rows have changed | --- |
-| onRowsRequest | function | triggers when new rows should be fetched | --- |
-| onRowsReset | function | triggers when the accumulated rows needs to be reset (when searching or sorting) | --- |
-| onTotalRowsChange | function | triggers when the total number of rows have changed | --- |
+| onRowsRequest | function | triggers when new rows should be fetched | see [example](#async-uncontrolled) |
+| onRowsChange | function | triggers when the rows have changed | see [example](#async-controlled) |
+| onTotalRowsChange | function | triggers when the total number of rows have changed | see [example](#async-controlled) |
+| onRowsReset | function | triggers when the accumulated rows needs to be reset (when searching or sorting) | see [example](#async-managed) |
 | batchSize | number | defines the amount of rows that will be requested by `onRowsRequest` prop | 100 |
-| requestDebounceTimeout | number | defines the amount of debouning time for triggering the `onRowsRequest` prop | 300 |
+| requestDebounceTimeout | number | defines the amount of debouncing time for triggering the `onRowsRequest` prop | 300 |
 | totalRows | number | the total number of rows | --- |
 
 ## props - detailed
@@ -252,7 +252,7 @@ Each column (except for '[checkbox](#checkbox-column)' column) has support for t
 
 | name | type | description | default value |
 |---|---|---|---|
-| id* | any | a unique identifier for the column (can be changed to a different field using the `rowIdField` prop), or you can set it to 'checkbox' which will generate a rows selction column (more [details](#checkbox-column) about checkbox column)  | --- |
+| id* | any | a unique identifier for the column, setting it to 'checkbox' will generate a rows selction column (more [details](#checkbox-column) about checkbox column)  | --- |
 | field | string | the name of the field as in the row data | --- |
 | label | string | the label to display in the header cell | the `field` property |
 | pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns | false |
@@ -319,7 +319,7 @@ Checkbox column has support for the following properties:
 | maxWidth | number, null | the maximum width of the column when resizing | null |
 | resizable | boolean | whether to allow resizing for the column | false |
 | cellRenderer | function | used for custom rendering the checkbox cell | `({ tableManager, value, data, column, colIndex, rowIndex, onChange, disabled}) => ( <input type="checkbox" onChange={ onChange } checked={ value } disabled={ disabled } /> )` |
-| headerCellRenderer | function | used for custom rendering the checkbox header cell | `({ tableManager, column }) => ( <input type="checkbox" onChange={ callback } checked={ isSelected } disabled={ disabled } /> )` |
+| headerCellRenderer | function | used for custom rendering the checkbox header cell | `({ tableManager, column, mode, ref, checked, disabled, indeterminate, onChange }) => ( <input type="checkbox" onChange={ onChange } checked={ checked } disabled={ disabled } /> )` |
 
 **Example:**
 ```javascript
@@ -334,8 +334,8 @@ Checkbox column has support for the following properties:
   maxWidth: null,
   resizable: false,
   visible: true,
-  cellRenderer: ({isSelected, callback, disabled, rowIndex}) => ( children )
-  headerCellRenderer: ({isSelected, isIndeterminate, callback, disabled}) => ( children )
+  cellRenderer: ({tableManager, value, data, column, colIndex, rowIndex, onChange, disabled}) => ( children )
+  headerCellRenderer: ({tableManager, column, mode, ref, checked, disabled, indeterminate, onChange}) => ( children )
 }
 ```
 
@@ -380,9 +380,9 @@ The returned value will be used for searching, sorting etc...
 ### components
 **Type:** object.
 
-All components are getting the `tableManager` object ([details](#tableManager)).
-
 This prop gives you the ability to override the internal components with your own custom components.
+
+All components are getting the `tableManager` object ([details](#tableManager)).
 
 **Example**
 Overriding the Loader component:
@@ -471,14 +471,14 @@ const MyAwesomeTable = props => {
 ### additionalProps
 **Type:** object.
 
-This prop gives you the ability to pass props to internal components.
+This prop gives you the ability to pass props to internal components/modules.
 
 **Example**
 Passing props to the cell component:
 ```JSX
 additionalProps={{ cell: { ... }, ... }}
 ```
-**List of components you can pass props to:**
+**List of components/modules you can pass props to:**
 
 - header
 - search
@@ -499,13 +499,13 @@ additionalProps={{ cell: { ... }, ... }}
 
 This is the API object used by the internal components, you can use it to do anything that the API provides, outside of the component.
 
-The API has the following properties:
+API Structure:
 
 - **isMounted:** Is the table mounted.
-- **isInitialized:** Is the table initialized. Will be set to true once all effects are finished.
+- **isInitialized:** Is the table initialized. Will be set to true once all components are initialized.
 - **mode:** 'sync' or 'async', derived from the supplied props.
 - **isLoading:** Is the table currently loading data.
-- **config:** All the params that defines the table's behavior & UI.
+- **config:** All the params that defines the table's user-interface and its behavior.
 - **refs:** ref objects for selected elements.
 - **columnsApi:** API of the columns.
 - **columnsVisibilityApi:** API of the columns visibility.
@@ -536,17 +536,11 @@ The API has the following properties:
 | requestDebounceTimeout | number | defines the amount of debouning time for triggering the `onRowsRequest` prop | 300 |
 | batchSize | number | defines the amount of rows that will be requested by `onRowsRequest` prop | 100 |
 | isVirtualScroll | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
-| tableHasSelection | boolean | wether table has a checkbox column to conrol rows selection | --- |
-| components | object | the components that are in use by the table (default components merged with props.components [details](#components)) | {...allDefaultComponents} |
-| additionalProps | object | the components props that are in use by the table (see full list of [additionalProps](#additionalProps)) | {} |
-| icons | object | the icons that are in use by the table (default icons merged with props.icons [details](#configuration-props)) | {...allDefaultIcons} |
-| texts | object | the texts that are in use by the table (default texts merged with props.texts [details](#configuration-props) | {...allDefaultTexts} |
-| sort | object | sort config. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }`, to unsort simply pass a `colId` and `isAsc` as `null` | { } |
-| page | number | the current page number | 0 |
-| searchText | string | text for search | "" |
-| totalPages | number | the total number of pages | 0 |
-| pageSize | number | the selected page size | 20 |
-| texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
+| tableHasSelection | boolean | wether the table has a checkbox column to control rows selection | --- |
+| components | object | the components that are in use by the table (see full list of [components](#components)) | {Header, Search, ColumnVisibility, HeaderCell, HeaderSelectionCell, Cell, EditorCell, SelectionCell, PlaceHolderCell, Loader, NoResults, Footer, Information, PageSize, Pagination} |
+| additionalProps | object | additional props that are passed to the internal components (see full list of [additionalProps](#additionalProps)) | {} |
+| icons | object | the icons that are in use by the table | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
+| texts | object | the texts that are in use by the table | { search, totalRows, rows, selected, rowsPerPage, page, of, prev, next, columnVisibility } |
 
 ### refs
 
@@ -559,79 +553,78 @@ The API has the following properties:
 
 | name | type | description | usage |
 |---|---|---|---|
-| columns | array | current columns | --- |
-| visibleColumns | array | current visible columns | --- |
-| setColumns | function | sets the columns | setColumns(columns) |
+| columns | array | columns configuration | --- |
+| visibleColumns | array | the columns that are visible | --- |
+| setColumns | function | updates the columns | setColumns(columns) |
 
 ### columnsVisibilityApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| toggleColumnVisibility | function | toggles a column's visibility | toggleColumnVisibility(column.id) |
+| toggleColumnVisibility | function | toggles a column's visibility by its `id` | toggleColumnVisibility(column.id) |
 
 ### searchApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| searchText | string | current searchText value | --- |
-| setSearchText | function | sets the searchText | setSearchText('hello') |
-| searchRows | function | filters rows based on the current searchText and all column.search configurations | searchRows(rows) |
-| valuePassesSearch | function | determains if a value paases the search of a certain column | valuePassesSearch('hello', column) |
+| searchText | string | text for search | --- |
+| setSearchText | function | updates the search text | setSearchText('hello') |
+| searchRows | function | filters rows based on the search text, using the search method defined on the columns | searchRows(rows) |
+| valuePassesSearch | function | returns true if a value passes the search for a certain column | valuePassesSearch('hello', column) |
 
 ### sortApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| sort | object | current sort value | --- |
-| setSort | function | sets the sort | setSort({colId: 5, isAsc: false}) |
-| sortRows | function | sorts rows based on the current sort and all column.sort configurations | sortRows(rows) |
-| toggleSort | function | toggles a column's sort state from ascending , to descending, to none | toggleSort(column.id) |
+| sort | object | the sort object holds `colId` for the id of the column that should be sorted, and `isAsc` that defines the sort direction | --- |
+| setSort | function | updates the sort object | setSort({colId: 5, isAsc: false}) |
+| sortRows | function | sorts rows based on the selected direction using the sort method defined on the column | sortRows(rows) |
+| toggleSort | function | toggles a column's sort steps from ascending, to descending and to none | toggleSort(column.id) |
 
 ### rowsApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| rows | array | current rows | --- |
-| setRows | function | sets the rows | setRows(rows) |
-| totalRows | number | total number of rows | --- |
-| setTotalRows | function | sets the total rows number | setTotalRows(1000) |
+| rows | array | the rows | --- |
+| setRows | function | updates the rows | setRows(rows) |
+| totalRows | number | the total number of rows | --- |
+| setTotalRows | function | updates the total number of rows | setTotalRows(1000) |
 
 ### paginationApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| page | number | current page | --- |
-| setPage | function | sets the page | setPage(3) |
-| pageSize | number | current page size | --- |
-| setPageSize | function | sets the page size | setPageSize(20) |
-| pageRows | array | rows in the current page | --- |
-| totalPages | number | total number of pages | --- |
+| page | number | the current page number | --- |
+| setPage | function | updates the page number | setPage(3) |
+| pageSize | number | the selected page size | --- |
+| setPageSize | function | updates the page size | setPageSize(20) |
+| pageRows | array | the rows in the current page | --- |
+| totalPages | number | the total number of pages | --- |
 
 ### rowSelectionApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| selectedRowsIds | number | selected rows ids | --- |
-| setSelectedRowsIds | function | sets the selected rows ids | setSelectedRowsIds([1,3,5]) |
-| toggleRowSelection | function | toggles if a row is selected | toggleRowSelection(row.id) |
-| getIsRowSelectable | function | determains if a row is selectable | --- |
-| selectAll | number | properties that can be used to control the select all button | --- |
-| selectAll.mode | string | determains the select all type | --- |
-| selectAll.checked | boolean | should the select all button be checked | --- |
-| selectAll.disabled | boolean | should the select all button be disabled | --- |
-| selectAll.indeterminate | boolean | should the select all button be indeterminate | --- |
-| selectAll.onChange | function | toggles the select all. will filter/push all avilable rows from/to selectedRowsIds | --- |
-| selectAll.ref | ref | a ref that can be added to the select all button to enable auto setting of indeterminate state | --- |
+| selectedRowsIds | array of ids | the ids of all selected rows | --- |
+| setSelectedRowsIds | function | updates the selected rows | setSelectedRowsIds([1,3,5]) |
+| toggleRowSelection | function | toggles selection of a row by its `id` | toggleRowSelection(row.id) |
+| getIsRowSelectable | function | determains whether a row can be selected | getIsRowSelectable(row.id) |
+| selectAll.mode | string | the type of select all, available options are 'page' - which only handles selection of the *current* page's rows, or 'available' which handles selection of all *available* rows | --- |
+| selectAll.disabled | boolean | whether there are no relevant selectable rows | --- |
+| selectAll.checked | boolean | whether all the relevant rows are selected | --- |
+| selectAll.indeterminate | boolean | whether only some of the relevant rows are selected | --- |
+| selectAll.onChange | function | toggles the select all | --- |
+| selectAll.ref | ref | a ref that can be added to the select all checkbox to enable auto setting of indeterminate state | --- |
 
 ### rowEditApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| editRow | object | current edit row data | --- |
-| editRowId | any | current edit row id | --- |
-| getIsRowEditable | function | determains wheather a row can be edited | getIsRowEditable(row) |
-| setEditRow | function | sets the edit row | setEditRow(row) |
-| setEditRowId | function | sets the edit row id, you can pass null to switch back from edit mode | setEditRowId(row.id) |
+| editRow | object | the row's data that is currently being edited | --- |
+| editRowId | any | the id of the row that is currently being edited | --- |
+| getIsRowEditable | function | determains whether a row can be edited | getIsRowEditable(row) |
+| setEditRow | function | updates the row's data of the currently edited row | setEditRow(row) |
+| setEditRowId | function | updates the row id of the currently edited row, you can pass `null` to switch back from edit mode | setEditRowId(row.id) |
 
 ### rowVirtualizer
 
@@ -641,9 +634,9 @@ See full documentation at https://github.com/tannerlinsley/react-virtual
 
 | name | type | description | usage |
 |---|---|---|---|
-| isLoading | boolean | indicated wheather the table currently expects new items | --- |
-| mergeRowsAt | function | merges arrays at a certain index while filling "holes" with nulls | `mergeRowsAt(rows, moreRows, atIndex)` |
-| resetRows | function | resets the table's rows, causing the table to request completely new rows | `resetRows()` |
+| isLoading | boolean | whether a request for new rows is still pending | --- |
+| mergeRowsAt | function | merges `array`s of rows at a certain index while filling "holes" with `null`s | `mergeRowsAt(rows, moreRows, atIndex)` |
+| resetRows | function | drops the accumulated rows, which will trigger a new request  | `resetRows()` |
 
 # How to...
 
@@ -657,9 +650,9 @@ Just pass all the data using the `rows` prop.
 
 **Required props**:
 
-| name | type | description | default value |
-|---|---|---|---|
-| rows* | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
+| name | type | description |
+|---|---|---|
+| rows* | array of objects | rows data (<u>[details](#rows)</u>) |
 
 **Example:**
 
@@ -685,9 +678,9 @@ All the data is supplied to the table via the `onRowsRequest` prop.
 
 **Required props**:
 
-| name | type | description | default value |
-|---|---|---|---|
-| onRowsRequest* | async function | Should return a promise that resolves to {rows, totalRows} | undefined |
+| name | type | description |
+|---|---|---|
+| onRowsRequest* | async function | Should return a promise that resolves to {rows, totalRows} |
 
 **Example:**
 
@@ -731,13 +724,13 @@ All the data is supplied to the table via the `onRowsRequest` prop, but is contr
 
 **Required props**:
 
-| name | type | description | default value |
-|---|---|---|---|
-| onRowsRequest* | async function | Should return a promise that resolves to {rows, totalRows} | undefined |
-| rows* | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
-| onRowsChange* | function | Should be used to set the current data | undefined |
-| totalRows* | number | Should contain the current data length | undefined |
-| onTotalRowsChange* | function | Should be used to set the current data length | undefined |
+| name | type | description |
+|---|---|---|
+| onRowsRequest* | async function | Should return a promise that resolves to {rows, totalRows} |
+| rows* | array of objects | rows data (<u>[details](#rows)</u>) |
+| onRowsChange* | function | Should be used to set the current data |
+| totalRows* | number | Should contain the current data length |
+| onTotalRowsChange* | function | Should be used to set the current data length |
 
 **Example:**
 
@@ -793,12 +786,12 @@ let mergedRows = tableManager.asyncApi.mergeRowsAt(rows, fetchedRows, at)
 
 **Required props**:
 
-| name | type | description | default value |
-|---|---|---|---|
-| onRowsRequest* | async function | Should update the rows props according to the request | undefined |
-| rows* | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
-| totalRows* | number | Should contain the current data length | undefined |
-| onRowsReset* | function | Should be used to reset the current data. Will be called when sort or searchText change | undefined |
+| name | type | description |
+|---|---|---|
+| onRowsRequest* | async function | Should update the rows props according to the request |
+| rows* | array of objects | rows data (<u>[details](#rows)</u>) |
+| totalRows* | number | Should contain the current data length |
+| onRowsReset* | function | Should be used to reset the current data. Will be called when sort or searchText change |
 
 **Example:**
 
@@ -871,24 +864,24 @@ let columns = [
         cellRenderer: ({ tableManager, value, data, column, colIndex, rowIndex }) => (
             <button 
                 style={{marginLeft: 20}} 
-                onClick={e => tableManager.handlers.setEditRowId(data.id)}
+                onClick={e => tableManager.rowEditApi.setEditRowId(data.id)}
             >&#x270E;</button>
         ),
         editorCellRenderer: ({ tableManager, value, data, column, colIndex, rowIndex, onChange }) => (
             <div style={{display: 'inline-flex'}}>
                 <button 
                     style={{marginLeft: 20}} 
-                    onClick={e => tableManager.handlers.setEditRowId(null)}
+                    onClick={e => tableManager.rowEditApi.setEditRowId(null)}
                 >&#x2716;</button>
                 <button 
                     style={{marginLeft: 10, marginRight: 20}} 
                     onClick={e => {
-                        let rowsClone = [...tableManager.rowsData.items];
+                        let rowsClone = [...rowsData];
                         let updatedRowIndex = rowsClone.findIndex(r => r.id === data.id);
                         rowsClone[updatedRowIndex] = data;
 
                         setRowsData(rowsClone);
-                        tableManager.handlers.setEditRowId(null);
+                        tableManager.rowEditApi.setEditRowId(null);
                     }
                 }>&#x2714;</button>
             </div>
@@ -906,7 +899,7 @@ let columns = [
 
 ```
 
-For columns that holds values other than string, you'll need to define the `setValue` function on the column so the updated value won't override the original value.
+For columns that hold values other than string, you'll need to define the `setValue` function on the column so the updated value won't override the original value.
 
 **Example:**
 

@@ -101,7 +101,8 @@ const CellContainer = ({
                     column.id === 'checkbox' ?
                         column.cellRenderer({ 
                             ...cellProps, 
-                            onChange: e => toggleRowSelection(rowId), disabled: disableSelection 
+                            onChange: e => toggleRowSelection(rowId),
+                            disabled: disableSelection 
                         })
                         :
                         !data ?
