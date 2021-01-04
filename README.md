@@ -587,45 +587,45 @@ The API has the following properties:
 |---|---|---|---|
 | rows | array | the rows | --- |
 | setRows | function | sets the rows | setRows(rows) |
-| totalRows | number | total number of rows | --- |
-| setTotalRows | function | sets the total rows number | setTotalRows(1000) |
+| totalRows | number | the total number of rows | --- |
+| setTotalRows | function | sets the total number of rows | setTotalRows(1000) |
 
 ### paginationApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| page | number | current page | --- |
-| setPage | function | sets the page | setPage(3) |
-| pageSize | number | current page size | --- |
+| page | number | the page number | --- |
+| setPage | function | sets the page number | setPage(3) |
+| pageSize | number | the page size | --- |
 | setPageSize | function | sets the page size | setPageSize(20) |
-| pageRows | array | rows in the current page | --- |
-| totalPages | number | total number of pages | --- |
+| pageRows | array | the rows in the current page | --- |
+| totalPages | number | the total number of pages | --- |
 
 ### rowSelectionApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| selectedRowsIds | number | selected rows ids | --- |
+| selectedRowsIds | number | the ids of the rows that are selected | --- |
 | setSelectedRowsIds | function | sets the selected rows ids | setSelectedRowsIds([1,3,5]) |
 | toggleRowSelection | function | toggles if a row is selected | toggleRowSelection(row.id) |
-| getIsRowSelectable | function | determains if a row is selectable | --- |
-| selectAll | number | properties that can be used to control the select all button | --- |
-| selectAll.mode | string | determains the select all type | --- |
-| selectAll.checked | boolean | should the select all button be checked | --- |
-| selectAll.disabled | boolean | should the select all button be disabled | --- |
-| selectAll.indeterminate | boolean | should the select all button be indeterminate | --- |
-| selectAll.onChange | function | toggles the select all. will filter/push all avilable rows from/to selectedRowsIds | --- |
-| selectAll.ref | ref | a ref that can be added to the select all button to enable auto setting of indeterminate state | --- |
+| getIsRowSelectable | function | determains whether a row can be selected | getIsRowSelectable(row.id) |
+| selectAll | number | contains properties that are used to control the select all | --- |
+| selectAll.mode | string | the type of select all, available options are 'page' - which only handles selection of the *current* page's rows, or 'available' which handles selection of all *available* rows | --- |
+| selectAll.disabled | boolean | whether there are no relevant selectable rows | --- |
+| selectAll.checked | boolean | whether all the relevant rows are selected | --- |
+| selectAll.indeterminate | boolean | whether only some of the relevant rows are selected | --- |
+| selectAll.onChange | function | toggles the select all | --- |
+| selectAll.ref | ref | a ref that can be added to the select all checkbox to enable auto setting of indeterminate state | --- |
 
 ### rowEditApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| editRow | object | current edit row data | --- |
-| editRowId | any | current edit row id | --- |
-| getIsRowEditable | function | determains wheather a row can be edited | getIsRowEditable(row) |
-| setEditRow | function | sets the edit row | setEditRow(row) |
-| setEditRowId | function | sets the edit row id, you can pass null to switch back from edit mode | setEditRowId(row.id) |
+| editRow | object | the row data that is currently being edited | --- |
+| editRowId | any | the id of the row that is currently being edited | --- |
+| getIsRowEditable | function | determains whether a row can be edited | getIsRowEditable(row) |
+| setEditRow | function | sets the row data of the currently edited row | setEditRow(row) |
+| setEditRowId | function | sets the row id of the currently edited row, you can pass null to switch back from edit mode | setEditRowId(row.id) |
 
 ### rowVirtualizer
 
@@ -635,9 +635,9 @@ See full documentation at https://github.com/tannerlinsley/react-virtual
 
 | name | type | description | usage |
 |---|---|---|---|
-| isLoading | boolean | indicated wheather the table currently expects new items | --- |
+| isLoading | boolean | whether a request for new rows is still pending | --- |
 | mergeRowsAt | function | merges arrays at a certain index while filling "holes" with nulls | `mergeRowsAt(rows, moreRows, atIndex)` |
-| resetRows | function | resets the table's rows, causing the table to request completely new rows | `resetRows()` |
+| resetRows | function | resets the rows of the table, causing the table to request completely new rows | `resetRows()` |
 
 # How to...
 
@@ -900,7 +900,7 @@ let columns = [
 
 ```
 
-For columns that holds values other than string, you'll need to define the `setValue` function on the column so the updated value won't override the original value.
+For columns that hold values other than string, you'll need to define the `setValue` function on the column so the updated value won't override the original value.
 
 **Example:**
 
