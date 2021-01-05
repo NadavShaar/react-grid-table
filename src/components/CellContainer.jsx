@@ -16,7 +16,6 @@ const CellContainer = ({
 
     let {
         config: {
-            minColumnWidth,
             highlightSearch,
             tableHasSelection,
             additionalProps: { cellContainer: additionalProps = {} }
