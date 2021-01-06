@@ -41,7 +41,7 @@
     "start": "react-scripts start",
     "watch": "webpack -w",
     "build": "webpack",
-    "build-demo": "webpack --config demo.config.js -w",
+    "build-demo": "webpack --config demo.config.js",
     "deploy-demo": "gh-pages -d demo/dist",
     "start:dev": "webpack serve --config demo.config.js",
     "test": "react-scripts test",

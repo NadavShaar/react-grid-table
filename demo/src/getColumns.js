@@ -140,7 +140,7 @@ const getColumns = ({ setRowsData }) => {
                         title="Save"
                         style={styles.saveButton}
                         onClick={e => {
-                            let rowsClone = [...rowsData];
+                            let rowsClone = [...tableManager.rowsApi.rows];
                             let updatedRowIndex = rowsClone.findIndex(r => r.id === data.id);
                             rowsClone[updatedRowIndex] = data;
                             setRowsData(rowsClone);
