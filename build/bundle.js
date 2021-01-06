@@ -1772,7 +1772,7 @@ var getColumns = function getColumns(_ref) {
         title: "Save",
         style: styles.saveButton,
         onClick: function onClick(e) {
-          var rowsClone = _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(rowsData);
+          var rowsClone = _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(tableManager.rowsApi.rows);
 
           var updatedRowIndex = rowsClone.findIndex(function (r) {
             return r.id === data.id;
