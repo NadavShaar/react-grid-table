@@ -13,7 +13,6 @@ const useResizeEvents = (resizeHandleRef, column, onResizeStart, onResize, onRes
     }, [resizeHandleRef.current, column, onResizeStart, onResize, onResizeEnd])
 
     const onMouseDown = event => {
-        event.stopPropagation();
         onResizeStart({ event, target: resizeHandleRef.current, column });
         window.addEventListener('mousemove', onMouseMove);
         window.addEventListener('mouseup', onMouseUp);

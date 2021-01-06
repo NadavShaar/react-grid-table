@@ -122,7 +122,6 @@
 
 .rgt-cell-header-inner-not-pinned-right {
   border-right: var(--rgt-border);
-  margin-right: 1px;
 }
 
 .rgt-cell-header-inner-checkbox {

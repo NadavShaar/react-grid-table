@@ -499,13 +499,13 @@ additionalProps={{ cell: { ... }, ... }}
 
 This is the API object used by the internal components, you can use it to do anything that the API provides, outside of the component.
 
-The API has the following properties:
+API Structure:
 
 - **isMounted:** Is the table mounted.
-- **isInitialized:** Is the table initialized. Will be set to true once all effects are finished.
+- **isInitialized:** Is the table initialized. Will be set to true once all components are initialized.
 - **mode:** 'sync' or 'async', derived from the supplied props.
 - **isLoading:** Is the table currently loading data.
-- **config:** All the params that defines the table's behavior & UI.
+- **config:** All the params that defines the table's user-interface and its behavior.
 - **refs:** ref objects for selected elements.
 - **columnsApi:** API of the columns.
 - **columnsVisibilityApi:** API of the columns visibility.
@@ -536,9 +536,9 @@ The API has the following properties:
 | requestDebounceTimeout | number | defines the amount of debouning time for triggering the `onRowsRequest` prop | 300 |
 | batchSize | number | defines the amount of rows that will be requested by `onRowsRequest` prop | 100 |
 | isVirtualScroll | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
-| tableHasSelection | boolean | wether table has a checkbox column to conrol rows selection | --- |
+| tableHasSelection | boolean | wether the table has a checkbox column to control rows selection | --- |
 | components | object | the components that are in use by the table (see full list of [components](#components)) | {Header, Search, ColumnVisibility, HeaderCell, HeaderSelectionCell, Cell, EditorCell, SelectionCell, PlaceHolderCell, Loader, NoResults, Footer, Information, PageSize, Pagination} |
-| additionalProps | object | additional props that are passsed to internal components (see full list of [additionalProps](#additionalProps)) | {} |
+| additionalProps | object | additional props that are passed to the internal components (see full list of [additionalProps](#additionalProps)) | {} |
 | icons | object | the icons that are in use by the table | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
 | texts | object | the texts that are in use by the table | { search, totalRows, rows, selected, rowsPerPage, page, of, prev, next, columnVisibility } |
 
@@ -553,32 +553,32 @@ The API has the following properties:
 
 | name | type | description | usage |
 |---|---|---|---|
-| columns | array | the columns | --- |
-| visibleColumns | array | the visible columns | --- |
-| setColumns | function | sets the columns | setColumns(columns) |
+| columns | array | columns configuration | --- |
+| visibleColumns | array | the columns that are visible | --- |
+| setColumns | function | updates the columns | setColumns(columns) |
 
 ### columnsVisibilityApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| toggleColumnVisibility | function | toggles a column's visibility | toggleColumnVisibility(column.id) |
+| toggleColumnVisibility | function | toggles a column's visibility by its `id` | toggleColumnVisibility(column.id) |
 
 ### searchApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| searchText | string | the search text | --- |
-| setSearchText | function | sets the search text | setSearchText('hello') |
-| searchRows | function | filters rows based on the current search text and the search methods of the columns | searchRows(rows) |
-| valuePassesSearch | function | determains if a value passes the search for a certain column | valuePassesSearch('hello', column) |
+| searchText | string | text for search | --- |
+| setSearchText | function | updates the search text | setSearchText('hello') |
+| searchRows | function | filters rows based on the search text, using the search method defined on the columns | searchRows(rows) |
+| valuePassesSearch | function | returns true if a value passes the search for a certain column | valuePassesSearch('hello', column) |
 
 ### sortApi
 
 | name | type | description | usage |
 |---|---|---|---|
 | sort | object | the sort object holds `colId` for the id of the column that should be sorted, and `isAsc` that defines the sort direction | --- |
-| setSort | function | sets the sort object | setSort({colId: 5, isAsc: false}) |
-| sortRows | function | sorts rows based on the sort method of the column and the selected direction | sortRows(rows) |
+| setSort | function | updates the sort object | setSort({colId: 5, isAsc: false}) |
+| sortRows | function | sorts rows based on the selected direction using the sort method defined on the column | sortRows(rows) |
 | toggleSort | function | toggles a column's sort steps from ascending, to descending and to none | toggleSort(column.id) |
 
 ### rowsApi
@@ -586,18 +586,18 @@ The API has the following properties:
 | name | type | description | usage |
 |---|---|---|---|
 | rows | array | the rows | --- |
-| setRows | function | sets the rows | setRows(rows) |
+| setRows | function | updates the rows | setRows(rows) |
 | totalRows | number | the total number of rows | --- |
-| setTotalRows | function | sets the total number of rows | setTotalRows(1000) |
+| setTotalRows | function | updates the total number of rows | setTotalRows(1000) |
 
 ### paginationApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| page | number | the page number | --- |
-| setPage | function | sets the page number | setPage(3) |
-| pageSize | number | the page size | --- |
-| setPageSize | function | sets the page size | setPageSize(20) |
+| page | number | the current page number | --- |
+| setPage | function | updates the page number | setPage(3) |
+| pageSize | number | the selected page size | --- |
+| setPageSize | function | updates the page size | setPageSize(20) |
 | pageRows | array | the rows in the current page | --- |
 | totalPages | number | the total number of pages | --- |
 
@@ -605,11 +605,10 @@ The API has the following properties:
 
 | name | type | description | usage |
 |---|---|---|---|
-| selectedRowsIds | number | the ids of the rows that are selected | --- |
-| setSelectedRowsIds | function | sets the selected rows ids | setSelectedRowsIds([1,3,5]) |
-| toggleRowSelection | function | toggles if a row is selected | toggleRowSelection(row.id) |
+| selectedRowsIds | array of ids | the ids of all selected rows | --- |
+| setSelectedRowsIds | function | updates the selected rows | setSelectedRowsIds([1,3,5]) |
+| toggleRowSelection | function | toggles selection of a row by its `id` | toggleRowSelection(row.id) |
 | getIsRowSelectable | function | determains whether a row can be selected | getIsRowSelectable(row.id) |
-| selectAll | number | contains properties that are used to control the select all | --- |
 | selectAll.mode | string | the type of select all, available options are 'page' - which only handles selection of the *current* page's rows, or 'available' which handles selection of all *available* rows | --- |
 | selectAll.disabled | boolean | whether there are no relevant selectable rows | --- |
 | selectAll.checked | boolean | whether all the relevant rows are selected | --- |
@@ -621,11 +620,11 @@ The API has the following properties:
 
 | name | type | description | usage |
 |---|---|---|---|
-| editRow | object | the row data that is currently being edited | --- |
+| editRow | object | the row's data that is currently being edited | --- |
 | editRowId | any | the id of the row that is currently being edited | --- |
 | getIsRowEditable | function | determains whether a row can be edited | getIsRowEditable(row) |
-| setEditRow | function | sets the row data of the currently edited row | setEditRow(row) |
-| setEditRowId | function | sets the row id of the currently edited row, you can pass null to switch back from edit mode | setEditRowId(row.id) |
+| setEditRow | function | updates the row's data of the currently edited row | setEditRow(row) |
+| setEditRowId | function | updates the row id of the currently edited row, you can pass `null` to switch back from edit mode | setEditRowId(row.id) |
 
 ### rowVirtualizer
 
@@ -636,8 +635,8 @@ See full documentation at https://github.com/tannerlinsley/react-virtual
 | name | type | description | usage |
 |---|---|---|---|
 | isLoading | boolean | whether a request for new rows is still pending | --- |
-| mergeRowsAt | function | merges arrays at a certain index while filling "holes" with nulls | `mergeRowsAt(rows, moreRows, atIndex)` |
-| resetRows | function | resets the rows of the table, causing the table to request completely new rows | `resetRows()` |
+| mergeRowsAt | function | merges `array`s of rows at a certain index while filling "holes" with `null`s | `mergeRowsAt(rows, moreRows, atIndex)` |
+| resetRows | function | drops the accumulated rows, which will trigger a new request  | `resetRows()` |
 
 # How to...
 
@@ -651,9 +650,9 @@ Just pass all the data using the `rows` prop.
 
 **Required props**:
 
-| name | type | description | default value |
-|---|---|---|---|
-| rows* | array of objects | rows data (<u>[details](#rows)</u>) | undefined |
+| name | type | description |
+|---|---|---|
+| rows* | array of objects | rows data (<u>[details](#rows)</u>) |
 
 **Example:**
 
@@ -679,9 +678,9 @@ All the data is supplied to the table via the `onRowsRequest` prop.
 
 **Required props**:
 
-| name | type | description | default value |
-|---|---|---|---|
-| onRowsRequest* | async function | Should return a promise that resolves to {rows, totalRows} | undefined |
+| name | type | description |
+|---|---|---|
+| onRowsRequest* | async function | Should return a promise that resolves to {rows, totalRows} |
 
 **Example:**
 
@@ -725,13 +724,13 @@ All the data is supplied to the table via the `onRowsRequest` prop, but is contr
 
 **Required props**:
 
-| name | type | description | default value |
-|---|---|---|---|
-| onRowsRequest* | async function | Should return a promise that resolves to {rows, totalRows} | undefined |
-| rows* | array of objects | rows data (<u>[details](#rows)</u>) | undefined |
-| onRowsChange* | function | Should be used to set the current data | undefined |
-| totalRows* | number | Should contain the current data length | undefined |
-| onTotalRowsChange* | function | Should be used to set the current data length | undefined |
+| name | type | description |
+|---|---|---|
+| onRowsRequest* | async function | Should return a promise that resolves to {rows, totalRows} |
+| rows* | array of objects | rows data (<u>[details](#rows)</u>) |
+| onRowsChange* | function | Should be used to set the current data |
+| totalRows* | number | Should contain the current data length |
+| onTotalRowsChange* | function | Should be used to set the current data length |
 
 **Example:**
 
@@ -787,12 +786,12 @@ let mergedRows = tableManager.asyncApi.mergeRowsAt(rows, fetchedRows, at)
 
 **Required props**:
 
-| name | type | description | default value |
-|---|---|---|---|
-| onRowsRequest* | async function | Should update the rows props according to the request | undefined |
-| rows* | array of objects | rows data (<u>[details](#rows)</u>) | undefined |
-| totalRows* | number | Should contain the current data length | undefined |
-| onRowsReset* | function | Should be used to reset the current data. Will be called when sort or searchText change | undefined |
+| name | type | description |
+|---|---|---|
+| onRowsRequest* | async function | Should update the rows props according to the request |
+| rows* | array of objects | rows data (<u>[details](#rows)</u>) |
+| totalRows* | number | Should contain the current data length |
+| onRowsReset* | function | Should be used to reset the current data. Will be called when sort or searchText change |
 
 **Example:**
 
@@ -925,7 +924,7 @@ Styling is done by css classes that can be easily overridden. the table's compon
 | Search | `rgt-search-container` `rgt-search-label` `rgt-search-icon` `rgt-search-input` `rgt-search-highlight` |
 | Columns Visibility Manager | `rgt-columns-manager-wrapper` `rgt-columns-manager-button` `rgt-columns-manager-button-active` `rgt-columns-manager-popover` `rgt-columns-manager-popover-open` `rgt-columns-manager-popover-row` `rgt-columns-manager-popover-title` `rgt-columns-manager-popover-body` |
 | Table | `rgt-container` `rgt-container-overlay` |
-| Header Cell | `rgt-cell-header` `rgt-cell-header-[column.field]` `rgt-cell-header-checkbox` `rgt-cell-header-virtual-col` `rgt-cell-header-sortable / rgt-cell-header-not-sortable` `rgt-cell-header-sticky` `rgt-cell-header-resizable / rgt-cell-header-not-resizable` `rgt-cell-header-searchable / rgt-cell-header-not-searchable` `rgt-cell-header-pinned` `rgt-cell-header-pinned-left / rgt-cell-header-pinned-right` `[column.className]` `rgt-cell-header-inner` `rgt-cell-header-inner-checkbox` `rgt-resize-handle` `rgt-sort-icon` `rgt-sort-icon-ascending / rgt-sort-icon-descending` `rgt-column-sort-ghost` |
+| Header Cell | `rgt-cell-header` `rgt-cell-header-[column.field]` `rgt-cell-header-checkbox` `rgt-cell-header-virtual-col` `rgt-cell-header-sortable / rgt-cell-header-not-sortable` `rgt-cell-header-sticky` `rgt-cell-header-resizable / rgt-cell-header-not-resizable` `rgt-cell-header-searchable / rgt-cell-header-not-searchable` `rgt-cell-header-pinned` `rgt-cell-header-pinned-left / rgt-cell-header-pinned-right` `rgt-cell-header-inner-not-pinned-right` `[column.className]` `rgt-cell-header-inner` `rgt-cell-header-inner-checkbox` `rgt-resize-handle` `rgt-sort-icon` `rgt-sort-icon-ascending / rgt-sort-icon-descending` `rgt-column-sort-ghost` |
 | Cell | `rgt-cell` `rgt-cell-[column.field]` `rgt-row-[rowNumber]` `rgt-row-odd / rgt-row-even` `rgt-row-hover` `rgt-row-selectable / rgt-row-not-selectable` `rgt-cell-inner` `rgt-cell-checkbox` `rgt-cell-virtual` `rgt-cell-pinned` `rgt-cell-pinned-left / rgt-cell-pinned-right` `rgt-cell-editor` `rgt-cell-editor-inner` `rgt-cell-editor-input` `rgt-row-selected` `rgt-placeholder-cell` |
 | Footer | `rgt-footer` `rgt-footer-right-container` |
 | Pagination | `rgt-footer-pagination` `rgt-footer-pagination-button` `rgt-footer-pagination-input-container` `rgt-footer-page-input` |
