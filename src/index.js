@@ -1,7 +1,6 @@
-// refactor hooks
-// move SortableList style to css file?
+// go over select all rows logic & documentation in regard to async
 // adding an "index" property to columns would simplify code
-// useResizeEvents - why does onMouseDown needs e.stopPropagation();
+// add resize to minWidth, maxWidth, minColumnWidth
 import React from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
 import { Row, HeaderCellContainer } from './components/';

@@ -19,7 +19,7 @@ const useRowEdit = (props, tableManager) => {
 
     useEffect(() => {
         rowEditApi.setEditRow(rowEditApi.editRowId && pageRows.find(item => item && (item[rowIdField] === rowEditApi.editRowId)) || null);
-    }, [rowEditApi.editRowId, pageRows, rowIdField])
+    }, [rowEditApi.editRowId, rowIdField])
 
     return rowEditApi;
 }
