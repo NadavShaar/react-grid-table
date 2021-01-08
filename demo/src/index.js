@@ -104,32 +104,6 @@ const MyAwesomeTable = () => {
     )
 }
 
-// const MyAwesomeTable = () => {
-//     let [columns, setColumns] = useState(getColumns({  }));
-
-//     const onRowsRequest = async (requestData, tableManager) => {
-//         await new Promise((res, rej) => setTimeout(res, 5000));
-//         const { searchApi: { searchRows }, sortApi: { sortRows } } = tableManager;
-
-//         let newRows = searchRows(MOCK_DATA);
-//         newRows = sortRows(newRows);
-
-//         return {
-//             rows: newRows.slice(requestData.from, requestData.to),
-//             totalRows: newRows.length
-//         };
-//     }
-
-//     return (
-//         <div className="demo">
-//             <GridTable
-//                 columns={columns}
-//                 onRowsRequest={onRowsRequest}
-//             />
-//         </div>
-//     )
-// }
-
 export default MyAwesomeTable;
 
 ReactDOM.render(<MyAwesomeTable />, document.getElementById('root'));

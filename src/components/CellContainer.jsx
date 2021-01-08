@@ -29,16 +29,19 @@ const CellContainer = ({
 
     const getClassNames = () => {
         let classNames;
+        const all = `rgt-cell rgt-row-${rowIndex} rgt-row-${rowIndex % 2 === 0 ? 'even' : 'odd'}${isSelected ? ' rgt-row-selected' : ''} ${additionalProps.className || ''}`.trim();
+        const virtualDefault = `${!tableHasSelection ? '' : disableSelection ? ' rgt-row-not-selectable' : ' rgt-row-selectable'}`;
+        const checkboxDefault = `${column.pinned && colIndex === 0 ? ' rgt-cell-pinned rgt-cell-pinned-left' : ''}${column.pinned && colIndex === visibleColumns.length - 1 ? ' rgt-cell-pinned rgt-cell-pinned-right' : ''} ${column.className}`.trim();
 
         switch (column.id) {
-            case 'virtual': classNames = `rgt-cell rgt-cell-virtual rgt-row-${rowIndex} rgt-row-${rowIndex % 2 === 0 ? 'even' : 'odd'}${!tableHasSelection ? '' : disableSelection ? ' rgt-row-not-selectable' : ' rgt-row-selectable'}${isSelected ? ' rgt-row-selected' : ''}`;
+            case 'virtual': classNames = `${all} rgt-cell-virtual ${virtualDefault}`;
                 break;
-            case 'checkbox': classNames = `rgt-cell rgt-cell-checkbox rgt-row-${rowIndex} rgt-row-${rowIndex % 2 === 0 ? 'even' : 'odd'}${column.pinned && colIndex === 0 ? ' rgt-cell-pinned rgt-cell-pinned-left' : ''}${column.pinned && colIndex === visibleColumns.length - 1 ? ' rgt-cell-pinned rgt-cell-pinned-right' : ''}${isSelected ? ' rgt-row-selected' : ''} ${column.className}`;
+            case 'checkbox': classNames = `${all} rgt-cell-checkbox ${checkboxDefault}`;
                 break;
-            default: classNames = `rgt-cell rgt-cell-${column.field} rgt-row-${rowIndex} rgt-row-${rowIndex % 2 === 0 ? 'even' : 'odd'}${!tableHasSelection ? '' : disableSelection ? ' rgt-row-not-selectable' : ' rgt-row-selectable'}${column.pinned && colIndex === 0 ? ' rgt-cell-pinned rgt-cell-pinned-left' : ''}${column.pinned && colIndex === visibleColumns.length - 1 ? ' rgt-cell-pinned rgt-cell-pinned-right' : ''}${isSelected ? ' rgt-row-selected' : ''}  ${column.className}`;
+            default: classNames = `${all} rgt-cell-${column.field} ${virtualDefault} ${checkboxDefault}`;
         }
 
-        return (classNames.trim() + ' ' + (additionalProps.className || '')).trim();
+        return classNames;
     }
 
     const getValue = () => {
