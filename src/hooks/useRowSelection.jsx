@@ -8,7 +8,7 @@ const useRowSelection = (props, tableManager) => {
 
     rowSelectionApi.selectedRowsIds = props.selectedRowsIds ?? selectedRowsIds;
     rowSelectionApi.getIsRowSelectable = props.getIsRowSelectable;
-    
+
     rowSelectionApi.setSelectedRowsIds = newSelectedItems => {
         if (props.selectedRowsIds === undefined || props.onSelectedRowsChange === undefined) setSelectedRowsIds(newSelectedItems);
         props.onSelectedRowsChange?.(newSelectedItems, tableManager);

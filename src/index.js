@@ -1,6 +1,3 @@
-// go over select all rows logic & documentation in regard to async
-// adding an "index" property to columns would simplify code
-// add resize to minWidth, maxWidth, minColumnWidth
 import React from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
 import { Row, HeaderCellContainer } from './components/';
@@ -52,7 +49,7 @@ const GridTable = props => {
                     display: 'grid',
                     overflow: 'auto',
                     flex: 1,
-                    gridTemplateColumns: (visibleColumns.map(g => g.width)).join(" "),
+                    gridTemplateColumns: (visibleColumns.map(column => column.width)).join(" "),
                     gridTemplateRows: `repeat(${pageRows.length + 1 + (isVirtualScroll ? 1 : 0)}, max-content)`,
                 }}
             >
@@ -66,11 +63,11 @@ const GridTable = props => {
                         isVirtualScroll ? 
                             [
                                 <Row key={'virtual-start'} index={'virtual-start'} tableManager={tableManager} />,
-                                ...virtualItems.map(vr => <Row key={vr.index} index={vr.index} data={pageRows[vr.index]} measureRef={vr.measureRef} tableManager={tableManager} />),
+                                ...virtualItems.map(virtualizedRow => <Row key={virtualizedRow.index} index={virtualizedRow.index} data={pageRows[virtualizedRow.index]} measureRef={virtualizedRow.measureRef} tableManager={tableManager} />),
                                 <Row key={'virtual-end'} index={'virtual-end'} tableManager={tableManager} />
                             ]
                             :
-                            pageRows.map((r, index) => <Row key={index} index={index} data={r} tableManager={tableManager} />)
+                            pageRows.map((rowData, index) => <Row key={index} index={index} data={rowData} tableManager={tableManager} />)
                         :
                         <div className='rgt-container-overlay'>
                             {
