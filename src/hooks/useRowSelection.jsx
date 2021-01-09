@@ -8,6 +8,8 @@ const useRowSelection = (props, tableManager) => {
 
     rowSelectionApi.selectedRowsIds = props.selectedRowsIds ?? selectedRowsIds;
     rowSelectionApi.getIsRowSelectable = props.getIsRowSelectable;
+
+    const selectedRows = rowSelectionApi.selectedRowsIds;
     
     rowSelectionApi.setSelectedRowsIds = newSelectedItems => {
         if (props.selectedRowsIds === undefined || props.onSelectedRowsChange === undefined) setSelectedRowsIds(newSelectedItems);
@@ -15,7 +17,7 @@ const useRowSelection = (props, tableManager) => {
     }
 
     rowSelectionApi.toggleRowSelection = rowId => {
-        const newSelectedRowsIds = [...rowSelectionApi.selectedRowsIds];
+        const newSelectedRowsIds = [...selectedRows];
 
         const itemIndex = newSelectedRowsIds.findIndex(s => s === rowId);
 
@@ -31,9 +33,9 @@ const useRowSelection = (props, tableManager) => {
         const mode = props.selectAllMode;
         const availableRows = mode === 'available' ? rows : pageRows;
         const selectableItemsIds = availableRows.filter(r => r).filter(rowSelectionApi.getIsRowSelectable).map(item => item[rowIdField]);
-        const checked = selectableItemsIds.length && selectableItemsIds.every(si => selectedRowsIds.find(id => si === id));
+        const checked = selectableItemsIds.length && selectableItemsIds.every(si => selectedRows.find(id => si === id));
         const disabled = !selectableItemsIds.length;
-        const indeterminate = !!(selectedRowsIds.length && !checked && selectableItemsIds.some(si => selectedRowsIds.find(id => si === id)));
+        const indeterminate = !!(selectedRows.length && !checked && selectableItemsIds.some(si => selectedRows.find(id => si === id)));
 
         return {
             mode,
@@ -42,7 +44,7 @@ const useRowSelection = (props, tableManager) => {
             disabled,
             indeterminate,
             onChange: () => {
-                let newSelectedRowsIds = [...selectedRowsIds];
+                let newSelectedRowsIds = [...selectedRows];
 
                 if (checked || indeterminate) newSelectedRowsIds = newSelectedRowsIds.filter(si => !selectableItemsIds.find(itemId => si === itemId));
                 else selectableItemsIds.forEach(s => newSelectedRowsIds.push(s));
@@ -50,7 +52,7 @@ const useRowSelection = (props, tableManager) => {
                 rowSelectionApi.setSelectedRowsIds(newSelectedRowsIds);
             }
         }
-    }, [props.selectAllMode, pageRows, rows, rowSelectionApi.getIsRowSelectable, rowIdField, selectedRowsIds]);
+    }, [props.selectAllMode, pageRows, rows, rowSelectionApi.getIsRowSelectable, rowIdField, selectedRows]);
 
     useEffect(() => {
         if (!selectAllRef.current) return;
