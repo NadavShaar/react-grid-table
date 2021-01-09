@@ -9,7 +9,7 @@ const useRows = (props, tableManager) => {
 
     Object.defineProperty(rowsApi, "onRowClick", { enumerable: false, writable: true });
     
-    rows = useMemo(() => {
+    rowsApi.rows = useMemo(() => {
         let newRows = props.rows ?? rows;
 
         if (mode === 'sync') {
@@ -21,7 +21,6 @@ const useRows = (props, tableManager) => {
     }, [props.rows, rows, mode, searchRows, sortRows]);
 
     rowsApi.onRowClick = props.onRowClick;
-    rowsApi.rows = rows;
     rowsApi.totalRows = mode === 'sync' ? rowsApi.rows?.length : (props.totalRows ?? totalRows);
 
     rowsApi.setRows = rows => {
