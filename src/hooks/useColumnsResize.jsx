@@ -5,7 +5,7 @@ const useColumnsResize = (props, tableManager) => {
     const {
         config: { minColumnResizeWidth },
         refs: { tableRef },
-        columnsApi: { columns, setColumns }
+        columnsApi: { columns, visibleColumns, setColumns }
     } = tableManager;
 
     const columnsResizeApi = useRef({ isColumnResizing: false }).current;
@@ -36,7 +36,7 @@ const useColumnsResize = (props, tableManager) => {
         if (minResizeWidth && (newColWidth < minResizeWidth)) newColWidth = minResizeWidth;
         if (column.maxResizeWidth && (column.maxResizeWidth < newColWidth)) newColWidth = column.maxResizeWidth;
 
-        const colIndex = columns.findIndex(cd => cd.id === column.id);
+        const colIndex = visibleColumns.findIndex(cd => cd.id === column.id);
         const gtcArr = gridTemplateColumns.split(/(?<!,) /);
         gtcArr[colIndex] = `${newColWidth}px`;
 
@@ -56,7 +56,7 @@ const useColumnsResize = (props, tableManager) => {
         columns.forEach(col => {
             if (!col.visible) return;
 
-            const colIndex = columns.findIndex(cd => cd.id === col.id);
+            const colIndex = visibleColumns.findIndex(cd => cd.id === col.id);
             col.width = gtcArr[colIndex];
         })
 
