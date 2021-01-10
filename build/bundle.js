@@ -3634,7 +3634,8 @@ var useColumns = function useColumns(props, tableManager) {
         editable: false,
         sortable: false,
         pinned: isPinnedColumn,
-        visible: isVisibleColumn
+        visible: isVisibleColumn,
+        index: idx
       });
       return _objectSpread(_objectSpread({
         label: column.field,
@@ -3678,7 +3679,8 @@ var useColumns = function useColumns(props, tableManager) {
         placeHolderRenderer: PlaceHolderCell
       }, column), {}, {
         pinned: isPinnedColumn,
-        visible: isVisibleColumn
+        visible: isVisibleColumn,
+        index: idx
       });
     });
   }, [props.columns, columns, SelectionCell, HeaderSelectionCell, Cell, EditorCell, HeaderCell, PlaceHolderCell]);
@@ -3757,16 +3759,10 @@ var useColumnsReorder = function useColumnsReorder(props, tableManager) {
       return columnsReorderApi.isColumnReordering = false;
     }, 0);
     if (sortData.oldIndex === sortData.newIndex) return;
-    var colDefNewIndex = columns.findIndex(function (oc) {
-      return oc.id === visibleColumns[sortData.newIndex].id;
-    });
-    var colDefOldIndex = columns.findIndex(function (oc) {
-      return oc.id === visibleColumns[sortData.oldIndex].id;
-    });
 
     var newColumns = _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(columns);
 
-    newColumns.splice.apply(newColumns, [colDefNewIndex, 0].concat(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(newColumns.splice(colDefOldIndex, 1))));
+    newColumns.splice.apply(newColumns, [visibleColumns[sortData.newIndex].index, 0].concat(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(newColumns.splice(visibleColumns[sortData.oldIndex].index, 1))));
     setColumns(newColumns);
     (_props$onColumnReorde2 = props.onColumnReorderEnd) === null || _props$onColumnReorde2 === void 0 ? void 0 : _props$onColumnReorde2.call(props, sortData, tableManager);
   };
@@ -3799,6 +3795,7 @@ var useColumnsResize = function useColumnsResize(props, tableManager) {
       tableRef = tableManager.refs.tableRef,
       _tableManager$columns = tableManager.columnsApi,
       columns = _tableManager$columns.columns,
+      visibleColumns = _tableManager$columns.visibleColumns,
       setColumns = _tableManager$columns.setColumns;
   var columnsResizeApi = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)({
     isColumnResizing: false
@@ -3851,7 +3848,7 @@ var useColumnsResize = function useColumnsResize(props, tableManager) {
     var newColWidth = currentColWidth + diff;
     if (minResizeWidth && newColWidth < minResizeWidth) newColWidth = minResizeWidth;
     if (column.maxResizeWidth && column.maxResizeWidth < newColWidth) newColWidth = column.maxResizeWidth;
-    var colIndex = columns.findIndex(function (cd) {
+    var colIndex = visibleColumns.findIndex(function (cd) {
       return cd.id === column.id;
     });
     var gtcArr = gridTemplateColumns.split(/(?<!,) /);
@@ -3879,7 +3876,7 @@ var useColumnsResize = function useColumnsResize(props, tableManager) {
     var gtcArr = containerEl.style.gridTemplateColumns.split(" ");
     columns.forEach(function (col) {
       if (!col.visible) return;
-      var colIndex = columns.findIndex(function (cd) {
+      var colIndex = visibleColumns.findIndex(function (cd) {
         return cd.id === col.id;
       });
       col.width = gtcArr[colIndex];
