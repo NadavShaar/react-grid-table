@@ -23,11 +23,8 @@ const useColumnsReorder = (props, tableManager) => {
         
         if (sortData.oldIndex === sortData.newIndex) return;
 
-        const colDefNewIndex = columns.findIndex(oc => oc.id === visibleColumns[sortData.newIndex].id);
-        const colDefOldIndex = columns.findIndex(oc => oc.id === visibleColumns[sortData.oldIndex].id);
-
         const newColumns = [...columns];
-        newColumns.splice(colDefNewIndex, 0, ...newColumns.splice(colDefOldIndex, 1));
+        newColumns.splice(visibleColumns[sortData.newIndex].index, 0, ...newColumns.splice(visibleColumns[sortData.oldIndex].index, 1));
 
         setColumns(newColumns);
 

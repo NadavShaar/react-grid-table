@@ -30,7 +30,8 @@ const useColumns = (props, tableManager) => {
                 editable: false,
                 sortable: false,
                 pinned: isPinnedColumn,
-                visible: isVisibleColumn
+                visible: isVisibleColumn,
+                index: idx
             };
 
             return {
@@ -59,7 +60,8 @@ const useColumns = (props, tableManager) => {
                 placeHolderRenderer: PlaceHolderCell,
                 ...column,
                 pinned: isPinnedColumn,
-                visible: isVisibleColumn
+                visible: isVisibleColumn,
+                index: idx
             }
         })
     }, [props.columns, columns, SelectionCell, HeaderSelectionCell, Cell, EditorCell, HeaderCell, PlaceHolderCell]); 
