@@ -88,7 +88,7 @@ const GridTable = props => {
 GridTable.defaultProps = {
     columns: [],
     rowIdField: 'id',
-    minColumnWidth: 70,
+    minColumnResizeWidth: 70,
     pageSizes: [20, 50, 100],
     isHeaderSticky: true,
     highlightSearch: true,
@@ -124,7 +124,7 @@ GridTable.propTypes = {
     pageSize: PropTypes.number,
     page: PropTypes.number,
     sort: PropTypes.object,
-    minColumnWidth: PropTypes.number,
+    minColumnResizeWidth: PropTypes.number,
     highlightSearch: PropTypes.bool,
     showSearch: PropTypes.bool,
     showRowsInformation: PropTypes.bool,

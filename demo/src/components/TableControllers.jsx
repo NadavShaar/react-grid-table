@@ -57,7 +57,7 @@ const TableControllers = ({ controllers }) => {
                 <input type='number' value={controllers.minSearchChars[0]} min='0' onChange={e => controllers.minSearchChars[1](~~e.target.value)} />
             </ControllerWrappper>
             <ControllerWrappper label='Min Column Width'>
-                <input type='number' value={controllers.minColumnWidth[0]} min='0' onChange={e => controllers.minColumnWidth[1](~~e.target.value)} />
+                <input type='number' value={controllers.minColumnResizeWidth[0]} min='0' onChange={e => controllers.minColumnResizeWidth[1](~~e.target.value)} />
             </ControllerWrappper>
         </React.Fragment>
     )

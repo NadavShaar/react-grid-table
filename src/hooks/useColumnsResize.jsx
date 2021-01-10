@@ -3,7 +3,7 @@ import { useResizeEvents } from './';
 
 const useColumnsResize = (props, tableManager) => {
     const {
-        config: { minColumnWidth },
+        config: { minColumnResizeWidth },
         refs: { tableRef },
         columnsApi: { columns, setColumns }
     } = tableManager;
@@ -31,10 +31,10 @@ const useColumnsResize = (props, tableManager) => {
 
         if (!diff) return;
 
-        const minWidth = column.minWidth ?? minColumnWidth;
+        const minResizeWidth = column.minResizeWidth ?? minColumnResizeWidth;
         let newColWidth = currentColWidth + diff;
-        if (minWidth && (newColWidth < minWidth)) newColWidth = minWidth;
-        if (column.maxWidth && (column.maxWidth < newColWidth)) newColWidth = column.maxWidth;
+        if (minResizeWidth && (newColWidth < minResizeWidth)) newColWidth = minResizeWidth;
+        if (column.maxResizeWidth && (column.maxResizeWidth < newColWidth)) newColWidth = column.maxResizeWidth;
 
         const colIndex = columns.findIndex(cd => cd.id === column.id);
         const gtcArr = gridTemplateColumns.split(/(?<!,) /);

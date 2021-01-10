@@ -33,7 +33,7 @@ const useTableManager = (props) => {
     tableManager.mode = !props.onRowsRequest ? 'sync' : 'async';
     tableManager.config = {
         rowIdField: props.rowIdField,
-        minColumnWidth: props.minColumnWidth,
+        minColumnResizeWidth: props.minColumnResizeWidth,
         minSearchChars: props.minSearchChars,
         isHeaderSticky: props.isHeaderSticky,
         isPaginated: props.isPaginated,

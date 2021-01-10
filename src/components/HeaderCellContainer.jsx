@@ -12,7 +12,7 @@ const SortableDragHandle = SortableHandle(({children, index}) => (
 const HeaderCellContainer = ({ index, column, tableManager }) => {
     let {
         config: {
-            minColumnWidth,
+            minColumnResizeWidth,
             isHeaderSticky,
             components: { DragHandle },
             additionalProps: { headerCellContainer: additionalProps = {} },

@@ -27,7 +27,7 @@ const MyAwesomeTable = () => {
     let [isVirtualScroll, setIsVirtualScroll] = useState(true);
     let [isPaginated, setIsPaginated] = useState(true);
     let [minSearchChars, setMinSearchChars] = useState(2);
-    let [minColumnWidth, setMinColumnWidth] = useState(70);
+    let [minColumnResizeWidth, setMinColumnWidth] = useState(70);
     let [columns, setColumns] = useState(getColumns({ setRowsData }));
     let [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
@@ -49,7 +49,7 @@ const MyAwesomeTable = () => {
         isVirtualScroll: [isVirtualScroll, setIsVirtualScroll],
         isPaginated: [isPaginated, setIsPaginated],
         minSearchChars: [minSearchChars, setMinSearchChars],
-        minColumnWidth: [minColumnWidth, setMinColumnWidth],
+        minColumnResizeWidth: [minColumnResizeWidth, setMinColumnWidth],
     }
 
     useEffect(() => {
@@ -97,7 +97,7 @@ const MyAwesomeTable = () => {
                     isVirtualScroll={isVirtualScroll}
                     isPaginated={isPaginated}
                     minSearchChars={minSearchChars}
-                    minColumnWidth={minColumnWidth}
+                    minColumnResizeWidth={minColumnResizeWidth}
                 />
             </div>
         </div>
