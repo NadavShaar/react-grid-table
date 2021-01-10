@@ -204,7 +204,7 @@ export default MyAwesomeTable;
 | showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
 | pageSizes | array of numbers | page size options | [20, 50, 100] |
 | isVirtualScroll | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
-| selectAllMode | string | controls the type of "All Selection". available options are 'page' - to select/unselect only the *current* page's rows, or 'available' to select/unselect all *available* rows | 'page' |
+| selectAllMode | string | controls the type of "All Selection". Available options are 'page' - to select/unselect only the **page** rows, or 'all' to select/unselect **all** rows. If using an async flow, the 'all' option will select all **available** rows | 'page' |
 | icons | object of nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
 | texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
 | components | object | This prop gives you the ability to override the internal components with your own custom components (see full list of supported [components](#components)) | { } |
@@ -609,11 +609,11 @@ API Structure:
 | setSelectedRowsIds | function | updates the selected rows | setSelectedRowsIds([1,3,5]) |
 | toggleRowSelection | function | toggles selection of a row by its `id` | toggleRowSelection(row.id) |
 | getIsRowSelectable | function | determains whether a row can be selected | getIsRowSelectable(row.id) |
-| selectAll.mode | string | the type of select all, available options are 'page' - which only handles selection of the *current* page's rows, or 'available' which handles selection of all *available* rows | --- |
-| selectAll.disabled | boolean | whether there are no relevant selectable rows | --- |
-| selectAll.checked | boolean | whether all the relevant rows are selected | --- |
-| selectAll.indeterminate | boolean | whether only some of the relevant rows are selected | --- |
-| selectAll.onChange | function | toggles the select all | --- |
+| selectAll.mode | string | the type of select all, possible modes are 'page' - which only handles selection of the **page** rows, or 'all' which handles selection of **all** rows. If using an async flow, 'all' mode will handle selection of all **available** rows | --- |
+| selectAll.disabled | boolean | whether the select all button should be disabled because there are no selectable rows that match the selectAll.mode | --- |
+| selectAll.checked | boolean | whether all the rows that match the selectAll.mode are selected | --- |
+| selectAll.indeterminate | boolean | whether only some of the rows that match the selectAll.mode are selected | --- |
+| selectAll.onChange | function | selects/unselects all rows that match the selectAll.mode | --- |
 | selectAll.ref | ref | a ref that can be added to the select all checkbox to enable auto setting of indeterminate state | --- |
 
 ### rowEditApi

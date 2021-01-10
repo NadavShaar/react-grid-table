@@ -103,7 +103,7 @@ GridTable.defaultProps = {
     batchSize: 100,
     getIsRowSelectable: row => true,
     getIsRowEditable: row => true,
-    selectAllMode: 'page' // ['page', 'available']
+    selectAllMode: 'page' // ['page', 'all']
 };
 
 GridTable.propTypes = {

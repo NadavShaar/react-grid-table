@@ -29,8 +29,8 @@ const useRowSelection = (props, tableManager) => {
 
     rowSelectionApi.selectAll = useMemo(() => {
         const mode = props.selectAllMode;
-        const availableRows = mode === 'available' ? rows : pageRows;
-        const selectableItemsIds = availableRows.filter(r => r).filter(rowSelectionApi.getIsRowSelectable).map(item => item[rowIdField]);
+        const allRows = mode === 'all' ? rows : pageRows;
+        const selectableItemsIds = allRows.filter(r => r).filter(rowSelectionApi.getIsRowSelectable).map(item => item[rowIdField]);
         const checked = selectableItemsIds.length && selectableItemsIds.every(si => rowSelectionApi.selectedRowsIds.find(id => si === id));
         const disabled = !selectableItemsIds.length;
         const indeterminate = !!(rowSelectionApi.selectedRowsIds.length && !checked && selectableItemsIds.some(si => rowSelectionApi.selectedRowsIds.find(id => si === id)));
