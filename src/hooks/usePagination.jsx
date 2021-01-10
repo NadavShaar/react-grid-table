@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 
 const usePagination = (props, tableManager) => {
     const { mode, config: { isPaginated }, rowsApi: { rows, totalRows } } = tableManager;
@@ -10,20 +10,22 @@ const usePagination = (props, tableManager) => {
     paginationApi.page = props.page ?? page;
     paginationApi.pageSize = props.pageSize ?? pageSize;
     paginationApi.totalPages = Math.ceil(totalRows / paginationApi.pageSize);
-    paginationApi.pageRows = rows;
-
-    if (isPaginated) {
-        paginationApi.pageRows = rows.slice((paginationApi.pageSize * paginationApi.page - paginationApi.pageSize), (paginationApi.pageSize * paginationApi.page));
+    paginationApi.pageRows = useMemo(() => {
+        if (!isPaginated) return rows;
         
+        const pageRows = rows.slice((paginationApi.pageSize * paginationApi.page - paginationApi.pageSize), (paginationApi.pageSize * paginationApi.page));
+
         // fill missing page rows with nulls - makes sure we display PlaceHolderCells when moving to a new page (while not using virtual scroll)
-        if ((mode !== 'sync') && (paginationApi.pageRows.length < paginationApi.pageSize)) {
-            let totalMissingRows = paginationApi.pageSize - paginationApi.pageRows.length;
+        if ((mode !== 'sync') && (pageRows.length < paginationApi.pageSize)) {
+            let totalMissingRows = paginationApi.pageSize - pageRows.length;
             if (paginationApi.page === Math.max(paginationApi.totalPages, 1)) totalMissingRows = totalRows % paginationApi.pageSize - paginationApi.pageRows.length;
             for (let i = 0; i < totalMissingRows; i++) {
-                paginationApi.pageRows.push(null);
+                pageRows.push(null);
             }
         }
-    }
+
+        return pageRows;
+    }, [rows, isPaginated, paginationApi.pageSize, paginationApi.page, paginationApi.totalPages, totalRows]);
 
     paginationApi.setPage = page => {
         page = ~~page;
