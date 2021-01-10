@@ -1383,10 +1383,10 @@ var TableControllers = function TableControllers(_ref) {
     label: "Min Column Width"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("input", {
     type: "number",
-    value: controllers.minColumnWidth[0],
+    value: controllers.minColumnResizeWidth[0],
     min: "0",
     onChange: function onChange(e) {
-      return controllers.minColumnWidth[1](~~e.target.value);
+      return controllers.minColumnResizeWidth[1](~~e.target.value);
     }
   })));
 };
@@ -1920,7 +1920,7 @@ var MyAwesomeTable = function MyAwesomeTable() {
 
   var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(70),
       _useState40 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_useState39, 2),
-      minColumnWidth = _useState40[0],
+      minColumnResizeWidth = _useState40[0],
       setMinColumnWidth = _useState40[1];
 
   var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)((0,_getColumns__WEBPACK_IMPORTED_MODULE_5__.default)({
@@ -1953,7 +1953,7 @@ var MyAwesomeTable = function MyAwesomeTable() {
     isVirtualScroll: [isVirtualScroll, setIsVirtualScroll],
     isPaginated: [isPaginated, setIsPaginated],
     minSearchChars: [minSearchChars, setMinSearchChars],
-    minColumnWidth: [minColumnWidth, setMinColumnWidth]
+    minColumnResizeWidth: [minColumnResizeWidth, setMinColumnWidth]
   };
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     setLoading(true);
@@ -2002,7 +2002,7 @@ var MyAwesomeTable = function MyAwesomeTable() {
     isVirtualScroll: isVirtualScroll,
     isPaginated: isPaginated,
     minSearchChars: minSearchChars,
-    minColumnWidth: minColumnWidth
+    minColumnResizeWidth: minColumnResizeWidth
   })));
 };
 
@@ -2517,7 +2517,7 @@ var HeaderCellContainer = function HeaderCellContainer(_ref3) {
       column = _ref3.column,
       tableManager = _ref3.tableManager;
   var _tableManager$config = tableManager.config,
-      minColumnWidth = _tableManager$config.minColumnWidth,
+      minColumnResizeWidth = _tableManager$config.minColumnResizeWidth,
       isHeaderSticky = _tableManager$config.isHeaderSticky,
       DragHandle = _tableManager$config.components.DragHandle,
       _tableManager$config$ = _tableManager$config.additionalProps.headerCellContainer,
@@ -3624,8 +3624,8 @@ var useColumns = function useColumns(props, tableManager) {
       if (column.id === 'checkbox') return _objectSpread(_objectSpread({
         className: '',
         width: 'max-content',
-        minWidth: 0,
-        maxWidth: null,
+        minResizeWidth: 0,
+        maxResizeWidth: null,
         resizable: false,
         cellRenderer: SelectionCell,
         headerCellRenderer: HeaderSelectionCell
@@ -3640,8 +3640,8 @@ var useColumns = function useColumns(props, tableManager) {
         label: column.field,
         className: '',
         width: '200px',
-        minWidth: null,
-        maxWidth: null,
+        minResizeWidth: null,
+        maxResizeWidth: null,
         getValue: function getValue(_ref) {
           var value = _ref.value,
               column = _ref.column;
@@ -3795,7 +3795,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var useColumnsResize = function useColumnsResize(props, tableManager) {
-  var minColumnWidth = tableManager.config.minColumnWidth,
+  var minColumnResizeWidth = tableManager.config.minColumnResizeWidth,
       tableRef = tableManager.refs.tableRef,
       _tableManager$columns = tableManager.columnsApi,
       columns = _tableManager$columns.columns,
@@ -3836,7 +3836,7 @@ var useColumnsResize = function useColumnsResize(props, tableManager) {
   };
 
   columnsResizeApi.onResize = function (_ref2) {
-    var _lastPos$current, _column$minWidth, _props$onColumnResize2;
+    var _lastPos$current, _column$minResizeWidt, _props$onColumnResize2;
 
     var event = _ref2.event,
         target = _ref2.target,
@@ -3847,10 +3847,10 @@ var useColumnsResize = function useColumnsResize(props, tableManager) {
     lastPos.current = (_lastPos$current = lastPos.current) !== null && _lastPos$current !== void 0 ? _lastPos$current : event.clientX;
     var diff = event.clientX - lastPos.current;
     if (!diff) return;
-    var minWidth = (_column$minWidth = column.minWidth) !== null && _column$minWidth !== void 0 ? _column$minWidth : minColumnWidth;
+    var minResizeWidth = (_column$minResizeWidt = column.minResizeWidth) !== null && _column$minResizeWidt !== void 0 ? _column$minResizeWidt : minColumnResizeWidth;
     var newColWidth = currentColWidth + diff;
-    if (minWidth && newColWidth < minWidth) newColWidth = minWidth;
-    if (column.maxWidth && column.maxWidth < newColWidth) newColWidth = column.maxWidth;
+    if (minResizeWidth && newColWidth < minResizeWidth) newColWidth = minResizeWidth;
+    if (column.maxResizeWidth && column.maxResizeWidth < newColWidth) newColWidth = column.maxResizeWidth;
     var colIndex = columns.findIndex(function (cd) {
       return cd.id === column.id;
     });
@@ -4013,7 +4013,9 @@ var usePagination = function usePagination(props, tableManager) {
   var _props$page, _props$pageSize;
 
   var mode = tableManager.mode,
-      isPaginated = tableManager.config.isPaginated,
+      _tableManager$config = tableManager.config,
+      isPaginated = _tableManager$config.isPaginated,
+      pageSizes = _tableManager$config.pageSizes,
       _tableManager$rowsApi = tableManager.rowsApi,
       rows = _tableManager$rowsApi.rows,
       totalRows = _tableManager$rowsApi.totalRows;
@@ -4024,7 +4026,7 @@ var usePagination = function usePagination(props, tableManager) {
       page = _useState2[0],
       setPage = _useState2[1];
 
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(props.pageSize || 20),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(props.pageSize || pageSizes[0] || 20),
       _useState4 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_useState3, 2),
       pageSize = _useState4[0],
       setPageSize = _useState4[1];
@@ -4032,20 +4034,21 @@ var usePagination = function usePagination(props, tableManager) {
   paginationApi.page = (_props$page = props.page) !== null && _props$page !== void 0 ? _props$page : page;
   paginationApi.pageSize = (_props$pageSize = props.pageSize) !== null && _props$pageSize !== void 0 ? _props$pageSize : pageSize;
   paginationApi.totalPages = Math.ceil(totalRows / paginationApi.pageSize);
-  paginationApi.pageRows = rows;
+  paginationApi.pageRows = (0,react__WEBPACK_IMPORTED_MODULE_1__.useMemo)(function () {
+    if (!isPaginated) return rows;
+    var pageRows = rows.slice(paginationApi.pageSize * paginationApi.page - paginationApi.pageSize, paginationApi.pageSize * paginationApi.page); // fill missing page rows with nulls - makes sure we display PlaceHolderCells when moving to a new page (while not using virtual scroll)
 
-  if (isPaginated) {
-    paginationApi.pageRows = rows.slice(paginationApi.pageSize * paginationApi.page - paginationApi.pageSize, paginationApi.pageSize * paginationApi.page); // fill missing page rows with nulls - makes sure we display PlaceHolderCells when moving to a new page (while not using virtual scroll)
-
-    if (mode !== 'sync' && paginationApi.pageRows.length < paginationApi.pageSize) {
-      var totalMissingRows = paginationApi.pageSize - paginationApi.pageRows.length;
+    if (mode !== 'sync' && pageRows.length < paginationApi.pageSize) {
+      var totalMissingRows = paginationApi.pageSize - pageRows.length;
       if (paginationApi.page === Math.max(paginationApi.totalPages, 1)) totalMissingRows = totalRows % paginationApi.pageSize - paginationApi.pageRows.length;
 
       for (var i = 0; i < totalMissingRows; i++) {
-        paginationApi.pageRows.push(null);
+        pageRows.push(null);
       }
     }
-  }
+
+    return pageRows;
+  }, [rows, isPaginated, paginationApi.pageSize, paginationApi.page, paginationApi.totalPages, totalRows]);
 
   paginationApi.setPage = function (page) {
     var _props$onPageChange;
@@ -4285,8 +4288,8 @@ var useRowSelection = function useRowSelection(props, tableManager) {
   var selectAllRef = (0,react__WEBPACK_IMPORTED_MODULE_2__.useRef)(null);
   rowSelectionApi.selectAll = (0,react__WEBPACK_IMPORTED_MODULE_2__.useMemo)(function () {
     var mode = props.selectAllMode;
-    var availableRows = mode === 'available' ? rows : pageRows;
-    var selectableItemsIds = availableRows.filter(function (r) {
+    var allRows = mode === 'all' ? rows : pageRows;
+    var selectableItemsIds = allRows.filter(function (r) {
       return r;
     }).filter(rowSelectionApi.getIsRowSelectable).map(function (item) {
       return item[rowIdField];
@@ -4712,7 +4715,7 @@ var useTableManager = function useTableManager(props) {
   tableManager.mode = !props.onRowsRequest ? 'sync' : 'async';
   tableManager.config = {
     rowIdField: props.rowIdField,
-    minColumnWidth: props.minColumnWidth,
+    minColumnResizeWidth: props.minColumnResizeWidth,
     minSearchChars: props.minSearchChars,
     isHeaderSticky: props.isHeaderSticky,
     isPaginated: props.isPaginated,
@@ -4956,7 +4959,7 @@ var GridTable = function GridTable(props) {
 GridTable.defaultProps = {
   columns: [],
   rowIdField: 'id',
-  minColumnWidth: 70,
+  minColumnResizeWidth: 70,
   pageSizes: [20, 50, 100],
   isHeaderSticky: true,
   highlightSearch: true,
@@ -4975,7 +4978,7 @@ GridTable.defaultProps = {
   getIsRowEditable: function getIsRowEditable(row) {
     return true;
   },
-  selectAllMode: 'page' // ['page', 'available']
+  selectAllMode: 'page' // ['page', 'all']
 
 };
 GridTable.propTypes = {
@@ -4996,7 +4999,7 @@ GridTable.propTypes = {
   pageSize: (prop_types__WEBPACK_IMPORTED_MODULE_7___default().number),
   page: (prop_types__WEBPACK_IMPORTED_MODULE_7___default().number),
   sort: (prop_types__WEBPACK_IMPORTED_MODULE_7___default().object),
-  minColumnWidth: (prop_types__WEBPACK_IMPORTED_MODULE_7___default().number),
+  minColumnResizeWidth: (prop_types__WEBPACK_IMPORTED_MODULE_7___default().number),
   highlightSearch: (prop_types__WEBPACK_IMPORTED_MODULE_7___default().bool),
   showSearch: (prop_types__WEBPACK_IMPORTED_MODULE_7___default().bool),
   showRowsInformation: (prop_types__WEBPACK_IMPORTED_MODULE_7___default().bool),
