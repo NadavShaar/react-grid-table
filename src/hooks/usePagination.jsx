@@ -1,11 +1,11 @@
 import { useState, useRef, useMemo } from 'react';
 
 const usePagination = (props, tableManager) => {
-    const { mode, config: { isPaginated }, rowsApi: { rows, totalRows } } = tableManager;
+    const { mode, config: { isPaginated, pageSizes }, rowsApi: { rows, totalRows } } = tableManager;
 
     const paginationApi = useRef({}).current;
     const [page, setPage] = useState(props.page || 1);
-    const [pageSize, setPageSize] = useState(props.pageSize || 20);
+    const [pageSize, setPageSize] = useState(props.pageSize || pageSizes[0] || 20);
 
     paginationApi.page = props.page ?? page;
     paginationApi.pageSize = props.pageSize ?? pageSize;
