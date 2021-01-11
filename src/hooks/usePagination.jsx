@@ -18,7 +18,7 @@ const usePagination = (props, tableManager) => {
         // fill missing page rows with nulls - makes sure we display PlaceHolderCells when moving to a new page (while not using virtual scroll)
         if ((mode !== 'sync') && (pageRows.length < paginationApi.pageSize)) {
             let totalMissingRows = paginationApi.pageSize - pageRows.length;
-            if (paginationApi.page === Math.max(paginationApi.totalPages, 1)) totalMissingRows = totalRows % paginationApi.pageSize - paginationApi.pageRows.length;
+            if (paginationApi.page === Math.max(paginationApi.totalPages, 1)) totalMissingRows = totalRows % paginationApi.pageSize - pageRows.length;
             for (let i = 0; i < totalMissingRows; i++) {
                 pageRows.push(null);
             }
