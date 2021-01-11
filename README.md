@@ -204,7 +204,7 @@ export default MyAwesomeTable;
 | showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
 | pageSizes | array of numbers | page size options | [20, 50, 100] |
 | isVirtualScroll | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
-| selectAllMode | string | controls the type of "All Selection". Available options are 'page' - to select/unselect only the **page** rows, or 'all' to select/unselect **all** rows. If using an async flow, the 'all' option will select all **available** rows | 'page' |
+| selectAllMode | string | controls the type of "All Selection". Available options are `page` to select / unselect only the page rows, or `all` to select / unselect all rows. If using an async flow, the all option will select all *available* rows, and page option combined with `batchSize`, will select/unselect all *available* rows in the page | 'page' |
 | icons | object of nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
 | texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
 | components | object | This prop gives you the ability to override the internal components with your own custom components (see full list of supported [components](#components)) | { } |
@@ -237,7 +237,7 @@ export default MyAwesomeTable;
 | onRowsChange | function | triggers when the rows have changed | see [example](#async-controlled) |
 | onTotalRowsChange | function | triggers when the total number of rows have changed | see [example](#async-controlled) |
 | onRowsReset | function | triggers when the accumulated rows needs to be reset (when searching or sorting) | see [example](#async-managed) |
-| batchSize | number | defines the amount of rows that will be requested by `onRowsRequest` prop | 100 |
+| batchSize | number | defines the amount of rows that will be requested by `onRowsRequest` prop | the page size of the table |
 | requestDebounceTimeout | number | defines the amount of debouncing time for triggering the `onRowsRequest` prop | 300 |
 | totalRows | number | the total number of rows | --- |
 
@@ -534,7 +534,6 @@ API Structure:
 | showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
 | pageSizes | array of numbers | page size options | [20, 50, 100] |
 | requestDebounceTimeout | number | defines the amount of debouning time for triggering the `onRowsRequest` prop | 300 |
-| batchSize | number | defines the amount of rows that will be requested by `onRowsRequest` prop | 100 |
 | isVirtualScroll | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
 | tableHasSelection | boolean | wether the table has a checkbox column to control rows selection | --- |
 | components | object | the components that are in use by the table (see full list of [components](#components)) | {Header, Search, ColumnVisibility, HeaderCell, HeaderSelectionCell, Cell, EditorCell, SelectionCell, PlaceHolderCell, Loader, NoResults, Footer, Information, PageSize, Pagination} |
@@ -609,7 +608,7 @@ API Structure:
 | setSelectedRowsIds | function | updates the selected rows | setSelectedRowsIds([1,3,5]) |
 | toggleRowSelection | function | toggles selection of a row by its `id` | toggleRowSelection(row.id) |
 | getIsRowSelectable | function | determains whether a row can be selected | getIsRowSelectable(row.id) |
-| selectAll.mode | string | the type of select all, possible modes are 'page' - which only handles selection of the **page** rows, or 'all' which handles selection of **all** rows. If using an async flow, 'all' mode will handle selection of all **available** rows | --- |
+| selectAll.mode | string | the type of select all, possible modes are `page` which only handles selection of the page rows, or `all` which handles selection of all rows. If using an async flow, all mode will handle selection of all *available* rows, and page mode with a controlled `batchSize`, will handle selection of all *available* rows in the page | --- |
 | selectAll.disabled | boolean | whether the select all button should be disabled because there are no selectable rows that match the selectAll.mode | --- |
 | selectAll.checked | boolean | whether all the rows that match the selectAll.mode are selected | --- |
 | selectAll.indeterminate | boolean | whether only some of the rows that match the selectAll.mode are selected | --- |
@@ -632,11 +631,12 @@ See full documentation at https://github.com/tannerlinsley/react-virtual
 
 ### asyncApi
 
-| name | type | description | usage |
+| name | type | description | usage / default value |
 |---|---|---|---|
 | isLoading | boolean | whether a request for new rows is still pending | --- |
 | mergeRowsAt | function | merges `array`s of rows at a certain index while filling "holes" with `null`s | `mergeRowsAt(rows, moreRows, atIndex)` |
 | resetRows | function | drops the accumulated rows, which will trigger a new request  | `resetRows()` |
+| batchSize | number | defines the amount of rows that will be requested by `onRowsRequest` prop | `paginationApi.pageSize` |
 
 # How to...
 

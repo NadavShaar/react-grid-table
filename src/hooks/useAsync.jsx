@@ -4,12 +4,13 @@ import { useRequestDebounce } from '.';
 
 function getRowsRequest(tableManager, rowsRequests) {
     const {
-        config: { isPaginated, isVirtualScroll, batchSize },
+        config: { isPaginated, isVirtualScroll },
         rowsApi: { totalRows },
         searchApi: { searchText },
         sortApi: { sort },
         paginationApi: { page, pageSize },
         rowVirtualizer: { virtualItems },
+        asyncApi: { batchSize }
     } = tableManager;
 
     // get starting indexes (100, 100)
@@ -65,12 +66,14 @@ const useAsync = (props, tableManager) => {
     const {
         mode,
         config: { requestDebounceTimeout },
-        rowsApi: { rows }
+        rowsApi: { rows },
+        paginationApi: { pageSize }
     } = tableManager;
 
     const asyncApi = useRef({}).current;
     const rowsRequests = useRef([]);
 
+    asyncApi.batchSize = props.batchSize ?? pageSize;
     asyncApi.isLoading = !rowsRequests.current.length || !rowsRequests.current.every(r => rows[r.from]);
 
     const onRowsRequest = async rowsRequest => {

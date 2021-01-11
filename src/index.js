@@ -100,7 +100,6 @@ GridTable.defaultProps = {
     showColumnVisibilityManager: true,
     enableColumnsReorder: true,
     requestDebounceTimeout: 300,
-    batchSize: 100,
     getIsRowSelectable: row => true,
     getIsRowEditable: row => true,
     selectAllMode: 'page' // ['page', 'all']

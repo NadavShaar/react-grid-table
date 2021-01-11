@@ -44,7 +44,6 @@ const useTableManager = (props) => {
         showColumnVisibilityManager: props.showColumnVisibilityManager,
         pageSizes: props.pageSizes,
         requestDebounceTimeout: props.requestDebounceTimeout,
-        batchSize: props.batchSize,
         isVirtualScroll: props.isVirtualScroll || (!props.isPaginated && (tableManager.mode !== 'sync')),
         tableHasSelection: !!props.columns.find(cd => cd.id === 'checkbox'),
         components: { ...components, ...props.components },
