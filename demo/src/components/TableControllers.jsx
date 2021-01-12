@@ -47,7 +47,7 @@ const TableControllers = ({ controllers }) => {
             <ControllerWrappper label='Is Header Sticky'>
                 <input type='checkbox' checked={controllers.isHeaderSticky[0]} onChange={e => controllers.isHeaderSticky[1](!controllers.isHeaderSticky[0])} />
             </ControllerWrappper>
-            <ControllerWrappper label='isVirtualScroll'>
+            <ControllerWrappper label='Is Virtual Scroll'>
                 <input type='checkbox' checked={controllers.isVirtualScroll[0]} onChange={e => controllers.isVirtualScroll[1](!controllers.isVirtualScroll[0])} />
             </ControllerWrappper>
             <ControllerWrappper label='Is Paginated'>
@@ -58,6 +58,12 @@ const TableControllers = ({ controllers }) => {
             </ControllerWrappper>
             <ControllerWrappper label='Min Column Width'>
                 <input type='number' value={controllers.minColumnResizeWidth[0]} min='0' onChange={e => controllers.minColumnResizeWidth[1](~~e.target.value)} />
+            </ControllerWrappper>
+            <ControllerWrappper label='Select All Mode'>
+                <select value={controllers.selectAllMode[0]} onChange={e => controllers.selectAllMode[1](e.target.value)}>
+                    <option value={'page'}>Page</option>
+                    <option value={'all'}>All</option>
+                </select>
             </ControllerWrappper>
         </React.Fragment>
     )

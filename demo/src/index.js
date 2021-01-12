@@ -30,6 +30,7 @@ const MyAwesomeTable = () => {
     let [minColumnResizeWidth, setMinColumnWidth] = useState(70);
     let [columns, setColumns] = useState(getColumns({ setRowsData }));
     let [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    let [selectAllMode, setSelectAllMode] = useState('page');
 
     const controllers = {
         columns: [columns, setColumns],
@@ -50,6 +51,7 @@ const MyAwesomeTable = () => {
         isPaginated: [isPaginated, setIsPaginated],
         minSearchChars: [minSearchChars, setMinSearchChars],
         minColumnResizeWidth: [minColumnResizeWidth, setMinColumnWidth],
+        selectAllMode: [selectAllMode, setSelectAllMode]
     }
 
     useEffect(() => {
@@ -98,6 +100,7 @@ const MyAwesomeTable = () => {
                     isPaginated={isPaginated}
                     minSearchChars={minSearchChars}
                     minColumnResizeWidth={minColumnResizeWidth}
+                    selectAllMode={selectAllMode}
                 />
             </div>
         </div>
