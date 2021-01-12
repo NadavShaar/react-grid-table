@@ -1355,7 +1355,7 @@ var TableControllers = function TableControllers(_ref) {
       return controllers.isHeaderSticky[1](!controllers.isHeaderSticky[0]);
     }
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_ControllerWrappper__WEBPACK_IMPORTED_MODULE_2__.default, {
-    label: "isVirtualScroll"
+    label: "Is Virtual Scroll"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("input", {
     type: "checkbox",
     checked: controllers.isVirtualScroll[0],
@@ -1388,7 +1388,18 @@ var TableControllers = function TableControllers(_ref) {
     onChange: function onChange(e) {
       return controllers.minColumnResizeWidth[1](~~e.target.value);
     }
-  })));
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_ControllerWrappper__WEBPACK_IMPORTED_MODULE_2__.default, {
+    label: "Select All Mode"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("select", {
+    value: controllers.selectAllMode[0],
+    onChange: function onChange(e) {
+      return controllers.selectAllMode[1](e.target.value);
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("option", {
+    value: 'page'
+  }, "Page"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("option", {
+    value: 'all'
+  }, "All"))));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TableControllers);
@@ -1790,10 +1801,10 @@ var getColumns = function getColumns(_ref) {
 
 /***/ }),
 
-/***/ "./demo/src/index.js":
-/*!***************************!*\
-  !*** ./demo/src/index.js ***!
-  \***************************/
+/***/ "./demo/src/views/sync.js":
+/*!********************************!*\
+  !*** ./demo/src/views/sync.js ***!
+  \********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1805,11 +1816,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var _src__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../src */ "./src/index.js");
-/* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components */ "./demo/src/components/index.js");
-/* harmony import */ var _getColumns__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./getColumns */ "./demo/src/getColumns.js");
-/* harmony import */ var _MOCK_DATA_json__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./MOCK_DATA.json */ "./demo/src/MOCK_DATA.json");
-/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./index.css */ "./demo/src/index.css");
+/* harmony import */ var _src__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../src */ "./src/index.js");
+/* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components */ "./demo/src/components/index.js");
+/* harmony import */ var _getColumns__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../getColumns */ "./demo/src/getColumns.js");
+/* harmony import */ var _MOCK_DATA_json__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../MOCK_DATA.json */ "./demo/src/MOCK_DATA.json");
+/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../index.css */ "./demo/src/index.css");
 
 
 
@@ -1822,8 +1833,8 @@ __webpack_require__.r(__webpack_exports__);
 var MyAwesomeTable = function MyAwesomeTable() {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
       _useState2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_useState, 2),
-      editRowId = _useState2[0],
-      setEditRowId = _useState2[1];
+      tableManager = _useState2[0],
+      setTableManager = _useState2[1];
 
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
       _useState4 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_useState3, 2),
@@ -1837,8 +1848,8 @@ var MyAwesomeTable = function MyAwesomeTable() {
 
   var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
       _useState8 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_useState7, 2),
-      tableManager = _useState8[0],
-      setTableManager = _useState8[1];
+      editRowId = _useState8[0],
+      setEditRowId = _useState8[1];
 
   var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''),
       _useState10 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_useState9, 2),
@@ -1935,6 +1946,11 @@ var MyAwesomeTable = function MyAwesomeTable() {
       isSettingsOpen = _useState44[0],
       setIsSettingsOpen = _useState44[1];
 
+  var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)('page'),
+      _useState46 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_useState45, 2),
+      selectAllMode = _useState46[0],
+      setSelectAllMode = _useState46[1];
+
   var controllers = {
     columns: [columns, setColumns],
     editRowId: [editRowId, setEditRowId],
@@ -1953,7 +1969,8 @@ var MyAwesomeTable = function MyAwesomeTable() {
     isVirtualScroll: [isVirtualScroll, setIsVirtualScroll],
     isPaginated: [isPaginated, setIsPaginated],
     minSearchChars: [minSearchChars, setMinSearchChars],
-    minColumnResizeWidth: [minColumnResizeWidth, setMinColumnWidth]
+    minColumnResizeWidth: [minColumnResizeWidth, setMinColumnWidth],
+    selectAllMode: [selectAllMode, setSelectAllMode]
   };
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     setLoading(true);
@@ -2002,7 +2019,8 @@ var MyAwesomeTable = function MyAwesomeTable() {
     isVirtualScroll: isVirtualScroll,
     isPaginated: isPaginated,
     minSearchChars: minSearchChars,
-    minColumnResizeWidth: minColumnResizeWidth
+    minColumnResizeWidth: minColumnResizeWidth,
+    selectAllMode: selectAllMode
   })));
 };
 
@@ -3415,14 +3433,14 @@ function getRowsRequest(tableManager, rowsRequests) {
   var _tableManager$config = tableManager.config,
       isPaginated = _tableManager$config.isPaginated,
       isVirtualScroll = _tableManager$config.isVirtualScroll,
-      batchSize = _tableManager$config.batchSize,
       totalRows = tableManager.rowsApi.totalRows,
       searchText = tableManager.searchApi.searchText,
       sort = tableManager.sortApi.sort,
       _tableManager$paginat = tableManager.paginationApi,
       page = _tableManager$paginat.page,
       pageSize = _tableManager$paginat.pageSize,
-      virtualItems = tableManager.rowVirtualizer.virtualItems; // get starting indexes (100, 100)
+      virtualItems = tableManager.rowVirtualizer.virtualItems,
+      batchSize = tableManager.asyncApi.batchSize; // get starting indexes (100, 100)
 
   var from = isPaginated ? (page - 1) * pageSize : 0;
   var to = from; // get exact indexes via virtualItems (113, 157)
@@ -3477,11 +3495,15 @@ function getRowsRequest(tableManager, rowsRequests) {
 }
 
 var useAsync = function useAsync(props, tableManager) {
+  var _props$batchSize;
+
   var mode = tableManager.mode,
       requestDebounceTimeout = tableManager.config.requestDebounceTimeout,
-      rows = tableManager.rowsApi.rows;
+      rows = tableManager.rowsApi.rows,
+      pageSize = tableManager.paginationApi.pageSize;
   var asyncApi = (0,react__WEBPACK_IMPORTED_MODULE_3__.useRef)({}).current;
   var rowsRequests = (0,react__WEBPACK_IMPORTED_MODULE_3__.useRef)([]);
+  asyncApi.batchSize = (_props$batchSize = props.batchSize) !== null && _props$batchSize !== void 0 ? _props$batchSize : pageSize;
   asyncApi.isLoading = !rowsRequests.current.length || !rowsRequests.current.every(function (r) {
     return rows[r.from];
   });
@@ -4037,7 +4059,7 @@ var usePagination = function usePagination(props, tableManager) {
 
     if (mode !== 'sync' && pageRows.length < paginationApi.pageSize) {
       var totalMissingRows = paginationApi.pageSize - pageRows.length;
-      if (paginationApi.page === Math.max(paginationApi.totalPages, 1)) totalMissingRows = totalRows % paginationApi.pageSize - paginationApi.pageRows.length;
+      if (paginationApi.page === Math.max(paginationApi.totalPages, 1)) totalMissingRows = totalRows % paginationApi.pageSize - pageRows.length;
 
       for (var i = 0; i < totalMissingRows; i++) {
         pageRows.push(null);
@@ -4723,7 +4745,6 @@ var useTableManager = function useTableManager(props) {
     showColumnVisibilityManager: props.showColumnVisibilityManager,
     pageSizes: props.pageSizes,
     requestDebounceTimeout: props.requestDebounceTimeout,
-    batchSize: props.batchSize,
     isVirtualScroll: props.isVirtualScroll || !props.isPaginated && tableManager.mode !== 'sync',
     tableHasSelection: !!props.columns.find(function (cd) {
       return cd.id === 'checkbox';
@@ -4968,7 +4989,6 @@ GridTable.defaultProps = {
   showColumnVisibilityManager: true,
   enableColumnsReorder: true,
   requestDebounceTimeout: 300,
-  batchSize: 100,
   getIsRowSelectable: function getIsRowSelectable(row) {
     return true;
   },
@@ -39581,7 +39601,7 @@ module.exports = function (list, options) {
 /************************************************************************/
 /******/ 	// startup
 /******/ 	// Load entry module
-/******/ 	__webpack_require__("./demo/src/index.js");
+/******/ 	__webpack_require__("./demo/src/views/sync.js");
 /******/ 	// This entry module used 'exports' so it can't be inlined
 /******/ })()
 ;
