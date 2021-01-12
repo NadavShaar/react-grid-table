@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
 import ReactDOM from "react-dom";
-import GridTable from '../../src';
-import { ControllersDrawer } from './components';
-import getColumns from './getColumns';
-import MOCK_DATA from "./MOCK_DATA.json";
-import './index.css';
+import GridTable from '../../../src';
+import { ControllersDrawer } from '../components';
+import getColumns from '../getColumns';
+import MOCK_DATA from "../MOCK_DATA.json";
+import '../index.css';
 
 
 const MyAwesomeTable = () => {
-    const [editRowId, setEditRowId] = useState(null);
+    const [tableManager, setTableManager] = useState(null);
     const [rowsData, setRowsData] = useState([]);
     const [isLoading, setLoading] = useState(false);
-    const [tableManager, setTableManager] = useState(null);
+    const [editRowId, setEditRowId] = useState(null);
     let [searchText, setSearchText] = useState('');
     let [selectedRowsIds, setSelectedRowsIds] = useState([]);
     let [sort, setSort] = useState({ colId: '', isAsc: true });

@@ -1,18 +1,19 @@
 const path = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const target = process.env.TARGET || 'sync';
 module.exports = {
     entry: {
-        bundle: "./demo/src/index.js",
+        bundle: __dirname + `/src/views/${target}.js`,
     },
     mode: 'development',
     devtool: 'source-map',
     output: {
-        path: __dirname + '/demo/dist/build',
+        path: __dirname + '/dist/build',
         filename: '[name].js'
     },
     devServer: {
-        publicPath: path.join(__dirname, '/demo/dist'),
-        contentBase: path.join(__dirname, '/demo/dist'),
+        publicPath: path.join(__dirname, '/dist'),
+        contentBase: path.join(__dirname, '/dist'),
         port: 9000,
         writeToDisk: true
     },
