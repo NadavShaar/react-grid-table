@@ -37,8 +37,6 @@ npm install --save @nadavshaar/react-grid-table
 ## Usage
 By default, the table is fully featured even with just a basic configuration of rows and columns.
 
-Just import the component from `@nadavshaar/react-grid-table`.
-
 **Example:**
 
 <!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
