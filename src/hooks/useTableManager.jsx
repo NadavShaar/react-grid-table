@@ -82,8 +82,10 @@ const useTableManager = (props) => {
     useEffect(() => {
         if (!tableManager.isInitialized) return;
 
-        tableManager.rowSelectionApi.setSelectedRowsIds([]);
-        if (tableManager.mode !== 'sync') tableManager.asyncApi.resetRows();
+        if (tableManager.mode !== 'sync') {
+            tableManager.rowSelectionApi.setSelectedRowsIds([]);
+            tableManager.asyncApi.resetRows();
+        }
     }, [tableManager.searchApi.searchText, tableManager.sortApi.sort.colId, tableManager.sortApi.sort.isAsc])
 
     // reset edit row
