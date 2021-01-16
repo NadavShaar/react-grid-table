@@ -151,6 +151,8 @@ export default MyAwesomeTable;
 - [The `columns` prop](#columns)
 - [The `checkbox` column](#checkbox-column)
 - [The `rows` prop](#rows)
+- [The `components` prop](#components)
+- [The `additionalProps` prop](#additionalProps)
 - [The `tableManager` API](#tableManager)
 - [How-To: Sync/Async](#syncasync)
 - [How-To: Row-Editing](#row-editing)
