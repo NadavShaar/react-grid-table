@@ -499,7 +499,7 @@ API Structure:
 - **isInitialized:** Is the table initialized. Will be set to true once all components are initialized.
 - **mode:** 'sync' or 'async', derived from the supplied props.
 - **isLoading:** Is the table currently loading data.
-- **config:** All the params that defines the table's user-interface and its behavior.
+- [**config:**](#config) All the params that defines the table's user-interface and its behavior.
 - **refs:** ref objects for selected elements.
 - **columnsApi:** API of the columns.
 - **columnsVisibilityApi:** API of the columns visibility.
