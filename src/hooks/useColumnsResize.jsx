@@ -53,11 +53,11 @@ const useColumnsResize = (props, tableManager) => {
         const containerEl = tableRef.current;
         const gtcArr = containerEl.style.gridTemplateColumns.split(" ");
 
-        columns.forEach(col => {
-            if (!col.visible) return;
+        columns.forEach(column => {
+            if (!column.visible) return;
 
-            const colIndex = visibleColumns.findIndex(cd => cd.id === col.id);
-            col.width = gtcArr[colIndex];
+            const colIndex = visibleColumns.findIndex(cd => cd.id === column.id);
+            column.width = gtcArr[colIndex];
         })
 
         setColumns(columns);

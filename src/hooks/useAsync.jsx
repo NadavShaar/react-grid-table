@@ -33,20 +33,20 @@ function getRowsRequest(tableManager, rowsRequests) {
     }
 
     // make sure "from" does not overlap previous requests 
-    rowsRequests.forEach(r => {
-        if ((r.from <= from) && (from <= r.to)) {
-            from = r.to;
+    rowsRequests.forEach(request => {
+        if ((request.from <= from) && (from <= request.to)) {
+            from = request.to;
         };
     })
 
     // make sure "to" does not overlap previous requests 
     // make sure no previous requests are between "from" & "to"
-    rowsRequests.slice().reverse().find(r => {
-        if ((r.from <= to) && (to <= r.to)) {
-            to = r.from;
+    rowsRequests.slice().reverse().find(request => {
+        if ((request.from <= to) && (to <= request.to)) {
+            to = request.from;
         };
-        if ((from < r.from) && (r.to < to)) {
-            to = r.from;
+        if ((from < request.from) && (request.to < to)) {
+            to = request.from;
         };
     })
 
@@ -74,7 +74,7 @@ const useAsync = (props, tableManager) => {
     const rowsRequests = useRef([]);
 
     asyncApi.batchSize = props.batchSize ?? pageSize;
-    asyncApi.isLoading = !rowsRequests.current.length || !rowsRequests.current.every(r => rows[r.from]);
+    asyncApi.isLoading = !rowsRequests.current.length || !rowsRequests.current.every(request => rows[request.from]);
 
     const onRowsRequest = async rowsRequest => {
         rowsRequests.current = [...rowsRequests.current, rowsRequest];
@@ -82,7 +82,7 @@ const useAsync = (props, tableManager) => {
 
         const result = await props.onRowsRequest(rowsRequest, tableManager);
 
-        if (!rowsRequests.current.find(rr => rr.id === rowsRequest.id)) return;
+        if (!rowsRequests.current.find(request => request.id === rowsRequest.id)) return;
         
         const {
             rowsApi: { rows, setRows, setTotalRows }

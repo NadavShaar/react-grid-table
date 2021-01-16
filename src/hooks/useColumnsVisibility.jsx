@@ -5,9 +5,9 @@ const useColumnsVisibility = (props, tableManager) => {
 
     const columnsVisibilityApi = useRef({}).current;
 
-    columnsVisibilityApi.toggleColumnVisibility = colId => {
+    columnsVisibilityApi.toggleColumnVisibility = columnId => {
         const newColumns = [...columns];
-        const colIndex = newColumns.findIndex(cd => cd.id === colId);
+        const colIndex = newColumns.findIndex(column => column.id === columnId);
 
         newColumns[colIndex].visible = !newColumns[colIndex].visible;
         setColumns(newColumns);
