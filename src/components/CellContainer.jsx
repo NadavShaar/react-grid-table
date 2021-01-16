@@ -29,7 +29,7 @@ const CellContainer = ({
 
     const getClassNames = () => {
         let classNames;
-        const all = `rgt-cell rgt-row-${rowIndex} rgt-row-${rowIndex % 2 === 0 ? 'even' : 'odd'}${isSelected ? ' rgt-row-selected' : ''} ${additionalProps.className || ''}`.trim();
+        const all = `rgt-cell rgt-row-${rowIndex} rgt-row-${rowIndex % 2 === 0 ? 'even' : 'odd'}${isSelected ? ' rgt-row-selected' : ''}${isEdit ? ' rgt-row-edit' : ''} ${additionalProps.className || ''}`.trim();
         const virtualDefault = `${!tableHasSelection ? '' : disableSelection ? ' rgt-row-not-selectable' : ' rgt-row-selectable'}`;
         const checkboxDefault = `${column.pinned && colIndex === 0 ? ' rgt-cell-pinned rgt-cell-pinned-left' : ''}${column.pinned && colIndex === visibleColumns.length - 1 ? ' rgt-cell-pinned rgt-cell-pinned-right' : ''} ${column.className}`.trim();
 
@@ -57,25 +57,25 @@ const CellContainer = ({
         return value;
     }
 
-    const onMouseEnter = useCallback(
-        e => {
-            document.querySelectorAll(`.rgt-row-${rowIndex}`).forEach(c => c.classList.add('rgt-row-hover')); 
-            additionalProps.onMouseEnter?.(e);
+    const onMouseOver = useCallback(
+        event => {
+            document.querySelectorAll(`.rgt-row-${rowIndex}`).forEach(cell => cell.classList.add('rgt-row-hover')); 
+            additionalProps.onMouseOver?.(event);
         },
-        [rowIndex, additionalProps.onMouseEnter]
+        [rowIndex, additionalProps.onMouseOver]
     )
     
-    const onMouseLeave = useCallback(
-        e => { 
-            document.querySelectorAll(`.rgt-row-${rowIndex}`).forEach(c => c.classList.remove('rgt-row-hover')); 
-            additionalProps.onMouseLeave?.(e);
+    const onMouseOut = useCallback(
+        event => { 
+            document.querySelectorAll(`.rgt-row-${rowIndex}`).forEach(cell => cell.classList.remove('rgt-row-hover')); 
+            additionalProps.onMouseOut?.(event);
         },
-        [rowIndex, additionalProps.onMouseLeave]
+        [rowIndex, additionalProps.onMouseOut]
     )
 
     if (data && onRowClick) {
         additionalProps = {
-            onClick: event => onRowClick({ rowIndex, data, column, event }, tableManager),
+            onClick: event => onRowClick({ rowIndex, data, column, isEdit, event }, tableManager),
             ...additionalProps
         };
     }
@@ -91,8 +91,8 @@ const CellContainer = ({
             data-row-index={ rowIndex.toString() }
             data-column-id={ column.id.toString() }
             { ...additionalProps }
-            onMouseEnter={ onMouseEnter }
-            onMouseLeave={ onMouseLeave }
+            onMouseOver={ onMouseOver }
+            onMouseOut={ onMouseOut }
             className={ classNames }
             ref={ forwardRef }
         >

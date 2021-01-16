@@ -21,9 +21,9 @@ const PageSize = ({
             <select 
                 className='rgt-footer-page-size-select'
                 value={value} 
-                onChange={e => { onChange(e.target.value);}}
+                onChange={event => { onChange(event.target.value);}}
             >
-                { options.map((op, idx) => <option key={idx} value={op}>{op}</option>) }
+                { options.map((option, idx) => <option key={idx} value={option}>{option}</option>) }
             </select>
         </div>
     )

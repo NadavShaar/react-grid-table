@@ -11,9 +11,7 @@ const Footer = ({ tableManager }) => {
                 PageSize,
                 Pagination
             },
-            additionalProps: {
-                footer: additionalProps = {}
-            },
+            additionalProps: { footer: additionalProps = {} },
         },
         rowsApi: { totalRows },
         rowSelectionApi: { selectedRowsIds },

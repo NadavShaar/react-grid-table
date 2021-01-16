@@ -7,7 +7,7 @@ const EditorCell = ({ tableManager, value, data, column, colIndex, rowIndex, onC
     } = tableManager;
 
     const classNames = ('rgt-cell-inner rgt-cell-editor ' + (additionalProps.className || '')).trim();
-    const firstEditableCell = visibleColumns.findIndex(c => c.id !== 'checkbox' && c.editable !== false) === colIndex;
+    const firstEditableCell = visibleColumns.findIndex(visibleColumn => visibleColumn.id !== 'checkbox' && visibleColumn.editable !== false) === colIndex;
 
     return (
         <div {...additionalProps} className={classNames}>
@@ -18,7 +18,7 @@ const EditorCell = ({ tableManager, value, data, column, colIndex, rowIndex, onC
                     className='rgt-cell-editor-input'
                     type="text"
                     value={value}
-                    onChange={e => onChange({ ...data, [column.field]: e.target.value})}
+                    onChange={event => onChange({ ...data, [column.field]: event.target.value})}
                 />
             </div>
         </div>

@@ -5,7 +5,8 @@ import { useTableManager } from './hooks/';
 import PropTypes from 'prop-types';
 import './index.css';
 
-const SortableList = SortableContainer(({ forwardRef, className, style, children }) => <div ref={forwardRef} className={className} style={style}>{children}</div>);
+const SortableList = SortableContainer(({ forwardRef, className, style, children }) => 
+    <div ref={forwardRef} className={className} style={style}>{children}</div>);
  
 const GridTable = props => {
 

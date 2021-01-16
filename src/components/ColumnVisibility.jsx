@@ -16,20 +16,20 @@ const ColumnVisibility = ({ columns, onChange, tableManager }) => {
             title={columnVisibilityText}
             buttonChildren={columnVisibilityIcon}
             popoverChildren={
-                columns.filter(col => col.label).map((cd, idx) => (
+                columns.filter(column => column.label).map((column, idx) => (
                     <div key={idx} className='rgt-clickable rgt-columns-manager-popover-row'>
                         <label 
                             htmlFor={`checkbox-${idx}`} 
-                            title={cd.label} 
-                            onClick={e => onChange(cd.id)} 
+                            title={column.label} 
+                            onClick={() => onChange(column.id)} 
                             className='rgt-clickable rgt-flex-child rgt-text-truncate'
-                        >{cd.label}</label>
+                        >{column.label}</label>
                         <input
                             id={`checkbox-${idx}`}
                             className='rgt-clickable'
                             type="checkbox"
-                            onChange={e => { }}
-                            checked={cd.visible !== false}
+                            onChange={() => { }}
+                            checked={column.visible !== false}
                         />
                     </div>
                 ))

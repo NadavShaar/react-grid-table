@@ -21,7 +21,7 @@ const Search = ({ value, onChange, tableManager }) => {
                 name="rgt-search"
                 type="search"
                 value={value}
-                onChange={e => onChange(e.target.value)}
+                onChange={event => onChange(event.target.value)}
                 className='rgt-search-input'
             />
         </div>

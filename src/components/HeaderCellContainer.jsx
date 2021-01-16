@@ -106,7 +106,7 @@ const HeaderCellContainer = ({ index, column, tableManager }) => {
                                 <span 
                                     ref={resizeHandleRef} 
                                     className='rgt-resize-handle'
-                                    onClick={e => {e.preventDefault(); e.stopPropagation();}}
+                                    onClick={event => {event.preventDefault(); event.stopPropagation();}}
                                 >
                                 </span>
                                 : null

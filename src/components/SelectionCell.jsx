@@ -18,7 +18,7 @@ const SelectionCell = ({
             className={classNames}
             type="checkbox"
             onChange={onChange}
-            onClick={e => e.stopPropagation()}
+            onClick={event => event.stopPropagation()}
             checked={value}
             disabled={disabled}
         />
