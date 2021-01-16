@@ -2254,9 +2254,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var ColumnVisibility = function ColumnVisibility(_ref) {
-  var columns = _ref.columns,
-      onChange = _ref.onChange,
-      tableManager = _ref.tableManager;
+  var tableManager = _ref.tableManager,
+      _ref$columns = _ref.columns,
+      columns = _ref$columns === void 0 ? tableManager.columnsApi.columns : _ref$columns,
+      _ref$onChange = _ref.onChange,
+      onChange = _ref$onChange === void 0 ? tableManager.columnsVisibilityApi.toggleColumnVisibility : _ref$onChange;
   var _tableManager$config = tableManager.config,
       _tableManager$config$ = _tableManager$config.additionalProps.columnVisibility,
       additionalProps = _tableManager$config$ === void 0 ? {} : _tableManager$config$,
@@ -2652,11 +2654,15 @@ __webpack_require__.r(__webpack_exports__);
 
 var HeaderSelectionCell = function HeaderSelectionCell(_ref) {
   var column = _ref.column,
-      ref = _ref.ref,
-      onChange = _ref.onChange,
-      checked = _ref.checked,
-      disabled = _ref.disabled,
-      tableManager = _ref.tableManager;
+      tableManager = _ref.tableManager,
+      _ref$ref = _ref.ref,
+      ref = _ref$ref === void 0 ? tableManager.rowSelectionApi.selectAll.ref : _ref$ref,
+      _ref$onChange = _ref.onChange,
+      onChange = _ref$onChange === void 0 ? tableManager.rowSelectionApi.selectAll.onChange : _ref$onChange,
+      _ref$checked = _ref.checked,
+      checked = _ref$checked === void 0 ? tableManager.rowSelectionApi.selectAll.checked : _ref$checked,
+      _ref$disabled = _ref.disabled,
+      disabled = _ref$disabled === void 0 ? tableManager.rowSelectionApi.selectAll.disabled : _ref$disabled;
   var _tableManager$config$ = tableManager.config.additionalProps.headerSelectionCell,
       additionalProps = _tableManager$config$ === void 0 ? {} : _tableManager$config$;
   var classNames = (disabled ? 'rgt-disabled' : 'rgt-clickable' + ' ' + additionalProps.className || 0).trim();
@@ -2692,11 +2698,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Information = function Information(_ref) {
-  var totalCount = _ref.totalCount,
-      pageSize = _ref.pageSize,
-      pageCount = _ref.pageCount,
-      selectedCount = _ref.selectedCount,
-      tableManager = _ref.tableManager;
+  var tableManager = _ref.tableManager,
+      _ref$totalCount = _ref.totalCount,
+      totalCount = _ref$totalCount === void 0 ? tableManager.rowsApi.totalRows : _ref$totalCount,
+      _ref$pageSize = _ref.pageSize,
+      pageSize = _ref$pageSize === void 0 ? tableManager.paginationApi.pageSize : _ref$pageSize,
+      _ref$pageCount = _ref.pageCount,
+      pageCount = _ref$pageCount === void 0 ? tableManager.paginationApi.pageRows.length : _ref$pageCount,
+      _ref$selectedCount = _ref.selectedCount,
+      selectedCount = _ref$selectedCount === void 0 ? tableManager.rowSelectionApi.selectedRowsIds.length : _ref$selectedCount;
   var _tableManager$config = tableManager.config,
       isPaginated = _tableManager$config.isPaginated,
       tableHasSelection = _tableManager$config.tableHasSelection,
@@ -2784,10 +2794,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var PageSize = function PageSize(_ref) {
-  var value = _ref.value,
-      _onChange = _ref.onChange,
-      options = _ref.options,
-      tableManager = _ref.tableManager;
+  var tableManager = _ref.tableManager,
+      _ref$value = _ref.value,
+      value = _ref$value === void 0 ? tableManager.paginationApi.pageSize : _ref$value,
+      _ref$onChange = _ref.onChange,
+      _onChange = _ref$onChange === void 0 ? tableManager.paginationApi.setPageSize : _ref$onChange,
+      _ref$options = _ref.options,
+      options = _ref$options === void 0 ? tableManager.config.pageSizes : _ref$options;
+
   var _tableManager$config = tableManager.config,
       rowsPerPageText = _tableManager$config.texts.rowsPerPage,
       _tableManager$config$ = _tableManager$config.additionalProps.pageSize,
@@ -2831,9 +2845,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Pagination = function Pagination(_ref) {
-  var page = _ref.page,
-      _onChange = _ref.onChange,
-      tableManager = _ref.tableManager;
+  var tableManager = _ref.tableManager,
+      _ref$page = _ref.page,
+      page = _ref$page === void 0 ? tableManager.paginationApi.page : _ref$page,
+      _ref$onChange = _ref.onChange,
+      _onChange = _ref$onChange === void 0 ? tableManager.paginationApi.setPage : _ref$onChange;
+
   var _tableManager$config = tableManager.config,
       _tableManager$config$ = _tableManager$config.texts,
       prevText = _tableManager$config$.prev,
@@ -3078,9 +3095,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Search = function Search(_ref) {
-  var value = _ref.value,
-      _onChange = _ref.onChange,
-      tableManager = _ref.tableManager;
+  var tableManager = _ref.tableManager,
+      _ref$value = _ref.value,
+      value = _ref$value === void 0 ? tableManager.searchApi.searchText : _ref$value,
+      _ref$onChange = _ref.onChange,
+      _onChange = _ref$onChange === void 0 ? tableManager.searchApi.setSearchText : _ref$onChange;
+
   var _tableManager$config = tableManager.config,
       searchText = _tableManager$config.texts.search,
       searchIcon = _tableManager$config.icons.search,
@@ -3473,24 +3493,24 @@ function getRowsRequest(tableManager, rowsRequests) {
   } // make sure "from" does not overlap previous requests 
 
 
-  rowsRequests.forEach(function (r) {
-    if (r.from <= from && from <= r.to) {
-      from = r.to;
+  rowsRequests.forEach(function (request) {
+    if (request.from <= from && from <= request.to) {
+      from = request.to;
     }
 
     ;
   }); // make sure "to" does not overlap previous requests 
   // make sure no previous requests are between "from" & "to"
 
-  rowsRequests.slice().reverse().find(function (r) {
-    if (r.from <= to && to <= r.to) {
-      to = r.from;
+  rowsRequests.slice().reverse().find(function (request) {
+    if (request.from <= to && to <= request.to) {
+      to = request.from;
     }
 
     ;
 
-    if (from < r.from && r.to < to) {
-      to = r.from;
+    if (from < request.from && request.to < to) {
+      to = request.from;
     }
 
     ;
@@ -3516,8 +3536,8 @@ var useAsync = function useAsync(props, tableManager) {
   var asyncApi = (0,react__WEBPACK_IMPORTED_MODULE_3__.useRef)({}).current;
   var rowsRequests = (0,react__WEBPACK_IMPORTED_MODULE_3__.useRef)([]);
   asyncApi.batchSize = (_props$batchSize = props.batchSize) !== null && _props$batchSize !== void 0 ? _props$batchSize : pageSize;
-  asyncApi.isLoading = !rowsRequests.current.length || !rowsRequests.current.every(function (r) {
-    return rows[r.from];
+  asyncApi.isLoading = !rowsRequests.current.length || !rowsRequests.current.every(function (request) {
+    return rows[request.from];
   });
 
   var onRowsRequest = /*#__PURE__*/function () {
@@ -3536,8 +3556,8 @@ var useAsync = function useAsync(props, tableManager) {
             case 4:
               result = _context.sent;
 
-              if (rowsRequests.current.find(function (rr) {
-                return rr.id === rowsRequest.id;
+              if (rowsRequests.current.find(function (request) {
+                return request.id === rowsRequest.id;
               })) {
                 _context.next = 7;
                 break;
@@ -3908,12 +3928,12 @@ var useColumnsResize = function useColumnsResize(props, tableManager) {
     lastPos.current = null;
     var containerEl = tableRef.current;
     var gtcArr = containerEl.style.gridTemplateColumns.split(" ");
-    columns.forEach(function (col) {
-      if (!col.visible) return;
+    columns.forEach(function (column) {
+      if (!column.visible) return;
       var colIndex = visibleColumns.findIndex(function (cd) {
-        return cd.id === col.id;
+        return cd.id === column.id;
       });
-      col.width = gtcArr[colIndex];
+      column.width = gtcArr[colIndex];
     });
     setColumns(columns);
     (_props$onColumnResize3 = props.onColumnResizeEnd) === null || _props$onColumnResize3 === void 0 ? void 0 : _props$onColumnResize3.call(props, {
@@ -3959,11 +3979,11 @@ var useColumnsVisibility = function useColumnsVisibility(props, tableManager) {
       setColumns = _tableManager$columns.setColumns;
   var columnsVisibilityApi = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)({}).current;
 
-  columnsVisibilityApi.toggleColumnVisibility = function (colId) {
+  columnsVisibilityApi.toggleColumnVisibility = function (columnId) {
     var newColumns = _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(columns);
 
-    var colIndex = newColumns.findIndex(function (cd) {
-      return cd.id === colId;
+    var colIndex = newColumns.findIndex(function (column) {
+      return column.id === columnId;
     });
     newColumns[colIndex].visible = !newColumns[colIndex].visible;
     setColumns(newColumns);
@@ -4320,20 +4340,20 @@ var useRowSelection = function useRowSelection(props, tableManager) {
   rowSelectionApi.selectAll = (0,react__WEBPACK_IMPORTED_MODULE_2__.useMemo)(function () {
     var mode = props.selectAllMode;
     var allRows = mode === 'all' ? rows : pageRows;
-    var selectableItemsIds = allRows.filter(function (r) {
-      return r;
+    var selectableItemsIds = allRows.filter(function (row) {
+      return row;
     }).filter(rowSelectionApi.getIsRowSelectable).map(function (item) {
       return item[rowIdField];
     });
-    var checked = selectableItemsIds.length && selectableItemsIds.every(function (si) {
+    var checked = selectableItemsIds.length && selectableItemsIds.every(function (selectableItemId) {
       return rowSelectionApi.selectedRowsIds.find(function (id) {
-        return si === id;
+        return selectableItemId === id;
       });
     });
     var disabled = !selectableItemsIds.length;
-    var indeterminate = !!(rowSelectionApi.selectedRowsIds.length && !checked && selectableItemsIds.some(function (si) {
+    var indeterminate = !!(rowSelectionApi.selectedRowsIds.length && !checked && selectableItemsIds.some(function (selectableItemId) {
       return rowSelectionApi.selectedRowsIds.find(function (id) {
-        return si === id;
+        return selectableItemId === id;
       });
     }));
     return {
@@ -4610,8 +4630,8 @@ var useSort = function useSort(props, tableManager) {
       setSort = _useState2[1];
 
   sortApi.sort = (_props$sort = props.sort) !== null && _props$sort !== void 0 ? _props$sort : sort;
-  if (!columns.some(function (c) {
-    return c.id === sortApi.sort.colId && c.sortable;
+  if (!columns.some(function (column) {
+    return column.id === sortApi.sort.colId && column.sortable;
   })) sortApi.sort = {
     colId: null,
     isAsc: true
@@ -4792,8 +4812,11 @@ var useTableManager = function useTableManager(props) {
 
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     if (!tableManager.isInitialized) return;
-    tableManager.rowSelectionApi.setSelectedRowsIds([]);
-    if (tableManager.mode !== 'sync') tableManager.asyncApi.resetRows();
+
+    if (tableManager.mode !== 'sync') {
+      tableManager.rowSelectionApi.setSelectedRowsIds([]);
+      tableManager.asyncApi.resetRows();
+    }
   }, [tableManager.searchApi.searchText, tableManager.sortApi.sort.colId, tableManager.sortApi.sort.isAsc]); // reset edit row
 
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
@@ -5088,28 +5111,28 @@ var getHighlightedText = function getHighlightedText(text, searchTerm) {
   if (text === searchTerm) return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
     className: "rgt-search-highlight"
   }, text);
-  var re = new RegExp(searchTerm, "gi");
-  var restArr = text.split(re, text.length);
+  var regex = new RegExp(searchTerm, "gi");
+  var restArr = text.split(regex, text.length);
   var restItemsLength = 0;
-  var highlightedSearch = restArr.map(function (a, idx) {
-    restItemsLength += a.length;
-    var el = null;
+  var highlightedSearch = restArr.map(function (textSlice, idx) {
+    restItemsLength += textSlice.length;
+    var element = null;
 
-    if (a) {
-      el = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    if (textSlice) {
+      element = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
         key: idx
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, a), restArr.length !== idx + 1 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, textSlice), restArr.length !== idx + 1 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
         className: "rgt-search-highlight"
       }, text.slice(restItemsLength, searchTerm.length + restItemsLength)) : null);
     } else if (restArr.length !== idx + 1) {
-      el = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
+      element = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", {
         key: idx,
         className: "rgt-search-highlight"
       }, text.slice(restItemsLength, searchTerm.length + restItemsLength));
     }
 
     restItemsLength += searchTerm.length;
-    return el;
+    return element;
   });
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("span", null, highlightedSearch);
 };
