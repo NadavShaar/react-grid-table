@@ -56,7 +56,7 @@ const MyAwesomeTable = () => {
     useEffect(() => {
         setLoading(true);
         setTimeout(() => {
-            setRowsData(MOCK_DATA)
+            setRowsData(MOCK_DATA);
             setLoading(false);
         }, 1500);
     }, [])

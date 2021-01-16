@@ -1,7 +1,11 @@
 import React from 'react';
 import { PopoverButton } from './';
 
-const ColumnVisibility = ({ columns, onChange, tableManager }) => {
+const ColumnVisibility = ({
+    tableManager,
+    columns = tableManager.columnsApi.columns,
+    onChange = tableManager.columnsVisibilityApi.toggleColumnVisibility
+}) => {
 
     const {
         config: {

@@ -1,10 +1,10 @@
 import React from 'react';
 
 const PageSize = ({
-    value,
-    onChange,
-    options,
-    tableManager
+    tableManager,
+    value = tableManager.paginationApi.pageSize,
+    onChange = tableManager.paginationApi.setPageSize,
+    options = tableManager.config.pageSizes
 }) => {
     const {
         config: {

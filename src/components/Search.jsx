@@ -1,6 +1,10 @@
 import React from 'react';
 
-const Search = ({ value, onChange, tableManager }) => {
+const Search = ({
+    tableManager,
+    value = tableManager.searchApi.searchText,
+    onChange = tableManager.searchApi.setSearchText
+}) => {
     const {
         config: {
             texts: { search: searchText },
