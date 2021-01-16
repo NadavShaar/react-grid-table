@@ -6,7 +6,6 @@ import getColumns from '../getColumns';
 import MOCK_DATA from "../MOCK_DATA.json";
 import '../index.css';
 
-
 const MyAwesomeTable = () => {
     const [tableManager, setTableManager] = useState(null);
     const [rowsData, setRowsData] = useState([]);
@@ -79,6 +78,12 @@ const MyAwesomeTable = () => {
                     onEditRowIdChange={setEditRowId}
                     selectedRowsIds={selectedRowsIds}
                     onSelectedRowsChange={setSelectedRowsIds}
+                    onRowClick={
+                        ({ rowIndex, data, column, isEdit, event }, tableManager) => 
+                            !isEdit 
+                            && tableManager.rowSelectionApi.getIsRowSelectable(data.id) 
+                            && tableManager.rowSelectionApi.toggleRowSelection(data.id)
+                    }
                     style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px', border: 'none' }}
                     onLoad={setTableManager}
                     searchText={searchText}

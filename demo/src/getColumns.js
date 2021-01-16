@@ -121,7 +121,7 @@ const getColumns = ({ setRowsData }) => {
                     <button
                         title="Edit"
                         style={styles.editButton}
-                        onClick={e => tableManager.rowEditApi.setEditRowId(data.id)}
+                        onClick={e => {e.stopPropagation(); tableManager.rowEditApi.setEditRowId(data.id)}}
                     >
                         {EDIT_SVG}
                     </button>
@@ -132,7 +132,7 @@ const getColumns = ({ setRowsData }) => {
                     <button
                         title="Cancel"
                         style={styles.cancelButton}
-                        onClick={e => tableManager.rowEditApi.setEditRowId(null)}
+                        onClick={e => {e.stopPropagation(); tableManager.rowEditApi.setEditRowId(null)}}
                     >
                         {CANCEL_SVG}
                     </button>
@@ -140,6 +140,7 @@ const getColumns = ({ setRowsData }) => {
                         title="Save"
                         style={styles.saveButton}
                         onClick={e => {
+                            e.stopPropagation();
                             let rowsClone = [...tableManager.rowsApi.rows];
                             let updatedRowIndex = rowsClone.findIndex(r => r.id === data.id);
                             rowsClone[updatedRowIndex] = data;

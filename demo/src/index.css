@@ -61,6 +61,18 @@ body {
   margin: 0;
 }
 
+.rgt-cell:not(.rgt-row-edit):not(.rgt-row-not-selectable) {
+  cursor: pointer;
+}
+
+.rgt-row-selected {
+  background: #f3f6f9;
+}
+
+.rgt-row-hover {
+  background: #f7f7f7;
+}
+
 .settingsDrawer input[type="checkbox"] {
   cursor: pointer;
 }
