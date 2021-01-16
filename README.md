@@ -500,17 +500,17 @@ API Structure:
 - **mode:** 'sync' or 'async', derived from the supplied props.
 - **isLoading:** Is the table currently loading data.
 - [**config:**](#config) All the params that defines the table's user-interface and its behavior.
-- **refs:** ref objects for selected elements.
-- **columnsApi:** API of the columns.
-- **columnsVisibilityApi:** API of the columns visibility.
-- **searchApi:** API of the search.
-- **sortApi:** API of the sort.
-- **rowsApi:** API of the rows
-- **paginationApi:** API of the pagination.
-- **rowSelectionApi:** API of the rows selection.
-- **rowEditApi:** API of the row editing.
-- **rowVirtualizer:** API of the rows virtualizer.
-- **asyncApi:** API of the async functionality.
+- [**refs:**](#refs) ref objects for selected elements.
+- [**columnsApi:**](#columnsApi) API of the columns.
+- [**columnsVisibilityApi:**](#columnsVisibilityApi) API of the columns visibility.
+- [**searchApi:**](#searchApi) API of the search.
+- [**sortApi:**](#sortApi) API of the sort.
+- [**rowsApi:**](#rowsApi) API of the rows
+- [**paginationApi:**](#paginationApi) API of the pagination.
+- [**rowSelectionApi:**](#rowSelectionApi) API of the rows selection.
+- [**rowEditApi:**](#rowEditApi) API of the row editing.
+- [**rowVirtualizer:**](#rowVirtualizer) API of the rows virtualizer.
+- [**asyncApi:**](#asyncApi) API of the async functionality.
 
 ### config
 
