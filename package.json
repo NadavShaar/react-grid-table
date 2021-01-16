@@ -44,7 +44,7 @@
     "start-async-managed": "cross-env TARGET=asyncManaged webpack serve --config demo/webpack.config.js",
     "watch": "webpack -w",
     "build": "webpack",
-    "build-demo": "webpack --config demo.config.js",
+    "build-demo": "webpack --config demo/webpack.config.js",
     "deploy-demo": "gh-pages -d demo/dist",
     "test": ""
   },
