@@ -384,14 +384,6 @@ This prop gives you the ability to override the internal components with your ow
 
 All components are getting the `tableManager` object ([details](#tableManager)).
 
-**Example**
-Overriding the Loader component:
-```JSX
-components={{ Loader: CustomLoader }}
-```
-
-**Overridable components**
-
 | component | required props | optional props |
 |---|---|---|
 | Header | `tableManager` | --- |
