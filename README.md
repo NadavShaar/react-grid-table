@@ -218,7 +218,7 @@ export default MyAwesomeTable;
 | onPageSizeChange | function | triggers when page size is changed | `newPageSize => { }` |
 | onSearchTextChange | function | triggers when search text changed | `searchText => { }` |
 | onSortChange | function | triggers when sort changed | `({colId, isAsc}) => { }` |
-| onRowClick | function | triggers when a row is clicked | `({rowIndex, data, column, event}) => { }` |
+| onRowClick | function | triggers when a row is clicked | `({ rowIndex, data, column, isEdit, event }, tableManager) => { }` |
 | onEditRowIdChange | function | triggers when `rowEditId` changed | `rowEditId => { }` |
 | onLoad | function | triggers when `tableManager` is initialized (<u>[details](#tableManager)</u>) | `tableManager => { }` |
 | onColumnResizeStart | function | triggers when column resize starts | `({event, target, column}) => { }` |
@@ -923,7 +923,7 @@ Styling is done by css classes that can be easily overridden. the table's compon
 | Columns Visibility Manager | `rgt-columns-manager-wrapper` `rgt-columns-manager-button` `rgt-columns-manager-button-active` `rgt-columns-manager-popover` `rgt-columns-manager-popover-open` `rgt-columns-manager-popover-row` `rgt-columns-manager-popover-title` `rgt-columns-manager-popover-body` |
 | Table | `rgt-container` `rgt-container-overlay` |
 | Header Cell | `rgt-cell-header` `rgt-cell-header-[column.field]` `rgt-cell-header-checkbox` `rgt-cell-header-virtual-col` `rgt-cell-header-sortable / rgt-cell-header-not-sortable` `rgt-cell-header-sticky` `rgt-cell-header-resizable / rgt-cell-header-not-resizable` `rgt-cell-header-searchable / rgt-cell-header-not-searchable` `rgt-cell-header-pinned` `rgt-cell-header-pinned-left / rgt-cell-header-pinned-right` `rgt-cell-header-inner-not-pinned-right` `[column.className]` `rgt-cell-header-inner` `rgt-cell-header-inner-checkbox` `rgt-resize-handle` `rgt-sort-icon` `rgt-sort-icon-ascending / rgt-sort-icon-descending` `rgt-column-sort-ghost` |
-| Cell | `rgt-cell` `rgt-cell-[column.field]` `rgt-row-[rowNumber]` `rgt-row-odd / rgt-row-even` `rgt-row-hover` `rgt-row-selectable / rgt-row-not-selectable` `rgt-cell-inner` `rgt-cell-checkbox` `rgt-cell-virtual` `rgt-cell-pinned` `rgt-cell-pinned-left / rgt-cell-pinned-right` `rgt-cell-editor` `rgt-cell-editor-inner` `rgt-cell-editor-input` `rgt-row-selected` `rgt-placeholder-cell` |
+| Cell | `rgt-cell` `rgt-cell-[column.field]` `rgt-row-[rowNumber]` `rgt-row-odd / rgt-row-even` `rgt-row-hover` `rgt-row-selectable / rgt-row-not-selectable` `rgt-cell-inner` `rgt-cell-checkbox` `rgt-cell-virtual` `rgt-cell-pinned` `rgt-cell-pinned-left / rgt-cell-pinned-right` `rgt-cell-editor` `rgt-cell-editor-inner` `rgt-cell-editor-input` `rgt-row-selected` `rgt-placeholder-cell` `rgt-row-edit` |
 | Footer | `rgt-footer` `rgt-footer-right-container` |
 | Pagination | `rgt-footer-pagination` `rgt-footer-pagination-button` `rgt-footer-pagination-input-container` `rgt-footer-page-input` |
 | Information | `rgt-footer-items-information` `rgt-footer-clear-selection-button` |
