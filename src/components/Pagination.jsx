@@ -1,9 +1,9 @@
 import React from 'react';
 
 const Pagination = ({
-    page, 
-    onChange,
-    tableManager
+    tableManager,
+    page = tableManager.paginationApi.page, 
+    onChange = tableManager.paginationApi.setPage
 }) => {
     const {
         config: {

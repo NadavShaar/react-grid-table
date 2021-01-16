@@ -1,11 +1,11 @@
 import React from 'react';
 
 const Information = ({
-    totalCount, 
-    pageSize,
-    pageCount, 
-    selectedCount,
-    tableManager
+    tableManager,
+    totalCount = tableManager.rowsApi.totalRows, 
+    pageSize = tableManager.paginationApi.pageSize,
+    pageCount = tableManager.paginationApi.pageRows.length, 
+    selectedCount = tableManager.rowSelectionApi.selectedRowsIds.length
 }) => {
     const {
         config: {
