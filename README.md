@@ -460,7 +460,7 @@ const MyAwesomeTable = props => {
     return (
         <GridTable
             ...
-            components={{ Header: YourCustomComponent }}
+            components={{ Header }}
         />
     )
 }
