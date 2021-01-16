@@ -7,10 +7,7 @@ const Header = ({ tableManager }) => {
             components: { ColumnVisibility, Search },
             additionalProps: { header: additionalProps = {} },
             showSearch,
-        },
-        columnsApi: { columns },
-        columnsVisibilityApi: { toggleColumnVisibility },
-        searchApi: { setSearchText, searchText },
+        }
     } = tableManager;
 
     const classNames = ('rgt-header-container ' + (additionalProps.className || '')).trim();
@@ -19,13 +16,13 @@ const Header = ({ tableManager }) => {
         <div {...additionalProps} className={classNames}>
             {
                 showSearch !== false ?
-                    <Search value={searchText} onChange={setSearchText} tableManager={tableManager}/>
+                    <Search tableManager={tableManager}/>
                     :
                     <span></span>
             }
             {
                 showColumnVisibilityManager !== false ?
-                    <ColumnVisibility columns={columns} onChange={toggleColumnVisibility} tableManager={tableManager}/>
+                    <ColumnVisibility tableManager={tableManager}/>
                     :
                     <span></span>
             }
