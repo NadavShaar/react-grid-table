@@ -1759,7 +1759,8 @@ var getColumns = function getColumns(_ref) {
         title: "Edit",
         style: styles.editButton,
         onClick: function onClick(e) {
-          return tableManager.rowEditApi.setEditRowId(data.id);
+          e.stopPropagation();
+          tableManager.rowEditApi.setEditRowId(data.id);
         }
       }, EDIT_SVG));
     },
@@ -1777,12 +1778,15 @@ var getColumns = function getColumns(_ref) {
         title: "Cancel",
         style: styles.cancelButton,
         onClick: function onClick(e) {
-          return tableManager.rowEditApi.setEditRowId(null);
+          e.stopPropagation();
+          tableManager.rowEditApi.setEditRowId(null);
         }
       }, CANCEL_SVG), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("button", {
         title: "Save",
         style: styles.saveButton,
         onClick: function onClick(e) {
+          e.stopPropagation();
+
           var rowsClone = _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(tableManager.rowsApi.rows);
 
           var updatedRowIndex = rowsClone.findIndex(function (r) {
@@ -1996,6 +2000,14 @@ var MyAwesomeTable = function MyAwesomeTable() {
     onEditRowIdChange: setEditRowId,
     selectedRowsIds: selectedRowsIds,
     onSelectedRowsChange: setSelectedRowsIds,
+    onRowClick: function onRowClick(_ref, tableManager) {
+      var rowIndex = _ref.rowIndex,
+          data = _ref.data,
+          column = _ref.column,
+          isEdit = _ref.isEdit,
+          event = _ref.event;
+      return !isEdit && tableManager.rowSelectionApi.getIsRowSelectable(data.id) && tableManager.rowSelectionApi.toggleRowSelection(data.id);
+    },
     style: {
       boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px',
       border: 'none'
@@ -2116,7 +2128,7 @@ var CellContainer = function CellContainer(_ref) {
 
   var getClassNames = function getClassNames() {
     var classNames;
-    var all = "rgt-cell rgt-row-".concat(rowIndex, " rgt-row-").concat(rowIndex % 2 === 0 ? 'even' : 'odd').concat(isSelected ? ' rgt-row-selected' : '', " ").concat(additionalProps.className || '').trim();
+    var all = "rgt-cell rgt-row-".concat(rowIndex, " rgt-row-").concat(rowIndex % 2 === 0 ? 'even' : 'odd').concat(isSelected ? ' rgt-row-selected' : '').concat(isEdit ? ' rgt-row-edit' : '', " ").concat(additionalProps.className || '').trim();
     var virtualDefault = "".concat(!tableHasSelection ? '' : disableSelection ? ' rgt-row-not-selectable' : ' rgt-row-selectable');
     var checkboxDefault = "".concat(column.pinned && colIndex === 0 ? ' rgt-cell-pinned rgt-cell-pinned-left' : '').concat(column.pinned && colIndex === visibleColumns.length - 1 ? ' rgt-cell-pinned rgt-cell-pinned-right' : '', " ").concat(column.className).trim();
 
@@ -2158,22 +2170,22 @@ var CellContainer = function CellContainer(_ref) {
     return value;
   };
 
-  var onMouseEnter = (0,react__WEBPACK_IMPORTED_MODULE_2__.useCallback)(function (e) {
+  var onMouseOver = (0,react__WEBPACK_IMPORTED_MODULE_2__.useCallback)(function (event) {
     var _additionalProps$onMo, _additionalProps;
 
-    document.querySelectorAll(".rgt-row-".concat(rowIndex)).forEach(function (c) {
-      return c.classList.add('rgt-row-hover');
+    document.querySelectorAll(".rgt-row-".concat(rowIndex)).forEach(function (cell) {
+      return cell.classList.add('rgt-row-hover');
     });
-    (_additionalProps$onMo = (_additionalProps = additionalProps).onMouseEnter) === null || _additionalProps$onMo === void 0 ? void 0 : _additionalProps$onMo.call(_additionalProps, e);
-  }, [rowIndex, additionalProps.onMouseEnter]);
-  var onMouseLeave = (0,react__WEBPACK_IMPORTED_MODULE_2__.useCallback)(function (e) {
+    (_additionalProps$onMo = (_additionalProps = additionalProps).onMouseOver) === null || _additionalProps$onMo === void 0 ? void 0 : _additionalProps$onMo.call(_additionalProps, event);
+  }, [rowIndex, additionalProps.onMouseOver]);
+  var onMouseOut = (0,react__WEBPACK_IMPORTED_MODULE_2__.useCallback)(function (event) {
     var _additionalProps$onMo2, _additionalProps2;
 
-    document.querySelectorAll(".rgt-row-".concat(rowIndex)).forEach(function (c) {
-      return c.classList.remove('rgt-row-hover');
+    document.querySelectorAll(".rgt-row-".concat(rowIndex)).forEach(function (cell) {
+      return cell.classList.remove('rgt-row-hover');
     });
-    (_additionalProps$onMo2 = (_additionalProps2 = additionalProps).onMouseLeave) === null || _additionalProps$onMo2 === void 0 ? void 0 : _additionalProps$onMo2.call(_additionalProps2, e);
-  }, [rowIndex, additionalProps.onMouseLeave]);
+    (_additionalProps$onMo2 = (_additionalProps2 = additionalProps).onMouseOut) === null || _additionalProps$onMo2 === void 0 ? void 0 : _additionalProps$onMo2.call(_additionalProps2, event);
+  }, [rowIndex, additionalProps.onMouseOut]);
 
   if (data && onRowClick) {
     additionalProps = _objectSpread({
@@ -2182,6 +2194,7 @@ var CellContainer = function CellContainer(_ref) {
           rowIndex: rowIndex,
           data: data,
           column: column,
+          isEdit: isEdit,
           event: event
         }, tableManager);
       }
@@ -2203,8 +2216,8 @@ var CellContainer = function CellContainer(_ref) {
     "data-row-index": rowIndex.toString(),
     "data-column-id": column.id.toString()
   }, additionalProps, {
-    onMouseEnter: onMouseEnter,
-    onMouseLeave: onMouseLeave,
+    onMouseOver: onMouseOver,
+    onMouseOut: onMouseOut,
     className: classNames,
     ref: forwardRef
   }), column.id === 'virtual' ? null : column.id === 'checkbox' ? column.cellRenderer(_objectSpread(_objectSpread({}, cellProps), {}, {
@@ -2252,25 +2265,25 @@ var ColumnVisibility = function ColumnVisibility(_ref) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(___WEBPACK_IMPORTED_MODULE_2__.PopoverButton, _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({
     title: columnVisibilityText,
     buttonChildren: columnVisibilityIcon,
-    popoverChildren: columns.filter(function (col) {
-      return col.label;
-    }).map(function (cd, idx) {
+    popoverChildren: columns.filter(function (column) {
+      return column.label;
+    }).map(function (column, idx) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
         key: idx,
         className: "rgt-clickable rgt-columns-manager-popover-row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("label", {
         htmlFor: "checkbox-".concat(idx),
-        title: cd.label,
-        onClick: function onClick(e) {
-          return onChange(cd.id);
+        title: column.label,
+        onClick: function onClick() {
+          return onChange(column.id);
         },
         className: "rgt-clickable rgt-flex-child rgt-text-truncate"
-      }, cd.label), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("input", {
+      }, column.label), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("input", {
         id: "checkbox-".concat(idx),
         className: "rgt-clickable",
         type: "checkbox",
-        onChange: function onChange(e) {},
-        checked: cd.visible !== false
+        onChange: function onChange() {},
+        checked: column.visible !== false
       }));
     })
   }, additionalProps));
@@ -2317,8 +2330,8 @@ var EditorCell = function EditorCell(_ref) {
       additionalProps = _tableManager$config$ === void 0 ? {} : _tableManager$config$,
       visibleColumns = tableManager.columnsApi.visibleColumns;
   var classNames = ('rgt-cell-inner rgt-cell-editor ' + (additionalProps.className || '')).trim();
-  var firstEditableCell = visibleColumns.findIndex(function (c) {
-    return c.id !== 'checkbox' && c.editable !== false;
+  var firstEditableCell = visibleColumns.findIndex(function (visibleColumn) {
+    return visibleColumn.id !== 'checkbox' && visibleColumn.editable !== false;
   }) === colIndex;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement("div", _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({}, additionalProps, {
     className: classNames
@@ -2330,8 +2343,8 @@ var EditorCell = function EditorCell(_ref) {
     className: "rgt-cell-editor-input",
     type: "text",
     value: value,
-    onChange: function onChange(e) {
-      return _onChange(_objectSpread(_objectSpread({}, data), {}, _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()({}, column.field, e.target.value)));
+    onChange: function onChange(event) {
+      return _onChange(_objectSpread(_objectSpread({}, data), {}, _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()({}, column.field, event.target.value)));
     }
   })));
 };
@@ -2609,9 +2622,9 @@ var HeaderCellContainer = function HeaderCellContainer(_ref3) {
   }, sortDescendingIcon)), column.resizable ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__.createElement("span", {
     ref: resizeHandleRef,
     className: "rgt-resize-handle",
-    onClick: function onClick(e) {
-      e.preventDefault();
-      e.stopPropagation();
+    onClick: function onClick(event) {
+      event.preventDefault();
+      event.stopPropagation();
     }
   }) : null));
 };
@@ -2785,14 +2798,14 @@ var PageSize = function PageSize(_ref) {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("span", null, rowsPerPageText, " "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("select", {
     className: "rgt-footer-page-size-select",
     value: value,
-    onChange: function onChange(e) {
-      _onChange(e.target.value);
+    onChange: function onChange(event) {
+      _onChange(event.target.value);
     }
-  }, options.map(function (op, idx) {
+  }, options.map(function (option, idx) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("option", {
       key: idx,
-      value: op
-    }, op);
+      value: option
+    }, option);
   })));
 };
 
@@ -2838,25 +2851,25 @@ var Pagination = function Pagination(_ref) {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("button", {
     className: "rgt-footer-pagination-button".concat(backButtonDisabled ? ' rgt-disabled-button' : ''),
     disabled: page - 1 < 1,
-    onClick: function onClick(e) {
+    onClick: function onClick() {
       return _onChange(page - 1);
     }
   }, prevText), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
     className: "rgt-footer-pagination-input-container"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("span", null, pageText, " "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("input", {
-    onClick: function onClick(e) {
-      return e.target.select();
+    onClick: function onClick(event) {
+      return event.target.select();
     },
     className: "rgt-footer-page-input",
     type: "number",
     value: totalPages ? page : 0,
-    onChange: function onChange(e) {
-      return _onChange(e.target.value * 1);
+    onChange: function onChange(event) {
+      return _onChange(event.target.value * 1);
     }
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("span", null, ofText, " ", totalPages)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("button", {
     className: "rgt-footer-pagination-button".concat(nextButtonDisabled ? ' rgt-disabled-button' : ''),
     disabled: page + 1 > totalPages,
-    onClick: function onClick(e) {
+    onClick: function onClick() {
       return _onChange(page + 1);
     }
   }, nextText));
@@ -2993,7 +3006,7 @@ var Row = function Row(_ref) {
 
   if (isVirtualScroll) {
     if (index === 'virtual-start') {
-      return visibleColumns.map(function (vc, colIndex) {
+      return visibleColumns.map(function (visibleColumn, colIndex) {
         var _virtualItems$;
 
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
@@ -3006,7 +3019,7 @@ var Row = function Row(_ref) {
     }
 
     if (index === 'virtual-end') {
-      return visibleColumns.map(function (vc, colIndex) {
+      return visibleColumns.map(function (visibleColumn, colIndex) {
         var _virtualItems;
 
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
@@ -3022,18 +3035,18 @@ var Row = function Row(_ref) {
   var rowIndex = index + 1 + (pageRows.length * page - pageRows.length);
   var rowId = (data === null || data === void 0 ? void 0 : data[rowIdField]) || rowIndex;
   var disableSelection = !data || !getIsRowSelectable(data);
-  var isSelected = !!data && !!selectedRowsIds.find(function (si) {
-    return si === rowId;
+  var isSelected = !!data && !!selectedRowsIds.find(function (selectedRowId) {
+    return selectedRowId === rowId;
   });
   var isEdit = !!data && (editRow === null || editRow === void 0 ? void 0 : editRow[rowIdField]) === rowId && !!getIsRowEditable(data);
-  return visibleColumns.map(function (cd, colIndex) {
+  return visibleColumns.map(function (visibleColumn, colIndex) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(___WEBPACK_IMPORTED_MODULE_1__.CellContainer, {
       key: rowIndex + colIndex,
       rowId: rowId,
       data: rowId && (editRow === null || editRow === void 0 ? void 0 : editRow[rowIdField]) === rowId ? editRow : data,
       rowIndex: rowIndex,
       colIndex: colIndex,
-      column: cd,
+      column: visibleColumn,
       isSelected: isSelected,
       isEdit: isEdit,
       disableSelection: disableSelection,
@@ -3085,8 +3098,8 @@ var Search = function Search(_ref) {
     name: "rgt-search",
     type: "search",
     value: value,
-    onChange: function onChange(e) {
-      return _onChange(e.target.value);
+    onChange: function onChange(event) {
+      return _onChange(event.target.value);
     },
     className: "rgt-search-input"
   }));
@@ -3125,8 +3138,8 @@ var SelectionCell = function SelectionCell(_ref) {
     className: classNames,
     type: "checkbox",
     onChange: onChange,
-    onClick: function onClick(e) {
-      return e.stopPropagation();
+    onClick: function onClick(event) {
+      return event.stopPropagation();
     },
     checked: value,
     disabled: disabled
@@ -5166,7 +5179,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "* {\r\n  box-sizing: border-box;\r\n}\r\n\r\nhtml {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\nbody {\r\n  margin: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  overflow: hidden;\r\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\r\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\r\n    sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n#root {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n.demo {\r\n  display: flex;\r\n  width: 100%;\r\n  height: 100%;\r\n  overflow: hidden;\r\n  background-color: #861657;\r\n  background-image: linear-gradient(326deg, #861657, #ffa69e 74%);\r\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\r\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\r\n    sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n.demo ::-webkit-scrollbar-track {\r\n  background-color: #f5f5f5;\r\n}\r\n\r\n.demo ::-webkit-scrollbar {\r\n  width: 8px;\r\n  height: 8px;\r\n  background-color: #f5f5f5;\r\n}\r\n\r\n.demo ::-webkit-scrollbar-thumb {\r\n  background-color: #ddd;\r\n  border: 2px solid #d8d8d8;\r\n}\r\n\r\n.tableWrapper {\r\n  height: 100%;\r\n  padding: 20px;\r\n  overflow: auto;\r\n  flex: 1;\r\n  margin: 0;\r\n}\r\n\r\n.settingsDrawer input[type=\"checkbox\"] {\r\n  cursor: pointer;\r\n}\r\n\r\n.settingsDrawer input[type=\"text\"],\r\n.settingsDrawer input[type=\"number\"],\r\n.settingsDrawer select {\r\n  background: #eef2f5;\r\n  outline: none;\r\n  border: none;\r\n  padding: 5px 10px;\r\n  border-radius: 4px;\r\n  width: 120px;\r\n}\r\n\r\n@media (min-width: 1025px) {\r\n  .tableWrapper {\r\n    padding: 40px;\r\n  }\r\n  .settingsDrawer {\r\n    position: unset !important;\r\n    transform: translate3d(0px, 0px, 0px) !important;\r\n  }\r\n  .settingsDrawerButton {\r\n    display: none !important;\r\n  }\r\n}\r\n", "",{"version":3,"sources":["webpack://./demo/src/index.css"],"names":[],"mappings":"AAAA;EACE,sBAAsB;AACxB;;AAEA;EACE,WAAW;EACX,YAAY;AACd;;AAEA;EACE,SAAS;EACT,WAAW;EACX,YAAY;EACZ,gBAAgB;EAChB;;cAEY;EACZ,mCAAmC;EACnC,kCAAkC;AACpC;;AAEA;EACE,WAAW;EACX,YAAY;AACd;;AAEA;EACE,aAAa;EACb,WAAW;EACX,YAAY;EACZ,gBAAgB;EAChB,yBAAyB;EACzB,+DAA+D;EAC/D;;cAEY;EACZ,mCAAmC;EACnC,kCAAkC;AACpC;;AAEA;EACE,yBAAyB;AAC3B;;AAEA;EACE,UAAU;EACV,WAAW;EACX,yBAAyB;AAC3B;;AAEA;EACE,sBAAsB;EACtB,yBAAyB;AAC3B;;AAEA;EACE,YAAY;EACZ,aAAa;EACb,cAAc;EACd,OAAO;EACP,SAAS;AACX;;AAEA;EACE,eAAe;AACjB;;AAEA;;;EAGE,mBAAmB;EACnB,aAAa;EACb,YAAY;EACZ,iBAAiB;EACjB,kBAAkB;EAClB,YAAY;AACd;;AAEA;EACE;IACE,aAAa;EACf;EACA;IACE,0BAA0B;IAC1B,gDAAgD;EAClD;EACA;IACE,wBAAwB;EAC1B;AACF","sourcesContent":["* {\r\n  box-sizing: border-box;\r\n}\r\n\r\nhtml {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\nbody {\r\n  margin: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  overflow: hidden;\r\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\r\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\r\n    sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n#root {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n.demo {\r\n  display: flex;\r\n  width: 100%;\r\n  height: 100%;\r\n  overflow: hidden;\r\n  background-color: #861657;\r\n  background-image: linear-gradient(326deg, #861657, #ffa69e 74%);\r\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\r\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\r\n    sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n.demo ::-webkit-scrollbar-track {\r\n  background-color: #f5f5f5;\r\n}\r\n\r\n.demo ::-webkit-scrollbar {\r\n  width: 8px;\r\n  height: 8px;\r\n  background-color: #f5f5f5;\r\n}\r\n\r\n.demo ::-webkit-scrollbar-thumb {\r\n  background-color: #ddd;\r\n  border: 2px solid #d8d8d8;\r\n}\r\n\r\n.tableWrapper {\r\n  height: 100%;\r\n  padding: 20px;\r\n  overflow: auto;\r\n  flex: 1;\r\n  margin: 0;\r\n}\r\n\r\n.settingsDrawer input[type=\"checkbox\"] {\r\n  cursor: pointer;\r\n}\r\n\r\n.settingsDrawer input[type=\"text\"],\r\n.settingsDrawer input[type=\"number\"],\r\n.settingsDrawer select {\r\n  background: #eef2f5;\r\n  outline: none;\r\n  border: none;\r\n  padding: 5px 10px;\r\n  border-radius: 4px;\r\n  width: 120px;\r\n}\r\n\r\n@media (min-width: 1025px) {\r\n  .tableWrapper {\r\n    padding: 40px;\r\n  }\r\n  .settingsDrawer {\r\n    position: unset !important;\r\n    transform: translate3d(0px, 0px, 0px) !important;\r\n  }\r\n  .settingsDrawerButton {\r\n    display: none !important;\r\n  }\r\n}\r\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "* {\r\n  box-sizing: border-box;\r\n}\r\n\r\nhtml {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\nbody {\r\n  margin: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  overflow: hidden;\r\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\r\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\r\n    sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n#root {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n.demo {\r\n  display: flex;\r\n  width: 100%;\r\n  height: 100%;\r\n  overflow: hidden;\r\n  background-color: #861657;\r\n  background-image: linear-gradient(326deg, #861657, #ffa69e 74%);\r\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\r\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\r\n    sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n.demo ::-webkit-scrollbar-track {\r\n  background-color: #f5f5f5;\r\n}\r\n\r\n.demo ::-webkit-scrollbar {\r\n  width: 8px;\r\n  height: 8px;\r\n  background-color: #f5f5f5;\r\n}\r\n\r\n.demo ::-webkit-scrollbar-thumb {\r\n  background-color: #ddd;\r\n  border: 2px solid #d8d8d8;\r\n}\r\n\r\n.tableWrapper {\r\n  height: 100%;\r\n  padding: 20px;\r\n  overflow: auto;\r\n  flex: 1;\r\n  margin: 0;\r\n}\r\n\r\n.rgt-cell:not(.rgt-row-edit):not(.rgt-row-not-selectable) {\r\n  cursor: pointer;\r\n}\r\n\r\n.rgt-row-selected {\r\n  background: #f3f6f9;\r\n}\r\n\r\n.rgt-row-hover {\r\n  background: #f7f7f7;\r\n}\r\n\r\n.settingsDrawer input[type=\"checkbox\"] {\r\n  cursor: pointer;\r\n}\r\n\r\n.settingsDrawer input[type=\"text\"],\r\n.settingsDrawer input[type=\"number\"],\r\n.settingsDrawer select {\r\n  background: #eef2f5;\r\n  outline: none;\r\n  border: none;\r\n  padding: 5px 10px;\r\n  border-radius: 4px;\r\n  width: 120px;\r\n}\r\n\r\n@media (min-width: 1025px) {\r\n  .tableWrapper {\r\n    padding: 40px;\r\n  }\r\n  .settingsDrawer {\r\n    position: unset !important;\r\n    transform: translate3d(0px, 0px, 0px) !important;\r\n  }\r\n  .settingsDrawerButton {\r\n    display: none !important;\r\n  }\r\n}\r\n", "",{"version":3,"sources":["webpack://./demo/src/index.css"],"names":[],"mappings":"AAAA;EACE,sBAAsB;AACxB;;AAEA;EACE,WAAW;EACX,YAAY;AACd;;AAEA;EACE,SAAS;EACT,WAAW;EACX,YAAY;EACZ,gBAAgB;EAChB;;cAEY;EACZ,mCAAmC;EACnC,kCAAkC;AACpC;;AAEA;EACE,WAAW;EACX,YAAY;AACd;;AAEA;EACE,aAAa;EACb,WAAW;EACX,YAAY;EACZ,gBAAgB;EAChB,yBAAyB;EACzB,+DAA+D;EAC/D;;cAEY;EACZ,mCAAmC;EACnC,kCAAkC;AACpC;;AAEA;EACE,yBAAyB;AAC3B;;AAEA;EACE,UAAU;EACV,WAAW;EACX,yBAAyB;AAC3B;;AAEA;EACE,sBAAsB;EACtB,yBAAyB;AAC3B;;AAEA;EACE,YAAY;EACZ,aAAa;EACb,cAAc;EACd,OAAO;EACP,SAAS;AACX;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,mBAAmB;AACrB;;AAEA;EACE,mBAAmB;AACrB;;AAEA;EACE,eAAe;AACjB;;AAEA;;;EAGE,mBAAmB;EACnB,aAAa;EACb,YAAY;EACZ,iBAAiB;EACjB,kBAAkB;EAClB,YAAY;AACd;;AAEA;EACE;IACE,aAAa;EACf;EACA;IACE,0BAA0B;IAC1B,gDAAgD;EAClD;EACA;IACE,wBAAwB;EAC1B;AACF","sourcesContent":["* {\r\n  box-sizing: border-box;\r\n}\r\n\r\nhtml {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\nbody {\r\n  margin: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  overflow: hidden;\r\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\r\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\r\n    sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n#root {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n.demo {\r\n  display: flex;\r\n  width: 100%;\r\n  height: 100%;\r\n  overflow: hidden;\r\n  background-color: #861657;\r\n  background-image: linear-gradient(326deg, #861657, #ffa69e 74%);\r\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Oxygen\",\r\n    \"Ubuntu\", \"Cantarell\", \"Fira Sans\", \"Droid Sans\", \"Helvetica Neue\",\r\n    sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n.demo ::-webkit-scrollbar-track {\r\n  background-color: #f5f5f5;\r\n}\r\n\r\n.demo ::-webkit-scrollbar {\r\n  width: 8px;\r\n  height: 8px;\r\n  background-color: #f5f5f5;\r\n}\r\n\r\n.demo ::-webkit-scrollbar-thumb {\r\n  background-color: #ddd;\r\n  border: 2px solid #d8d8d8;\r\n}\r\n\r\n.tableWrapper {\r\n  height: 100%;\r\n  padding: 20px;\r\n  overflow: auto;\r\n  flex: 1;\r\n  margin: 0;\r\n}\r\n\r\n.rgt-cell:not(.rgt-row-edit):not(.rgt-row-not-selectable) {\r\n  cursor: pointer;\r\n}\r\n\r\n.rgt-row-selected {\r\n  background: #f3f6f9;\r\n}\r\n\r\n.rgt-row-hover {\r\n  background: #f7f7f7;\r\n}\r\n\r\n.settingsDrawer input[type=\"checkbox\"] {\r\n  cursor: pointer;\r\n}\r\n\r\n.settingsDrawer input[type=\"text\"],\r\n.settingsDrawer input[type=\"number\"],\r\n.settingsDrawer select {\r\n  background: #eef2f5;\r\n  outline: none;\r\n  border: none;\r\n  padding: 5px 10px;\r\n  border-radius: 4px;\r\n  width: 120px;\r\n}\r\n\r\n@media (min-width: 1025px) {\r\n  .tableWrapper {\r\n    padding: 40px;\r\n  }\r\n  .settingsDrawer {\r\n    position: unset !important;\r\n    transform: translate3d(0px, 0px, 0px) !important;\r\n  }\r\n  .settingsDrawerButton {\r\n    display: none !important;\r\n  }\r\n}\r\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
