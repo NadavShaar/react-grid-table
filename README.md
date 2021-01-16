@@ -392,21 +392,23 @@ components={{ Loader: CustomLoader }}
 
 **Overridable components**
 
-- Header - props: tableManager
-- Search - props: tableManager, value, onChange
-- ColumnVisibility - props: tableManager, columns, onChange
-- HeaderCell - props: tableManager, column
-- HeaderSelectionCell - props: tableManager, column, ref, onChange, checked, disabled
-- Cell - props: tableManager, value
-- EditorCell - props: tableManager, value, data, column, colIndex, rowIndex, onChange
-- SelectionCell - props: tableManager, value, disabled, onChange
-- PlaceHolderCell - props: tableManager
-- Loader - props: tableManager
-- NoResults - props: tableManager
-- Footer - props: tableManager
-- Information - props: tableManager, totalCount, pageSize, pageCount, selectedCount
-- PageSize - props: tableManager, value, onChange, options
-- Pagination - props: tableManager, page, onChange
+| component | required props | optional props |
+|---|---|---|
+| Header | `tableManager` | --- |
+| Search | `tableManager` | `value` `onChange` |
+| ColumnVisibility | `tableManager` | `columns` `onChange` |
+| HeaderCell | `tableManager` | `column` |
+| HeaderSelectionCell | `tableManager` | `column` `ref` `onChange` `checked` `disabled` |
+| Cell | `tableManager` | `value` |
+| EditorCell | `tableManager` | `value` `data` `column` `colIndex` `rowIndex` `onChange` |
+| SelectionCell | `tableManager` | `value` `disabled` `onChange` |
+| PlaceHolderCell | `tableManager` | --- |
+| Loader | `tableManager` | --- |
+| NoResults | `tableManager` | --- |
+| Footer | `tableManager` | --- |
+| Information | `tableManager` | `totalCount` `pageSize` `pageCount` `selectedCount` |
+| PageSize | `tableManager` | `value` `onChange` `options` |
+| Pagination | `tableManager` | `page` `onChange` |
 
 **Example: Overriding the header component**
 
