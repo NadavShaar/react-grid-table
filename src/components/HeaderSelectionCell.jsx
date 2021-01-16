@@ -1,6 +1,13 @@
 import React from 'react';
 
-const HeaderSelectionCell = ({ column, ref, onChange, checked, disabled, tableManager }) => {
+const HeaderSelectionCell = ({
+    column,
+    tableManager,
+    ref = tableManager.rowSelectionApi.selectAll.ref,
+    onChange = tableManager.rowSelectionApi.selectAll.onChange,
+    checked = tableManager.rowSelectionApi.selectAll.checked,
+    disabled = tableManager.rowSelectionApi.selectAll.disabled
+}) => {
     const {
         config: { additionalProps: { headerSelectionCell: additionalProps = {} } },
     } = tableManager;
