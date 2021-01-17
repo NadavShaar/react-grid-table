@@ -362,7 +362,7 @@ Each row should have a unique identifier field, which by default is `id`, but it
       "ip_address":"113.75.186.33",
       "last_visited":"12/08/2019"
     },
-    ...
+    ...,
 ]
 ```
 
