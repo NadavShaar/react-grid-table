@@ -214,20 +214,20 @@ export default MyAwesomeTable;
 
 | name | type | description | usage |
 |---|---|---|---|
-| onColumnsChange | function | triggers when the `columns` has been changed | `onColumnsChange={columns => { }}` |
-| onSelectedRowsChange | function | triggers when rows selection has been changed | `selectedRowsIds => { }` |
-| onPageChange | function | triggers when page is changed | `nextPage => { }` |
-| onPageSizeChange | function | triggers when page size is changed | `newPageSize => { }` |
-| onSearchTextChange | function | triggers when search text changed | `searchText => { }` |
-| onSortChange | function | triggers when sort changed | `({colId, isAsc}) => { }` |
-| onRowClick | function | triggers when a row is clicked | `({ rowIndex, data, column, isEdit, event }, tableManager) => { }` |
-| onEditRowIdChange | function | triggers when `rowEditId` changed | `rowEditId => { }` |
-| onLoad | function | triggers when `tableManager` is initialized (<u>[details](#tableManager)</u>) | `tableManager => { }` |
-| onColumnResizeStart | function | triggers when column resize starts | `({event, target, column}) => { }` |
-| onColumnResize | function | triggers when column resize occur | `({event, target, column}) => { }` |
-| onColumnResizeEnd | function | triggers when column resize ended | `({event, target, column}) => { }` |
-| onColumnReorderStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `(sortData, tableManager) => { }` |
-| onColumnReorderEnd | function | triggers on column drop, and only if the column changed its position. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `(sortData, tableManager) => { }` |
+| onColumnsChange | function | triggers when the `columns` has been changed | `onColumnsChange={columns => { ... }}` |
+| onSelectedRowsChange | function | triggers when rows selection has been changed | `onSelectedRowsChange={selectedRowsIds => { ... }}` |
+| onPageChange | function | triggers when page is changed | `onPageChange={nextPage => { ... }}` |
+| onPageSizeChange | function | triggers when page size is changed | `onPageSizeChange={newPageSize => { ... }}` |
+| onSearchTextChange | function | triggers when search text changed | `onSearchTextChange={searchText => { ... }}` |
+| onSortChange | function | triggers when sort changed | `onSortChange={({colId, isAsc}) => { ... }}` |
+| onRowClick | function | triggers when a row is clicked | `onRowClick={({ rowIndex, data, column, isEdit, event }, tableManager) => { ... }}` |
+| onEditRowIdChange | function | triggers when `rowEditId` changed | `onEditRowIdChange={rowEditId => { ... }}` |
+| onLoad | function | triggers when `tableManager` is initialized (<u>[details](#tableManager)</u>) | `onLoad={tableManager => { ... }}` |
+| onColumnResizeStart | function | triggers when column resize starts | `onColumnResizeStart={({event, target, column}) => { ... }}` |
+| onColumnResize | function | triggers when column resize occur | `onColumnResize={({event, target, column}) => { ... }}` |
+| onColumnResizeEnd | function | triggers when column resize ended | `onColumnResizeEnd={({event, target, column}) => { ... }}` |
+| onColumnReorderStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `onColumnReorderStart={(sortData, tableManager) => { ... }}` |
+| onColumnReorderEnd | function | triggers on column drop, and only if the column changed its position. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `onColumnReorderEnd={(sortData, tableManager) => { ... }}` |
 
 ### Async props
 
