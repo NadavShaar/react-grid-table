@@ -382,7 +382,7 @@ The returned value will be used for searching, sorting etc...
 
 This prop gives you the ability to override the internal components with your own custom components.
 
-All components are getting the `tableManager` object ([details](#tableManager)).
+All components are exported so you'll be able to use them from anywhere but you'll be responsible to supply them with their props:
 
 | component | required props | optional props |
 |---|---|---|
