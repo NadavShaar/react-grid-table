@@ -311,7 +311,7 @@ Checkbox column has support for the following properties:
 | name | type | description | default value  |
 |---|---|---|---|
 | id* | 'checkbox' | will generate a rows selction column | --- |
-| pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns | false |
+| pinned | boolean | whether the column will be pinned to the side, **supported only in the first and last columns** | false |
 | visible | boolean | whether to display the column | true |
 | className | string | a custom class for all column cells | "" |
 | width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "max-content" |
