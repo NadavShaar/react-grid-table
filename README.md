@@ -180,8 +180,8 @@ export default MyAwesomeTable;
 | rows | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
 | selectedRowsIds | array of ids | the ids of all selected rows (<u>[details](#checkbox-column)</u>) | [ ] |
 | searchText | string | text for search | "" |
-| getIsRowSelectable | function | a callback function that returns whether row selection for the current row should be disabled or not | `row => true` |
-| getIsRowEditable | function | a callback function that returns whether row editing for the current row should be disabled or not | `row => true` |
+| getIsRowSelectable | function | a callback function that returns whether row selection for the current row should be selectable or disabled | `row => true` |
+| getIsRowEditable | function | a callback function that returns whether row editing for the current row should be allowed or not | `row => true` |
 | editRowId | any | the id of the row that should switch to inline editing mode, (more <u>[details](#Row-Editing)</u> about row editing) | null |
 | page | number | current page number | 1 |
 | pageSize | number | the selected page size | 20 |
