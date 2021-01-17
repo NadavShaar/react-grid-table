@@ -214,7 +214,7 @@ export default MyAwesomeTable;
 
 | name | type | description | usage |
 |---|---|---|---|
-| onColumnsChange | function | triggers when the `columns` has been changed | `columns => { }` |
+| onColumnsChange | function | triggers when the `columns` has been changed | `onColumnsChange={columns => { }}` |
 | onSelectedRowsChange | function | triggers when rows selection has been changed | `selectedRowsIds => { }` |
 | onPageChange | function | triggers when page is changed | `nextPage => { }` |
 | onPageSizeChange | function | triggers when page size is changed | `newPageSize => { }` |
