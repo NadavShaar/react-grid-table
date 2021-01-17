@@ -192,7 +192,7 @@ export default MyAwesomeTable;
 
 | name | type | description | default value |
 |---|---|---|---|
-| rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be unique | 'id' |
+| rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be **unique** | 'id' |
 | minColumnResizeWidth | number | minimum width for all columns (doesn't apply to 'checkbox' column)| 70 |
 | minSearchChars | number | the minimum characters in order to apply search and highlighting | 2 |
 | isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
