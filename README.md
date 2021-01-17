@@ -347,20 +347,23 @@ This prop containes the data for the rows.
 Each row should have a unique identifier field, which by default is `id`, but it can be changed to a different field using the `rowIdField` prop.
 
 ```json
-// row data
+// Example for row data
 
-{
-  "id": "some-unique-id", 
-  "objectValueField": {"x": 1, "y": 2}, 
-  "username":"wotham0",
-  "first_name":"Waldemar",
-  "last_name":"Otham",
-  "avatar":"https://robohash.org/atquenihillaboriosam.bmp?size=32x32&set=set1",
-  "email":"wotham0@skyrock.com",
-  "gender":"Male",
-  "ip_address":"113.75.186.33",
-  "last_visited":"12/08/2019"
-}
+[
+    {
+      "id": "some-unique-id", 
+      "objectValueField": {"x": 1, "y": 2}, 
+      "username":"wotham0",
+      "first_name":"Waldemar",
+      "last_name":"Otham",
+      "avatar":"https://robohash.org/atquenihillaboriosam.bmp?size=32x32&set=set1",
+      "email":"wotham0@skyrock.com",
+      "gender":"Male",
+      "ip_address":"113.75.186.33",
+      "last_visited":"12/08/2019"
+    },
+    ...
+]
 ```
 
 **Note:** If a property value is not of type string, you'll have to use the `getValue` function on the column in order to extract the desired value. 
