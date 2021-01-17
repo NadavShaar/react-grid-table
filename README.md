@@ -193,8 +193,8 @@ export default MyAwesomeTable;
 | name | type | description | default value |
 |---|---|---|---|
 | rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be **unique** | 'id' |
-| minColumnResizeWidth | number | minimum width for all columns (doesn't apply to 'checkbox' column)| 70 |
-| minSearchChars | number | the minimum characters in order to apply search and highlighting | 2 |
+| minColumnResizeWidth | number | minimum width for all columns while resizing (doesn't apply to 'checkbox' column)| 70 |
+| minSearchChars | number | the minimum characters to type before search will apply | 2 |
 | isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
 | isPaginated | boolean | determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
 | enableColumnsReorder | boolean | whether to allow column drag & drop for repositioning | true |
@@ -204,7 +204,7 @@ export default MyAwesomeTable;
 | showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
 | pageSizes | array of numbers | page size options | [20, 50, 100] |
 | isVirtualScroll | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
-| selectAllMode | string | controls the type of "All Selection". Available options are `page` to select / unselect only the page rows, or `all` to select / unselect all rows. If using an async flow, the all option will select all *available* rows, and page option combined with `batchSize`, will select/unselect all *available* rows in the page | 'page' |
+| selectAllMode | string | controls the type of "All Selection". Available options are `page` to select / unselect only the rows in the current page, or `all` to select / unselect all rows in all pages. If using an async flow, the all option will select all *available* rows, and page option combined with `batchSize`, will select/unselect all *available* rows in the page | 'page' |
 | icons | object of nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
 | texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
 | components | object | This prop gives you the ability to override the internal components with your own custom components (see full list of supported [components](#components)) | { } |
