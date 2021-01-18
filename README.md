@@ -569,7 +569,7 @@ API Structure:
 
 | name | type | description | usage |
 |---|---|---|---|
-| sort | object | the sort object holds `colId` for the id of the column that should be sorted or `null` to reset the sort, and `isAsc` that defines the sort direction | --- |
+| sort | object | the sort object holds `colId` for the id of the column that should be sorted or `null` when there is no sort, and `isAsc` that defines the sort direction | --- |
 | setSort | function | updates the sort object | `setSort({colId: 5, isAsc: false})` |
 | sortRows | function | sorts rows based on the selected direction using the sort method defined on the column | `sortRows(rows)` |
 | toggleSort | function | toggles a column's sort steps from ascending, to descending and to none | `toggleSort(column.id)` |
@@ -606,7 +606,7 @@ API Structure:
 | selectAll.disabled | boolean | whether the select all button should be disabled because there are no selectable rows that match the selectAll.mode | --- |
 | selectAll.checked | boolean | whether all the rows that match the selectAll.mode are selected | --- |
 | selectAll.indeterminate | boolean | whether only some of the rows that match the selectAll.mode are selected | --- |
-| selectAll.onChange | function | selects/unselects all rows that match the selectAll.mode | --- |
+| selectAll.onChange | function | selects/unselects all rows that match the selectAll.mode | `selectAll.onChange()` |
 | selectAll.ref | ref | a ref that can be added to the select all checkbox to enable auto setting of indeterminate state | --- |
 
 ### rowEditApi
