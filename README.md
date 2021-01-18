@@ -516,9 +516,9 @@ API Structure:
 
 | name | type | description | default value |
 |---|---|---|---|
-| rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be unique | 'id' |
-| minColumnResizeWidth | number | the minimum width of a column | 70 |
-| minSearchChars | number | the minimum characters in order to apply search and highlighting | 2 |
+| rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be **unique** | 'id' |
+| minColumnResizeWidth | number | minimum width for all columns while resizing (doesn't apply to 'checkbox' column) | 70 |
+| minSearchChars | number | the minimum characters to type before search will apply | 2 |
 | isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
 | isPaginated | boolean | 	determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
 | enableColumnsReorder | boolean | whether to allow column drag & drop for repositioning | true |
@@ -548,7 +548,7 @@ API Structure:
 |---|---|---|---|
 | columns | array | columns configuration | --- |
 | visibleColumns | array | the columns that are visible | --- |
-| setColumns | function | updates the columns | setColumns(columns) |
+| setColumns | function | updates the columns | ```jsx setColumns(columns)``` |
 
 ### columnsVisibilityApi
 
@@ -569,7 +569,7 @@ API Structure:
 
 | name | type | description | usage |
 |---|---|---|---|
-| sort | object | the sort object holds `colId` for the id of the column that should be sorted, and `isAsc` that defines the sort direction | --- |
+| sort | object | the sort object holds `colId` for the id of the column that should be sorted or `null` to reset the sort, and `isAsc` that defines the sort direction | --- |
 | setSort | function | updates the sort object | setSort({colId: 5, isAsc: false}) |
 | sortRows | function | sorts rows based on the selected direction using the sort method defined on the column | sortRows(rows) |
 | toggleSort | function | toggles a column's sort steps from ascending, to descending and to none | toggleSort(column.id) |
