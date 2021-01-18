@@ -548,49 +548,49 @@ API Structure:
 |---|---|---|---|
 | columns | array | columns configuration | --- |
 | visibleColumns | array | the columns that are visible | --- |
-| setColumns | function | updates the columns | ```jsx setColumns(columns)``` |
+| setColumns | function | updates the columns | `setColumns(columns)` |
 
 ### columnsVisibilityApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| toggleColumnVisibility | function | toggles a column's visibility by its `id` | toggleColumnVisibility(column.id) |
+| toggleColumnVisibility | function | toggles a column's visibility by its `id` | `toggleColumnVisibility(column.id)` |
 
 ### searchApi
 
 | name | type | description | usage |
 |---|---|---|---|
 | searchText | string | text for search | --- |
-| setSearchText | function | updates the search text | setSearchText('hello') |
-| searchRows | function | filters rows based on the search text, using the search method defined on the columns | searchRows(rows) |
-| valuePassesSearch | function | returns true if a value passes the search for a certain column | valuePassesSearch('hello', column) |
+| setSearchText | function | updates the search text | `setSearchText('hello')` |
+| searchRows | function | filters rows based on the search text, using the search method defined on the columns | `searchRows(rows)` |
+| valuePassesSearch | function | returns true if a value passes the search for a certain column | `valuePassesSearch('hello', column)` |
 
 ### sortApi
 
 | name | type | description | usage |
 |---|---|---|---|
 | sort | object | the sort object holds `colId` for the id of the column that should be sorted or `null` to reset the sort, and `isAsc` that defines the sort direction | --- |
-| setSort | function | updates the sort object | setSort({colId: 5, isAsc: false}) |
-| sortRows | function | sorts rows based on the selected direction using the sort method defined on the column | sortRows(rows) |
-| toggleSort | function | toggles a column's sort steps from ascending, to descending and to none | toggleSort(column.id) |
+| setSort | function | updates the sort object | `setSort({colId: 5, isAsc: false})` |
+| sortRows | function | sorts rows based on the selected direction using the sort method defined on the column | `sortRows(rows)` |
+| toggleSort | function | toggles a column's sort steps from ascending, to descending and to none | `toggleSort(column.id)` |
 
 ### rowsApi
 
 | name | type | description | usage |
 |---|---|---|---|
 | rows | array | the rows | --- |
-| setRows | function | updates the rows | setRows(rows) |
+| setRows | function | updates the rows | `setRows(rows)` |
 | totalRows | number | the total number of rows | --- |
-| setTotalRows | function | updates the total number of rows | setTotalRows(1000) |
+| setTotalRows | function | updates the total number of rows | `setTotalRows(1000)` |
 
 ### paginationApi
 
 | name | type | description | usage |
 |---|---|---|---|
 | page | number | the current page number | --- |
-| setPage | function | updates the page number | setPage(3) |
+| setPage | function | updates the page number | `setPage(3)` |
 | pageSize | number | the selected page size | --- |
-| setPageSize | function | updates the page size | setPageSize(20) |
+| setPageSize | function | updates the page size | `setPageSize(20)` |
 | pageRows | array | the rows in the current page | --- |
 | totalPages | number | the total number of pages | --- |
 
@@ -599,9 +599,9 @@ API Structure:
 | name | type | description | usage |
 |---|---|---|---|
 | selectedRowsIds | array of ids | the ids of all selected rows | --- |
-| setSelectedRowsIds | function | updates the selected rows | setSelectedRowsIds([1,3,5]) |
-| toggleRowSelection | function | toggles selection of a row by its `id` | toggleRowSelection(row.id) |
-| getIsRowSelectable | function | determains whether a row can be selected | getIsRowSelectable(row.id) |
+| setSelectedRowsIds | function | updates the selected rows | `setSelectedRowsIds([1,3,5])` |
+| toggleRowSelection | function | toggles selection of a row by its `id` | `toggleRowSelection(row.id)` |
+| getIsRowSelectable | function | determains whether a row can be selected | `getIsRowSelectable(row.id)` |
 | selectAll.mode | string | the type of select all, possible modes are `page` which only handles selection of the page rows, or `all` which handles selection of all rows. If using an async flow, all mode will handle selection of all *available* rows, and page mode with a controlled `batchSize`, will handle selection of all *available* rows in the page | --- |
 | selectAll.disabled | boolean | whether the select all button should be disabled because there are no selectable rows that match the selectAll.mode | --- |
 | selectAll.checked | boolean | whether all the rows that match the selectAll.mode are selected | --- |
@@ -615,9 +615,9 @@ API Structure:
 |---|---|---|---|
 | editRow | object | the row's data that is currently being edited | --- |
 | editRowId | any | the id of the row that is currently being edited | --- |
-| getIsRowEditable | function | determains whether a row can be edited | getIsRowEditable(row) |
-| setEditRow | function | updates the row's data of the currently edited row | setEditRow(row) |
-| setEditRowId | function | updates the row id of the currently edited row, you can pass `null` to switch back from edit mode | setEditRowId(row.id) |
+| getIsRowEditable | function | determains whether a row can be edited | `getIsRowEditable(row)` |
+| setEditRow | function | updates the row's data of the currently edited row | `setEditRow(row)` |
+| setEditRowId | function | updates the row id of the currently edited row, you can pass `null` to switch back from edit mode | `setEditRowId(row.id)` |
 
 ### rowVirtualizer
 
