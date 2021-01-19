@@ -924,4 +924,4 @@ Styling is done by css classes that can be easily overridden. the table's compon
 
 ## License
 
- © [NadavShaar](https://github.com/NadavShaar)
+ © [MIT](https://github.com/NadavShaar/react-grid-table/blob/main/LICENSE)
