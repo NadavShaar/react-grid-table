@@ -32,7 +32,7 @@ const styles = {
         textOverflow: 'ellipsis'
     }
 }
-const UsernameCell = ({tableManager, value, onChange, isEdit, data, column, rowIndex, searchText}) => {
+const UsernameCell = ({tableManager, value, onChange, isEdit, data, column, rowIndex, searchText, isFirstEditableCell}) => {
 
     return (
         <div style={styles.root}>
@@ -41,7 +41,7 @@ const UsernameCell = ({tableManager, value, onChange, isEdit, data, column, rowI
                     <React.Fragment>
                         <img style={styles.img} src={data.avatar} alt="avatar" />    
                         <input
-                            autoFocus 
+                            autoFocus={isFirstEditableCell} 
                             style={styles.input} 
                             type="text" 
                             value={value} 
