@@ -509,7 +509,7 @@ API Structure:
 - [**paginationApi:**](#paginationApi) API of the pagination.
 - [**rowSelectionApi:**](#rowSelectionApi) API of the rows selection.
 - [**rowEditApi:**](#rowEditApi) API of the row editing.
-- **rowVirtualizer:** API of the rows virtualizer (See full documentation at https://github.com/tannerlinsley/react-virtual).
+- **rowVirtualizer:** API of the rows virtualizer (See full documentation at [react-virtual](https://github.com/tannerlinsley/react-virtual)).
 - [**asyncApi:**](#asyncApi) API of the async functionality.
 
 ### config
