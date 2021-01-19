@@ -509,7 +509,7 @@ API Structure:
 - [**paginationApi:**](#paginationApi) API of the pagination.
 - [**rowSelectionApi:**](#rowSelectionApi) API of the rows selection.
 - [**rowEditApi:**](#rowEditApi) API of the row editing.
-- [**rowVirtualizer:**](#rowVirtualizer) API of the rows virtualizer.
+- **rowVirtualizer:** API of the rows virtualizer (See full documentation at https://github.com/tannerlinsley/react-virtual).
 - [**asyncApi:**](#asyncApi) API of the async functionality.
 
 ### config
@@ -618,10 +618,6 @@ API Structure:
 | getIsRowEditable | function | determains whether a row can be edited | `getIsRowEditable(row)` |
 | setEditRow | function | updates the row's data of the currently edited row | `setEditRow(row)` |
 | setEditRowId | function | updates the row id of the currently edited row, you can pass `null` to switch back from edit mode | `setEditRowId(row.id)` |
-
-### rowVirtualizer
-
-See full documentation at https://github.com/tannerlinsley/react-virtual
 
 ### asyncApi
 
