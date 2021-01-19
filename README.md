@@ -26,7 +26,7 @@
 
 <!-- ![rgt](https://user-images.githubusercontent.com/8030614/98936396-945e7700-24ed-11eb-9485-83586d7b1df8.gif) -->
 <!-- ![rgt](https://user-images.githubusercontent.com/8030614/98937518-2adf6800-24ef-11eb-8040-4629dbb4754d.gif) -->
-![Demo](https://user-images.githubusercontent.com/8030614/105104490-08536780-5abb-11eb-9102-0d92820b6b39.gif)
+![Demo](https://user-images.githubusercontent.com/8030614/105105087-0fc74080-5abc-11eb-83c0-84bc4433d134.gif)
 
 ## Install
 Not published yet!
