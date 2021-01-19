@@ -14,8 +14,8 @@ const TableControllers = ({ controllers }) => {
                 <input type='text' value={controllers.searchText[0]} onChange={e => controllers.searchText[1](e.target.value)} />
             </ControllerWrappper>
             <ControllerWrappper label='Sort By'>
-                <select value={controllers.sort[0].colId} onChange={e => controllers.sort[1]({ ...controllers.sort[0], colId: e.target.value, isAsc: e.target.value === 'null' ? false : true })}>
-                    <option value={''}>None</option>
+                <select value={controllers.sort[0].colId || 'null'} onChange={e => controllers.sort[1]({ ...controllers.sort[0], colId: e.target.value === 'null' ? null : e.target.value, isAsc: e.target.value })}>
+                    <option value={'null'}>None</option>
                     {controllers.columns[0].filter(c => (c.sortable !== false) && (c.id !== 'checkbox')).map(c => {
                         return (
                             <option key={c.id} value={c.id}>{c.label}</option>

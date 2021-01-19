@@ -13,7 +13,7 @@ const MyAwesomeTable = () => {
     const [editRowId, setEditRowId] = useState(null);
     let [searchText, setSearchText] = useState('');
     let [selectedRowsIds, setSelectedRowsIds] = useState([]);
-    let [sort, setSort] = useState({ colId: '', isAsc: true });
+    let [sort, setSort] = useState({ colId: null, isAsc: true });
     let [page, setPage] = useState(1);
     let [pageSize, setPageSize] = useState(20);
     let [pageSizes, setPageSizes] = useState([20, 50, 100]);

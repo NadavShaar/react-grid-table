@@ -151,6 +151,8 @@ export default MyAwesomeTable;
 - [The `columns` prop](#columns)
 - [The `checkbox` column](#checkbox-column)
 - [The `rows` prop](#rows)
+- [The `components` prop](#components)
+- [The `additionalProps` prop](#additionalProps)
 - [The `tableManager` API](#tableManager)
 - [How-To: Sync/Async](#syncasync)
 - [How-To: Row-Editing](#row-editing)
@@ -178,8 +180,8 @@ export default MyAwesomeTable;
 | rows | array of objects | rows data (<u>[details](#rows)</u>) | [ ] |
 | selectedRowsIds | array of ids | the ids of all selected rows (<u>[details](#checkbox-column)</u>) | [ ] |
 | searchText | string | text for search | "" |
-| getIsRowSelectable | function | a callback function that returns whether row selection for the current row should be disabled or not | `row => true` |
-| getIsRowEditable | function | a callback function that returns whether row editing for the current row should be disabled or not | `row => true` |
+| getIsRowSelectable | function | a callback function that returns whether row selection for the current row should be selectable or disabled | `row => true` |
+| getIsRowEditable | function | a callback function that returns whether row editing for the current row should be allowed or not | `row => true` |
 | editRowId | any | the id of the row that should switch to inline editing mode, (more <u>[details](#Row-Editing)</u> about row editing) | null |
 | page | number | current page number | 1 |
 | pageSize | number | the selected page size | 20 |
@@ -190,9 +192,9 @@ export default MyAwesomeTable;
 
 | name | type | description | default value |
 |---|---|---|---|
-| rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be unique | 'id' |
-| minColumnResizeWidth | number | minimum width for all columns (doesn't apply to 'checkbox' column)| 70 |
-| minSearchChars | number | the minimum characters in order to apply search and highlighting | 2 |
+| rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be **unique** | 'id' |
+| minColumnResizeWidth | number | minimum width for all columns while resizing (doesn't apply to 'checkbox' column)| 70 |
+| minSearchChars | number | the minimum characters to type before search will apply | 2 |
 | isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
 | isPaginated | boolean | determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
 | enableColumnsReorder | boolean | whether to allow column drag & drop for repositioning | true |
@@ -202,30 +204,30 @@ export default MyAwesomeTable;
 | showColumnVisibilityManager | boolean | whether to display the columns visibility management button (located at the top right of the header) | true |
 | pageSizes | array of numbers | page size options | [20, 50, 100] |
 | isVirtualScroll | boolean | whether to render items in a virtual scroll to enhance performance (useful when you have lots of rows in a page) | true |
-| selectAllMode | string | controls the type of "All Selection". Available options are `page` to select / unselect only the page rows, or `all` to select / unselect all rows. If using an async flow, the all option will select all *available* rows, and page option combined with `batchSize`, will select/unselect all *available* rows in the page | 'page' |
+| selectAllMode | string | controls the type of "All Selection". Available options are `page` to select / unselect only the rows in the current page, or `all` to select / unselect all rows in all pages. If using an async flow, the `all` option will select all *available* rows, and the `page` option combined with `batchSize`, will select/unselect all *available* rows in the page | 'page' |
 | icons | object of nodes | custom icons config | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
 | texts | object | config for all UI text, useful for translations or to customize the text | { search: 'Search:', totalRows: 'Total rows:', rows: 'Rows:', selected: 'Selected', rowsPerPage: 'Rows per page:', page: 'Page:', of: 'of', prev: 'Prev', next: 'Next', columnVisibility: 'Column visibility' } |
-| components | object | This prop gives you the ability to override the internal components with your own custom components (see full list of supported [components](#components)) | { } |
+| components | object | This prop gives you the ability to override the internal components with your own custom components (see full list of supported [components](#components)) | { [Default components](#components) } |
 | additionalProps | object | This prop gives you the ability to pass props to the table's components/modules (see full list of supported [additionalProps](#additionalProps)) | `additionalProps={{ header: { ... } }}` |
 
 ### Event props
 
 | name | type | description | usage |
 |---|---|---|---|
-| onColumnsChange | function | triggers when the `columns` has been changed | `columns => { }` |
-| onSelectedRowsChange | function | triggers when rows selection has been changed | `selectedRowsIds => { }` |
-| onPageChange | function | triggers when page is changed | `nextPage => { }` |
-| onPageSizeChange | function | triggers when page size is changed | `newPageSize => { }` |
-| onSearchTextChange | function | triggers when search text changed | `searchText => { }` |
-| onSortChange | function | triggers when sort changed | `({colId, isAsc}) => { }` |
-| onRowClick | function | triggers when a row is clicked | `({ rowIndex, data, column, isEdit, event }, tableManager) => { }` |
-| onEditRowIdChange | function | triggers when `rowEditId` changed | `rowEditId => { }` |
-| onLoad | function | triggers when `tableManager` is initialized (<u>[details](#tableManager)</u>) | `tableManager => { }` |
-| onColumnResizeStart | function | triggers when column resize starts | `({event, target, column}) => { }` |
-| onColumnResize | function | triggers when column resize occur | `({event, target, column}) => { }` |
-| onColumnResizeEnd | function | triggers when column resize ended | `({event, target, column}) => { }` |
-| onColumnReorderStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `(sortData, tableManager) => { }` |
-| onColumnReorderEnd | function | triggers on column drop, and only if the column changed its position. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `(sortData, tableManager) => { }` |
+| onColumnsChange | function | triggers when the `columns` has been changed | `columns => { ... }` |
+| onSelectedRowsChange | function | triggers when rows selection has been changed | `selectedRowsIds => { ... }` |
+| onPageChange | function | triggers when page is changed | `nextPage => { ... }` |
+| onPageSizeChange | function | triggers when page size is changed | `newPageSize => { ... }` |
+| onSearchTextChange | function | triggers when search text changed | `searchText => { ... }` |
+| onSortChange | function | triggers when sort changed | `({colId, isAsc}) => { ... }` |
+| onRowClick | function | triggers when a row is clicked | `({ rowIndex, data, column, isEdit, event }, tableManager) => { ... }` |
+| onEditRowIdChange | function | triggers when `rowEditId` changed | `rowEditId => { ... }` |
+| onLoad | function | triggers when `tableManager` is initialized (<u>[details](#tableManager)</u>) | `tableManager => { ... }` |
+| onColumnResizeStart | function | triggers when column resize starts | `({event, target, column}) => { ... }` |
+| onColumnResize | function | triggers when column resize occur | `({event, target, column}) => { ... }` |
+| onColumnResizeEnd | function | triggers when column resize ended | `({event, target, column}) => { ... }` |
+| onColumnReorderStart | function | triggers on column drag. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortStart` prop | `(sortData, tableManager) => { ... }` |
+| onColumnReorderEnd | function | triggers on column drop, and only if the column changed its position. the sort data supplied by [react-sortable-hoc](https://github.com/clauderic/react-sortable-hoc) using the `onSortEnd` prop | `(sortData, tableManager) => { ... }` |
 
 ### Async props
 
@@ -253,7 +255,7 @@ Each column (except for '[checkbox](#checkbox-column)' column) has support for t
 | id* | any | a unique identifier for the column, setting it to 'checkbox' will generate a rows selction column (more [details](#checkbox-column) about checkbox column)  | --- |
 | field | string | the name of the field as in the row data | --- |
 | label | string | the label to display in the header cell | the `field` property |
-| pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns | false |
+| pinned | boolean | whether the column will be pinned to the side, **supported only in the first and last columns** | false |
 | visible | boolean | whether to display the column | true |
 | className | string | a custom class selector for all column cells | "" |
 | width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "200px" |
@@ -309,7 +311,7 @@ Checkbox column has support for the following properties:
 | name | type | description | default value  |
 |---|---|---|---|
 | id* | 'checkbox' | will generate a rows selction column | --- |
-| pinned | boolean | whether the column will be pinned to the side, supported only in the first and last columns | false |
+| pinned | boolean | whether the column will be pinned to the side, **supported only in the first and last columns** | false |
 | visible | boolean | whether to display the column | true |
 | className | string | a custom class for all column cells | "" |
 | width | string | the initial width of the column in grid values (full list of [values](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns)) | "max-content" |
@@ -345,7 +347,7 @@ This prop containes the data for the rows.
 Each row should have a unique identifier field, which by default is `id`, but it can be changed to a different field using the `rowIdField` prop.
 
 ```json
-// row data
+// Example for a single row data
 
 {
   "id": "some-unique-id", 
@@ -380,31 +382,25 @@ The returned value will be used for searching, sorting etc...
 
 This prop gives you the ability to override the internal components with your own custom components.
 
-All components are getting the `tableManager` object ([details](#tableManager)).
+All components are exported so you'll be able to import them from anywhere but you'll be responsible to supply them with their props:
 
-**Example**
-Overriding the Loader component:
-```JSX
-components={{ Loader: CustomLoader }}
-```
-
-**Overridable components**
-
-- Header - props: tableManager
-- Search - props: tableManager, value, onChange
-- ColumnVisibility - props: tableManager, columns, onChange
-- HeaderCell - props: tableManager, column
-- HeaderSelectionCell - props: tableManager, column, ref, onChange, checked, disabled
-- Cell - props: tableManager, value
-- EditorCell - props: tableManager, value, data, column, colIndex, rowIndex, onChange
-- SelectionCell - props: tableManager, value, disabled, onChange
-- PlaceHolderCell - props: tableManager
-- Loader - props: tableManager
-- NoResults - props: tableManager
-- Footer - props: tableManager
-- Information - props: tableManager, totalCount, pageSize, pageCount, selectedCount
-- PageSize - props: tableManager, value, onChange, options
-- Pagination - props: tableManager, page, onChange
+| component | required props | optional props |
+|---|---|---|
+| Header | `tableManager` | --- |
+| Search | `tableManager` | `value` `onChange` |
+| ColumnVisibility | `tableManager` | `columns` `onChange` |
+| HeaderCell | `tableManager` | `column` |
+| HeaderSelectionCell | `tableManager` | `column` `ref` `onChange` `checked` `disabled` |
+| Cell | `tableManager` | `value` |
+| EditorCell | `tableManager` | `value` `data` `column` `colIndex` `rowIndex` `onChange` |
+| SelectionCell | `tableManager` | `value` `disabled` `onChange` |
+| PlaceHolderCell | `tableManager` | --- |
+| Loader | `tableManager` | --- |
+| NoResults | `tableManager` | --- |
+| Footer | `tableManager` | --- |
+| Information | `tableManager` | `totalCount` `pageSize` `pageCount` `selectedCount` |
+| PageSize | `tableManager` | `value` `onChange` `options` |
+| Pagination | `tableManager` | `page` `onChange` |
 
 **Example: Overriding the header component**
 
@@ -503,26 +499,26 @@ API Structure:
 - **isInitialized:** Is the table initialized. Will be set to true once all components are initialized.
 - **mode:** 'sync' or 'async', derived from the supplied props.
 - **isLoading:** Is the table currently loading data.
-- **config:** All the params that defines the table's user-interface and its behavior.
-- **refs:** ref objects for selected elements.
-- **columnsApi:** API of the columns.
-- **columnsVisibilityApi:** API of the columns visibility.
-- **searchApi:** API of the search.
-- **sortApi:** API of the sort.
-- **rowsApi:** API of the rows
-- **paginationApi:** API of the pagination.
-- **rowSelectionApi:** API of the rows selection.
-- **rowEditApi:** API of the row editing.
-- **rowVirtualizer:** API of the rows virtualizer.
-- **asyncApi:** API of the async functionality.
+- [**config:**](#config) All the params that defines the table's user-interface and its behavior.
+- [**refs:**](#refs) ref objects for selected elements.
+- [**columnsApi:**](#columnsApi) API of the columns.
+- [**columnsVisibilityApi:**](#columnsVisibilityApi) API of the columns visibility.
+- [**searchApi:**](#searchApi) API of the search.
+- [**sortApi:**](#sortApi) API of the sort.
+- [**rowsApi:**](#rowsApi) API of the rows
+- [**paginationApi:**](#paginationApi) API of the pagination.
+- [**rowSelectionApi:**](#rowSelectionApi) API of the rows selection.
+- [**rowEditApi:**](#rowEditApi) API of the row editing.
+- [**rowVirtualizer:**](#rowVirtualizer) API of the rows virtualizer.
+- [**asyncApi:**](#asyncApi) API of the async functionality.
 
 ### config
 
 | name | type | description | default value |
 |---|---|---|---|
-| rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be unique | 'id' |
-| minColumnResizeWidth | number | the minimum width of a column | 70 |
-| minSearchChars | number | the minimum characters in order to apply search and highlighting | 2 |
+| rowIdField | string | the name of the field in the row's data that should be used as the row identifier - must be **unique** | 'id' |
+| minColumnResizeWidth | number | minimum width for all columns while resizing (doesn't apply to 'checkbox' column) | 70 |
+| minSearchChars | number | the minimum characters to type before search will apply | 2 |
 | isHeaderSticky | boolean | whether the table header cells will stick to the top when scrolling, or not | true |
 | isPaginated | boolean | 	determine whether the pagination controls sholuld be shown in the footer and if the rows data should split into pages | true |
 | enableColumnsReorder | boolean | whether to allow column drag & drop for repositioning | true |
@@ -552,49 +548,49 @@ API Structure:
 |---|---|---|---|
 | columns | array | columns configuration | --- |
 | visibleColumns | array | the columns that are visible | --- |
-| setColumns | function | updates the columns | setColumns(columns) |
+| setColumns | function | updates the columns | `setColumns(columns)` |
 
 ### columnsVisibilityApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| toggleColumnVisibility | function | toggles a column's visibility by its `id` | toggleColumnVisibility(column.id) |
+| toggleColumnVisibility | function | toggles a column's visibility by its `id` | `toggleColumnVisibility(column.id)` |
 
 ### searchApi
 
 | name | type | description | usage |
 |---|---|---|---|
 | searchText | string | text for search | --- |
-| setSearchText | function | updates the search text | setSearchText('hello') |
-| searchRows | function | filters rows based on the search text, using the search method defined on the columns | searchRows(rows) |
-| valuePassesSearch | function | returns true if a value passes the search for a certain column | valuePassesSearch('hello', column) |
+| setSearchText | function | updates the search text | `setSearchText('hello')` |
+| searchRows | function | filters rows based on the search text, using the search method defined on the columns | `searchRows(rows)` |
+| valuePassesSearch | function | returns true if a value passes the search for a certain column | `valuePassesSearch('hello', column)` |
 
 ### sortApi
 
 | name | type | description | usage |
 |---|---|---|---|
-| sort | object | the sort object holds `colId` for the id of the column that should be sorted, and `isAsc` that defines the sort direction | --- |
-| setSort | function | updates the sort object | setSort({colId: 5, isAsc: false}) |
-| sortRows | function | sorts rows based on the selected direction using the sort method defined on the column | sortRows(rows) |
-| toggleSort | function | toggles a column's sort steps from ascending, to descending and to none | toggleSort(column.id) |
+| sort | object | the sort object holds `colId` for the id of the column that should be sorted or `null` when there is no sort, and `isAsc` that defines the sort direction | --- |
+| setSort | function | updates the sort object | `setSort({colId: 5, isAsc: false})` |
+| sortRows | function | sorts rows based on the selected direction using the sort method defined on the column | `sortRows(rows)` |
+| toggleSort | function | toggles a column's sort steps from ascending, to descending and to none | `toggleSort(column.id)` |
 
 ### rowsApi
 
 | name | type | description | usage |
 |---|---|---|---|
 | rows | array | the rows | --- |
-| setRows | function | updates the rows | setRows(rows) |
+| setRows | function | updates the rows | `setRows(rows)` |
 | totalRows | number | the total number of rows | --- |
-| setTotalRows | function | updates the total number of rows | setTotalRows(1000) |
+| setTotalRows | function | updates the total number of rows | `setTotalRows(1000)` |
 
 ### paginationApi
 
 | name | type | description | usage |
 |---|---|---|---|
 | page | number | the current page number | --- |
-| setPage | function | updates the page number | setPage(3) |
+| setPage | function | updates the page number | `setPage(3)` |
 | pageSize | number | the selected page size | --- |
-| setPageSize | function | updates the page size | setPageSize(20) |
+| setPageSize | function | updates the page size | `setPageSize(20)` |
 | pageRows | array | the rows in the current page | --- |
 | totalPages | number | the total number of pages | --- |
 
@@ -603,14 +599,14 @@ API Structure:
 | name | type | description | usage |
 |---|---|---|---|
 | selectedRowsIds | array of ids | the ids of all selected rows | --- |
-| setSelectedRowsIds | function | updates the selected rows | setSelectedRowsIds([1,3,5]) |
-| toggleRowSelection | function | toggles selection of a row by its `id` | toggleRowSelection(row.id) |
-| getIsRowSelectable | function | determains whether a row can be selected | getIsRowSelectable(row.id) |
+| setSelectedRowsIds | function | updates the selected rows | `setSelectedRowsIds([1,3,5])` |
+| toggleRowSelection | function | toggles selection of a row by its `id` | `toggleRowSelection(row.id)` |
+| getIsRowSelectable | function | determains whether a row can be selected | `getIsRowSelectable(row.id)` |
 | selectAll.mode | string | the type of select all, possible modes are `page` which only handles selection of the page rows, or `all` which handles selection of all rows. If using an async flow, all mode will handle selection of all *available* rows, and page mode with a controlled `batchSize`, will handle selection of all *available* rows in the page | --- |
 | selectAll.disabled | boolean | whether the select all button should be disabled because there are no selectable rows that match the selectAll.mode | --- |
 | selectAll.checked | boolean | whether all the rows that match the selectAll.mode are selected | --- |
 | selectAll.indeterminate | boolean | whether only some of the rows that match the selectAll.mode are selected | --- |
-| selectAll.onChange | function | selects/unselects all rows that match the selectAll.mode | --- |
+| selectAll.onChange | function | selects/unselects all rows that match the selectAll.mode | `selectAll.onChange()` |
 | selectAll.ref | ref | a ref that can be added to the select all checkbox to enable auto setting of indeterminate state | --- |
 
 ### rowEditApi
@@ -619,9 +615,9 @@ API Structure:
 |---|---|---|---|
 | editRow | object | the row's data that is currently being edited | --- |
 | editRowId | any | the id of the row that is currently being edited | --- |
-| getIsRowEditable | function | determains whether a row can be edited | getIsRowEditable(row) |
-| setEditRow | function | updates the row's data of the currently edited row | setEditRow(row) |
-| setEditRowId | function | updates the row id of the currently edited row, you can pass `null` to switch back from edit mode | setEditRowId(row.id) |
+| getIsRowEditable | function | determains whether a row can be edited | `getIsRowEditable(row)` |
+| setEditRow | function | updates the row's data of the currently edited row | `setEditRow(row)` |
+| setEditRowId | function | updates the row id of the currently edited row, you can pass `null` to switch back from edit mode | `setEditRowId(row.id)` |
 
 ### rowVirtualizer
 
