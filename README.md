@@ -24,8 +24,8 @@
 
 <!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
 
-<!-- ![rgt](https://user-images.githubusercontent.com/8030614/98936396-945e7700-24ed-11eb-9485-83586d7b1df8.gif) -->
-![rgt](https://user-images.githubusercontent.com/8030614/98937518-2adf6800-24ef-11eb-8040-4629dbb4754d.gif)
+![Demo](https://user-images.githubusercontent.com/8030614/105105698-46518b00-5abd-11eb-82b2-cdd8bf89ee54.gif)
+<!-- ![Demo](https://user-images.githubusercontent.com/8030614/105105087-0fc74080-5abc-11eb-83c0-84bc4433d134.gif) -->
 
 ## Install
 Not published yet!
@@ -509,7 +509,7 @@ API Structure:
 - [**paginationApi:**](#paginationApi) API of the pagination.
 - [**rowSelectionApi:**](#rowSelectionApi) API of the rows selection.
 - [**rowEditApi:**](#rowEditApi) API of the row editing.
-- [**rowVirtualizer:**](#rowVirtualizer) API of the rows virtualizer.
+- **rowVirtualizer:** API of the rows virtualizer (See full documentation at [**react-virtual**](https://github.com/tannerlinsley/react-virtual)).
 - [**asyncApi:**](#asyncApi) API of the async functionality.
 
 ### config
@@ -618,10 +618,6 @@ API Structure:
 | getIsRowEditable | function | determains whether a row can be edited | `getIsRowEditable(row)` |
 | setEditRow | function | updates the row's data of the currently edited row | `setEditRow(row)` |
 | setEditRowId | function | updates the row id of the currently edited row, you can pass `null` to switch back from edit mode | `setEditRowId(row.id)` |
-
-### rowVirtualizer
-
-See full documentation at https://github.com/tannerlinsley/react-virtual
 
 ### asyncApi
 
@@ -928,4 +924,4 @@ Styling is done by css classes that can be easily overridden. the table's compon
 
 ## License
 
- © [NadavShaar](https://github.com/NadavShaar)
+ © [MIT](https://github.com/NadavShaar/react-grid-table/blob/main/LICENSE)
