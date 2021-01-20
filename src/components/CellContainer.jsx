@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { getHighlightedText } from '../utils';
 
 const CellContainer = ({
@@ -84,6 +84,7 @@ const CellContainer = ({
     let value = getValue();
 
     let cellProps = { tableManager, value, data, column, colIndex, rowIndex };
+    const isFirstEditableCell = useMemo(() => visibleColumns.findIndex(visibleColumn => visibleColumn.id !== 'checkbox' && visibleColumn.editable !== false) === colIndex, [visibleColumns, colIndex]);
 
     return (
         <div
@@ -111,7 +112,7 @@ const CellContainer = ({
                             column.placeHolderRenderer(cellProps)
                             :
                             column.editable && isEdit ?
-                                column.editorCellRenderer({ ...cellProps, onChange: setEditRow })
+                                column.editorCellRenderer({ ...cellProps, onChange: setEditRow, isFirstEditableCell })
                                 :
                                 column.cellRenderer(cellProps)
             }
