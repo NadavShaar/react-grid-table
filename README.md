@@ -28,12 +28,11 @@
 <!-- ![Demo](https://user-images.githubusercontent.com/8030614/105105087-0fc74080-5abc-11eb-83c0-84bc4433d134.gif) -->
 
 ## Install
-Not published yet!
-<!--
+
 ```bash
-npm install --save @nadavshaar/react-grid-table
+npm i @nadavshaar/react-grid-table
 ```
--->
+
 ## Usage
 By default, the table is fully featured even with just a basic configuration of rows and columns.
 
