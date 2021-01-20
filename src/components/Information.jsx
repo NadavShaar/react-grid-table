@@ -27,7 +27,7 @@ const Information = ({
 
     return (
         <div {...additionalProps} className={classNames}>
-            { totalRowsText} { totalCount} { isPaginated ? `| ${rowsText} ${pageSize * (page - 1)} - ${pageSize * (page - 1) + pageCount}` : ''} { tableHasSelection ? <React.Fragment>{`| ${selectedCount} ${selectedText}`}{selectedCount ? <span className="rgt-footer-clear-selection-button rgt-clickable" onClick={e => setSelectedRowsIds([])}>{ clearSelectionIcon }</span> : null}</React.Fragment> : ''}
+            { totalRowsText} { totalCount} { !isPaginated ? '' : `| ${rowsText} ${!pageCount ? '0' : `${pageSize * (page - 1) + 1} - ${pageSize * (page - 1) + pageCount}`}`} { tableHasSelection ? <React.Fragment>{`| ${selectedCount} ${selectedText}`}{selectedCount ? <span className="rgt-footer-clear-selection-button rgt-clickable" onClick={e => setSelectedRowsIds([])}>{ clearSelectionIcon }</span> : null}</React.Fragment> : ''}
         </div>
     )
 };
