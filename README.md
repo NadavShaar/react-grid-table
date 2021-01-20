@@ -24,8 +24,7 @@
 
 <!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
 
-![Demo](https://user-images.githubusercontent.com/8030614/105105698-46518b00-5abd-11eb-82b2-cdd8bf89ee54.gif)
-<!-- ![Demo](https://user-images.githubusercontent.com/8030614/105105087-0fc74080-5abc-11eb-83c0-84bc4433d134.gif) -->
+![Demo](https://user-images.githubusercontent.com/8030614/105251406-16b98600-5b84-11eb-849e-77f43d9dd476.gif)
 
 ## Install
 
