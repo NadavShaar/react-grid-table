@@ -280,7 +280,7 @@ Each column (except for '[checkbox](#checkbox-column)' column) has support for t
   label: 'First Name',
   className: '',
   pinned: false,
-  width: 'max-content',
+  width: '200px',
   getValue: ({value, column}) => value, 
   setValue: ({ value, data, setRow, column }) => { setRow({ ...data, [column.field]: value}) },
   minResizeWidth: 70,
