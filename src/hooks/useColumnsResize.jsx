@@ -37,7 +37,13 @@ const useColumnsResize = (props, tableManager) => {
         if (column.maxResizeWidth && (column.maxResizeWidth < newColWidth)) newColWidth = column.maxResizeWidth;
 
         const colIndex = visibleColumns.findIndex(cd => cd.id === column.id);
-        const gtcArr = gridTemplateColumns.split(/(?<!,) /);
+        const gtcArr = gridTemplateColumns.split(' ').reduce((gtcArr, gtc) => {
+            if (gtcArr[gtcArr.length - 1] && gtcArr[gtcArr.length - 1][gtcArr[gtcArr.length - 1].length - 1] === ',') {
+                gtcArr[gtcArr.length - 1] = gtcArr[gtcArr.length - 1] + gtc;
+                return gtcArr;
+            }
+            return gtcArr.concat(gtc);
+        }, []);
         gtcArr[colIndex] = `${newColWidth}px`;
 
         containerEl.style.gridTemplateColumns = gtcArr.join(" ");
@@ -51,7 +57,13 @@ const useColumnsResize = (props, tableManager) => {
         
         lastPos.current = null;
         const containerEl = tableRef.current;
-        const gtcArr = containerEl.style.gridTemplateColumns.split(" ");
+        const gtcArr = containerEl.style.gridTemplateColumns.split(' ').reduce((gtcArr, gtc) => {
+            if (gtcArr[gtcArr.length - 1] && gtcArr[gtcArr.length - 1][gtcArr[gtcArr.length - 1].length - 1] === ',') {
+                gtcArr[gtcArr.length - 1] = gtcArr[gtcArr.length - 1] + gtc;
+                return gtcArr;
+            }
+            return gtcArr.concat(gtc);
+        }, []);
 
         columns.forEach(column => {
             if (!column.visible) return;
