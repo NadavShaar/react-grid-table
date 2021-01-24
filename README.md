@@ -850,7 +850,11 @@ Row editing can be done by rendering the edit button using the `cellRenderer` pr
 ```JSX
 // state
 const [rowsData, setRows] = useState(MOCK_DATA);
-const [editRowId, setEditRowId] = useState(null)
+
+// 'editRowId' can also be controlled.
+// if using controlled state, you can call your 'setEditRowId' instead of 'tableManager.rowEditApi.setEditRowId' to set it directly on your state.
+// the table will typicaly call 'onEditRowIdChange' to reset it if 'searchText', 'sort' or 'page' has changed.
+// const [editRowId, setEditRowId] = useState(null)
 
 // columns
 let columns = [
@@ -893,7 +897,8 @@ let columns = [
 <GridTable 
     columns={columns}
     rows={rowsData} 
-    editRowId={editRowId}
+    //editRowId={editRowId}
+    //onEditRowIdChange={setEditRowId}
     ...
 />
 
