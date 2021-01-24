@@ -3910,7 +3910,14 @@ var useColumnsResize = function useColumnsResize(props, tableManager) {
     var colIndex = visibleColumns.findIndex(function (cd) {
       return cd.id === column.id;
     });
-    var gtcArr = gridTemplateColumns.split(/(?<!,) /);
+    var gtcArr = gridTemplateColumns.split(' ').reduce(function (gtcArr, gtc) {
+      if (gtcArr[gtcArr.length - 1] && gtcArr[gtcArr.length - 1][gtcArr[gtcArr.length - 1].length - 1] === ',') {
+        gtcArr[gtcArr.length - 1] = gtcArr[gtcArr.length - 1] + gtc;
+        return gtcArr;
+      }
+
+      return gtcArr.concat(gtc);
+    }, []);
     gtcArr[colIndex] = "".concat(newColWidth, "px");
     containerEl.style.gridTemplateColumns = gtcArr.join(" ");
     lastPos.current = event.clientX;
@@ -3932,7 +3939,14 @@ var useColumnsResize = function useColumnsResize(props, tableManager) {
     }, 0);
     lastPos.current = null;
     var containerEl = tableRef.current;
-    var gtcArr = containerEl.style.gridTemplateColumns.split(" ");
+    var gtcArr = containerEl.style.gridTemplateColumns.split(' ').reduce(function (gtcArr, gtc) {
+      if (gtcArr[gtcArr.length - 1] && gtcArr[gtcArr.length - 1][gtcArr[gtcArr.length - 1].length - 1] === ',') {
+        gtcArr[gtcArr.length - 1] = gtcArr[gtcArr.length - 1] + gtc;
+        return gtcArr;
+      }
+
+      return gtcArr.concat(gtc);
+    }, []);
     columns.forEach(function (column) {
       if (!column.visible) return;
       var colIndex = visibleColumns.findIndex(function (cd) {
