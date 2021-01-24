@@ -22,10 +22,9 @@
 
 **Live [Demo](https://nadavshaar.github.io/react-grid-table/)**
 
-<!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
+[<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](https://codesandbox.io/s/react-grid-table-demo-3275n?file=/src/App.js)
 
-![Demo](https://user-images.githubusercontent.com/8030614/105105698-46518b00-5abd-11eb-82b2-cdd8bf89ee54.gif)
-<!-- ![Demo](https://user-images.githubusercontent.com/8030614/105105087-0fc74080-5abc-11eb-83c0-84bc4433d134.gif) -->
+![Demo](https://user-images.githubusercontent.com/8030614/105251406-16b98600-5b84-11eb-849e-77f43d9dd476.gif)
 
 ## Install
 
@@ -38,7 +37,7 @@ By default, the table is fully featured even with just a basic configuration of 
 
 **Example:**
 
-<!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
+[<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](https://codesandbox.io/s/react-grid-table-usage-p6538?file=/src/App.js)
 
 ```JSX
 import React from "react";
@@ -47,7 +46,7 @@ import GridTable from '@nadavshaar/react-grid-table';
 // custom cell component
 const Username = ({ tableManager, value, field, data, column, colIndex, rowIndex }) => {
     return (
-        <div className='rgt-cell-inner' style={{display: 'flex', alignItems: 'center'}}>
+        <div className='rgt-cell-inner' style={{display: 'flex', alignItems: 'center', overflow: 'hidden'}}>
             <img src={data.avatar} alt="user avatar" />
             <span className='rgt-text-truncate' style={{marginLeft: 10}}>{value}</span>
         </div>
@@ -283,7 +282,7 @@ Each column (except for '[checkbox](#checkbox-column)' column) has support for t
   label: 'First Name',
   className: '',
   pinned: false,
-  width: 'max-content',
+  width: '200px',
   getValue: ({value, column}) => value, 
   setValue: ({ value, data, setRow, column }) => { setRow({ ...data, [column.field]: value}) },
   minResizeWidth: 70,
@@ -402,6 +401,8 @@ All components are exported so you'll be able to import them from anywhere but y
 | Pagination | `tableManager` | `page` `onChange` |
 
 **Example: Overriding the header component**
+
+[<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](https://codesandbox.io/s/react-grid-table-components-64bh4?file=/src/CustomHeader.js)
 
 <!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
 
@@ -645,6 +646,8 @@ Just pass all the data using the `rows` prop.
 
 **Example:**
 
+[<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](https://codesandbox.io/s/react-grid-table-sync-u550u?file=/src/App.js)
+
 ```JSX
 export const SyncedTable = () => {
 
@@ -672,6 +675,8 @@ All the data is supplied to the table via the `onRowsRequest` prop.
 | onRowsRequest* | async function | Should return a promise that resolves to {rows, totalRows} |
 
 **Example:**
+
+[<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](https://codesandbox.io/s/react-grid-table-async-lpmfv?file=/src/App.js)
 
 ```JSX
 export const AsyncUncontrolledTable = () => {
@@ -722,6 +727,8 @@ All the data is supplied to the table via the `onRowsRequest` prop, but is contr
 | onTotalRowsChange* | function | Should be used to set the current data length |
 
 **Example:**
+
+[<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](https://codesandbox.io/s/react-grid-table-async-controlled-6pp8v?file=/src/App.js)
 
 ```JSX
 export const AsyncControlledTable = () => {
@@ -784,6 +791,8 @@ let mergedRows = tableManager.asyncApi.mergeRowsAt(rows, fetchedRows, at)
 
 **Example:**
 
+[<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](https://codesandbox.io/s/react-grid-table-async-managed-2bsvl?file=/src/App.js)
+
 ```JSX
 const controller = new AbortController();
 
@@ -834,12 +843,18 @@ export const AsyncManagedTable = () => {
 ### Row-Editing
 Row editing can be done by rendering the edit button using the `cellRenderer` property in the column configuration, then when clicked, it will control the `editRowId` prop, then the table will render the editing components for columns that are defined as `editable` (true by default), and as was defined in the `editorCellRenderer` which by default will render a text input.
 
-<!-- [<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](#) -->
+**Example:**
+
+[<img src="https://camo.githubusercontent.com/416c7a7433e9d81b4e430b561d92f22ac4f15988/68747470733a2f2f636f646573616e64626f782e696f2f7374617469632f696d672f706c61792d636f646573616e64626f782e737667" alt="Edit on CodeSandbox" data-canonical-src="https://codesandbox.io/static/img/play-codesandbox.svg" style="max-width:100%;">](https://codesandbox.io/s/react-grid-table-row-edit-mwysh?file=/src/App.js)
 
 ```JSX
 // state
 const [rowsData, setRows] = useState(MOCK_DATA);
-const [editRowId, setEditRowId] = useState(null)
+
+// 'editRowId' can also be controlled.
+// if using controlled state, you can call your 'setEditRowId' instead of 'tableManager.rowEditApi.setEditRowId' to set it directly on your state.
+// the table will typicaly call 'onEditRowIdChange' to reset it if 'searchText', 'sort' or 'page' has changed.
+// const [editRowId, setEditRowId] = useState(null)
 
 // columns
 let columns = [
@@ -882,7 +897,8 @@ let columns = [
 <GridTable 
     columns={columns}
     rows={rowsData} 
-    editRowId={editRowId}
+    //editRowId={editRowId}
+    //onEditRowIdChange={setEditRowId}
     ...
 />
 

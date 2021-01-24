@@ -1,80 +1,80 @@
 {
-  "name": "@nadavshaar/react-grid-table",
-  "version": "0.1.1",
-  "description": "A modular table, based on a CSS grid layout, optimized for customization.",
-  "author": "NadavShaar",
-  "license": "",
-  "repository": "NadavShaar/react-grid-table",
-  "homepage": "https://nadavshaar.github.io/react-grid-table/",
-  "keywords": [
-    "react",
-    "table",
-    "grid",
-    "css-grid",
-    "list",
-    "modular",
-    "sort",
-    "resize",
-    "reorder",
-    "pin",
-    "columns",
-    "rows",
-    "sticky-header",
-    "row-selection",
-    "inline-editing",
-    "dynamic-row-height",
-    "visibility-management",
-    "search",
-    "header",
-    "footer",
-    "cells",
-    "pagination",
-    "async",
-    "row-virtualizer"
-  ],
-  "main": "dist/index.js",
-  "source": "src/index.js",
-  "engines": {
-    "node": ">=10"
-  },
-  "scripts": {
-    "start": "webpack serve --config demo/webpack.config.js",
-    "start-async": "cross-env TARGET=async webpack serve --config demo/webpack.config.js",
-    "start-async-controlled": "cross-env TARGET=asyncControlled webpack serve --config demo/webpack.config.js",
-    "start-async-managed": "cross-env TARGET=asyncManaged webpack serve --config demo/webpack.config.js",
-    "watch": "webpack -w",
-    "build": "webpack",
-    "build-demo": "webpack --config demo/webpack.config.js",
-    "deploy-demo": "gh-pages -d demo/dist",
-    "test": ""
-  },
-  "peerDependencies": {
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.12.3",
-    "@babel/plugin-transform-runtime": "^7.12.10",
-    "@babel/preset-env": "^7.12.1",
-    "@babel/preset-react": "^7.12.5",
-    "babel-loader": "^8.2.1",
-    "clean-webpack-plugin": "^3.0.0",
-    "cross-env": "^7.0.3",
-    "css-loader": "^5.0.1",
-    "gh-pages": "^3.1.0",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-is": "^17.0.1",
-    "style-loader": "^2.0.0",
-    "webpack": "^5.11.0",
-    "webpack-cli": "^4.3.1",
-    "webpack-dev-server": "^3.11.0"
-  },
-  "files": [
-    "dist"
-  ],
-  "dependencies": {
-    "react-sortable-hoc": "^1.11.0",
-    "react-virtual": "^2.3.0"
-  }
+    "name": "@nadavshaar/react-grid-table",
+    "version": "0.1.2",
+    "description": "A modular table, based on a CSS grid layout, optimized for customization.",
+    "author": "NadavShaar",
+    "license": "MIT",
+    "repository": "NadavShaar/react-grid-table",
+    "homepage": "https://nadavshaar.github.io/react-grid-table/",
+    "keywords": [
+        "react",
+        "table",
+        "grid",
+        "css-grid",
+        "list",
+        "modular",
+        "sort",
+        "resize",
+        "reorder",
+        "pin",
+        "columns",
+        "rows",
+        "sticky-header",
+        "row-selection",
+        "inline-editing",
+        "dynamic-row-height",
+        "visibility-management",
+        "search",
+        "header",
+        "footer",
+        "cells",
+        "pagination",
+        "async",
+        "row-virtualizer"
+    ],
+    "main": "dist/index.js",
+    "source": "src/index.js",
+    "engines": {
+        "node": ">=10"
+    },
+    "scripts": {
+        "start": "webpack serve --config demo/webpack.config.js",
+        "start-async": "cross-env TARGET=async webpack serve --config demo/webpack.config.js",
+        "start-async-controlled": "cross-env TARGET=asyncControlled webpack serve --config demo/webpack.config.js",
+        "start-async-managed": "cross-env TARGET=asyncManaged webpack serve --config demo/webpack.config.js",
+        "watch": "webpack -w",
+        "build": "webpack",
+        "build-demo": "webpack --config demo/webpack.config.js",
+        "deploy-demo": "gh-pages -d demo/dist",
+        "test": ""
+    },
+    "peerDependencies": {
+        "react": "^17.0.1",
+        "react-dom": "^17.0.1"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.12.3",
+        "@babel/plugin-transform-runtime": "^7.12.10",
+        "@babel/preset-env": "^7.12.1",
+        "@babel/preset-react": "^7.12.5",
+        "babel-loader": "^8.2.1",
+        "clean-webpack-plugin": "^3.0.0",
+        "cross-env": "^7.0.3",
+        "css-loader": "^5.0.1",
+        "gh-pages": "^3.1.0",
+        "react": "^17.0.1",
+        "react-dom": "^17.0.1",
+        "react-is": "^17.0.1",
+        "style-loader": "^2.0.0",
+        "webpack": "^5.11.0",
+        "webpack-cli": "^4.3.1",
+        "webpack-dev-server": "^3.11.0"
+    },
+    "files": [
+        "dist"
+    ],
+    "dependencies": {
+        "react-sortable-hoc": "^1.11.0",
+        "react-virtual": "^2.3.0"
+    }
 }
