@@ -2,7 +2,7 @@ import React from 'react';
 import { SortableElement, SortableHandle } from 'react-sortable-hoc';
 
 const SortableItem = SortableElement(({children, index, columnId, className}) => (
-    <div className={className} data-column-id={columnId} key={index}>{children}</div>
+    <div className={className} data-column-id={columnId} key={columnId}>{children}</div>
 ));
 
 const SortableDragHandle = SortableHandle(({children, index}) => (
