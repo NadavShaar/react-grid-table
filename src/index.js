@@ -16,6 +16,7 @@ const GridTable = props => {
         isLoading,
         config: {
             isVirtualScroll,
+            rowIdField,
             components: { Header, Footer, Loader, NoResults, DragHandle },
         },
         refs: { rgtRef, tableRef },
@@ -55,8 +56,8 @@ const GridTable = props => {
                 }}
             >
                 {
-                    visibleColumns.map((cd, idx) => (
-                        <HeaderCellContainer key={idx} index={idx} column={cd} tableManager={tableManager}/>
+                    visibleColumns.map((visibleColumn, idx) => (
+                        <HeaderCellContainer key={visibleColumn.id} index={idx} column={visibleColumn} tableManager={tableManager}/>
                     ))
                 }
                 {
@@ -68,7 +69,7 @@ const GridTable = props => {
                                 <Row key={'virtual-end'} index={'virtual-end'} tableManager={tableManager} />
                             ]
                             :
-                            pageRows.map((rowData, index) => <Row key={index} index={index} data={rowData} tableManager={tableManager} />)
+                            pageRows.map((rowData, index) => <Row key={rowData?.[rowIdField]} index={index} data={rowData} tableManager={tableManager} />)
                         :
                         <div className='rgt-container-overlay'>
                             {
