@@ -185,6 +185,7 @@ export default MyAwesomeTable;
 | pageSize | number | the selected page size | 20 |
 | sort | object | sort config. accepts `colId` for the id of the column that should be sorted, and `isAsc` to define the sort direction. example: `{ colId: 'some-column-id', isAsc: true }`, to unsort simply pass `colId` as `null` | { } |
 | isLoading | boolean | whether to display the loader | false |
+| tableId | string | table unique identifier | random string |
 
 ### Configuration props
 

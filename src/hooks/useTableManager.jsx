@@ -32,6 +32,7 @@ const useTableManager = (props) => {
 
     tableManager.mode = !props.onRowsRequest ? 'sync' : 'async';
     tableManager.config = {
+        tableId: props.tableId,
         rowIdField: props.rowIdField,
         minColumnResizeWidth: props.minColumnResizeWidth,
         minSearchChars: props.minSearchChars,

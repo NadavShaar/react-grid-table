@@ -1,5 +1,6 @@
 import React from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
+import { nanoid } from 'nanoid';
 import { Row, HeaderCellContainer } from './components/';
 import { useTableManager } from './hooks/';
 import PropTypes from 'prop-types';
@@ -10,7 +11,8 @@ const SortableList = SortableContainer(({ forwardRef, className, style, children
  
 const GridTable = props => {
 
-    const tableManager = useTableManager(props);
+    const tableId = props.tableId === '' ? nanoid(10) : props.tableId;
+    const tableManager = useTableManager({ ...props, tableId });
 
     const {
         isLoading,
@@ -32,7 +34,7 @@ const GridTable = props => {
         return rest;
     }, {})
 
-    const classNames = ('rgt-wrapper ' + (props.className || '')).trim();
+    const classNames = (`rgt-wrapper rgt-${tableId} ` + (props.className || '')).trim();
 
     return (
         <div {...rest} ref={rgtRef} className={classNames}>
@@ -88,6 +90,7 @@ const GridTable = props => {
 }
 
 GridTable.defaultProps = {
+    tableId: '',
     columns: [],
     rowIdField: 'id',
     minColumnResizeWidth: 70,
@@ -109,6 +112,7 @@ GridTable.defaultProps = {
 
 GridTable.propTypes = {
     // general
+    tableId: PropTypes.string,
     columns: PropTypes.arrayOf(PropTypes.object).isRequired,
     rows: PropTypes.arrayOf(PropTypes.object),
     selectedRowsIds: PropTypes.array,

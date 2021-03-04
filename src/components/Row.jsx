@@ -8,7 +8,7 @@ const Row = ({
     measureRef
 }) => {
     const {
-        config: { isVirtualScroll, rowIdField },
+        config: { isVirtualScroll, tableId, rowIdField },
         rowEditApi: { editRow, getIsRowEditable },
         rowSelectionApi: { getIsRowSelectable, selectedRowsIds },
         columnsApi: { visibleColumns },
@@ -36,7 +36,8 @@ const Row = ({
     let isEdit = !!data && editRow?.[rowIdField] === rowId && !!getIsRowEditable(data);
     
     return visibleColumns.map((visibleColumn, colIndex) =>
-        <CellContainer 
+        <CellContainer
+            tableId={tableId}
             key={`${visibleColumn.id}-${rowId}`}
             rowId={rowId}
             data={rowId && (editRow?.[rowIdField] === rowId) ? editRow : data} 
