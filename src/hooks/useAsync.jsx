@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
 import { uuid } from '../utils';
 import { useRequestDebounce } from '.';
 
@@ -66,7 +66,7 @@ const useAsync = (props, tableManager) => {
     const {
         mode,
         config: { requestDebounceTimeout },
-        rowsApi: { rows },
+        rowsApi: { rows, totalRows },
         paginationApi: { pageSize }
     } = tableManager;
 
@@ -74,7 +74,11 @@ const useAsync = (props, tableManager) => {
     const rowsRequests = useRef([]);
 
     asyncApi.batchSize = props.batchSize ?? pageSize;
-    asyncApi.isLoading = !rowsRequests.current.length || !rowsRequests.current.every(request => rows[request.from]);
+    asyncApi.isLoading = useMemo(() => {
+        if (!rowsRequests.current.length) return true;
+        if (totalRows === 0) return false;
+        if (!rowsRequests.current.every(request => rows[request.from])) return true;
+    })
 
     const onRowsRequest = async rowsRequest => {
         rowsRequests.current = [...rowsRequests.current, rowsRequest];
@@ -92,7 +96,7 @@ const useAsync = (props, tableManager) => {
             const newRows = asyncApi.mergeRowsAt(rows, result.rows, rowsRequest.from);
             setRows(newRows);
         };
-        if (result?.totalRows) setTotalRows(result.totalRows);
+        if (result?.totalRows !== undefined) setTotalRows(result.totalRows);
     };
 
     const debouncedOnRowsRequest = useRequestDebounce(onRowsRequest, requestDebounceTimeout);

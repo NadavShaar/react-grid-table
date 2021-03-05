@@ -5,7 +5,7 @@ const useRows = (props, tableManager) => {
 
     const rowsApi = useRef({}).current;
     let [rows, setRows] = useState([]);
-    const [totalRows, setTotalRows] = useState(0);
+    const [totalRows, setTotalRows] = useState(null);
 
     Object.defineProperty(rowsApi, "onRowClick", { enumerable: false, writable: true });
     
