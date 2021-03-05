@@ -70,6 +70,7 @@ const useTableManager = (props) => {
     tableManager.rowVirtualizer = useRowVirtualizer(props, tableManager);
     tableManager.asyncApi = useAsync(props, tableManager);
     tableManager.isLoading = props.isLoading ?? (tableManager.mode !== 'sync' && tableManager.asyncApi.isLoading);
+    const searchText = (tableManager.searchApi.searchText.length >= tableManager.config.minSearchChars) ? tableManager.searchApi.searchText : '';
 
     // reset page number
     useEffect(() => {
@@ -77,7 +78,7 @@ const useTableManager = (props) => {
         if (tableManager.paginationApi.page === 1) return;
 
         tableManager.paginationApi.setPage(1);
-    }, [tableManager.searchApi.searchText, tableManager.paginationApi.pageSize])
+    }, [searchText, tableManager.paginationApi.pageSize])
 
     // reset rows
     useEffect(() => {
@@ -87,12 +88,12 @@ const useTableManager = (props) => {
             tableManager.rowSelectionApi.setSelectedRowsIds([]);
             tableManager.asyncApi.resetRows();
         }
-    }, [tableManager.searchApi.searchText, tableManager.sortApi.sort.colId, tableManager.sortApi.sort.isAsc])
+    }, [searchText, tableManager.sortApi.sort.colId, tableManager.sortApi.sort.isAsc])
 
     // reset edit row
     useEffect(() => {
         if (tableManager.rowEditApi.editRow) tableManager.rowEditApi.setEditRowId(null);
-    }, [tableManager.searchApi.searchText, tableManager.sortApi.sort.colId, tableManager.sortApi.sort.isAsc, tableManager.paginationApi.page])
+    }, [searchText, tableManager.sortApi.sort.colId, tableManager.sortApi.sort.isAsc, tableManager.paginationApi.page])
 
     // initialization completion
     useEffect(() => {
