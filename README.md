@@ -495,6 +495,7 @@ This is the API object used by the internal components, you can use it to do any
 
 API Structure:
 
+- **id:** A unique identifier for each table component.
 - **isMounted:** Is the table mounted.
 - **isInitialized:** Is the table initialized. Will be set to true once all components are initialized.
 - **mode:** 'sync' or 'async', derived from the supplied props.
