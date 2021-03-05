@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import * as components from '../components';
 import { icons, texts } from '../defaults';
+import { uuid } from '../utils';
 import {
     useRowVirtualizer,
     useColumns,
@@ -17,7 +18,7 @@ import {
 } from '../hooks/';
 
 const useTableManager = (props) => {
-    const tableManager = useRef({ isMounted: false, isInitialized: false }).current;
+    const tableManager = useRef({ id: props.id || uuid(), isMounted: false, isInitialized: false }).current;
 
     Object.defineProperty(tableManager, "columnsReorderApi", { enumerable: false, writable: true });
     Object.defineProperty(tableManager, "columnsResizeApi", { enumerable: false, writable: true });

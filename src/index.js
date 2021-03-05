@@ -13,6 +13,7 @@ const GridTable = props => {
     const tableManager = useTableManager(props);
 
     const {
+        id,
         isLoading,
         config: {
             isVirtualScroll,
@@ -35,7 +36,7 @@ const GridTable = props => {
     const classNames = ('rgt-wrapper ' + (props.className || '')).trim();
 
     return (
-        <div {...rest} ref={rgtRef} className={classNames}>
+        <div {...rest} ref={rgtRef} id={id} className={classNames}>
             <Header tableManager={tableManager} />
             <SortableList
                 forwardRef={tableRef}
