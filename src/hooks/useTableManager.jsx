@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { nanoid } from 'nanoid';
 import * as components from '../components';
 import { icons, texts } from '../defaults';
 import {
@@ -32,7 +33,7 @@ const useTableManager = (props) => {
 
     tableManager.mode = !props.onRowsRequest ? 'sync' : 'async';
     tableManager.config = {
-        tableId: props.tableId,
+        tableId: props.tableId === '' ? nanoid(10) : props.tableId,
         rowIdField: props.rowIdField,
         minColumnResizeWidth: props.minColumnResizeWidth,
         minSearchChars: props.minSearchChars,

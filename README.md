@@ -535,6 +535,7 @@ API Structure:
 | additionalProps | object | additional props that are passed to the internal components (see full list of [additionalProps](#additionalProps)) | {} |
 | icons | object | the icons that are in use by the table | { sortAscending, sortDescending, clearSelection, columnVisibility, search, loader } |
 | texts | object | the texts that are in use by the table | { search, totalRows, rows, selected, rowsPerPage, page, of, prev, next, columnVisibility } |
+| tableId | string | table unique identifier | random string |
 
 ### refs
 

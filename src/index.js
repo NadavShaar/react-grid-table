@@ -1,6 +1,5 @@
 import React from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
-import { nanoid } from 'nanoid';
 import { Row, HeaderCellContainer } from './components/';
 import { useTableManager } from './hooks/';
 import PropTypes from 'prop-types';
@@ -10,13 +9,12 @@ const SortableList = SortableContainer(({ forwardRef, className, style, children
     <div ref={forwardRef} className={className} style={style}>{children}</div>);
  
 const GridTable = props => {
-
-    const tableId = props.tableId === '' ? nanoid(10) : props.tableId;
-    const tableManager = useTableManager({ ...props, tableId });
+    const tableManager = useTableManager({ ...props });
 
     const {
         isLoading,
         config: {
+            tableId,
             isVirtualScroll,
             rowIdField,
             components: { Header, Footer, Loader, NoResults, DragHandle },
