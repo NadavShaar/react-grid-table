@@ -2171,7 +2171,8 @@ var CellContainer = function CellContainer(_ref) {
       isSelected = _ref.isSelected,
       tableManager = _ref.tableManager,
       forwardRef = _ref.forwardRef;
-  var _tableManager$config = tableManager.config,
+  var id = tableManager.id,
+      _tableManager$config = tableManager.config,
       highlightSearch = _tableManager$config.highlightSearch,
       tableHasSelection = _tableManager$config.tableHasSelection,
       _tableManager$config$ = _tableManager$config.additionalProps.cellContainer,
@@ -2233,7 +2234,7 @@ var CellContainer = function CellContainer(_ref) {
   var onMouseOver = (0,react__WEBPACK_IMPORTED_MODULE_2__.useCallback)(function (event) {
     var _additionalProps$onMo, _additionalProps;
 
-    document.querySelectorAll(".rgt-row-".concat(rowIndex)).forEach(function (cell) {
+    document.querySelectorAll("#".concat(id, " .rgt-row-").concat(rowIndex)).forEach(function (cell) {
       return cell.classList.add('rgt-row-hover');
     });
     (_additionalProps$onMo = (_additionalProps = additionalProps).onMouseOver) === null || _additionalProps$onMo === void 0 ? void 0 : _additionalProps$onMo.call(_additionalProps, event);
@@ -2241,7 +2242,7 @@ var CellContainer = function CellContainer(_ref) {
   var onMouseOut = (0,react__WEBPACK_IMPORTED_MODULE_2__.useCallback)(function (event) {
     var _additionalProps$onMo2, _additionalProps2;
 
-    document.querySelectorAll(".rgt-row-".concat(rowIndex)).forEach(function (cell) {
+    document.querySelectorAll("#".concat(id, " .rgt-row-").concat(rowIndex)).forEach(function (cell) {
       return cell.classList.remove('rgt-row-hover');
     });
     (_additionalProps$onMo2 = (_additionalProps2 = additionalProps).onMouseOut) === null || _additionalProps$onMo2 === void 0 ? void 0 : _additionalProps$onMo2.call(_additionalProps2, event);
@@ -2337,7 +2338,7 @@ var ColumnVisibility = function ColumnVisibility(_ref) {
       return column.label;
     }).map(function (column, idx) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", {
-        key: idx,
+        key: column.id,
         className: "rgt-clickable rgt-columns-manager-popover-row"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("label", {
         htmlFor: "checkbox-".concat(idx),
@@ -2879,7 +2880,7 @@ var PageSize = function PageSize(_ref) {
     }
   }, options.map(function (option, idx) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("option", {
-      key: idx,
+      key: option,
       value: option
     }, option);
   })));
@@ -3085,11 +3086,11 @@ var Row = function Row(_ref) {
 
   if (isVirtualScroll) {
     if (index === 'virtual-start') {
-      return visibleColumns.map(function (visibleColumn, colIndex) {
+      return visibleColumns.map(function (visibleColumn) {
         var _virtualItems$;
 
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-          key: index + colIndex,
+          key: "".concat(index, "-").concat(visibleColumn.id),
           style: {
             minHeight: (_virtualItems$ = virtualItems[0]) === null || _virtualItems$ === void 0 ? void 0 : _virtualItems$.start
           }
@@ -3098,11 +3099,11 @@ var Row = function Row(_ref) {
     }
 
     if (index === 'virtual-end') {
-      return visibleColumns.map(function (visibleColumn, colIndex) {
+      return visibleColumns.map(function (visibleColumn) {
         var _virtualItems;
 
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-          key: index + colIndex,
+          key: "".concat(index, "-").concat(visibleColumn.id),
           style: {
             minHeight: totalSize - ((_virtualItems = virtualItems[virtualItems.length - 1]) === null || _virtualItems === void 0 ? void 0 : _virtualItems.end) || 0
           }
@@ -3120,7 +3121,7 @@ var Row = function Row(_ref) {
   var isEdit = !!data && (editRow === null || editRow === void 0 ? void 0 : editRow[rowIdField]) === rowId && !!getIsRowEditable(data);
   return visibleColumns.map(function (visibleColumn, colIndex) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(___WEBPACK_IMPORTED_MODULE_1__.CellContainer, {
-      key: rowIndex + colIndex,
+      key: "".concat(visibleColumn.id, "-").concat(rowId),
       rowId: rowId,
       data: rowId && (editRow === null || editRow === void 0 ? void 0 : editRow[rowIdField]) === rowId ? editRow : data,
       rowIndex: rowIndex,
@@ -3593,18 +3594,24 @@ var useAsync = function useAsync(props, tableManager) {
 
   var mode = tableManager.mode,
       requestDebounceTimeout = tableManager.config.requestDebounceTimeout,
-      rows = tableManager.rowsApi.rows,
+      _tableManager$rowsApi = tableManager.rowsApi,
+      rows = _tableManager$rowsApi.rows,
+      totalRows = _tableManager$rowsApi.totalRows,
       pageSize = tableManager.paginationApi.pageSize;
   var asyncApi = (0,react__WEBPACK_IMPORTED_MODULE_3__.useRef)({}).current;
   var rowsRequests = (0,react__WEBPACK_IMPORTED_MODULE_3__.useRef)([]);
   asyncApi.batchSize = (_props$batchSize = props.batchSize) !== null && _props$batchSize !== void 0 ? _props$batchSize : pageSize;
-  asyncApi.isLoading = !rowsRequests.current.length || !rowsRequests.current.every(function (request) {
-    return rows[request.from];
+  asyncApi.isLoading = (0,react__WEBPACK_IMPORTED_MODULE_3__.useMemo)(function () {
+    if (!rowsRequests.current.length) return true;
+    if (totalRows === 0) return false;
+    if (!rowsRequests.current.every(function (request) {
+      return rows[request.from];
+    })) return true;
   });
 
   var onRowsRequest = /*#__PURE__*/function () {
     var _ref = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2___default()( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(rowsRequest) {
-      var result, _tableManager$rowsApi, rows, setRows, setTotalRows, newRows;
+      var result, _tableManager$rowsApi2, rows, setRows, setTotalRows, newRows;
 
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
@@ -3628,7 +3635,7 @@ var useAsync = function useAsync(props, tableManager) {
               return _context.abrupt("return");
 
             case 7:
-              _tableManager$rowsApi = tableManager.rowsApi, rows = _tableManager$rowsApi.rows, setRows = _tableManager$rowsApi.setRows, setTotalRows = _tableManager$rowsApi.setTotalRows;
+              _tableManager$rowsApi2 = tableManager.rowsApi, rows = _tableManager$rowsApi2.rows, setRows = _tableManager$rowsApi2.setRows, setTotalRows = _tableManager$rowsApi2.setTotalRows;
 
               if (result !== null && result !== void 0 && result.rows) {
                 newRows = asyncApi.mergeRowsAt(rows, result.rows, rowsRequest.from);
@@ -3636,7 +3643,7 @@ var useAsync = function useAsync(props, tableManager) {
               }
 
               ;
-              if (result !== null && result !== void 0 && result.totalRows) setTotalRows(result.totalRows);
+              if ((result === null || result === void 0 ? void 0 : result.totalRows) !== undefined) setTotalRows(result.totalRows);
 
             case 11:
             case "end":
@@ -3655,9 +3662,9 @@ var useAsync = function useAsync(props, tableManager) {
 
   asyncApi.resetRows = function () {
     if (mode === 'sync') return;
-    var _tableManager$rowsApi2 = tableManager.rowsApi,
-        setRows = _tableManager$rowsApi2.setRows,
-        setTotalRows = _tableManager$rowsApi2.setTotalRows;
+    var _tableManager$rowsApi3 = tableManager.rowsApi,
+        setRows = _tableManager$rowsApi3.setRows,
+        setTotalRows = _tableManager$rowsApi3.setTotalRows;
     rowsRequests.current = [];
     if (props.onRowsReset) props.onRowsReset(tableManager);else {
       setRows([]);
@@ -4544,7 +4551,7 @@ var useRows = function useRows(props, tableManager) {
       rows = _useState2[0],
       setRows = _useState2[1];
 
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(0),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
       _useState4 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_useState3, 2),
       totalRows = _useState4[0],
       setTotalRows = _useState4[1];
@@ -4802,7 +4809,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components */ "./src/components/index.js");
 /* harmony import */ var _defaults__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../defaults */ "./src/defaults/index.js");
-/* harmony import */ var _hooks___WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../hooks/ */ "./src/hooks/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils */ "./src/utils/index.js");
+/* harmony import */ var _hooks___WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../hooks/ */ "./src/hooks/index.js");
 
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -4814,10 +4822,12 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 
 
+
 var useTableManager = function useTableManager(props) {
   var _props$isLoading;
 
   var tableManager = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)({
+    id: props.id || (0,_utils__WEBPACK_IMPORTED_MODULE_4__.uuid)(),
     isMounted: false,
     isInitialized: false
   }).current;
@@ -4866,25 +4876,26 @@ var useTableManager = function useTableManager(props) {
     tableRef: (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null),
     rgtRef: (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null)
   };
-  tableManager.columnsApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_4__.useColumns)(props, tableManager);
-  tableManager.columnsReorderApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_4__.useColumnsReorder)(props, tableManager);
-  tableManager.columnsResizeApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_4__.useColumnsResize)(props, tableManager);
-  tableManager.columnsVisibilityApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_4__.useColumnsVisibility)(props, tableManager);
-  tableManager.searchApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_4__.useSearch)(props, tableManager);
-  tableManager.sortApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_4__.useSort)(props, tableManager);
-  tableManager.rowsApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_4__.useRows)(props, tableManager);
-  tableManager.paginationApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_4__.usePagination)(props, tableManager);
-  tableManager.rowSelectionApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_4__.useRowSelection)(props, tableManager);
-  tableManager.rowEditApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_4__.useRowEdit)(props, tableManager);
-  tableManager.rowVirtualizer = (0,_hooks___WEBPACK_IMPORTED_MODULE_4__.useRowVirtualizer)(props, tableManager);
-  tableManager.asyncApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_4__.useAsync)(props, tableManager);
-  tableManager.isLoading = (_props$isLoading = props.isLoading) !== null && _props$isLoading !== void 0 ? _props$isLoading : tableManager.mode !== 'sync' && tableManager.asyncApi.isLoading; // reset page number
+  tableManager.columnsApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_5__.useColumns)(props, tableManager);
+  tableManager.columnsReorderApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_5__.useColumnsReorder)(props, tableManager);
+  tableManager.columnsResizeApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_5__.useColumnsResize)(props, tableManager);
+  tableManager.columnsVisibilityApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_5__.useColumnsVisibility)(props, tableManager);
+  tableManager.searchApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_5__.useSearch)(props, tableManager);
+  tableManager.sortApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_5__.useSort)(props, tableManager);
+  tableManager.rowsApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_5__.useRows)(props, tableManager);
+  tableManager.paginationApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_5__.usePagination)(props, tableManager);
+  tableManager.rowSelectionApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_5__.useRowSelection)(props, tableManager);
+  tableManager.rowEditApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_5__.useRowEdit)(props, tableManager);
+  tableManager.rowVirtualizer = (0,_hooks___WEBPACK_IMPORTED_MODULE_5__.useRowVirtualizer)(props, tableManager);
+  tableManager.asyncApi = (0,_hooks___WEBPACK_IMPORTED_MODULE_5__.useAsync)(props, tableManager);
+  tableManager.isLoading = (_props$isLoading = props.isLoading) !== null && _props$isLoading !== void 0 ? _props$isLoading : tableManager.mode !== 'sync' && tableManager.asyncApi.isLoading;
+  var searchText = tableManager.searchApi.searchText.length >= tableManager.config.minSearchChars ? tableManager.searchApi.searchText : ''; // reset page number
 
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     if (!tableManager.isInitialized) return;
     if (tableManager.paginationApi.page === 1) return;
     tableManager.paginationApi.setPage(1);
-  }, [tableManager.searchApi.searchText, tableManager.paginationApi.pageSize]); // reset rows
+  }, [searchText, tableManager.paginationApi.pageSize]); // reset rows
 
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     if (!tableManager.isInitialized) return;
@@ -4893,11 +4904,11 @@ var useTableManager = function useTableManager(props) {
       tableManager.rowSelectionApi.setSelectedRowsIds([]);
       tableManager.asyncApi.resetRows();
     }
-  }, [tableManager.searchApi.searchText, tableManager.sortApi.sort.colId, tableManager.sortApi.sort.isAsc]); // reset edit row
+  }, [searchText, tableManager.sortApi.sort.colId, tableManager.sortApi.sort.isAsc]); // reset edit row
 
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     if (tableManager.rowEditApi.editRow) tableManager.rowEditApi.setEditRowId(null);
-  }, [tableManager.searchApi.searchText, tableManager.sortApi.sort.colId, tableManager.sortApi.sort.isAsc, tableManager.paginationApi.page]); // initialization completion
+  }, [searchText, tableManager.sortApi.sort.colId, tableManager.sortApi.sort.isAsc, tableManager.paginationApi.page]); // initialization completion
 
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     tableManager.isInitialized = true;
@@ -4996,9 +5007,11 @@ var SortableList = (0,react_sortable_hoc__WEBPACK_IMPORTED_MODULE_4__.SortableCo
 
 var GridTable = function GridTable(props) {
   var tableManager = (0,_hooks___WEBPACK_IMPORTED_MODULE_6__.useTableManager)(props);
-  var isLoading = tableManager.isLoading,
+  var id = tableManager.id,
+      isLoading = tableManager.isLoading,
       _tableManager$config = tableManager.config,
       isVirtualScroll = _tableManager$config.isVirtualScroll,
+      rowIdField = _tableManager$config.rowIdField,
       _tableManager$config$ = _tableManager$config.components,
       Header = _tableManager$config$.Header,
       Footer = _tableManager$config$.Footer,
@@ -5022,6 +5035,7 @@ var GridTable = function GridTable(props) {
   var classNames = ('rgt-wrapper ' + (props.className || '')).trim();
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement("div", _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({}, rest, {
     ref: rgtRef,
+    id: id,
     className: classNames
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement(Header, {
     tableManager: tableManager
@@ -5044,11 +5058,11 @@ var GridTable = function GridTable(props) {
       }).join(" "),
       gridTemplateRows: "repeat(".concat(pageRows.length + 1 + (isVirtualScroll ? 1 : 0), ", max-content)")
     }
-  }, visibleColumns.map(function (cd, idx) {
+  }, visibleColumns.map(function (visibleColumn, idx) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement(_components___WEBPACK_IMPORTED_MODULE_5__.HeaderCellContainer, {
-      key: idx,
+      key: visibleColumn.id,
       index: idx,
-      column: cd,
+      column: visibleColumn,
       tableManager: tableManager
     });
   }), totalRows && visibleColumns.length > 1 ? isVirtualScroll ? [/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement(_components___WEBPACK_IMPORTED_MODULE_5__.Row, {
@@ -5069,7 +5083,7 @@ var GridTable = function GridTable(props) {
     tableManager: tableManager
   })]) : pageRows.map(function (rowData, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3__.createElement(_components___WEBPACK_IMPORTED_MODULE_5__.Row, {
-      key: index,
+      key: rowData === null || rowData === void 0 ? void 0 : rowData[rowIdField],
       index: index,
       data: rowData,
       tableManager: tableManager
@@ -5249,7 +5263,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
 var uuid = function uuid() {
-  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, function (a) {
+  return 'rgt-' + ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, function (a) {
     return (a ^ Math.random() * 16 >> a / 4).toString(16);
   });
 };
