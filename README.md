@@ -53,7 +53,7 @@ const Username = ({ tableManager, value, field, data, column, colIndex, rowIndex
     )
 }
 
-let rows = [
+const rows = [
     { 
         "id": 1, 
         "username": "wotham0", 
