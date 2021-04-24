@@ -1,13 +1,15 @@
 import React from 'react';
-import { SortableElement, SortableHandle } from 'react-sortable-hoc';
+import {useSortable} from '@dnd-kit/sortable';
+import {CSS} from '@dnd-kit/utilities';
+// import { SortableElement, SortableHandle } from 'react-sortable-hoc';
 
-const SortableItem = SortableElement(({children, columnId, className}) => (
-    <div className={className} data-column-id={columnId}>{children}</div>
-));
+// const SortableItem = SortableElement(({children, columnId, className}) => (
+//     <div className={className} data-column-id={columnId}>{children}</div>
+// ));
 
-const SortableDragHandle = SortableHandle(({children, index}) => (
-    <React.Fragment>{children}</React.Fragment>
-));
+// const SortableDragHandle = SortableHandle(({children, index}) => (
+//     <React.Fragment>{children}</React.Fragment>
+// ));
 
 const HeaderCellContainer = ({ index, column, tableManager }) => {
     let {
@@ -25,6 +27,14 @@ const HeaderCellContainer = ({ index, column, tableManager }) => {
     } = tableManager;
     
     let resizeHandleRef = useResizeRef(column);
+
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+      } = useSortable({id: column.id});
 
     const getClassNames = () => {
         let classNames;
@@ -63,6 +73,7 @@ const HeaderCellContainer = ({ index, column, tableManager }) => {
 
     return (
         <div 
+            ref={setNodeRef}
             data-column-id={(column.id).toString()}
             {...additionalProps}
             className={classNames}
@@ -72,19 +83,26 @@ const HeaderCellContainer = ({ index, column, tableManager }) => {
                     null
                     :
                     <React.Fragment>
-                        <SortableItem 
+                        <div 
+                            // ref={setNodeRef}
                             className={innerCellClassNames}
-                            index={index} 
-                            disabled={!enableColumnsReorder || isPinnedLeft || isPinnedRight}
-                            columnId={column.id.toString()}
-                            collection={isPinnedLeft || isPinnedRight ? 0 : 1}
+                            style={{
+                                transform: CSS.Transform.toString(transform),
+                                transition,
+                            }}
+                            {...listeners}
+                            {...attributes}
+                            // index={index} 
+                            // disabled={!enableColumnsReorder || isPinnedLeft || isPinnedRight}
+                            // columnId={column.id.toString()}
+                            // collection={isPinnedLeft || isPinnedRight ? 0 : 1}
                         >
-                            {
+                            {/* {
                                 DragHandle ?
                                     <SortableDragHandle index={index}>{<DragHandle/>}</SortableDragHandle>
                                     :
                                     null
-                            }
+                            } */}
                             {
                                 column.id === 'checkbox' ?
                                     column.headerCellRenderer({ ...headerCellProps, ...selectionProps })
@@ -100,7 +118,7 @@ const HeaderCellContainer = ({ index, column, tableManager }) => {
                                         :
                                         <span className='rgt-sort-icon rgt-sort-icon-descending'>{sortDescendingIcon}</span> 
                             }
-                        </SortableItem>
+                        </div>
                         {
                             column.resizable ?
                                 <span 
