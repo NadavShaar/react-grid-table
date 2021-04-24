@@ -1,12 +1,13 @@
 import React from 'react';
-import { SortableContainer } from 'react-sortable-hoc';
+// import { SortableContainer } from 'react-sortable-hoc';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { Row, HeaderCellContainer } from './components/';
 import { useTableManager } from './hooks/';
 import PropTypes from 'prop-types';
 import './index.css';
 
-const SortableList = SortableContainer(({ forwardRef, className, style, children }) => 
-    <div ref={forwardRef} className={className} style={style}>{children}</div>);
+// const SortableList = SortableContainer(({ forwardRef, className, style, children }) => 
+//     <div ref={forwardRef} className={className} style={style}>{children}</div>);
  
 const GridTable = props => {
 
@@ -38,51 +39,65 @@ const GridTable = props => {
     return (
         <div {...rest} ref={rgtRef} id={id} className={classNames}>
             <Header tableManager={tableManager} />
-            <SortableList
-                forwardRef={tableRef}
-                className='rgt-container'
-                axis="x"
-                lockToContainerEdges
-                distance={10}
-                lockAxis="x"
-                useDragHandle={!!DragHandle}
-                onSortStart={onColumnReorderStart}
-                onSortEnd={onColumnReorderEnd}
-                style={{
-                    display: 'grid',
-                    overflow: 'auto',
-                    flex: 1,
-                    gridTemplateColumns: (visibleColumns.map(column => column.width)).join(" "),
-                    gridTemplateRows: `repeat(${pageRows.length + 1 + (isVirtualScroll ? 1 : 0)}, max-content)`,
-                }}
-            >
-                {
-                    visibleColumns.map((visibleColumn, idx) => (
-                        <HeaderCellContainer key={visibleColumn.id} index={idx} column={visibleColumn} tableManager={tableManager}/>
-                    ))
-                }
-                {
-                    totalRows && visibleColumns.length > 1 ?
-                        isVirtualScroll ? 
-                            [
-                                <Row key={'virtual-start'} index={'virtual-start'} tableManager={tableManager} />,
-                                ...virtualItems.map(virtualizedRow => <Row key={virtualizedRow.index} index={virtualizedRow.index} data={pageRows[virtualizedRow.index]} measureRef={virtualizedRow.measureRef} tableManager={tableManager} />),
-                                <Row key={'virtual-end'} index={'virtual-end'} tableManager={tableManager} />
-                            ]
-                            :
-                            pageRows.map((rowData, index) => <Row key={rowData?.[rowIdField]} index={index} data={rowData} tableManager={tableManager} />)
-                        :
-                        <div className='rgt-container-overlay'>
-                            {
-                                isLoading
-                                    ?
-                                    <Loader tableManager={tableManager} />
-                                    :
-                                    <NoResults tableManager={tableManager} />
-                            }
+            <DragDropContext onDragStart={onColumnReorderStart} onDragEnd={onColumnReorderEnd}>
+                <Droppable droppableId="droppable" direction="horizontal">
+                    {(provided, snapshot) => (
+                        <div 
+                            ref={provided.innerRef}
+                            className='rgt-container'
+                        >
+                            <div
+                                // forwardRef={tableRef}
+                                className='rgt-grid'
+                                // axis="x"
+                                // lockToContainerEdges
+                                // distance={10}
+                                // lockAxis="x"
+                                // useDragHandle={!!DragHandle}
+                                // onSortStart={onColumnReorderStart}
+                                // onSortEnd={onColumnReorderEnd}
+                                ref={tableRef}
+                                style={{
+                                    display: 'grid',
+                                    overflow: 'auto',
+                                    flex: 1,
+                                    gridTemplateColumns: (visibleColumns.map(column => column.width)).join(" "),
+                                    gridTemplateRows: `repeat(${pageRows.length + 1 + (isVirtualScroll ? 1 : 0)}, max-content)`,
+                                }}
+                                {...provided.droppableProps}
+                            >
+                                {
+                                    visibleColumns.map((visibleColumn, idx) => (
+                                        <HeaderCellContainer key={visibleColumn.id} index={idx} column={visibleColumn} tableManager={tableManager}/>
+                                    ))
+                                }
+                                {provided.placeholder}
+                                {
+                                    totalRows && visibleColumns.length > 1 ?
+                                        isVirtualScroll ? 
+                                            [
+                                                <Row key={'virtual-start'} index={'virtual-start'} tableManager={tableManager} />,
+                                                ...virtualItems.map(virtualizedRow => <Row key={virtualizedRow.index} index={virtualizedRow.index} data={pageRows[virtualizedRow.index]} measureRef={virtualizedRow.measureRef} tableManager={tableManager} />),
+                                                <Row key={'virtual-end'} index={'virtual-end'} tableManager={tableManager} />
+                                            ]
+                                            :
+                                            pageRows.map((rowData, index) => <Row key={rowData?.[rowIdField]} index={index} data={rowData} tableManager={tableManager} />)
+                                        :
+                                        <div className='rgt-grid-overlay'>
+                                            {
+                                                isLoading
+                                                    ?
+                                                    <Loader tableManager={tableManager} />
+                                                    :
+                                                    <NoResults tableManager={tableManager} />
+                                            }
+                                        </div>
+                                }
+                            </div>
                         </div>
-                }
-            </SortableList>
+                    )}
+                </Droppable>
+            </DragDropContext>
             <Footer tableManager={tableManager}/>
         </div>
     )

@@ -9,7 +9,7 @@ const useColumnsReorder = (props, tableManager) => {
     columnsReorderApi.onColumnReorderStart = sortData => {
         columnsReorderApi.isColumnReordering = true;
 
-        sortData.helper.classList.add('rgt-column-sort-ghost');
+        // sortData.helper.classList.add('rgt-column-sort-ghost');
 
         props.onColumnReorderStart?.(sortData, tableManager);
     }
@@ -21,10 +21,10 @@ const useColumnsReorder = (props, tableManager) => {
 
         setTimeout(() => columnsReorderApi.isColumnReordering = false, 0);
         
-        if (sortData.oldIndex === sortData.newIndex) return;
+        if (sortData.source.index === sortData.destination.index) return;
 
         const newColumns = [...columns];
-        newColumns.splice(visibleColumns[sortData.newIndex].index, 0, ...newColumns.splice(visibleColumns[sortData.oldIndex].index, 1));
+        newColumns.splice(visibleColumns[sortData.destination.index].index, 0, ...newColumns.splice(visibleColumns[sortData.source.index].index, 1));
 
         setColumns(newColumns);
 

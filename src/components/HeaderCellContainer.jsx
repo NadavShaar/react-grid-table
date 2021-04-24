@@ -1,13 +1,14 @@
 import React from 'react';
-import { SortableElement, SortableHandle } from 'react-sortable-hoc';
+import { Draggable } from 'react-beautiful-dnd';
+// import { SortableElement, SortableHandle } from 'react-sortable-hoc';
 
-const SortableItem = SortableElement(({children, columnId, className}) => (
-    <div className={className} data-column-id={columnId}>{children}</div>
-));
+// const SortableItem = SortableElement(({children, columnId, className}) => (
+//     <div className={className} data-column-id={columnId}>{children}</div>
+// ));
 
-const SortableDragHandle = SortableHandle(({children, index}) => (
-    <React.Fragment>{children}</React.Fragment>
-));
+// const SortableDragHandle = SortableHandle(({children, index}) => (
+//     <React.Fragment>{children}</React.Fragment>
+// ));
 
 const HeaderCellContainer = ({ index, column, tableManager }) => {
     let {
@@ -62,58 +63,71 @@ const HeaderCellContainer = ({ index, column, tableManager }) => {
     let headerCellProps = { tableManager, column };
 
     return (
-        <div 
-            data-column-id={(column.id).toString()}
-            {...additionalProps}
-            className={classNames}
+        <Draggable 
+            index={index} 
+            draggableId={column.id.toString()}
         >
-            {
-                (column.id === 'virtual') ?
-                    null
-                    :
-                    <React.Fragment>
-                        <SortableItem 
-                            className={innerCellClassNames}
-                            index={index} 
-                            disabled={!enableColumnsReorder || isPinnedLeft || isPinnedRight}
-                            columnId={column.id.toString()}
-                            collection={isPinnedLeft || isPinnedRight ? 0 : 1}
-                        >
-                            {
-                                DragHandle ?
-                                    <SortableDragHandle index={index}>{<DragHandle/>}</SortableDragHandle>
-                                    :
-                                    null
-                            }
-                            {
-                                column.id === 'checkbox' ?
-                                    column.headerCellRenderer({ ...headerCellProps, ...selectionProps })
-                                    : 
-                                    column.headerCellRenderer(headerCellProps)
-                            }
-                            {
-                                sort.colId !== column.id ? 
-                                    null
-                                    :
-                                    sort.isAsc ? 
-                                        <span className='rgt-sort-icon rgt-sort-icon-ascending'>{sortAscendingIcon}</span> 
-                                        :
-                                        <span className='rgt-sort-icon rgt-sort-icon-descending'>{sortDescendingIcon}</span> 
-                            }
-                        </SortableItem>
-                        {
-                            column.resizable ?
-                                <span 
-                                    ref={resizeHandleRef} 
-                                    className='rgt-resize-handle'
-                                    onClick={event => {event.preventDefault(); event.stopPropagation();}}
+            {(provided, snapshot) => (
+                <div 
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    style={provided.draggableProps.style}
+                    className={classNames}
+                    data-column-id={(column.id).toString()}
+                    {...additionalProps}
+                >
+                    {
+                        (column.id === 'virtual') ?
+                            null
+                            :
+                            <React.Fragment>
+                                <div 
+                                    className={innerCellClassNames}
+                                    // ref={provided.innerRef}
+                                    // {...provided.draggableProps}
+                                    // {...provided.dragHandleProps}
+                                    // disabled={!enableColumnsReorder || isPinnedLeft || isPinnedRight}
+                                    // columnId={column.id.toString()}
+                                    // collection={isPinnedLeft || isPinnedRight ? 0 : 1}
                                 >
-                                </span>
-                                : null
-                        }
-                    </React.Fragment>
-            }
-        </div>
+                                    {/* {
+                                        DragHandle ?
+                                            <SortableDragHandle index={index}>{<DragHandle/>}</SortableDragHandle>
+                                            :
+                                            null
+                                    } */}
+                                    {
+                                        column.id === 'checkbox' ?
+                                            column.headerCellRenderer({ ...headerCellProps, ...selectionProps })
+                                            : 
+                                            column.headerCellRenderer(headerCellProps)
+                                    }
+                                    {
+                                        sort.colId !== column.id ? 
+                                            null
+                                            :
+                                            sort.isAsc ? 
+                                                <span className='rgt-sort-icon rgt-sort-icon-ascending'>{sortAscendingIcon}</span> 
+                                                :
+                                                <span className='rgt-sort-icon rgt-sort-icon-descending'>{sortDescendingIcon}</span> 
+                                    }
+                                </div>
+                                {
+                                    column.resizable ?
+                                        <span 
+                                            ref={resizeHandleRef} 
+                                            className='rgt-resize-handle'
+                                            onClick={event => {event.preventDefault(); event.stopPropagation();}}
+                                        >
+                                        </span>
+                                        : null
+                                }
+                            </React.Fragment>
+                    }
+                </div>
+            )}
+        </Draggable>
     )
 }
 
