@@ -1,9 +1,9 @@
 import React from 'react';
-import { SortableElement, SortableHandle } from 'react-sortable-hoc';
+import { SortableElement, SortableHandle } from '../drag-and-drop';
 
-const SortableItem = SortableElement(({children, columnId, className}) => (
-    <div className={className} data-column-id={columnId}>{children}</div>
-));
+const SortableItem = SortableElement(React.forwardRef(({children, columnId, className}, ref) => (
+    <div ref={ref} className={className} data-column-id={columnId}>{children}</div>
+)));
 
 const SortableDragHandle = SortableHandle(({children, index}) => (
     <React.Fragment>{children}</React.Fragment>

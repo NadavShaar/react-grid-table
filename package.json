@@ -1,6 +1,6 @@
 {
     "name": "@nadavshaar/react-grid-table",
-    "version": "0.2.2",
+    "version": "0.3",
     "description": "A modular table, based on a CSS grid layout, optimized for customization.",
     "author": "Nadav Shaar",
     "license": "MIT",
@@ -62,7 +62,8 @@
     },
     "peerDependencies": {
         "react": "^17.0.1",
-        "react-dom": "^17.0.1"
+        "react-dom": "^17.0.1",
+        "prop-types": "^15.7.2"
     },
     "devDependencies": {
         "@babel/core": "^7.12.3",
@@ -74,6 +75,7 @@
         "cross-env": "^7.0.3",
         "css-loader": "^5.0.1",
         "gh-pages": "^3.1.0",
+        "prop-types": "^15.7.2",
         "react": "^17.0.1",
         "react-dom": "^17.0.1",
         "react-is": "^17.0.1",
@@ -86,7 +88,6 @@
         "dist"
     ],
     "dependencies": {
-        "react-sortable-hoc": "^1.11.0",
         "react-virtual": "^2.3.0"
     }
 }
