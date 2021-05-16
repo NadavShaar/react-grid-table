@@ -1,5 +1,5 @@
 import React from 'react';
-import { SortableContainer } from 'react-sortable-hoc';
+import { SortableContainer } from './drag-and-drop';
 import { Row, HeaderCellContainer } from './components/';
 import { useTableManager } from './hooks/';
 import PropTypes from 'prop-types';
@@ -40,6 +40,7 @@ const GridTable = props => {
             <Header tableManager={tableManager} />
             <SortableList
                 forwardRef={tableRef}
+                getContainer={() => tableRef}
                 className='rgt-container'
                 axis="x"
                 lockToContainerEdges

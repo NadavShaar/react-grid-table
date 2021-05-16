@@ -31,7 +31,7 @@ const useSearch = (props, tableManager) => {
             rows = rows.filter(item => Object.keys(item).some(key => {
                 if (cols[key] && cols[key].searchable) {
                     const value = cols[key].getValue({ value: item[key], column: cols[key] });
-                    return cols[key].search({ value: value.toString(), searchText: searchApi.searchText });
+                    return cols[key].search({ value: value?.toString() || '', searchText: searchApi.searchText });
                 }
                 return false;
             }));
