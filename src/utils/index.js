@@ -1,7 +1,4 @@
-import getHighlightedText from './getHighlightedText'; 
-import uuid from './uuid'; 
+import getHighlightedText from "./getHighlightedText";
+import uuid from "./uuid";
 
-export {
-    getHighlightedText,
-    uuid
-}
+export { getHighlightedText, uuid };

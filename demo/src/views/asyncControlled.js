@@ -1,19 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import ReactDOM from "react-dom";
-import GridTable from '../../../src';
-import { ControllersDrawer } from '../components';
-import getColumns from '../getColumns';
+import GridTable from "../../../src";
+import { ControllersDrawer } from "../components";
+import getColumns from "../getColumns";
 import MOCK_DATA from "../MOCK_DATA.json";
-import '../index.css';
-
+import "../index.css";
 
 const MyAwesomeTable = () => {
     const tableManager = useRef(null);
-    const setTableManager = tm => tableManager.current = tm;
+    const setTableManager = (tm) => (tableManager.current = tm);
     const [rows, setRows] = useState([]);
     const [totalRows, setTotalRows] = useState(null);
     const [editRowId, setEditRowId] = useState(null);
-    let [searchText, setSearchText] = useState('');
+    let [searchText, setSearchText] = useState("");
     let [selectedRowsIds, setSelectedRowsIds] = useState([]);
     let [sort, setSort] = useState({ colId: null, isAsc: true });
     let [page, setPage] = useState(1);
@@ -23,15 +22,21 @@ const MyAwesomeTable = () => {
     let [highlightSearch, setHighlightSearch] = useState(true);
     let [showSearch, setShowSearch] = useState(true);
     let [showRowsInformation, setShowRowsInformation] = useState(true);
-    let [showColumnVisibilityManager, setShowColumnVisibilityManager] = useState(true);
+    let [showColumnVisibilityManager, setShowColumnVisibilityManager] =
+        useState(true);
     let [isHeaderSticky, setIsHeaderSticky] = useState(true);
     let [isVirtualScroll, setIsVirtualScroll] = useState(true);
     let [isPaginated, setIsPaginated] = useState(true);
     let [minSearchChars, setMinSearchChars] = useState(2);
     let [minColumnResizeWidth, setMinColumnWidth] = useState(70);
-    let [columns, setColumns] = useState(getColumns({ setRowsData: newRows => tableManager.current.asyncApi.setRows(newRows) }));
+    let [columns, setColumns] = useState(
+        getColumns({
+            setRowsData: (newRows) =>
+                tableManager.current.asyncApi.setRows(newRows),
+        })
+    );
     let [isSettingsOpen, setIsSettingsOpen] = useState(false);
-    let [selectAllMode, setSelectAllMode] = useState('page');
+    let [selectAllMode, setSelectAllMode] = useState("page");
 
     const controllers = {
         columns: [columns, setColumns],
@@ -46,36 +51,35 @@ const MyAwesomeTable = () => {
         highlightSearch: [highlightSearch, setHighlightSearch],
         showSearch: [showSearch, setShowSearch],
         showRowsInformation: [showRowsInformation, setShowRowsInformation],
-        showColumnVisibilityManager: [showColumnVisibilityManager, setShowColumnVisibilityManager],
+        showColumnVisibilityManager: [
+            showColumnVisibilityManager,
+            setShowColumnVisibilityManager,
+        ],
         isHeaderSticky: [isHeaderSticky, setIsHeaderSticky],
         isVirtualScroll: [isVirtualScroll, setIsVirtualScroll],
         isPaginated: [isPaginated, setIsPaginated],
         minSearchChars: [minSearchChars, setMinSearchChars],
         minColumnResizeWidth: [minColumnResizeWidth, setMinColumnWidth],
-        selectAllMode: [selectAllMode, setSelectAllMode]
-    }
+        selectAllMode: [selectAllMode, setSelectAllMode],
+    };
 
     const onRowsRequest = async (requestData, tableManager) => {
         let {
-            sortApi: {
-                sortRows
-            },
-            searchApi: {
-                searchRows
-            },
+            sortApi: { sortRows },
+            searchApi: { searchRows },
         } = tableManager;
 
         let allRows = MOCK_DATA;
         allRows = searchRows(allRows);
         allRows = sortRows(allRows);
 
-        await new Promise(r => setTimeout(r, 1300));
+        await new Promise((r) => setTimeout(r, 1300));
 
         return {
             rows: allRows.slice(requestData.from, requestData.to),
-            totalRows: allRows.length
+            totalRows: allRows.length,
         };
-    }
+    };
 
     return (
         <div className="demo">
@@ -85,7 +89,9 @@ const MyAwesomeTable = () => {
                 controllers={controllers}
             />
             <div className="tableWrapper">
-                <div style={{ position: 'absolute', top: 0 }}>Async Controlled</div>
+                <div style={{ position: "absolute", top: 0 }}>
+                    Async Controlled
+                </div>
                 <GridTable
                     columns={columns}
                     onColumnsChange={setColumns}
@@ -98,7 +104,10 @@ const MyAwesomeTable = () => {
                     onEditRowIdChange={setEditRowId}
                     selectedRowsIds={selectedRowsIds}
                     onSelectedRowsChange={setSelectedRowsIds}
-                    style={{ boxShadow: 'rgb(0 0 0 / 30%) 0px 40px 40px -20px', border: 'none' }}
+                    style={{
+                        boxShadow: "rgb(0 0 0 / 30%) 0px 40px 40px -20px",
+                        border: "none",
+                    }}
                     onLoad={setTableManager}
                     searchText={searchText}
                     onSearchTextChange={setSearchText}
@@ -123,9 +132,9 @@ const MyAwesomeTable = () => {
                 />
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default MyAwesomeTable;
 
-ReactDOM.render(<MyAwesomeTable />, document.getElementById('root'));
+ReactDOM.render(<MyAwesomeTable />, document.getElementById("root"));

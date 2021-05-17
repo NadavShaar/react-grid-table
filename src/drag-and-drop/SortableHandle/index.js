@@ -1,34 +1,37 @@
-import * as React from 'react';
-import {findDOMNode} from 'react-dom';
+import * as React from "react";
+import { findDOMNode } from "react-dom";
 
-import {provideDisplayName} from '../utils';
+import { provideDisplayName } from "../utils";
 
 export default function sortableHandle(
-  WrappedComponent,
-  config = {withRef: false},
+    WrappedComponent,
+    config = { withRef: false }
 ) {
-  return class WithSortableHandle extends React.Component {
-    static displayName = provideDisplayName('sortableHandle', WrappedComponent);
+    return class WithSortableHandle extends React.Component {
+        static displayName = provideDisplayName(
+            "sortableHandle",
+            WrappedComponent
+        );
 
-    componentDidMount() {
-      const node = findDOMNode(this);
-      node.sortableHandle = true;
-    }
+        componentDidMount() {
+            const node = findDOMNode(this);
+            node.sortableHandle = true;
+        }
 
-    getWrappedInstance() {
-      return this.wrappedInstance.current;
-    }
+        getWrappedInstance() {
+            return this.wrappedInstance.current;
+        }
 
-    wrappedInstance = React.createRef();
+        wrappedInstance = React.createRef();
 
-    render() {
-      const ref = config.withRef ? this.wrappedInstance : null;
+        render() {
+            const ref = config.withRef ? this.wrappedInstance : null;
 
-      return <WrappedComponent ref={ref} {...this.props} />;
-    }
-  };
+            return <WrappedComponent ref={ref} {...this.props} />;
+        }
+    };
 }
 
 export function isSortableHandle(node) {
-  return node.sortableHandle != null;
+    return node.sortableHandle != null;
 }

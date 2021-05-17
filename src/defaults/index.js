@@ -1,7 +1,4 @@
-import icons from './icons';
-import texts from './texts';
+import icons from "./icons";
+import texts from "./texts";
 
-export {
-    icons,
-    texts,
-} 
+export { icons, texts };

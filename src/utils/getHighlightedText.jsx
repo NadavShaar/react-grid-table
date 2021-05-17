@@ -1,7 +1,8 @@
-import React from 'react';
+import React from "react";
 
 const getHighlightedText = (text, searchTerm) => {
-    if (text === searchTerm) return <span className='rgt-search-highlight'>{text}</span>;
+    if (text === searchTerm)
+        return <span className="rgt-search-highlight">{text}</span>;
 
     const regex = new RegExp(searchTerm, "gi");
     const restArr = text.split(regex, text.length);
@@ -15,21 +16,25 @@ const getHighlightedText = (text, searchTerm) => {
             element = (
                 <React.Fragment key={idx}>
                     <span>{textSlice}</span>
-                    {
-                        (restArr.length !== idx + 1) ?
-                            <span className='rgt-search-highlight'>
-                                {text.slice(restItemsLength, searchTerm.length + restItemsLength)}
-                            </span>
-                            : null
-                    }
+                    {restArr.length !== idx + 1 ? (
+                        <span className="rgt-search-highlight">
+                            {text.slice(
+                                restItemsLength,
+                                searchTerm.length + restItemsLength
+                            )}
+                        </span>
+                    ) : null}
                 </React.Fragment>
-            )
+            );
         } else if (restArr.length !== idx + 1) {
             element = (
-                <span key={idx} className='rgt-search-highlight'>
-                    {text.slice(restItemsLength, searchTerm.length + restItemsLength)}
+                <span key={idx} className="rgt-search-highlight">
+                    {text.slice(
+                        restItemsLength,
+                        searchTerm.length + restItemsLength
+                    )}
                 </span>
-            )
+            );
         }
 
         restItemsLength += searchTerm.length;

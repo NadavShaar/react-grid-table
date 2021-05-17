@@ -1,16 +1,15 @@
-import React from 'react';
+import React from "react";
 
-const SelectionCell = ({
-    value,
-    disabled,
-    onChange,
-    tableManager
-}) => {
+const SelectionCell = ({ value, disabled, onChange, tableManager }) => {
     const {
-        config: { additionalProps: { selectionCell: additionalProps = {} } }
+        config: {
+            additionalProps: { selectionCell: additionalProps = {} },
+        },
     } = tableManager;
 
-    let classNames = (`${disabled ? 'rgt-disabled' : 'rgt-clickable'} ${additionalProps.className || ''}`).trim();
+    let classNames = `${disabled ? "rgt-disabled" : "rgt-clickable"} ${
+        additionalProps.className || ""
+    }`.trim();
 
     return (
         <input
@@ -18,11 +17,11 @@ const SelectionCell = ({
             className={classNames}
             type="checkbox"
             onChange={onChange}
-            onClick={event => event.stopPropagation()}
+            onClick={(event) => event.stopPropagation()}
             checked={value}
             disabled={disabled}
         />
-    )
+    );
 };
 
 export default SelectionCell;

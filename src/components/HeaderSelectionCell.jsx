@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const HeaderSelectionCell = ({
     column,
@@ -6,13 +6,19 @@ const HeaderSelectionCell = ({
     ref = tableManager.rowSelectionApi.selectAll.ref,
     onChange = tableManager.rowSelectionApi.selectAll.onChange,
     checked = tableManager.rowSelectionApi.selectAll.checked,
-    disabled = tableManager.rowSelectionApi.selectAll.disabled
+    disabled = tableManager.rowSelectionApi.selectAll.disabled,
 }) => {
     const {
-        config: { additionalProps: { headerSelectionCell: additionalProps = {} } },
+        config: {
+            additionalProps: { headerSelectionCell: additionalProps = {} },
+        },
     } = tableManager;
 
-    let classNames = (disabled ? 'rgt-disabled' : 'rgt-clickable' + ' ' + additionalProps.className || '').trim();
+    let classNames = (
+        disabled
+            ? "rgt-disabled"
+            : "rgt-clickable" + " " + additionalProps.className || ""
+    ).trim();
 
     return (
         <input
@@ -24,7 +30,7 @@ const HeaderSelectionCell = ({
             checked={checked}
             disabled={disabled}
         />
-    )
+    );
 };
 
 export default HeaderSelectionCell;
