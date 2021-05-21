@@ -387,6 +387,7 @@ All components are exported so you'll be able to import them from anywhere but y
 | PlaceHolderCell | `tableManager` | --- |
 | Loader | `tableManager` | --- |
 | NoResults | `tableManager` | --- |
+| DragHandle | --- | --- |
 | Footer | `tableManager` | --- |
 | Information | `tableManager` | `totalCount` `pageSize` `pageCount` `selectedCount` |
 | PageSize | `tableManager` | `value` `onChange` `options` |
