@@ -1,4 +1,4 @@
-import { useRef, useEffect, useMemo } from "react";
+import { useRef, useEffect } from "react";
 import { uuid } from "../utils";
 import { useRequestDebounce } from ".";
 
@@ -77,12 +77,12 @@ const useAsync = (props, tableManager) => {
     const rowsRequests = useRef([]);
 
     asyncApi.batchSize = props.batchSize ?? pageSize;
-    asyncApi.isLoading = useMemo(() => {
+    asyncApi.isLoading = (() => {
         if (!rowsRequests.current.length) return true;
         if (totalRows === 0) return false;
         if (!rowsRequests.current.every((request) => rows[request.from]))
             return true;
-    });
+    })();
 
     const onRowsRequest = async (rowsRequest) => {
         rowsRequests.current = [...rowsRequests.current, rowsRequest];

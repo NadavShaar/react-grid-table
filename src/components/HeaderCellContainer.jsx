@@ -1,17 +1,21 @@
 import React from "react";
 import { SortableElement, SortableHandle } from "../drag-and-drop";
 
-const SortableItem = SortableElement(
-    React.forwardRef(({ children, columnId, className }, ref) => (
-        <div ref={ref} className={className} data-column-id={columnId}>
-            {children}
-        </div>
-    ))
+const SortableItem = ({ children, columnId, className }, ref) => (
+    <div ref={ref} className={className} data-column-id={columnId}>
+        {children}
+    </div>
 );
 
-const SortableDragHandle = SortableHandle(({ children }) => (
-    <React.Fragment>{children}</React.Fragment>
-));
+const SortableElementItem = SortableElement(React.forwardRef(SortableItem));
+
+const DragHandleContainer = ({ children }, ref) => (
+    <span ref={ref}>{children}</span>
+);
+
+const SortableDragHandle = SortableHandle(
+    React.forwardRef(DragHandleContainer)
+);
 
 const HeaderCellContainer = ({ index, column, tableManager }) => {
     let {
@@ -118,7 +122,7 @@ const HeaderCellContainer = ({ index, column, tableManager }) => {
         >
             {column.id === "virtual" ? null : (
                 <React.Fragment>
-                    <SortableItem
+                    <SortableElementItem
                         className={innerCellClassNames}
                         index={index}
                         disabled={
@@ -129,7 +133,7 @@ const HeaderCellContainer = ({ index, column, tableManager }) => {
                         columnId={column.id.toString()}
                         collection={isPinnedLeft || isPinnedRight ? 0 : 1}
                     >
-                        {DragHandle ? (
+                        {DragHandle && !isPinnedLeft && !isPinnedRight ? (
                             <SortableDragHandle index={index}>
                                 {<DragHandle />}
                             </SortableDragHandle>
@@ -149,7 +153,7 @@ const HeaderCellContainer = ({ index, column, tableManager }) => {
                                 {sortDescendingIcon}
                             </span>
                         )}
-                    </SortableItem>
+                    </SortableElementItem>
                     {column.resizable ? (
                         <span
                             ref={resizeHandleRef}

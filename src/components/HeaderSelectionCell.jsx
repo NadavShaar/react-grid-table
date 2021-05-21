@@ -1,7 +1,6 @@
 import React from "react";
 
 const HeaderSelectionCell = ({
-    column,
     tableManager,
     ref = tableManager.rowSelectionApi.selectAll.ref,
     onChange = tableManager.rowSelectionApi.selectAll.onChange,

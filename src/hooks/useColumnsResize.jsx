@@ -104,7 +104,7 @@ const useColumnsResize = (props, tableManager) => {
         props.onColumnResizeEnd?.({ event, target, column }, tableManager);
     };
 
-    columnsResizeApi.useResizeRef = (column) => {
+    const useResizeRef = (column) => {
         const resizeHandleRef = useRef(null);
 
         useResizeEvents(
@@ -117,6 +117,8 @@ const useColumnsResize = (props, tableManager) => {
 
         return resizeHandleRef;
     };
+
+    columnsResizeApi.useResizeRef = useResizeRef;
 
     return columnsResizeApi;
 };

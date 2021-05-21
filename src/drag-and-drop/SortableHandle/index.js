@@ -1,12 +1,8 @@
 import * as React from "react";
-import { findDOMNode } from "react-dom";
 
 import { provideDisplayName } from "../utils";
 
-export default function sortableHandle(
-    WrappedComponent,
-    config = { withRef: false }
-) {
+export default function sortableHandle(WrappedComponent) {
     return class WithSortableHandle extends React.Component {
         static displayName = provideDisplayName(
             "sortableHandle",
@@ -14,8 +10,7 @@ export default function sortableHandle(
         );
 
         componentDidMount() {
-            const node = findDOMNode(this);
-            node.sortableHandle = true;
+            this.wrappedInstance.current.sortableHandle = true;
         }
 
         getWrappedInstance() {
@@ -25,9 +20,9 @@ export default function sortableHandle(
         wrappedInstance = React.createRef();
 
         render() {
-            const ref = config.withRef ? this.wrappedInstance : null;
-
-            return <WrappedComponent ref={ref} {...this.props} />;
+            return (
+                <WrappedComponent ref={this.wrappedInstance} {...this.props} />
+            );
         }
     };
 }
