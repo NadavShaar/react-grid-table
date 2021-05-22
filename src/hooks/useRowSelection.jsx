@@ -35,28 +35,30 @@ const useRowSelection = (props, tableManager) => {
 
     const selectAllRef = useRef(null);
 
+    const {
+        selectedRowsIds: selectedRows,
+        setSelectedRowsIds: setSelectedRows,
+        getIsRowSelectable,
+    } = rowSelectionApi;
+
     rowSelectionApi.selectAll = useMemo(() => {
         const mode = props.selectAllMode;
         const allRows = mode === "all" ? rows : pageRows;
         const selectableItemsIds = allRows
             .filter((row) => row)
-            .filter(rowSelectionApi.getIsRowSelectable)
+            .filter(getIsRowSelectable)
             .map((item) => item[rowIdField]);
         const checked =
             selectableItemsIds.length &&
             selectableItemsIds.every((selectableItemId) =>
-                rowSelectionApi.selectedRowsIds.find(
-                    (id) => selectableItemId === id
-                )
+                selectedRows.find((id) => selectableItemId === id)
             );
         const disabled = !selectableItemsIds.length;
         const indeterminate = !!(
-            rowSelectionApi.selectedRowsIds.length &&
+            selectedRows.length &&
             !checked &&
             selectableItemsIds.some((selectableItemId) =>
-                rowSelectionApi.selectedRowsIds.find(
-                    (id) => selectableItemId === id
-                )
+                selectedRows.find((id) => selectableItemId === id)
             )
         );
 
@@ -67,7 +69,7 @@ const useRowSelection = (props, tableManager) => {
             disabled,
             indeterminate,
             onChange: () => {
-                let newSelectedRowsIds = [...rowSelectionApi.selectedRowsIds];
+                let newSelectedRowsIds = [...selectedRows];
 
                 if (checked || indeterminate)
                     newSelectedRowsIds = newSelectedRowsIds.filter(
@@ -79,10 +81,18 @@ const useRowSelection = (props, tableManager) => {
                         newSelectedRowsIds.push(s)
                     );
 
-                rowSelectionApi.setSelectedRowsIds(newSelectedRowsIds);
+                setSelectedRows(newSelectedRowsIds);
             },
         };
-    }, [props.selectAllMode, rows, pageRows, rowSelectionApi, rowIdField]);
+    }, [
+        props.selectAllMode,
+        rows,
+        pageRows,
+        getIsRowSelectable,
+        selectedRows,
+        rowIdField,
+        setSelectedRows,
+    ]);
 
     useEffect(() => {
         if (!selectAllRef.current) return;

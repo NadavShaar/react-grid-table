@@ -29,7 +29,7 @@ const Information = ({
 
     return (
         <div {...additionalProps} className={classNames}>
-            {totalRowsText} {totalCount}{" "}
+            {totalRowsText} {totalCount || 0}&nbsp;
             {!isPaginated
                 ? ""
                 : `| ${rowsText} ${

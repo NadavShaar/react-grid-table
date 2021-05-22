@@ -74,49 +74,48 @@ const GridTable = (props) => {
                         tableManager={tableManager}
                     />
                 ))}
-                {totalRows && visibleColumns.length > 1 ? (
-                    isVirtualScroll ? (
-                        [
-                            <Row
-                                key={"virtual-start"}
-                                index={"virtual-start"}
-                                tableManager={tableManager}
-                            />,
-                            ...virtualItems.map((virtualizedRow) => (
-                                <Row
-                                    key={virtualizedRow.index}
-                                    index={virtualizedRow.index}
-                                    data={pageRows[virtualizedRow.index]}
-                                    measureRef={virtualizedRow.measureRef}
-                                    tableManager={tableManager}
-                                />
-                            )),
-                            <Row
-                                key={"virtual-end"}
-                                index={"virtual-end"}
-                                tableManager={tableManager}
-                            />,
-                        ]
-                    ) : (
-                        pageRows.map((rowData, index) => (
-                            <Row
-                                key={rowData?.[rowIdField]}
-                                index={index}
-                                data={rowData}
-                                tableManager={tableManager}
-                            />
-                        ))
-                    )
-                ) : (
-                    <div className="rgt-container-overlay">
-                        {isLoading ? (
-                            <Loader tableManager={tableManager} />
-                        ) : (
-                            <NoResults tableManager={tableManager} />
-                        )}
-                    </div>
-                )}
+                {totalRows && visibleColumns.length > 1
+                    ? isVirtualScroll
+                        ? [
+                              <Row
+                                  key={"virtual-start"}
+                                  index={"virtual-start"}
+                                  tableManager={tableManager}
+                              />,
+                              ...virtualItems.map((virtualizedRow) => (
+                                  <Row
+                                      key={virtualizedRow.index}
+                                      index={virtualizedRow.index}
+                                      data={pageRows[virtualizedRow.index]}
+                                      measureRef={virtualizedRow.measureRef}
+                                      tableManager={tableManager}
+                                  />
+                              )),
+                              <Row
+                                  key={"virtual-end"}
+                                  index={"virtual-end"}
+                                  tableManager={tableManager}
+                              />,
+                          ]
+                        : pageRows.map((rowData, index) => (
+                              <Row
+                                  key={rowData?.[rowIdField]}
+                                  index={index}
+                                  data={rowData}
+                                  tableManager={tableManager}
+                              />
+                          ))
+                    : null}
             </SortableList>
+            {!totalRows || !visibleColumns.length ? (
+                <div className="rgt-container-overlay">
+                    {isLoading ? (
+                        <Loader tableManager={tableManager} />
+                    ) : (
+                        <NoResults tableManager={tableManager} />
+                    )}
+                </div>
+            ) : null}
             <Footer tableManager={tableManager} />
         </div>
     );
