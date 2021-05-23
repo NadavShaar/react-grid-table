@@ -60,7 +60,9 @@ const UsernameCell = ({
             ) : (
                 <React.Fragment>
                     <img style={styles.img} src={data.avatar} alt="avatar" />
-                    <span style={styles.text}>{value}</span>
+                    <span style={styles.text} title={value}>
+                        {value}
+                    </span>
                 </React.Fragment>
             )}
         </div>

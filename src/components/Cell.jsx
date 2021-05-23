@@ -12,7 +12,7 @@ const Cell = ({ value, tableManager }) => {
     ).trim();
 
     return (
-        <div {...additionalProps} className={classNames}>
+        <div {...additionalProps} className={classNames} title={value}>
             {value}
         </div>
     );
