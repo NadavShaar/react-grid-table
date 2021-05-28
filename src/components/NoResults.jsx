@@ -1,7 +1,11 @@
 const NoResults = ({ tableManager }) => {
-    let { config: { texts: { noResults } } } = tableManager;
+    let {
+        config: {
+            texts: { noResults },
+        },
+    } = tableManager;
 
-    return noResults
+    return noResults;
 };
 
 export default NoResults;

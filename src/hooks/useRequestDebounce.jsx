@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef } from "react";
 
 const useRequestDebounce = (callback, wait) => {
     const params = useRef({ timeout: null, lastData: {} }).current;
@@ -6,10 +6,14 @@ const useRequestDebounce = (callback, wait) => {
     params.wait = wait;
 
     return function () {
-        if ((arguments[0].from === params.lastData.from) && (arguments[0].to === params.lastData.to)) return;
+        if (
+            arguments[0].from === params.lastData.from &&
+            arguments[0].to === params.lastData.to
+        )
+            return;
 
         params.lastData = arguments[0];
-        
+
         clearTimeout(params.timeout);
         params.timeout = setTimeout(() => {
             params.timeout = null;

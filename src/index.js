@@ -1,15 +1,19 @@
-import React from 'react';
-import { SortableContainer } from './drag-and-drop';
-import { Row, HeaderCellContainer } from './components/';
-import { useTableManager } from './hooks/';
-import PropTypes from 'prop-types';
-import './index.css';
+import React from "react";
+import { SortableContainer } from "./drag-and-drop";
+import { Row, HeaderCellContainer } from "./components/";
+import { useTableManager } from "./hooks/";
+import PropTypes from "prop-types";
+import "./index.css";
 
-const SortableList = SortableContainer(({ forwardRef, className, style, children }) => 
-    <div ref={forwardRef} className={className} style={style}>{children}</div>);
- 
-const GridTable = props => {
+const SortableList = SortableContainer(
+    ({ forwardRef, className, style, children }) => (
+        <div ref={forwardRef} className={className} style={style}>
+            {children}
+        </div>
+    )
+);
 
+const GridTable = (props) => {
     const tableManager = useTableManager(props);
 
     const {
@@ -25,15 +29,16 @@ const GridTable = props => {
         columnsReorderApi: { onColumnReorderStart, onColumnReorderEnd },
         rowVirtualizer: { virtualItems },
         paginationApi: { pageRows },
-        rowsApi: { totalRows }
+        rowsApi: { totalRows },
     } = tableManager;
 
     const rest = Object.keys(props).reduce((rest, key) => {
-        if (GridTable.propTypes[key] === undefined) rest = { ...rest, [key]: props[key] };
+        if (GridTable.propTypes[key] === undefined)
+            rest = { ...rest, [key]: props[key] };
         return rest;
-    }, {})
+    }, {});
 
-    const classNames = ('rgt-wrapper ' + (props.className || '')).trim();
+    const classNames = ("rgt-wrapper " + (props.className || "")).trim();
 
     return (
         <div {...rest} ref={rgtRef} id={id} className={classNames}>
@@ -41,7 +46,7 @@ const GridTable = props => {
             <SortableList
                 forwardRef={tableRef}
                 getContainer={() => tableRef}
-                className='rgt-container'
+                className="rgt-container"
                 axis="x"
                 lockToContainerEdges
                 distance={10}
@@ -50,48 +55,75 @@ const GridTable = props => {
                 onSortStart={onColumnReorderStart}
                 onSortEnd={onColumnReorderEnd}
                 style={{
-                    display: 'grid',
-                    overflow: 'auto',
+                    display: "grid",
+                    overflow: "auto",
                     flex: 1,
-                    gridTemplateColumns: (visibleColumns.map(column => column.width)).join(" "),
-                    gridTemplateRows: `repeat(${pageRows.length + 1 + (isVirtualScroll ? 1 : 0)}, max-content)`,
+                    gridTemplateColumns: visibleColumns
+                        .map((column) => column.width)
+                        .join(" "),
+                    gridTemplateRows: `repeat(${
+                        pageRows.length + 1 + (isVirtualScroll ? 1 : 0)
+                    }, max-content)`,
                 }}
             >
-                {
-                    visibleColumns.map((visibleColumn, idx) => (
-                        <HeaderCellContainer key={visibleColumn.id} index={idx} column={visibleColumn} tableManager={tableManager}/>
-                    ))
-                }
-                {
-                    totalRows && visibleColumns.length > 1 ?
-                        isVirtualScroll ? 
-                            [
-                                <Row key={'virtual-start'} index={'virtual-start'} tableManager={tableManager} />,
-                                ...virtualItems.map(virtualizedRow => <Row key={virtualizedRow.index} index={virtualizedRow.index} data={pageRows[virtualizedRow.index]} measureRef={virtualizedRow.measureRef} tableManager={tableManager} />),
-                                <Row key={'virtual-end'} index={'virtual-end'} tableManager={tableManager} />
-                            ]
-                            :
-                            pageRows.map((rowData, index) => <Row key={rowData?.[rowIdField]} index={index} data={rowData} tableManager={tableManager} />)
-                        :
-                        <div className='rgt-container-overlay'>
-                            {
-                                isLoading
-                                    ?
-                                    <Loader tableManager={tableManager} />
-                                    :
-                                    <NoResults tableManager={tableManager} />
-                            }
-                        </div>
-                }
+                {visibleColumns.map((visibleColumn, idx) => (
+                    <HeaderCellContainer
+                        key={visibleColumn.id}
+                        index={idx}
+                        column={visibleColumn}
+                        tableManager={tableManager}
+                    />
+                ))}
+                {totalRows && visibleColumns.length > 1
+                    ? isVirtualScroll
+                        ? [
+                              <Row
+                                  key={"virtual-start"}
+                                  index={"virtual-start"}
+                                  tableManager={tableManager}
+                              />,
+                              ...virtualItems.map((virtualizedRow) => (
+                                  <Row
+                                      key={virtualizedRow.index}
+                                      index={virtualizedRow.index}
+                                      data={pageRows[virtualizedRow.index]}
+                                      measureRef={virtualizedRow.measureRef}
+                                      tableManager={tableManager}
+                                  />
+                              )),
+                              <Row
+                                  key={"virtual-end"}
+                                  index={"virtual-end"}
+                                  tableManager={tableManager}
+                              />,
+                          ]
+                        : pageRows.map((rowData, index) => (
+                              <Row
+                                  key={rowData?.[rowIdField]}
+                                  index={index}
+                                  data={rowData}
+                                  tableManager={tableManager}
+                              />
+                          ))
+                    : null}
             </SortableList>
-            <Footer tableManager={tableManager}/>
+            {!totalRows || !visibleColumns.length ? (
+                <div className="rgt-container-overlay">
+                    {isLoading ? (
+                        <Loader tableManager={tableManager} />
+                    ) : (
+                        <NoResults tableManager={tableManager} />
+                    )}
+                </div>
+            ) : null}
+            <Footer tableManager={tableManager} />
         </div>
-    )
-}
+    );
+};
 
 GridTable.defaultProps = {
     columns: [],
-    rowIdField: 'id',
+    rowIdField: "id",
     minColumnResizeWidth: 70,
     pageSizes: [20, 50, 100],
     isHeaderSticky: true,
@@ -104,9 +136,9 @@ GridTable.defaultProps = {
     showColumnVisibilityManager: true,
     enableColumnsReorder: true,
     requestDebounceTimeout: 300,
-    getIsRowSelectable: row => true,
-    getIsRowEditable: row => true,
-    selectAllMode: 'page' // ['page', 'all']
+    getIsRowSelectable: () => true,
+    getIsRowEditable: () => true,
+    selectAllMode: "page", // ['page', 'all']
 };
 
 GridTable.propTypes = {
@@ -157,8 +189,8 @@ GridTable.propTypes = {
     onColumnResize: PropTypes.func,
     onColumnResizeEnd: PropTypes.func,
     onColumnReorderStart: PropTypes.func,
-    onColumnReorderEnd: PropTypes.func, 
-    onRowsRequest: PropTypes.func, 
+    onColumnReorderEnd: PropTypes.func,
+    onRowsRequest: PropTypes.func,
     onRowsReset: PropTypes.func,
     onRowsChange: PropTypes.func,
     onTotalRowsChange: PropTypes.func,
@@ -166,5 +198,5 @@ GridTable.propTypes = {
 
 export default GridTable;
 
-export * from './components';
-export * from './hooks';
+export * from "./components";
+export * from "./hooks";

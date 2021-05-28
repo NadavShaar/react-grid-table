@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'react';
-import * as components from '../components';
-import { icons, texts } from '../defaults';
-import { uuid } from '../utils';
+import { useEffect, useRef } from "react";
+import * as components from "../components";
+import { icons, texts } from "../defaults";
+import { uuid } from "../utils";
 import {
     useRowVirtualizer,
     useColumns,
@@ -14,24 +14,34 @@ import {
     useAsync,
     useColumnsReorder,
     useColumnsVisibility,
-    useColumnsResize
-} from '../hooks/';
+    useColumnsResize,
+} from "../hooks/";
 
 const useTableManager = (props) => {
-    const tableManager = useRef({ id: props.id || uuid(), isMounted: false, isInitialized: false }).current;
+    const tableManager = useRef({
+        id: props.id || uuid(),
+        isMounted: false,
+        isInitialized: false,
+    }).current;
 
-    Object.defineProperty(tableManager, "columnsReorderApi", { enumerable: false, writable: true });
-    Object.defineProperty(tableManager, "columnsResizeApi", { enumerable: false, writable: true });
-    
+    Object.defineProperty(tableManager, "columnsReorderApi", {
+        enumerable: false,
+        writable: true,
+    });
+    Object.defineProperty(tableManager, "columnsResizeApi", {
+        enumerable: false,
+        writable: true,
+    });
+
     // initialization
     useEffect(() => {
         tableManager.isMounted = true;
         props.onLoad?.(tableManager);
 
-        return () => tableManager.isMounted = false;
-    }, [])
+        return () => (tableManager.isMounted = false);
+    }, [props, tableManager]);
 
-    tableManager.mode = !props.onRowsRequest ? 'sync' : 'async';
+    tableManager.mode = !props.onRowsRequest ? "sync" : "async";
     tableManager.config = {
         rowIdField: props.rowIdField,
         minColumnResizeWidth: props.minColumnResizeWidth,
@@ -45,22 +55,27 @@ const useTableManager = (props) => {
         showColumnVisibilityManager: props.showColumnVisibilityManager,
         pageSizes: props.pageSizes,
         requestDebounceTimeout: props.requestDebounceTimeout,
-        isVirtualScroll: props.isVirtualScroll || (!props.isPaginated && (tableManager.mode !== 'sync')),
-        tableHasSelection: !!props.columns.find(cd => cd.id === 'checkbox'),
+        isVirtualScroll:
+            props.isVirtualScroll ||
+            (!props.isPaginated && tableManager.mode !== "sync"),
+        tableHasSelection: !!props.columns.find((cd) => cd.id === "checkbox"),
         components: { ...components, ...props.components },
         additionalProps: props.additionalProps || {},
         icons: { ...icons, ...props.icons },
         texts: { ...texts, ...props.texts },
-    }
+    };
 
     tableManager.refs = {
         tableRef: useRef(null),
-        rgtRef: useRef(null)
-    }
+        rgtRef: useRef(null),
+    };
     tableManager.columnsApi = useColumns(props, tableManager);
     tableManager.columnsReorderApi = useColumnsReorder(props, tableManager);
     tableManager.columnsResizeApi = useColumnsResize(props, tableManager);
-    tableManager.columnsVisibilityApi = useColumnsVisibility(props, tableManager);
+    tableManager.columnsVisibilityApi = useColumnsVisibility(
+        props,
+        tableManager
+    );
     tableManager.searchApi = useSearch(props, tableManager);
     tableManager.sortApi = useSort(props, tableManager);
     tableManager.rowsApi = useRows(props, tableManager);
@@ -69,8 +84,14 @@ const useTableManager = (props) => {
     tableManager.rowEditApi = useRowEdit(props, tableManager);
     tableManager.rowVirtualizer = useRowVirtualizer(props, tableManager);
     tableManager.asyncApi = useAsync(props, tableManager);
-    tableManager.isLoading = props.isLoading ?? (tableManager.mode !== 'sync' && tableManager.asyncApi.isLoading);
-    const searchText = (tableManager.searchApi.searchText.length >= tableManager.config.minSearchChars) ? tableManager.searchApi.searchText : '';
+    tableManager.isLoading =
+        props.isLoading ??
+        (tableManager.mode !== "sync" && tableManager.asyncApi.isLoading);
+    const searchText =
+        tableManager.searchApi.searchText.length >=
+        tableManager.config.minSearchChars
+            ? tableManager.searchApi.searchText
+            : "";
 
     // reset page number
     useEffect(() => {
@@ -78,29 +99,49 @@ const useTableManager = (props) => {
         if (tableManager.paginationApi.page === 1) return;
 
         tableManager.paginationApi.setPage(1);
-    }, [searchText, tableManager.paginationApi.pageSize])
+    }, [
+        searchText,
+        tableManager.isInitialized,
+        tableManager.paginationApi,
+        tableManager.paginationApi.pageSize,
+    ]);
 
     // reset rows
     useEffect(() => {
         if (!tableManager.isInitialized) return;
 
-        if (tableManager.mode !== 'sync') {
+        if (tableManager.mode !== "sync") {
             tableManager.rowSelectionApi.setSelectedRowsIds([]);
             tableManager.asyncApi.resetRows();
         }
-    }, [searchText, tableManager.sortApi.sort.colId, tableManager.sortApi.sort.isAsc])
+    }, [
+        searchText,
+        tableManager.asyncApi,
+        tableManager.isInitialized,
+        tableManager.mode,
+        tableManager.rowSelectionApi,
+        tableManager.sortApi.sort.colId,
+        tableManager.sortApi.sort.isAsc,
+    ]);
 
     // reset edit row
     useEffect(() => {
-        if (tableManager.rowEditApi.editRow) tableManager.rowEditApi.setEditRowId(null);
-    }, [searchText, tableManager.sortApi.sort.colId, tableManager.sortApi.sort.isAsc, tableManager.paginationApi.page])
+        if (tableManager.rowEditApi.editRow)
+            tableManager.rowEditApi.setEditRowId(null);
+    }, [
+        searchText,
+        tableManager.sortApi.sort.colId,
+        tableManager.sortApi.sort.isAsc,
+        tableManager.paginationApi.page,
+        tableManager.rowEditApi,
+    ]);
 
     // initialization completion
     useEffect(() => {
         tableManager.isInitialized = true;
-    }, [])
+    }, [tableManager]);
 
-    return tableManager
-}
+    return tableManager;
+};
 
 export default useTableManager;

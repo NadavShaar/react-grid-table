@@ -1,7 +1,4 @@
-import ControllerWrappper from './ControllerWrappper';
-import ControllersDrawer from './ControllersDrawer';
+import ControllerWrappper from "./ControllerWrappper";
+import ControllersDrawer from "./ControllersDrawer";
 
-export {
-    ControllerWrappper,
-    ControllersDrawer,
-}
+export { ControllerWrappper, ControllersDrawer };
