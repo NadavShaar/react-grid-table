@@ -12,7 +12,7 @@ const Row = ({
         rowEditApi: { editRow, getIsRowEditable },
         rowSelectionApi: { getIsRowSelectable, selectedRowsIds },
         columnsApi: { visibleColumns },
-        paginationApi: { pageRows, page },
+        paginationApi: { pageRows, page, pageSize },
         rowVirtualizer: { virtualItems, totalSize },
     } = tableManager;
 
@@ -29,7 +29,7 @@ const Row = ({
         }
     }
 
-    let rowIndex = (index+1) + (pageRows.length * page - pageRows.length);
+    let rowIndex = (index+1) + pageSize * (page - 1);
     let rowId = data?.[rowIdField] || rowIndex;
     let disableSelection = !data || !getIsRowSelectable(data);
     let isSelected = !!data && !!(selectedRowsIds.find(selectedRowId => selectedRowId === rowId));
