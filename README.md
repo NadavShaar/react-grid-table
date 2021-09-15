@@ -914,7 +914,7 @@ setValue: ({value, data, setRow, column}) => {
 
 ### Styling
 
-Styling is done by css classes that can be easily overridden. the table's components are mapped with pre-defined classes that should cover any situation, and you can add your own custom class per column in the `columns` configuration using the `className` property.
+Styling is done by CSS classes that you can easily override. the table's components are mapped with pre-defined classes that should cover any situation, and you can add your own custom class per column in the `columns` configuration using the `className` property.
 
 | Component | All available class selectors |
 |---|---|
