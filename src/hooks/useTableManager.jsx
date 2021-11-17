@@ -18,11 +18,12 @@ import {
 } from "../hooks/";
 
 const useTableManager = (props) => {
-    const tableManager = useRef({
+    const tableManagerRef = useRef({
         id: props.id || uuid(),
         isMounted: false,
         isInitialized: false,
-    }).current;
+    });
+    const tableManager = tableManagerRef.current;
 
     Object.defineProperty(tableManager, "columnsReorderApi", {
         enumerable: false,
@@ -108,7 +109,7 @@ const useTableManager = (props) => {
 
     // reset rows
     useEffect(() => {
-        if (!tableManager.isInitialized) return;
+        if (!tableManagerRef.current.isInitialized) return;
 
         if (tableManager.mode !== "sync") {
             tableManager.rowSelectionApi.setSelectedRowsIds([]);
@@ -117,7 +118,6 @@ const useTableManager = (props) => {
     }, [
         searchText,
         tableManager.asyncApi,
-        tableManager.isInitialized,
         tableManager.mode,
         tableManager.rowSelectionApi,
         tableManager.sortApi.sort.colId,
