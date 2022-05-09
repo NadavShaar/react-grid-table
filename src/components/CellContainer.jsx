@@ -17,6 +17,7 @@ const CellContainer = ({
         id,
         config: {
             highlightSearch,
+            searchByColumn,
             tableHasSelection,
             additionalProps: { cellContainer: additionalProps = {} },
         },
@@ -67,6 +68,9 @@ const CellContainer = ({
 
     const getValue = () => {
         let value;
+        const searchToHighlight = searchByColumn
+            ? column.searchText
+            : searchText;
 
         switch (column.id) {
             case "checkbox":
@@ -89,7 +93,7 @@ const CellContainer = ({
                     highlightSearch &&
                     valuePassesSearch(value, column)
                 )
-                    return getHighlightedText(value, searchText);
+                    return getHighlightedText(value, searchToHighlight);
         }
 
         return value;

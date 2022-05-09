@@ -40,6 +40,11 @@ const ColumnsControllers = ({ controllers }) => {
         setColumns(columns);
     };
 
+    const setSearchText = (column, searchText) => {
+        column.searchText = searchText;
+        setColumns(columns);
+    };
+
     const setSortable = (column) => {
         column.sortable = !column.sortable;
         setColumns(columns);
@@ -73,6 +78,19 @@ const ColumnsControllers = ({ controllers }) => {
                             />
                         </ControllerWrappper>
                     ) : null}
+                    {column.searchable &&
+                    column.id !== "checkbox" &&
+                    column.id !== "buttons" ? (
+                        <ControllerWrappper label="Search Text">
+                            <input
+                                type="text"
+                                value={column.searchText}
+                                onChange={(e) =>
+                                    setSearchText(column, e.target.value)
+                                }
+                            />
+                        </ControllerWrappper>
+                    ) : null}
                     <ControllerWrappper label="Visible">
                         <input
                             type="checkbox"
@@ -94,7 +112,12 @@ const ColumnsControllers = ({ controllers }) => {
                             <input
                                 type="checkbox"
                                 checked={column.searchable}
-                                onChange={() => setSearchable(column)}
+                                onChange={() => {
+                                    if (column.searchable) {
+                                        setSearchText(column, "");
+                                    }
+                                    setSearchable(column);
+                                }}
                             />
                         </ControllerWrappper>
                     ) : null}

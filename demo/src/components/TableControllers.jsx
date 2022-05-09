@@ -80,6 +80,27 @@ const TableControllers = ({ controllers }) => {
                     }
                 />
             </ControllerWrappper>
+            <ControllerWrappper label="Search By Column">
+                <input
+                    type="checkbox"
+                    checked={controllers.searchByColumn[0]}
+                    onChange={() => {
+                        const shouldSearchByColumn =
+                            !controllers.searchByColumn[0];
+
+                        if (shouldSearchByColumn) {
+                            const cols = controllers.columns[0].map(
+                                (column) => ({
+                                    ...column,
+                                    searchText: "",
+                                })
+                            );
+                            controllers.columns[1](cols);
+                        }
+                        controllers.searchByColumn[1](shouldSearchByColumn);
+                    }}
+                />
+            </ControllerWrappper>
             <ControllerWrappper label="Highlight Search">
                 <input
                     type="checkbox"

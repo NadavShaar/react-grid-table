@@ -21,11 +21,13 @@ const HeaderCellContainer = ({ index, column, tableManager }) => {
     let {
         config: {
             isHeaderSticky,
+            searchByColumn,
             components: { DragHandle },
             additionalProps: { headerCellContainer: additionalProps = {} },
             icons: {
                 sortAscending: sortAscendingIcon,
                 sortDescending: sortDescendingIcon,
+                sortUnsorted: sortUnsortedIcon,
             },
         },
         sortApi: { sort, toggleSort },
@@ -79,7 +81,9 @@ const HeaderCellContainer = ({ index, column, tableManager }) => {
                     isPinnedRight
                         ? " rgt-cell-header-pinned rgt-cell-header-pinned-right"
                         : ""
-                } ${column.className}`.trim();
+                }${searchByColumn ? " rgt-cell-header-with-search" : ""} ${
+                    column.className
+                }`.trim();
         }
 
         return (
@@ -144,7 +148,11 @@ const HeaderCellContainer = ({ index, column, tableManager }) => {
                                   ...selectionProps,
                               })
                             : column.headerCellRenderer(headerCellProps)}
-                        {sort.colId !== column.id ? null : sort.isAsc ? (
+                        {!column.sortable ? null : sort.colId !== column.id ? (
+                            <span className="rgt-sort-icon rgt-sort-icon-unsorted">
+                                {sortUnsortedIcon}
+                            </span>
+                        ) : sort.isAsc ? (
                             <span className="rgt-sort-icon rgt-sort-icon-ascending">
                                 {sortAscendingIcon}
                             </span>
