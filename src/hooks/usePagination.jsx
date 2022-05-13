@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 
 const usePagination = (props, tableManager) => {
     const {
@@ -68,6 +68,12 @@ const usePagination = (props, tableManager) => {
             setPageSize(pageSize);
         props.onPageSizeChange?.(pageSize, tableManager);
     };
+
+    useEffect(() => {
+        if (paginationApi.page > paginationApi.totalPages) {
+            paginationApi.setPage(paginationApi.totalPages);
+        }
+    }, [paginationApi.page, paginationApi.totalPages, paginationApi]);
 
     return paginationApi;
 };

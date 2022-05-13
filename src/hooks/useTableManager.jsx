@@ -107,12 +107,45 @@ const useTableManager = (props) => {
         tableManager.paginationApi.pageSize,
     ]);
 
+    // filter selectedRows and reset editRow if their ids no longer exist in the rows
+    useEffect(() => {
+        if (!tableManagerRef.current.isInitialized) return;
+
+        const newSelectedRows =
+            tableManager.rowSelectionApi.selectedRowsIds.filter((sr) =>
+                tableManager.rowsApi.rows.find(
+                    (r, i) => (r[tableManager.config.rowIdField] || i) === sr
+                )
+            );
+        if (
+            newSelectedRows.length !==
+            tableManager.rowSelectionApi.selectedRowsIds.length
+        ) {
+            tableManager.rowSelectionApi.setSelectedRowsIds(newSelectedRows);
+        }
+
+        if (
+            tableManager.rowEditApi.editRowId &&
+            !tableManager.rowsApi.rows.find(
+                (r, i) =>
+                    (r[tableManager.config.rowIdField] || i) ===
+                    tableManager.rowEditApi.editRowId
+            )
+        ) {
+            tableManager.rowEditApi.setEditRowId(null);
+        }
+    }, [
+        tableManager.config.rowIdField,
+        tableManager.rowEditApi,
+        tableManager.rowSelectionApi,
+        tableManager.rowsApi.rows,
+    ]);
+
     // reset rows
     useEffect(() => {
         if (!tableManagerRef.current.isInitialized) return;
 
         if (tableManager.mode !== "sync") {
-            tableManager.rowSelectionApi.setSelectedRowsIds([]);
             tableManager.asyncApi.resetRows();
         }
     }, [

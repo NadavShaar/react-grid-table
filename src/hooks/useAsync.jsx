@@ -122,7 +122,12 @@ const useAsync = (props, tableManager) => {
 
         const {
             rowsApi: { setRows, setTotalRows },
+            rowSelectionApi: { setSelectedRowsIds },
+            rowEditApi: { editRow, setEditRowId },
         } = tableManager;
+
+        setSelectedRowsIds([]);
+        if (editRow) setEditRowId(null);
 
         rowsRequests.current = [];
         if (props.onRowsReset) props.onRowsReset(tableManager);
