@@ -572,7 +572,8 @@ API Structure:
 
 | name | type | description | usage |
 |---|---|---|---|
-| rows | array | the rows | --- |
+| rows | array | the rows data (in sync mode - the rows data after the search filter and the sort)  | --- |
+| originalRows | array | the rows data untouched (in sync mode - the rows data before the search filter) | --- |
 | setRows | function | updates the rows | `setRows(rows)` |
 | totalRows | number | the total number of rows | --- |
 | setTotalRows | function | updates the total number of rows | `setTotalRows(1000)` |

@@ -25,13 +25,17 @@ const useRowEdit = (props, tableManager) => {
     };
 
     useEffect(() => {
-        rowEditApi.setEditRow(
-            (rowEditApi.editRowId &&
+        rowEditApi.setEditRow((prevState) => {
+            if (prevState?.[rowIdField] === rowEditApi.editRowId) {
+                return prevState;
+            }
+
+            return (
                 pageRows.find(
-                    (item) => item && item[rowIdField] === rowEditApi.editRowId
-                )) ||
-                null
-        );
+                    (item) => item?.[rowIdField] === rowEditApi.editRowId
+                ) || null
+            );
+        });
     }, [pageRows, rowEditApi, rowEditApi.editRowId, rowIdField]);
 
     return rowEditApi;

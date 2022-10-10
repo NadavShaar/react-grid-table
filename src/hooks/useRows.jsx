@@ -16,8 +16,13 @@ const useRows = (props, tableManager) => {
         writable: true,
     });
 
+    rowsApi.originalRows = useMemo(
+        () => props.rows ?? rows,
+        [props.rows, rows]
+    );
+
     rowsApi.rows = useMemo(() => {
-        let newRows = props.rows ?? rows;
+        let newRows = rowsApi.originalRows;
 
         if (mode === "sync") {
             newRows = searchRows(newRows);
@@ -25,7 +30,7 @@ const useRows = (props, tableManager) => {
         }
 
         return newRows;
-    }, [props.rows, rows, mode, searchRows, sortRows]);
+    }, [rowsApi.originalRows, mode, searchRows, sortRows]);
 
     rowsApi.onRowClick = props.onRowClick;
     rowsApi.totalRows =
