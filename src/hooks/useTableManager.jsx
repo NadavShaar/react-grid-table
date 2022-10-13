@@ -51,6 +51,7 @@ const useTableManager = (props) => {
         isPaginated: props.isPaginated,
         enableColumnsReorder: props.enableColumnsReorder,
         highlightSearch: props.highlightSearch,
+        searchByColumn: props.searchByColumn,
         showSearch: props.showSearch,
         showRowsInformation: props.showRowsInformation,
         showColumnVisibilityManager: props.showColumnVisibilityManager,

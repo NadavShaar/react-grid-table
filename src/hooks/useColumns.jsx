@@ -58,6 +58,7 @@ const useColumns = (props, tableManager) => {
                 editable: true,
                 sortable: true,
                 resizable: true,
+                searchText: "",
                 search: ({ value, searchText }) =>
                     value
                         .toString()

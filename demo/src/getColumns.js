@@ -112,6 +112,7 @@ const getColumns = ({ setRowsData }) => {
             pinned: true,
             sortable: false,
             resizable: false,
+            searchable: false,
             cellRenderer: ButtonsCell,
             editorCellRenderer: ButtonsEditorCell,
         },

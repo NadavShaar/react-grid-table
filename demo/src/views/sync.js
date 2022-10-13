@@ -31,6 +31,7 @@ const MyAwesomeTable = () => {
     let [columns, setColumns] = useState(getColumns({ setRowsData }));
     let [isSettingsOpen, setIsSettingsOpen] = useState(false);
     let [selectAllMode, setSelectAllMode] = useState("page");
+    let [searchByColumn, setSearchByColumn] = useState(true);
 
     const controllers = {
         columns: [columns, setColumns],
@@ -55,6 +56,7 @@ const MyAwesomeTable = () => {
         minSearchChars: [minSearchChars, setMinSearchChars],
         minColumnResizeWidth: [minColumnResizeWidth, setMinColumnWidth],
         selectAllMode: [selectAllMode, setSelectAllMode],
+        searchByColumn: [searchByColumn, setSearchByColumn],
     };
 
     useEffect(() => {
@@ -114,6 +116,7 @@ const MyAwesomeTable = () => {
                     minSearchChars={minSearchChars}
                     minColumnResizeWidth={minColumnResizeWidth}
                     selectAllMode={selectAllMode}
+                    searchByColumn={searchByColumn}
                 />
             </div>
         </div>

@@ -14,6 +14,7 @@ import NoResults from "./NoResults";
 import PopoverButton from "./PopoverButton";
 import Row from "./Row";
 import Search from "./Search";
+import SearchColumn from "./SearchColumn";
 import Information from "./Information";
 import PageSize from "./PageSize";
 import Pagination from "./Pagination";
@@ -35,6 +36,7 @@ export {
     PopoverButton,
     Row,
     Search,
+    SearchColumn,
     Information,
     PageSize,
     Pagination,

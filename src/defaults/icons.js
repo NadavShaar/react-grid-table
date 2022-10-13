@@ -68,6 +68,7 @@ const MENU_ICON = (
 const SORT_ASCENDING_ICON = <React.Fragment>&uarr;</React.Fragment>;
 
 const SORT_DESCENDING_ICON = <React.Fragment>&darr;</React.Fragment>;
+const SORT_UNSORTED_ICON = <React.Fragment>&#8645;</React.Fragment>;
 
 const SEARCH_ICON = <React.Fragment>&#9906;</React.Fragment>;
 
@@ -77,5 +78,6 @@ export default {
     columnVisibility: MENU_ICON,
     sortAscending: SORT_ASCENDING_ICON,
     sortDescending: SORT_DESCENDING_ICON,
+    sortUnsorted: SORT_UNSORTED_ICON,
     search: SEARCH_ICON,
 };

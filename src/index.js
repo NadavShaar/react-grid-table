@@ -128,6 +128,7 @@ GridTable.defaultProps = {
     pageSizes: [20, 50, 100],
     isHeaderSticky: true,
     highlightSearch: true,
+    searchByColumn: false,
     minSearchChars: 2,
     isPaginated: true,
     isVirtualScroll: true,
@@ -162,6 +163,7 @@ GridTable.propTypes = {
     minColumnResizeWidth: PropTypes.number,
     highlightSearch: PropTypes.bool,
     showSearch: PropTypes.bool,
+    searchByColumn: PropTypes.bool,
     showRowsInformation: PropTypes.bool,
     showColumnVisibilityManager: PropTypes.bool,
     minSearchChars: PropTypes.number,
@@ -177,6 +179,7 @@ GridTable.propTypes = {
     selectAllMode: PropTypes.string,
     // events
     onColumnsChange: PropTypes.func,
+    onColumnSearchTextChange: PropTypes.func,
     onSearchTextChange: PropTypes.func,
     onSelectedRowsChange: PropTypes.func,
     onSortChange: PropTypes.func,
