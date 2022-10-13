@@ -18,12 +18,11 @@ import {
 } from "../hooks/";
 
 const useTableManager = (props) => {
-    const tableManagerRef = useRef({
+    const tableManager = useRef({
         id: props.id || uuid(),
         isMounted: false,
         isInitialized: false,
-    });
-    const tableManager = tableManagerRef.current;
+    }).current;
 
     Object.defineProperty(tableManager, "columnsReorderApi", {
         enumerable: false,
@@ -88,86 +87,6 @@ const useTableManager = (props) => {
     tableManager.isLoading =
         props.isLoading ??
         (tableManager.mode !== "sync" && tableManager.asyncApi.isLoading);
-    const searchText =
-        tableManager.searchApi.searchText.length >=
-        tableManager.config.minSearchChars
-            ? tableManager.searchApi.searchText
-            : "";
-
-    // reset page number
-    useEffect(() => {
-        if (!tableManager.isInitialized) return;
-        if (tableManager.paginationApi.page === 1) return;
-
-        tableManager.paginationApi.setPage(1);
-    }, [
-        searchText,
-        tableManager.isInitialized,
-        tableManager.paginationApi,
-        tableManager.paginationApi.pageSize,
-    ]);
-
-    // filter selectedRows and reset editRow if their ids no longer exist in the rows
-    useEffect(() => {
-        if (!tableManagerRef.current.isInitialized) return;
-
-        const newSelectedRows =
-            tableManager.rowSelectionApi.selectedRowsIds.filter((sr) =>
-                tableManager.rowsApi.rows.find(
-                    (r, i) => (r[tableManager.config.rowIdField] || i) === sr
-                )
-            );
-        if (
-            newSelectedRows.length !==
-            tableManager.rowSelectionApi.selectedRowsIds.length
-        ) {
-            tableManager.rowSelectionApi.setSelectedRowsIds(newSelectedRows);
-        }
-
-        if (
-            tableManager.rowEditApi.editRowId &&
-            !tableManager.rowsApi.rows.find(
-                (r, i) =>
-                    (r[tableManager.config.rowIdField] || i) ===
-                    tableManager.rowEditApi.editRowId
-            )
-        ) {
-            tableManager.rowEditApi.setEditRowId(null);
-        }
-    }, [
-        tableManager.config.rowIdField,
-        tableManager.rowEditApi,
-        tableManager.rowSelectionApi,
-        tableManager.rowsApi.rows,
-    ]);
-
-    // reset rows
-    useEffect(() => {
-        if (!tableManagerRef.current.isInitialized) return;
-
-        if (tableManager.mode !== "sync") {
-            tableManager.asyncApi.resetRows();
-        }
-    }, [
-        searchText,
-        tableManager.asyncApi,
-        tableManager.mode,
-        tableManager.rowSelectionApi,
-        tableManager.sortApi.sort.colId,
-        tableManager.sortApi.sort.isAsc,
-    ]);
-
-    // reset edit row
-    useEffect(() => {
-        if (tableManager.rowEditApi.editRow)
-            tableManager.rowEditApi.setEditRowId(null);
-    }, [
-        searchText,
-        tableManager.sortApi.sort.colId,
-        tableManager.sortApi.sort.isAsc,
-        tableManager.paginationApi.page,
-        tableManager.rowEditApi,
-    ]);
 
     // initialization completion
     useEffect(() => {

@@ -555,6 +555,7 @@ API Structure:
 | name | type | description | usage |
 |---|---|---|---|
 | searchText | string | text for search | --- |
+| validSearchText | string | is an empty string if the searched text did not pass the `minSearchChars`, if it does pass, it will be equal to `searchText` | --- |
 | setSearchText | function | updates the search text | `setSearchText('hello')` |
 | searchRows | function | filters rows based on the search text, using the search method defined on the columns | `searchRows(rows)` |
 | valuePassesSearch | function | returns true if a value passes the search for a certain column | `valuePassesSearch('hello', column)` |
@@ -572,7 +573,8 @@ API Structure:
 
 | name | type | description | usage |
 |---|---|---|---|
-| rows | array | the rows | --- |
+| rows | array | the rows data (in sync mode - the rows data after the search filter and the sort)  | --- |
+| originalRows | array | the rows data untouched (in sync mode - the rows data before the search filter) | --- |
 | setRows | function | updates the rows | `setRows(rows)` |
 | totalRows | number | the total number of rows | --- |
 | setTotalRows | function | updates the total number of rows | `setTotalRows(1000)` |
@@ -625,7 +627,7 @@ API Structure:
 # How to...
 
 ### Sync/Async
-`react-grid-table` supports 4 different data managing flows:
+`react-grid-table` supports 4 different data models:
 
 #### Sync: 
 

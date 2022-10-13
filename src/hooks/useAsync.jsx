@@ -71,6 +71,7 @@ const useAsync = (props, tableManager) => {
         config: { requestDebounceTimeout },
         rowsApi: { rows, totalRows },
         paginationApi: { pageSize },
+        searchApi: { validSearchText },
     } = tableManager;
 
     const asyncApi = useRef({}).current;
@@ -146,6 +147,21 @@ const useAsync = (props, tableManager) => {
         rows.splice(at, newRows.length, ...newRows);
         return rows;
     };
+
+    // reset rows
+    useEffect(() => {
+        if (!tableManager.isInitialized) return;
+        if (mode === "sync") return;
+
+        asyncApi.resetRows();
+    }, [
+        validSearchText,
+        asyncApi,
+        mode,
+        tableManager.isInitialized,
+        tableManager.sortApi.sort.colId,
+        tableManager.sortApi.sort.isAsc,
+    ]);
 
     useEffect(() => {
         if (mode === "sync") return;

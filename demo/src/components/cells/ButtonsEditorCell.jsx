@@ -78,7 +78,7 @@ const ButtonsEditorCell = ({ tableManager, data, setRowsData }) => (
             style={styles.saveButton}
             onClick={(e) => {
                 e.stopPropagation();
-                let rowsClone = [...tableManager.rowsApi.rows];
+                let rowsClone = [...tableManager.rowsApi.originalRows];
                 let updatedRowIndex = rowsClone.findIndex(
                     (r) => r.id === data.id
                 );
