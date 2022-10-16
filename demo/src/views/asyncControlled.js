@@ -32,7 +32,7 @@ const MyAwesomeTable = () => {
     let [columns, setColumns] = useState(
         getColumns({
             setRowsData: (newRows) =>
-                tableManager.current.asyncApi.setRows(newRows),
+                tableManager.current.rowsApi.setRows(newRows),
         })
     );
     let [isSettingsOpen, setIsSettingsOpen] = useState(false);

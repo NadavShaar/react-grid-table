@@ -39,7 +39,7 @@ const useRowEdit = (props, tableManager) => {
         if (
             !tableManager.paginationApi.pageRows.find(
                 (row, i) =>
-                    (row[tableManager.config.rowIdField] || i) ===
+                    (row?.[tableManager.config.rowIdField] || i) ===
                     rowEditApi.editRowId
             )
         )
