@@ -1,6 +1,6 @@
 # react-grid-table
 
-> A modular table, based on a CSS grid layout, optimized for customization.
+> A modular table, based on a CSS grid layout, optimized for fast configuration and deep customization.
 
 [![NPM](https://img.shields.io/npm/v/@nadavshaar/react-grid-table.svg)](https://www.npmjs.com/package/@nadavshaar/react-grid-table) [![Downloads](https://img.shields.io/npm/dt/@nadavshaar/react-grid-table)](https://www.npmjs.com/package/@nadavshaar/react-grid-table) 
 
