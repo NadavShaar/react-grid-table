@@ -1,6 +1,6 @@
 # react-grid-table
 
-> A modular table, based on a CSS grid layout, optimized for customization.
+> A modular table, based on a CSS grid layout, optimized for fast configuration and deep customization.
 
 [![NPM](https://img.shields.io/npm/v/@nadavshaar/react-grid-table.svg)](https://www.npmjs.com/package/@nadavshaar/react-grid-table) [![Downloads](https://img.shields.io/npm/dt/@nadavshaar/react-grid-table)](https://www.npmjs.com/package/@nadavshaar/react-grid-table) 
 
@@ -150,7 +150,7 @@ export default MyAwesomeTable;
 
 #### Support this package
 
-[![paypal](https://image.flaticon.com/icons/png/128/2871/2871557.png)](https://www.paypal.com/donate?hosted_button_id=VAEHCLA692FMW)
+[![paypal](https://cdn-icons-png.flaticon.com/128/2871/2871557.png)](https://www.paypal.com/donate?hosted_button_id=VAEHCLA692FMW)
 
 ## Main components
 **HEADER (optional | customizable):** search & column visibility management. 
