@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 
 const usePagination = (props, tableManager) => {
     const {
@@ -13,9 +13,12 @@ const usePagination = (props, tableManager) => {
         props.pageSize || pageSizes[0] || 20
     );
 
-    paginationApi.page = props.page ?? page;
     paginationApi.pageSize = props.pageSize ?? pageSize;
     paginationApi.totalPages = Math.ceil(totalRows / paginationApi.pageSize);
+    paginationApi.page = Math.max(
+        1,
+        Math.min(paginationApi.totalPages, props.page ?? page)
+    );
     paginationApi.pageRows = useMemo(() => {
         if (!isPaginated) return rows;
 
@@ -49,7 +52,8 @@ const usePagination = (props, tableManager) => {
 
     paginationApi.setPage = (page) => {
         page = ~~page;
-        if (page < 1 || paginationApi.totalPages < page) return;
+        page = Math.max(1, Math.min(paginationApi.totalPages, page));
+        if (paginationApi.page === page) return;
 
         if (props.page === undefined || props.onPageChange === undefined)
             setPage(page);
@@ -68,6 +72,20 @@ const usePagination = (props, tableManager) => {
             setPageSize(pageSize);
         props.onPageSizeChange?.(pageSize, tableManager);
     };
+
+    // reset page number
+    useEffect(() => {
+        if (!tableManager.isInitialized) return;
+        if (tableManager.paginationApi.page === 1) return;
+
+        tableManager.paginationApi.setPage(1);
+    }, [
+        tableManager.searchApi.validSearchText,
+        tableManager.isInitialized,
+        paginationApi,
+        paginationApi.pageSize,
+        tableManager.paginationApi,
+    ]);
 
     return paginationApi;
 };

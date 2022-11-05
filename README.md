@@ -1,6 +1,6 @@
 # react-grid-table
 
-> A modular table, based on a CSS grid layout, optimized for customization.
+> A modular table, based on a CSS grid layout, optimized for fast configuration and deep customization.
 
 [![NPM](https://img.shields.io/npm/v/@nadavshaar/react-grid-table.svg)](https://www.npmjs.com/package/@nadavshaar/react-grid-table) [![Downloads](https://img.shields.io/npm/dt/@nadavshaar/react-grid-table)](https://www.npmjs.com/package/@nadavshaar/react-grid-table) 
 
@@ -150,7 +150,7 @@ export default MyAwesomeTable;
 
 #### Support this package
 
-[![paypal](https://image.flaticon.com/icons/png/128/2871/2871557.png)](https://www.paypal.com/donate?hosted_button_id=VAEHCLA692FMW)
+[![paypal](https://cdn-icons-png.flaticon.com/128/2871/2871557.png)](https://www.paypal.com/donate?hosted_button_id=VAEHCLA692FMW)
 
 ## Main components
 **HEADER (optional | customizable):** search & column visibility management. 
@@ -555,6 +555,7 @@ API Structure:
 | name | type | description | usage |
 |---|---|---|---|
 | searchText | string | text for search | --- |
+| validSearchText | string | is an empty string if the searched text did not pass the `minSearchChars`, if it does pass, it will be equal to `searchText` | --- |
 | setSearchText | function | updates the search text | `setSearchText('hello')` |
 | searchRows | function | filters rows based on the search text, using the search method defined on the columns | `searchRows(rows)` |
 | valuePassesSearch | function | returns true if a value passes the search for a certain column | `valuePassesSearch('hello', column)` |
@@ -572,7 +573,8 @@ API Structure:
 
 | name | type | description | usage |
 |---|---|---|---|
-| rows | array | the rows | --- |
+| rows | array | the rows data (in sync mode - the rows data after the search filter and the sort)  | --- |
+| originalRows | array | the rows data untouched (in sync mode - the rows data before the search filter) | --- |
 | setRows | function | updates the rows | `setRows(rows)` |
 | totalRows | number | the total number of rows | --- |
 | setTotalRows | function | updates the total number of rows | `setTotalRows(1000)` |
@@ -625,7 +627,7 @@ API Structure:
 # How to...
 
 ### Sync/Async
-`react-grid-table` supports 4 different data managing flows:
+`react-grid-table` supports 4 different data models:
 
 #### Sync: 
 

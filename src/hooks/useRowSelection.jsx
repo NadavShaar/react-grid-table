@@ -101,6 +101,32 @@ const useRowSelection = (props, tableManager) => {
             rowSelectionApi.selectAll.indeterminate;
     }, [rowSelectionApi.selectAll.indeterminate]);
 
+    // filter selectedRows if their ids no longer exist in the rows
+    useEffect(() => {
+        if (!tableManager.isInitialized) return;
+
+        const filteredSelectedRows = rowSelectionApi.selectedRowsIds.filter(
+            (selectedRowId) =>
+                tableManager.rowsApi.originalRows.find(
+                    (row, i) =>
+                        (row[tableManager.config.rowIdField] || i) ===
+                        selectedRowId
+                )
+        );
+        if (
+            filteredSelectedRows.length !==
+            rowSelectionApi.selectedRowsIds.length
+        ) {
+            rowSelectionApi.setSelectedRowsIds(filteredSelectedRows);
+        }
+    }, [
+        tableManager.config.rowIdField,
+        tableManager.isInitialized,
+        tableManager.rowEditApi,
+        rowSelectionApi,
+        tableManager.rowsApi.originalRows,
+    ]);
+
     return rowSelectionApi;
 };
 

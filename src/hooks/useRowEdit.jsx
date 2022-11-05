@@ -25,14 +25,31 @@ const useRowEdit = (props, tableManager) => {
     };
 
     useEffect(() => {
+        if (rowEditApi.editRow?.[rowIdField] === rowEditApi.editRowId) return;
+
         rowEditApi.setEditRow(
-            (rowEditApi.editRowId &&
-                pageRows.find(
-                    (item) => item && item[rowIdField] === rowEditApi.editRowId
-                )) ||
-                null
+            pageRows.find(
+                (item) => item?.[rowIdField] === rowEditApi.editRowId
+            ) || null
         );
     }, [pageRows, rowEditApi, rowEditApi.editRowId, rowIdField]);
+
+    // reset edit row
+    useEffect(() => {
+        if (
+            !tableManager.paginationApi.pageRows.find(
+                (row, i) =>
+                    (row?.[tableManager.config.rowIdField] || i) ===
+                    rowEditApi.editRowId
+            )
+        )
+            tableManager.rowEditApi.setEditRowId(null);
+    }, [
+        rowEditApi.editRowId,
+        tableManager.config.rowIdField,
+        tableManager.paginationApi.pageRows,
+        tableManager.rowEditApi,
+    ]);
 
     return rowEditApi;
 };

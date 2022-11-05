@@ -10,6 +10,10 @@ const useSearch = (props, tableManager) => {
     const [searchText, setSearchText] = useState("");
 
     searchApi.searchText = props.searchText ?? searchText;
+    searchApi.validSearchText =
+        searchApi.searchText.length >= minSearchChars
+            ? searchApi.searchText
+            : "";
 
     searchApi.setSearchText = (searchText) => {
         if (
@@ -23,11 +27,11 @@ const useSearch = (props, tableManager) => {
     searchApi.valuePassesSearch = (value, column) => {
         if (!value) return false;
         if (!column?.searchable) return false;
-        if (searchApi.searchText.length < minSearchChars) return false;
+        if (!searchApi.validSearchText) return false;
 
         return column.search({
             value: value.toString(),
-            searchText: searchApi.searchText,
+            searchText: searchApi.validSearchText,
         });
     };
 
@@ -38,7 +42,7 @@ const useSearch = (props, tableManager) => {
                 return cols;
             }, {});
 
-            if (searchApi.searchText.length >= minSearchChars) {
+            if (searchApi.validSearchText) {
                 rows = rows.filter((item) =>
                     Object.keys(item).some((key) => {
                         if (cols[key] && cols[key].searchable) {
@@ -48,7 +52,7 @@ const useSearch = (props, tableManager) => {
                             });
                             return cols[key].search({
                                 value: value?.toString() || "",
-                                searchText: searchApi.searchText,
+                                searchText: searchApi.validSearchText,
                             });
                         }
                         return false;
@@ -58,7 +62,7 @@ const useSearch = (props, tableManager) => {
 
             return rows;
         },
-        [searchApi.searchText, columns, minSearchChars]
+        [columns, searchApi.validSearchText]
     );
 
     return searchApi;

@@ -31,7 +31,7 @@ const LOADER = (
     </svg>
 );
 
-const TRASH_ICON = (
+const CLEAR_ICON = (
     <svg
         height="16"
         viewBox="0 0 21 21"
@@ -41,15 +41,16 @@ const TRASH_ICON = (
         <g
             fill="none"
             fillRule="evenodd"
-            stroke="#2a2e3b"
+            stroke="#125082"
             strokeLinecap="round"
             strokeLinejoin="round"
-            transform="translate(3 2)"
+            transform="translate(2 2)"
         >
-            <path d="m2.5 2.5h10v12c0 1.1045695-.8954305 2-2 2h-6c-1.1045695 0-2-.8954305-2-2zm5-2c1.1045695 0 2 .8954305 2 2h-4c0-1.1045695.8954305-2 2-2z" />
-            <path d="m.5 2.5h14" />
-            <path d="m5.5 5.5v8" />
-            <path d="m9.5 5.5v8" />
+            <circle cx="8.5" cy="8.5" r="8" />
+            <g transform="matrix(0 1 -1 0 17 0)">
+                <path d="m5.5 11.5 6-6" />
+                <path d="m5.5 5.5 6 6" />
+            </g>
         </g>
     </svg>
 );
@@ -73,7 +74,7 @@ const SEARCH_ICON = <React.Fragment>&#9906;</React.Fragment>;
 
 export default {
     loader: LOADER,
-    clearSelection: TRASH_ICON,
+    clearSelection: CLEAR_ICON,
     columnVisibility: MENU_ICON,
     sortAscending: SORT_ASCENDING_ICON,
     sortDescending: SORT_DESCENDING_ICON,
