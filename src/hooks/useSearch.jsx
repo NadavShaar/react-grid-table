@@ -42,27 +42,25 @@ const useSearch = (props, tableManager) => {
                     Object.keys(item).some((key) => {
                         var cols = columns.filter(
                             (column) =>
-                                column.searchable &&
-                                (!column.field || column.field === key)
+                                column.searchable && column.field === key
                         );
+
                         let isValid = false;
 
-                        if (cols.length) {
-                            for (let index = 0; index < cols.length; index++) {
-                                const currentColumn = cols[index];
-                                const value = currentColumn.getValue({
-                                    tableManager,
-                                    value: item[key],
-                                    column: currentColumn,
-                                    rowData: item,
-                                });
-                                isValid = currentColumn.search({
-                                    value: value?.toString() || "",
-                                    searchText: searchApi.validSearchText,
-                                });
+                        for (let index = 0; index < cols.length; index++) {
+                            const currentColumn = cols[index];
+                            const value = currentColumn.getValue({
+                                tableManager,
+                                value: item[key],
+                                column: currentColumn,
+                                rowData: item,
+                            });
+                            isValid = currentColumn.search({
+                                value: value?.toString() || "",
+                                searchText: searchApi.validSearchText,
+                            });
 
-                                if (isValid) break;
-                            }
+                            if (isValid) break;
                         }
 
                         return isValid;
