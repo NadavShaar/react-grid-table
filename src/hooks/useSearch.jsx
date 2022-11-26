@@ -58,7 +58,6 @@ const useSearch = (props, tableManager) => {
                                 isValid = currentColumn.search({
                                     value: value?.toString() || "",
                                     searchText: searchApi.validSearchText,
-                                    rowData: item,
                                 });
 
                                 if (isValid) break;
