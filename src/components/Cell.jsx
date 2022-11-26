@@ -1,6 +1,6 @@
 import React from "react";
 
-const Cell = ({ value, tableManager }) => {
+const Cell = ({ value, textValue, tableManager }) => {
     const {
         config: {
             additionalProps: { cell: additionalProps = {} },
@@ -12,7 +12,7 @@ const Cell = ({ value, tableManager }) => {
     ).trim();
 
     return (
-        <div {...additionalProps} className={classNames} title={value}>
+        <div {...additionalProps} className={classNames} title={textValue}>
             {value}
         </div>
     );

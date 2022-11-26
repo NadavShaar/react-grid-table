@@ -37,25 +37,35 @@ const useSearch = (props, tableManager) => {
 
     searchApi.searchRows = useCallback(
         (rows) => {
-            var cols = columns.reduce((cols, coldef) => {
-                cols[coldef.field] = coldef;
-                return cols;
-            }, {});
-
             if (searchApi.validSearchText) {
                 rows = rows.filter((item) =>
                     Object.keys(item).some((key) => {
-                        if (cols[key] && cols[key].searchable) {
-                            const value = cols[key].getValue({
-                                value: item[key],
-                                column: cols[key],
-                            });
-                            return cols[key].search({
-                                value: value?.toString() || "",
-                                searchText: searchApi.validSearchText,
-                            });
+                        var cols = columns.filter(
+                            (column) =>
+                                column.searchable &&
+                                (!column.field || column.field === key)
+                        );
+                        let isValid = false;
+
+                        if (cols.length) {
+                            for (let index = 0; index < cols.length; index++) {
+                                const currentColumn = cols[index];
+                                const value = currentColumn.getValue({
+                                    value: item[key],
+                                    column: currentColumn,
+                                    rowData: item,
+                                });
+                                isValid = currentColumn.search({
+                                    value: value?.toString() || "",
+                                    searchText: searchApi.validSearchText,
+                                    rowData: item,
+                                });
+
+                                if (isValid) break;
+                            }
                         }
-                        return false;
+
+                        return isValid;
                     })
                 );
             }
