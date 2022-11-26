@@ -135,7 +135,7 @@ const CellContainer = ({
 
     let cellProps = {
         tableManager,
-        value: value,
+        value,
         textValue,
         data,
         column,
