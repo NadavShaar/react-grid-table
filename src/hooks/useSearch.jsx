@@ -51,6 +51,7 @@ const useSearch = (props, tableManager) => {
                             for (let index = 0; index < cols.length; index++) {
                                 const currentColumn = cols[index];
                                 const value = currentColumn.getValue({
+                                    tableManager,
                                     value: item[key],
                                     column: currentColumn,
                                     rowData: item,
@@ -58,7 +59,6 @@ const useSearch = (props, tableManager) => {
                                 isValid = currentColumn.search({
                                     value: value?.toString() || "",
                                     searchText: searchApi.validSearchText,
-                                    rowData: item,
                                 });
 
                                 if (isValid) break;
@@ -72,7 +72,7 @@ const useSearch = (props, tableManager) => {
 
             return rows;
         },
-        [columns, searchApi.validSearchText]
+        [columns, searchApi.validSearchText, tableManager]
     );
 
     return searchApi;

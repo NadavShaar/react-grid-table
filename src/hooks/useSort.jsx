@@ -41,12 +41,16 @@ const useSort = (props, tableManager) => {
                 rows = [...rows];
                 rows.sort((a, b) => {
                     const aVal = cols[sortApi.sort.colId].getValue({
+                        tableManager,
                         value: a[cols[sortApi.sort.colId].field],
                         column: cols[sortApi.sort.colId],
+                        rowData: a,
                     });
                     const bVal = cols[sortApi.sort.colId].getValue({
+                        tableManager,
                         value: b[cols[sortApi.sort.colId].field],
                         column: cols[sortApi.sort.colId],
+                        rowData: b,
                     });
 
                     if (cols[sortApi.sort.colId].sortable === false) return 0;
@@ -60,7 +64,7 @@ const useSort = (props, tableManager) => {
 
             return rows;
         },
-        [sortApi.sort, columns]
+        [sortApi.sort, columns, tableManager]
     );
 
     sortApi.toggleSort = (colId) => {
