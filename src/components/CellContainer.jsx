@@ -65,6 +65,20 @@ const CellContainer = ({
         return classNames;
     };
 
+    const textValue = useMemo(
+        () =>
+            data &&
+            column
+                .getValue?.({
+                    tableManager,
+                    value: isEdit ? editRow[column.field] : data[column.field],
+                    column,
+                    rowData: data,
+                })
+                ?.toString?.(),
+        [column, data, editRow, isEdit, tableManager]
+    );
+
     const getValue = () => {
         let value;
 
@@ -73,17 +87,7 @@ const CellContainer = ({
                 value = isSelected;
                 break;
             default:
-                value =
-                    data &&
-                    column
-                        .getValue?.({
-                            tableManager,
-                            value: isEdit
-                                ? editRow[column.field]
-                                : data[column.field],
-                            column,
-                        })
-                        ?.toString?.();
+                value = textValue;
                 if (
                     !isEdit &&
                     highlightSearch &&
@@ -129,7 +133,15 @@ const CellContainer = ({
     let classNames = getClassNames();
     let value = getValue();
 
-    let cellProps = { tableManager, value, data, column, colIndex, rowIndex };
+    let cellProps = {
+        tableManager,
+        value,
+        textValue,
+        data,
+        column,
+        colIndex,
+        rowIndex,
+    };
     const isFirstEditableCell = useMemo(
         () =>
             visibleColumns.findIndex(

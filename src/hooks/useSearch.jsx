@@ -37,32 +37,40 @@ const useSearch = (props, tableManager) => {
 
     searchApi.searchRows = useCallback(
         (rows) => {
-            var cols = columns.reduce((cols, coldef) => {
-                cols[coldef.field] = coldef;
-                return cols;
-            }, {});
-
             if (searchApi.validSearchText) {
                 rows = rows.filter((item) =>
                     Object.keys(item).some((key) => {
-                        if (cols[key] && cols[key].searchable) {
-                            const value = cols[key].getValue({
+                        var cols = columns.filter(
+                            (column) =>
+                                column.searchable && column.field === key
+                        );
+
+                        let isValid = false;
+
+                        for (let index = 0; index < cols.length; index++) {
+                            const currentColumn = cols[index];
+                            const value = currentColumn.getValue({
+                                tableManager,
                                 value: item[key],
-                                column: cols[key],
+                                column: currentColumn,
+                                rowData: item,
                             });
-                            return cols[key].search({
+                            isValid = currentColumn.search({
                                 value: value?.toString() || "",
                                 searchText: searchApi.validSearchText,
                             });
+
+                            if (isValid) break;
                         }
-                        return false;
+
+                        return isValid;
                     })
                 );
             }
 
             return rows;
         },
-        [columns, searchApi.validSearchText]
+        [columns, searchApi.validSearchText, tableManager]
     );
 
     return searchApi;

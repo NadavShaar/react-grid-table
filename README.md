@@ -112,7 +112,7 @@ const columns = [
         id: 3, 
         field: 'last_visited', 
         label: 'Last Visited',
-        sort: ({a, b, isAscending}) => {
+        sort: ({ a, b, isAscending }) => {
             let aa = a.split('/').reverse().join(),
             bb = b.split('/').reverse().join();
             return aa < bb ? isAscending ? -1 : 1 : (aa > bb ? isAscending ? 1 : -1 : 0);
@@ -122,7 +122,7 @@ const columns = [
         id: 4, 
         field: 'test', 
         label: 'Score',
-        getValue: ({value, column}) => value.x + value.y
+        getValue: ({ value }) => value.x + value.y
     }
 ];
 
@@ -275,7 +275,7 @@ Each column (except for '[checkbox](#checkbox-column)' column) has support for t
   className: '',
   pinned: false,
   width: '200px',
-  getValue: ({value, column}) => value, 
+  getValue: ({ tableManager, value, column, rowData }) => value, 
   setValue: ({ value, data, setRow, column }) => { setRow({ ...data, [column.field]: value}) },
   minResizeWidth: 70,
   maxResizeWidth: null,
@@ -353,7 +353,9 @@ Each row should have a unique identifier field, which by default is `id`, but it
 }
 ```
 
-**Note:** If a property value is not of type string, you'll have to use the `getValue` function on the column in order to extract the desired value. 
+**Note:** If a property value is not of type string, or in cases you don't specify a field for the column, you'll have to use the `getValue` function on the column in order to extract the desired value. 
+
+**Signature**: getValue: ({ tableManager, value, column, rowData }) => string
 
 **Example:**
 
@@ -363,7 +365,7 @@ Let's say the field's value for a cell is an object:
 
 Its `getValue` function for displaying the first and last name as a full name, would be: 
 
-`getValue: ({value, column}) => value.firstName + ' ' +  value.lastName`
+`getValue: ({ value }) => value.firstName + ' ' +  value.lastName`
 
 The returned value will be used for searching, sorting etc...
 
